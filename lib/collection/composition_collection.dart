@@ -108,15 +108,15 @@ class CompositionSousCollection {
         .indexWhere((element) => element.idJoueur == sortant.idJoueur);
     final int entrantIndex = homeOutside
         .indexWhere((element) => element.idJoueur == entrant.idJoueur);
-    final JoueurComposition s = sortant.copyWith(
+    /* final JoueurComposition s = sortant.copyWith(
       tempsSortant: 0,
     );
     final JoueurComposition e = entrant.copyWith(
       tempsEntrants: 0,
-    );
+    ); */
 
-    homeInside[sortantIndex].entrant = e;
-    homeOutside[entrantIndex].sortant = s;
+    homeInside[sortantIndex].entrant = entrant;
+    homeOutside[entrantIndex].sortant = sortant;
   }
 
   void changeAway(JoueurComposition sortant, JoueurComposition entrant) {
@@ -124,14 +124,14 @@ class CompositionSousCollection {
         .indexWhere((element) => element.idJoueur == sortant.idJoueur);
     final int entrantIndex = awayOutside
         .indexWhere((element) => element.idJoueur == entrant.idJoueur);
-    final JoueurComposition s = sortant.copyWith(
+    /*  final JoueurComposition s = sortant.copyWith(
       tempsSortant: 0,
     );
     final JoueurComposition e = entrant.copyWith(
       tempsEntrants: 0,
-    );
-    awayInside[sortantIndex].entrant = e;
-    awayOutside[entrantIndex].sortant = s;
+    ); */
+    awayInside[sortantIndex].entrant = entrant;
+    awayOutside[entrantIndex].sortant = sortant;
   }
 
   void homeTo433() {

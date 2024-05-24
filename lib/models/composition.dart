@@ -56,7 +56,7 @@ class JoueurComposition extends EquipeComposition {
   int? tempsSortant;
   int but;
   bool isCapitaine;
-  bool isChanged;
+
   JoueurComposition({
     required this.idJoueur,
     required this.numero,
@@ -69,7 +69,6 @@ class JoueurComposition extends EquipeComposition {
     this.tempsEntrants,
     this.but = 0,
     this.isCapitaine = false,
-    this.isChanged = false,
     required super.nom,
     required super.idParticipant,
     required super.idGame,
@@ -107,7 +106,6 @@ class JoueurComposition extends EquipeComposition {
       rouge: rouge ?? this.rouge,
       but: but ?? this.but,
       isCapitaine: isCapitaine ?? this.isCapitaine,
-      isChanged: isChanged ?? this.isChanged,
       idParticipant: idParticipant ?? this.idParticipant,
       idGame: idGame ?? this.idGame,
       entrant: entrant ?? this.entrant,

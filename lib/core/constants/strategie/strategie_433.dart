@@ -62,7 +62,7 @@ List<JoueurComposition> kStrategie433 = [
       idJoueur: 'joueur',
       numero: 0,
       nom: 'Player6',
-      jaune: 1,
+      jaune: 0,
       left: 160,
       top: 540),
   JoueurComposition(
