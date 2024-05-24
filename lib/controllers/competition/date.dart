@@ -50,7 +50,6 @@ class DateController {
 
     final dt = DateTime.parse(date);
     final String abbrday = '${semaine[dt.weekday - 1].substring(0, 3)}.';
-    print(mois[dt.month]);
 
     String abbrmonth =
         '${mois[dt.month - 1].substring(0, mois[dt.month - 1].length > 3 ? 3 : null)}';
