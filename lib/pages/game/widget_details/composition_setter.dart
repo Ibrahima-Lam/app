@@ -6,6 +6,7 @@ import 'package:app/models/game.dart';
 import 'package:app/providers/composition_provider.dart';
 import 'package:app/widget/composition_bottom_sheet_widget.dart';
 import 'package:app/widget/composition_element_widget.dart';
+import 'package:app/widget_pages/event_form.dart';
 import 'package:app/widget_pages/substitut_list_widget.dart';
 import 'package:app/widget_pages/composition_form.dart';
 import 'package:flutter/material.dart';
@@ -163,6 +164,12 @@ class _CompositionSetterWidgetState extends State<CompositionSetterWidget> {
                   height: 20,
                 ),
                 SubstitutListWidget(
+                  onTap: (p0) async {
+                    await Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => EventFormWidget(
+                              composition: p0,
+                            )));
+                  },
                   onLongPress: (p0) {},
                   onDoubleTap: (p0) {},
                   game: widget.game,
@@ -235,6 +242,12 @@ class _PlayerListWidgetState2 extends State<PlayerListWidget2> {
     setState(() {});
   }
 
+  void _onTap(JoueurComposition composition) async {
+    await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => EventFormWidget(composition: composition)));
+    setState(() {});
+  }
+
   void _onLongPress(JoueurComposition composition, List<JoueurComposition> data,
       bool isHome) async {
     final JoueurComposition? compos = await showModalBottomSheet(
@@ -302,6 +315,7 @@ class _PlayerListWidgetState2 extends State<PlayerListWidget2> {
                   onLongPress: (JoueurComposition composition) => _onLongPress(
                       p, widget.compositionSousCollection.awayOutside, false),
                   composition: p,
+                  onTap: () => _onTap(p),
                   onDoubleTap: () {
                     _onDoubleTap(p);
                   },
@@ -323,6 +337,7 @@ class _PlayerListWidgetState2 extends State<PlayerListWidget2> {
                   onLongPress: (JoueurComposition composition) => _onLongPress(
                       p, widget.compositionSousCollection.homeOutside, true),
                   composition: p,
+                  onTap: () => _onTap(p),
                   onDoubleTap: () {
                     _onDoubleTap(p);
                   },
@@ -379,12 +394,14 @@ class PlayerWidget2 extends StatelessWidget {
   final Function(JoueurComposition) onLongPress;
   final Function(DragUpdateDetails details) onPanUpdate;
   final Function() onDoubleTap;
+  final Function() onTap;
   final bool isHome;
   const PlayerWidget2(
       {super.key,
       required this.composition,
       required this.onPanUpdate,
       required this.onDoubleTap,
+      required this.onTap,
       required this.onLongPress,
       required this.isHome});
 
@@ -397,6 +414,7 @@ class PlayerWidget2 extends StatelessWidget {
         child: Icon(Icons.person),
       ),
       child: GestureDetector(
+          onTap: onTap,
           onLongPress: () {
             onLongPress(composition);
           },

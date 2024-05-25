@@ -120,6 +120,7 @@ class CompositionWidget extends StatelessWidget {
 // ignore: must_be_immutable
 class PlayerListWidget extends StatelessWidget {
   final Game game;
+  final double height = 370;
   CompositionSousCollection compositionSousCollection;
   PlayerListWidget(
       {super.key, required this.game, required this.compositionSousCollection});
@@ -138,7 +139,7 @@ class PlayerListWidget extends StatelessWidget {
           children: [
             for (JoueurComposition p in awaypls)
               Positioned(
-                  left: p.left * constraint.maxWidth / 350,
+                  left: p.left * constraint.maxWidth / height,
                   top: p.top,
                   child: PlayerWidget(
                     isHome: true,
@@ -146,7 +147,7 @@ class PlayerListWidget extends StatelessWidget {
                   )),
             for (JoueurComposition p in homepls)
               Positioned(
-                  right: p.left * constraint.maxWidth / 350,
+                  right: p.left * constraint.maxWidth / height,
                   bottom: p.top,
                   child: PlayerWidget(
                     isHome: false,

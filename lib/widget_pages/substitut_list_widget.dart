@@ -7,6 +7,7 @@ import 'package:app/pages/joueur/joueur_details.dart';
 import 'package:app/providers/composition_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/widget/composition_bottom_sheet_widget.dart';
+import 'package:app/widget/composition_events_widget.dart';
 import 'package:app/widget_pages/composition_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,18 +18,54 @@ class SubstitutLogoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Badge(
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-      offset: Offset(0, 5),
-      label: Text(composition.numero.toString()),
-      alignment: Alignment.bottomCenter,
-      child: CircleAvatar(
-        radius: 15,
-        backgroundColor: const Color(0xFFDCDCDC),
-        foregroundColor: Colors.white,
-        child: Icon(Icons.person),
-      ),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          height: 40,
+          width: 40,
+        ),
+        Badge(
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          offset: Offset(0, 5),
+          label: Text(composition.numero.toString()),
+          alignment: Alignment.bottomCenter,
+          child: CircleAvatar(
+            radius: 15,
+            backgroundColor: const Color(0xFFDCDCDC),
+            foregroundColor: Colors.white,
+            child: Icon(Icons.person),
+          ),
+        ),
+        if (composition.but > 0)
+          Positioned(
+              left: 0,
+              top: 0,
+              child: GoalWidget(
+                but: composition.but,
+              )),
+        if (composition.entrant != null)
+          Positioned(
+              left: 0,
+              top: 22,
+              child: Icon(
+                Icons.subdirectory_arrow_left,
+                color: Colors.red,
+                size: 20,
+              )),
+        if (composition.jaune > 0)
+          Positioned(right: 0, top: 5, child: CardWidget()),
+        if (composition.rouge > 0)
+          Positioned(
+              right: 3,
+              top: 0,
+              child: CardWidget(
+                isRed: true,
+              )),
+        if (composition.isCapitaine)
+          Positioned(right: 0, top: 25, child: CapitaineWidget()),
+      ],
     );
   }
 }
@@ -108,6 +145,7 @@ class SubstitutListTile extends StatelessWidget {
 class SubstitutListWidget extends StatefulWidget {
   final Game game;
   final CompositionSousCollection compositionSousCollection;
+  final Function(JoueurComposition)? onTap;
   final Function(JoueurComposition)? onDoubleTap;
   final Function(JoueurComposition)? onLongPress;
 
@@ -115,6 +153,7 @@ class SubstitutListWidget extends StatefulWidget {
     super.key,
     required this.game,
     required this.compositionSousCollection,
+    this.onTap,
     this.onDoubleTap,
     this.onLongPress,
   });
@@ -124,8 +163,8 @@ class SubstitutListWidget extends StatefulWidget {
 }
 
 class _SubstitutListWidgetState extends State<SubstitutListWidget> {
-  late List<Composition> homes;
-  late List<Composition> aways;
+  late List<JoueurComposition> homes;
+  late List<JoueurComposition> aways;
 
   @override
   void initState() {
@@ -233,13 +272,18 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
           Row(children: [
             Expanded(
               child: Column(children: [
-                for (Composition home in homes)
+                for (JoueurComposition home in homes)
                   SubstitutListTile(
                     isHome: true,
-                    onTap: _onTap,
+                    onTap: widget.onTap == null
+                        ? _onTap
+                        : (p0) async {
+                            await widget.onTap!(home);
+                            setState(() {});
+                          },
                     onDoubleTap: widget.onDoubleTap == null
                         ? null
-                        : (Composition comp) {
+                        : (JoueurComposition comp) {
                             home = comp;
                             setState(() {});
                           },
@@ -251,19 +295,24 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
                                 widget.compositionSousCollection.homeInside,
                                 true);
                           },
-                    composition: home as JoueurComposition,
+                    composition: home,
                   )
               ]),
             ),
             Expanded(
               child: Column(children: [
-                for (Composition away in aways)
+                for (JoueurComposition away in aways)
                   SubstitutListTile(
                     isHome: false,
-                    onTap: _onTap,
+                    onTap: widget.onTap == null
+                        ? _onTap
+                        : (p0) async {
+                            await widget.onTap!(away);
+                            setState(() {});
+                          },
                     onDoubleTap: widget.onDoubleTap == null
                         ? null
-                        : (Composition comp) {
+                        : (JoueurComposition comp) {
                             away = comp;
                             setState(() {});
                           },
@@ -275,7 +324,7 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
                                 widget.compositionSousCollection.awayInside,
                                 false);
                           },
-                    composition: away as JoueurComposition,
+                    composition: away,
                   )
               ]),
             ),
