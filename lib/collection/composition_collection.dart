@@ -1,4 +1,6 @@
 import 'package:app/collection/collection.dart';
+import 'package:app/core/constants/arbitre/kArbitre.dart';
+import 'package:app/core/constants/coatch/kCoatch.dart';
 import 'package:app/core/constants/strategie/rempl.dart';
 import 'package:app/core/constants/strategie/strategie_433.dart';
 import 'package:app/core/constants/strategie/strategie_442.dart';
@@ -89,6 +91,25 @@ class CompositionCollection implements Collection {
     }
     return rempls;
   }
+
+  List<ArbitreComposition> getArbitres({required String idGame}) {
+    List<ArbitreComposition> arbitres =
+        compositions.whereType<ArbitreComposition>().toList();
+    if (arbitres.isEmpty) {
+      arbitres = kArbitres.map((e) => e.copyWith(idGame: idGame)).toList();
+    }
+    return arbitres;
+  }
+
+  CoachComposition getCoach(
+      {required String idGame, required String idParticipant}) {
+    final List<CoachComposition> coaches =
+        compositions.whereType<CoachComposition>().toList();
+    late CoachComposition coach = coaches.firstWhere(
+        (element) => element.idParticipant == idParticipant,
+        orElse: (() => kCoach.copyWith(idParticipant: idParticipant)));
+    return coach;
+  }
 }
 
 class CompositionSousCollection {
@@ -96,11 +117,17 @@ class CompositionSousCollection {
   List<JoueurComposition> awayInside;
   List<JoueurComposition> homeOutside;
   List<JoueurComposition> awayOutside;
+  List<ArbitreComposition> arbitres;
+  CoachComposition homeCoatch;
+  CoachComposition awayCoatch;
   CompositionSousCollection({
     required this.homeInside,
     required this.homeOutside,
     required this.awayInside,
     required this.awayOutside,
+    required this.homeCoatch,
+    required this.awayCoatch,
+    required this.arbitres,
   });
 
   void changeHome(JoueurComposition sortant, JoueurComposition entrant) {

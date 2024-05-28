@@ -1,6 +1,7 @@
 import 'package:app/models/composition.dart';
 import 'package:app/models/joueur.dart';
 import 'package:app/providers/joueur_provider.dart';
+import 'package:app/widget/elevated_button_widget.dart';
 import 'package:app/widget/joueur_widget.dart';
 import 'package:app/widget/text_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -63,19 +64,16 @@ class _CompositionFormState extends State<CompositionForm> {
               const SizedBox(
                 height: 10,
               ),
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white),
-                  onPressed: () async {
-                    setState(() {
-                      widget.composition.nom = nomController.text;
-                      widget.composition.numero =
-                          int.parse(numeroController.text);
-                    });
-                    Navigator.pop(context, widget.composition);
-                  },
-                  child: Text('Envoyer'))
+              ElevatedButtonWidget(
+                onPressed: () async {
+                  setState(() {
+                    widget.composition.nom = nomController.text;
+                    widget.composition.numero =
+                        int.parse(numeroController.text);
+                  });
+                  Navigator.pop(context, widget.composition);
+                },
+              )
             ],
           ),
         ),

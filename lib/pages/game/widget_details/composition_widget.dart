@@ -1,10 +1,13 @@
 import 'package:app/collection/composition_collection.dart';
 import 'package:app/models/composition.dart';
 import 'package:app/models/game.dart';
+import 'package:app/pages/game/widget_details/composition_setter.dart';
 import 'package:app/pages/joueur/joueur_details.dart';
 import 'package:app/providers/composition_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
+import 'package:app/widget/coach_and_team_widget.dart';
 import 'package:app/widget/composition_element_widget.dart';
+import 'package:app/widget_pages/arbitre_widget.dart';
 import 'package:app/widget_pages/substitut_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,17 +38,35 @@ class CompositionWidget extends StatelessWidget {
           final CompositionCollection compositionCollection = snapshot.data!;
 
           compositionSousCollection = CompositionSousCollection(
-              homeInside: compositionCollection.getTitulaire(
-                  idGame: game.idGame!, idParticipant: game.idHome!),
-              awayInside: compositionCollection.getTitulaire(
-                  idGame: game.idGame!, idParticipant: game.idAway!),
-              homeOutside: compositionCollection.getRempl(
-                  idGame: game.idGame!, idParticipant: game.idHome!),
-              awayOutside: compositionCollection.getRempl(
-                  idGame: game.idGame!, idParticipant: game.idAway!));
+            homeInside: compositionCollection.getTitulaire(
+                idGame: game.idGame!, idParticipant: game.idHome!),
+            awayInside: compositionCollection.getTitulaire(
+                idGame: game.idGame!, idParticipant: game.idAway!),
+            homeOutside: compositionCollection.getRempl(
+                idGame: game.idGame!, idParticipant: game.idHome!),
+            awayOutside: compositionCollection.getRempl(
+                idGame: game.idGame!, idParticipant: game.idAway!),
+            arbitres: compositionCollection.getArbitres(idGame: game.idGame!),
+            homeCoatch: compositionCollection.getCoach(
+                idGame: game.idGame!, idParticipant: game.idHome!),
+            awayCoatch: compositionCollection.getCoach(
+                idGame: game.idGame!, idParticipant: game.idAway!),
+          );
           return Consumer<CompositionProvider>(builder: (context, val, child) {
             return ListView(
               children: [
+                Center(
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        await Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => CompositionSetter(
+                                  compositionSousCollection:
+                                      compositionSousCollection,
+                                  game: game,
+                                )));
+                      },
+                      child: Text('Setting')),
+                ),
                 Card(
                   child: Stack(
                     alignment: Alignment.center,
@@ -77,39 +98,33 @@ class CompositionWidget extends StatelessWidget {
                       Positioned(
                         top: 0,
                         left: 0,
-                        child: Container(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            game.home ?? '',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                        ),
+                        child: CoachAndTeamWidget(
+                            equipe: game.home ?? '',
+                            composition: compositionSousCollection.homeCoatch),
                       ),
                       Positioned(
                         bottom: 0,
                         right: 0,
-                        child: Container(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            game.away ?? '',
-                            style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                          ),
-                        ),
+                        child: CoachAndTeamWidget(
+                            equipe: game.away ?? '',
+                            composition: compositionSousCollection.awayCoatch),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 SubstitutListWidget(
                   game: game,
                   compositionSousCollection: compositionSousCollection,
                 ),
+                ArbitreWidget(
+                  compositionSousCollection: compositionSousCollection,
+                ),
+                const SizedBox(
+                  height: 20,
+                )
               ],
             );
           });

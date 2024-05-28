@@ -4,8 +4,12 @@ import 'package:app/collection/composition_collection.dart';
 import 'package:app/models/composition.dart';
 import 'package:app/models/game.dart';
 import 'package:app/providers/composition_provider.dart';
+import 'package:app/widget/coach_and_team_widget.dart';
 import 'package:app/widget/composition_bottom_sheet_widget.dart';
 import 'package:app/widget/composition_element_widget.dart';
+import 'package:app/widget_pages/arbitre_form.dart';
+import 'package:app/widget_pages/arbitre_widget.dart';
+import 'package:app/widget_pages/coach_form.dart';
 import 'package:app/widget_pages/event_form.dart';
 import 'package:app/widget_pages/substitut_list_widget.dart';
 import 'package:app/widget_pages/composition_form.dart';
@@ -15,13 +19,12 @@ import 'package:provider/provider.dart';
 // ignore: must_be_immutable
 class CompositionSetter extends StatelessWidget {
   final Game game;
-  late CompositionSousCollection compositionSousCollection;
-  CompositionSetter({super.key, required this.game});
+  final CompositionSousCollection compositionSousCollection;
+  CompositionSetter(
+      {super.key, required this.game, required this.compositionSousCollection});
 
   @override
   Widget build(BuildContext context) {
-    compositionSousCollection = CompositionSousCollection(
-        awayInside: [], homeInside: [], homeOutside: [], awayOutside: []);
     return Scaffold(
       appBar: AppBar(
         title: Text('Composition'),
@@ -33,11 +36,17 @@ class CompositionSetter extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          // Todo enregistrer le formulaire des arbitres
           context.read<CompositionProvider>().setCompositions(game.idGame!, [
             ...compositionSousCollection.homeInside,
             ...compositionSousCollection.awayInside,
             ...compositionSousCollection.homeOutside,
-            ...compositionSousCollection.awayOutside
+            ...compositionSousCollection.awayOutside,
+            ...compositionSousCollection.arbitres,
+            ...[
+              compositionSousCollection.homeCoatch,
+              compositionSousCollection.awayCoatch
+            ]
           ]);
         },
         child: Icon(Icons.save),
@@ -63,122 +72,97 @@ class CompositionSetterWidget extends StatefulWidget {
 }
 
 class _CompositionSetterWidgetState extends State<CompositionSetterWidget> {
+  void _onDoubleTapCoach(CoachComposition compostition) async {
+    await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => CoachFormWidget(
+              composition: compostition,
+            )));
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: context.read<CompositionProvider>().getCompositions(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text('erreur!'),
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.green,
-              ),
-            );
-          }
-
-          final CompositionCollection compositionCollection = snapshot.data!;
-          widget.compositionSousCollection.homeInside =
-              compositionCollection.getTitulaire(
-                  idGame: widget.game.idGame!,
-                  idParticipant: widget.game.idHome!);
-          widget.compositionSousCollection.awayInside =
-              compositionCollection.getTitulaire(
-                  idGame: widget.game.idGame!,
-                  idParticipant: widget.game.idAway!);
-          widget.compositionSousCollection.homeOutside =
-              compositionCollection.getRempl(
-                  idGame: widget.game.idGame!,
-                  idParticipant: widget.game.idHome!);
-          widget.compositionSousCollection.awayOutside =
-              compositionCollection.getRempl(
-                  idGame: widget.game.idGame!,
-                  idParticipant: widget.game.idAway!);
-
-          return Consumer<CompositionProvider>(builder: (context, val, child) {
-            return ListView(
+    return Consumer<CompositionProvider>(builder: (context, val, child) {
+      return ListView(
+        children: [
+          Card(
+            child: Stack(
+              alignment: Alignment.center,
               children: [
-                Card(
+                Container(
+                  height: 900,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      Container(
-                        height: 900,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            RotatedBox(
-                              quarterTurns: 1,
-                              child: Container(
-                                height: MediaQuery.of(context).size.width,
-                                width: 800,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage('images/stade.jpg'),
-                                        fit: BoxFit.fill)),
-                              ),
-                            ),
-                            PlayerListWidget2(
-                              onUpdate: () {
-                                setState(() {});
-                              },
-                              game: widget.game,
-                              compositionSousCollection:
-                                  widget.compositionSousCollection,
-                            ),
-                          ],
+                      RotatedBox(
+                        quarterTurns: 1,
+                        child: Container(
+                          height: MediaQuery.of(context).size.width,
+                          width: 800,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage('images/stade.jpg'),
+                                  fit: BoxFit.fill)),
                         ),
                       ),
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        child: Container(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            widget.game.home ?? '',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          padding: EdgeInsets.all(10.0),
-                          child: Text(
-                            widget.game.away ?? '',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                        ),
+                      PlayerListWidget2(
+                        onUpdate: () {
+                          setState(() {});
+                        },
+                        game: widget.game,
+                        compositionSousCollection:
+                            widget.compositionSousCollection,
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 20,
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: CoachAndTeamWidget(
+                      onDoubleTap: () => _onDoubleTapCoach(
+                          widget.compositionSousCollection.homeCoatch),
+                      equipe: widget.game.home ?? '',
+                      composition: widget.compositionSousCollection.homeCoatch),
                 ),
-                SubstitutListWidget(
-                  onTap: (p0) async {
-                    await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => EventFormWidget(
-                              composition: p0,
-                            )));
-                  },
-                  onLongPress: (p0) {},
-                  onDoubleTap: (p0) {},
-                  game: widget.game,
-                  compositionSousCollection: widget.compositionSousCollection,
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: CoachAndTeamWidget(
+                      onDoubleTap: () => _onDoubleTapCoach(
+                          widget.compositionSousCollection.awayCoatch),
+                      equipe: widget.game.away ?? '',
+                      composition: widget.compositionSousCollection.awayCoatch),
                 ),
               ],
-            );
-          });
-        });
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          SubstitutListWidget(
+            onTap: (p0) async {
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => EventFormWidget(
+                        composition: p0,
+                      )));
+            },
+            onLongPress: (p0) {},
+            onDoubleTap: (p0) {},
+            game: widget.game,
+            compositionSousCollection: widget.compositionSousCollection,
+          ),
+          ArbitreWidget(
+              onDoubleTap: (p0) async {
+                await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ArbitreFormWidget(
+                          composition: p0,
+                        )));
+              },
+              compositionSousCollection: widget.compositionSousCollection),
+        ],
+      );
+    });
   }
 }
 

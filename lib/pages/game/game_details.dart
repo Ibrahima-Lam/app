@@ -8,7 +8,6 @@ import 'package:app/models/game.dart';
 import 'package:app/models/gameEvent.dart';
 import 'package:app/pages/competition/competition_details.dart';
 import 'package:app/pages/equipe/equipe_details.dart';
-import 'package:app/pages/game/widget_details/composition_setter.dart';
 import 'package:app/pages/game/widget_details/composition_widget.dart';
 import 'package:app/widget/classement_widget.dart';
 import 'package:app/pages/game/widget_details/journee_list_widget.dart';
@@ -332,17 +331,6 @@ class _GameDetailsState extends State<GameDetails>
                       context.read<GameProvider>().changeCard(game.idGame!);
                     },
                     child: Text('Card'),
-                  ),
-                  FloatingActionButton(
-                    heroTag: 'comp',
-                    onPressed: () async {
-                      await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => CompositionSetter(
-                                game: game,
-                              )));
-                      setState(() {});
-                    },
-                    child: Text('Comp'),
                   ),
                 ],
               ),

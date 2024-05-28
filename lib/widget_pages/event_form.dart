@@ -1,5 +1,6 @@
 import 'package:app/models/composition.dart';
 import 'package:app/widget/composition_events_widget.dart';
+import 'package:app/widget/dropdown_menu_widget.dart';
 import 'package:flutter/material.dart';
 
 class EventFormWidget extends StatefulWidget {
@@ -99,26 +100,5 @@ class _EventFormWidgetState extends State<EventFormWidget> {
         ),
       ),
     );
-  }
-}
-
-class DropDownMenuWidget<T> extends StatelessWidget {
-  final void Function(T?)? onChanged;
-  final List<T> tab;
-  final T value;
-  const DropDownMenuWidget(
-      {super.key,
-      required this.onChanged,
-      required this.tab,
-      required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton(
-        value: value,
-        items: tab
-            .map((e) => DropdownMenuItem(value: e, child: Text(e.toString())))
-            .toList(),
-        onChanged: onChanged);
   }
 }
