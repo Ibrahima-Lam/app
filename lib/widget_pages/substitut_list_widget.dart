@@ -1,8 +1,8 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 
 import 'package:app/collection/composition_collection.dart';
+import 'package:app/core/constants/strategie/rempl.dart';
 import 'package:app/models/composition.dart';
-import 'package:app/models/game.dart';
 import 'package:app/pages/joueur/joueur_details.dart';
 import 'package:app/providers/composition_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
@@ -143,7 +143,6 @@ class SubstitutListTile extends StatelessWidget {
 
 // ignore: must_be_immutable
 class SubstitutListWidget extends StatefulWidget {
-  final Game game;
   final CompositionSousCollection compositionSousCollection;
   final Function(JoueurComposition)? onTap;
   final Function(JoueurComposition)? onDoubleTap;
@@ -151,7 +150,6 @@ class SubstitutListWidget extends StatefulWidget {
 
   SubstitutListWidget({
     super.key,
-    required this.game,
     required this.compositionSousCollection,
     this.onTap,
     this.onDoubleTap,
@@ -254,14 +252,14 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.game.home ?? '',
+                    widget.compositionSousCollection.game.home ?? '',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    widget.game.away ?? '',
+                    widget.compositionSousCollection.game.away ?? '',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -296,7 +294,7 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
                                 true);
                           },
                     composition: home,
-                  )
+                  ),
               ]),
             ),
             Expanded(
@@ -325,10 +323,40 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
                                 false);
                           },
                     composition: away,
-                  )
+                  ),
               ]),
             ),
           ]),
+          if (widget.onDoubleTap != null)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                OutlinedButton(
+                    onPressed: () {
+                      setState(() {
+                        widget.compositionSousCollection.homeOutside
+                            .add(kRemplComposition.copyWith(
+                          idGame: widget.compositionSousCollection.game.idGame,
+                          idParticipant:
+                              widget.compositionSousCollection.game.idHome,
+                        ));
+                      });
+                    },
+                    child: Text('Ajouter')),
+                OutlinedButton(
+                    onPressed: () {
+                      setState(() {
+                        widget.compositionSousCollection.awayOutside
+                            .add(kRemplComposition.copyWith(
+                          idGame: widget.compositionSousCollection.game.idGame,
+                          idParticipant:
+                              widget.compositionSousCollection.game.idAway,
+                        ));
+                      });
+                    },
+                    child: Text('Ajouter')),
+              ],
+            )
         ],
       ),
     );

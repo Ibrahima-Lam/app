@@ -2,7 +2,6 @@
 
 import 'package:app/collection/composition_collection.dart';
 import 'package:app/models/composition.dart';
-import 'package:app/models/game.dart';
 import 'package:app/providers/composition_provider.dart';
 import 'package:app/widget/coach_and_team_widget.dart';
 import 'package:app/widget/composition_bottom_sheet_widget.dart';
@@ -18,10 +17,8 @@ import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class CompositionSetter extends StatelessWidget {
-  final Game game;
   final CompositionSousCollection compositionSousCollection;
-  CompositionSetter(
-      {super.key, required this.game, required this.compositionSousCollection});
+  CompositionSetter({super.key, required this.compositionSousCollection});
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +29,13 @@ class CompositionSetter extends StatelessWidget {
       ),
       body: CompositionSetterWidget(
         compositionSousCollection: compositionSousCollection,
-        game: game,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Todo enregistrer le formulaire des arbitres
-          context.read<CompositionProvider>().setCompositions(game.idGame!, [
+          context
+              .read<CompositionProvider>()
+              .setCompositions(compositionSousCollection.game.idGame, [
             ...compositionSousCollection.homeInside,
             ...compositionSousCollection.awayInside,
             ...compositionSousCollection.homeOutside,
@@ -57,12 +55,10 @@ class CompositionSetter extends StatelessWidget {
 
 // ignore: must_be_immutable
 class CompositionSetterWidget extends StatefulWidget {
-  final Game game;
   final CompositionSousCollection compositionSousCollection;
 
   CompositionSetterWidget({
     super.key,
-    required this.game,
     required this.compositionSousCollection,
   });
 
@@ -109,7 +105,6 @@ class _CompositionSetterWidgetState extends State<CompositionSetterWidget> {
                         onUpdate: () {
                           setState(() {});
                         },
-                        game: widget.game,
                         compositionSousCollection:
                             widget.compositionSousCollection,
                       ),
@@ -122,7 +117,7 @@ class _CompositionSetterWidgetState extends State<CompositionSetterWidget> {
                   child: CoachAndTeamWidget(
                       onDoubleTap: () => _onDoubleTapCoach(
                           widget.compositionSousCollection.homeCoatch),
-                      equipe: widget.game.home ?? '',
+                      equipe: widget.compositionSousCollection.game.home ?? '',
                       composition: widget.compositionSousCollection.homeCoatch),
                 ),
                 Positioned(
@@ -131,7 +126,7 @@ class _CompositionSetterWidgetState extends State<CompositionSetterWidget> {
                   child: CoachAndTeamWidget(
                       onDoubleTap: () => _onDoubleTapCoach(
                           widget.compositionSousCollection.awayCoatch),
-                      equipe: widget.game.away ?? '',
+                      equipe: widget.compositionSousCollection.game.away ?? '',
                       composition: widget.compositionSousCollection.awayCoatch),
                 ),
               ],
@@ -149,7 +144,6 @@ class _CompositionSetterWidgetState extends State<CompositionSetterWidget> {
             },
             onLongPress: (p0) {},
             onDoubleTap: (p0) {},
-            game: widget.game,
             compositionSousCollection: widget.compositionSousCollection,
           ),
           ArbitreWidget(
@@ -201,12 +195,10 @@ class ToggleButtonsWidget extends StatelessWidget {
 
 // ignore: must_be_immutable
 class PlayerListWidget2 extends StatefulWidget {
-  final Game game;
   final Function() onUpdate;
   CompositionSousCollection compositionSousCollection;
   PlayerListWidget2(
       {super.key,
-      required this.game,
       required this.compositionSousCollection,
       required this.onUpdate});
 

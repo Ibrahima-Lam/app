@@ -1,5 +1,7 @@
 import 'package:app/models/composition.dart';
 
+final ArbitreComposition kArbitreComposition = ArbitreComposition(
+    role: 'principale', idGame: 'AR' + 1.toString(), nom: 'Directeur');
 final List<ArbitreComposition> kArbitres = [
   ArbitreComposition(
       role: 'principale', idGame: 'AR' + 1.toString(), nom: 'Directeur'),

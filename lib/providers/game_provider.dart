@@ -38,17 +38,17 @@ class GameProvider extends ChangeNotifier {
 
   GameEvent getEvent(Game game) {
     if (gameEventCollection.isNotEmpty) {
-      final GameEvent? value = gameEventCollection.getElementAt(game.idGame!);
+      final GameEvent? value = gameEventCollection.getElementAt(game.idGame);
       if (value != null) {
         return value;
       }
     }
     EventStream homeEvent = EventStream(
-        idPartcipant: game.idHome!, redCard: 0, yellowCard: 0, pourcent: null);
+        idPartcipant: game.idHome, redCard: 0, yellowCard: 0, pourcent: null);
     EventStream awayEvent = EventStream(
-        idPartcipant: game.idAway!, redCard: 0, yellowCard: 0, pourcent: null);
+        idPartcipant: game.idAway, redCard: 0, yellowCard: 0, pourcent: null);
     GameEvent gameEvent = GameEvent(
-        idGame: game.idGame!,
+        idGame: game.idGame,
         timer: null,
         homeEvent: homeEvent,
         awayEvent: awayEvent);

@@ -38,34 +38,36 @@ class CompositionWidget extends StatelessWidget {
           final CompositionCollection compositionCollection = snapshot.data!;
 
           compositionSousCollection = CompositionSousCollection(
+            game: game,
             homeInside: compositionCollection.getTitulaire(
-                idGame: game.idGame!, idParticipant: game.idHome!),
+                idGame: game.idGame, idParticipant: game.idHome),
             awayInside: compositionCollection.getTitulaire(
-                idGame: game.idGame!, idParticipant: game.idAway!),
+                idGame: game.idGame, idParticipant: game.idAway),
             homeOutside: compositionCollection.getRempl(
-                idGame: game.idGame!, idParticipant: game.idHome!),
+                idGame: game.idGame, idParticipant: game.idHome),
             awayOutside: compositionCollection.getRempl(
-                idGame: game.idGame!, idParticipant: game.idAway!),
-            arbitres: compositionCollection.getArbitres(idGame: game.idGame!),
+                idGame: game.idGame, idParticipant: game.idAway),
+            arbitres: compositionCollection.getArbitres(idGame: game.idGame),
             homeCoatch: compositionCollection.getCoach(
-                idGame: game.idGame!, idParticipant: game.idHome!),
+                idGame: game.idGame, idParticipant: game.idHome),
             awayCoatch: compositionCollection.getCoach(
-                idGame: game.idGame!, idParticipant: game.idAway!),
+                idGame: game.idGame, idParticipant: game.idAway),
           );
           return Consumer<CompositionProvider>(builder: (context, val, child) {
             return ListView(
               children: [
-                Center(
-                  child: ElevatedButton(
-                      onPressed: () async {
-                        await Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => CompositionSetter(
-                                  compositionSousCollection:
-                                      compositionSousCollection,
-                                  game: game,
-                                )));
-                      },
-                      child: Text('Setting')),
+                Card(
+                  child: Center(
+                    child: OutlinedButton(
+                        onPressed: () async {
+                          await Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => CompositionSetter(
+                                    compositionSousCollection:
+                                        compositionSousCollection,
+                                  )));
+                        },
+                        child: Text('Paramettre de Composition')),
+                  ),
                 ),
                 Card(
                   child: Stack(
@@ -88,7 +90,6 @@ class CompositionWidget extends StatelessWidget {
                               ),
                             ),
                             PlayerListWidget(
-                              game: game,
                               compositionSousCollection:
                                   compositionSousCollection,
                             ),
@@ -116,7 +117,6 @@ class CompositionWidget extends StatelessWidget {
                   height: 20,
                 ),
                 SubstitutListWidget(
-                  game: game,
                   compositionSousCollection: compositionSousCollection,
                 ),
                 ArbitreWidget(
@@ -134,11 +134,9 @@ class CompositionWidget extends StatelessWidget {
 
 // ignore: must_be_immutable
 class PlayerListWidget extends StatelessWidget {
-  final Game game;
   final double height = 370;
   CompositionSousCollection compositionSousCollection;
-  PlayerListWidget(
-      {super.key, required this.game, required this.compositionSousCollection});
+  PlayerListWidget({super.key, required this.compositionSousCollection});
 
   @override
   Widget build(BuildContext context) {

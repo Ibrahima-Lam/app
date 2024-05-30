@@ -46,7 +46,7 @@ class _ArbitreFormWidgetState extends State<ArbitreFormWidget> {
                         widget.composition.role = val!;
                       });
                     },
-                    tab: ['principale', 'assistant', '4 eme'],
+                    tab: ['principale', 'assistant', '4 eme', 'var'],
                     value: widget.composition.role),
               ],
             ),

@@ -65,7 +65,7 @@ class GameWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => GameDetails(id: game.idGame!)));
+            builder: (context) => GameDetails(id: game.idGame)));
       },
       child: Container(
         decoration: const BoxDecoration(

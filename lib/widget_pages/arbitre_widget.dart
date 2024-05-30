@@ -1,4 +1,5 @@
 import 'package:app/collection/composition_collection.dart';
+import 'package:app/core/constants/arbitre/kArbitre.dart';
 import 'package:app/models/composition.dart';
 import 'package:flutter/material.dart';
 
@@ -31,8 +32,8 @@ class _ArbitreWidgetState extends State<ArbitreWidget> {
               ),
             ),
           ),
-          Column(
-            children: widget.compositionSousCollection.arbitres
+          Column(children: [
+            ...widget.compositionSousCollection.arbitres
                 .map((e) => ArbitreListTileWidget(
                       composition: e,
                       onDoubleTap: widget.onDoubleTap == null
@@ -43,7 +44,18 @@ class _ArbitreWidgetState extends State<ArbitreWidget> {
                             },
                     ))
                 .toList(),
-          ),
+            if (widget.onDoubleTap != null)
+              OutlinedButton(
+                  onPressed: () {
+                    setState(() {
+                      widget.compositionSousCollection.arbitres
+                          .add(kArbitreComposition.copyWith(
+                        idGame: widget.compositionSousCollection.game.idGame,
+                      ));
+                    });
+                  },
+                  child: Text('Ajouter')),
+          ]),
         ],
       ),
     );
@@ -70,7 +82,13 @@ class ArbitreListTileWidget extends StatelessWidget {
         title: Text(composition.nom),
         subtitle: Text(composition.role),
         trailing: Icon(
-          Icons.flag,
+          composition.role == 'assistant'
+              ? Icons.flag
+              : composition.role == 'principale'
+                  ? Icons.sports
+                  : composition.role == 'var'
+                      ? Icons.tv
+                      : Icons.settings_backup_restore_outlined,
           color: Colors.green,
         ),
       ),

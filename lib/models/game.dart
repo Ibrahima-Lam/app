@@ -2,9 +2,9 @@ import 'package:app/core/enums/game_etat_enum.dart';
 import 'package:app/models/searchable.dart';
 
 class Game implements Searchable {
-  String? idGame;
-  String? idHome;
-  String? idAway;
+  String idGame;
+  String idHome;
+  String idAway;
   String? dateGame;
   String? stadeGame;
   String? heureGame;
@@ -27,9 +27,9 @@ class Game implements Searchable {
   String nomCompetition;
 
   Game({
-    this.idGame,
-    this.idHome,
-    this.idAway,
+    required this.idGame,
+    required this.idHome,
+    required this.idAway,
     this.dateGame,
     this.stadeGame,
     this.heureGame,

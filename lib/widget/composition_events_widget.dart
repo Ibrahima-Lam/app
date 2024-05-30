@@ -60,3 +60,18 @@ class CardWidget extends StatelessWidget {
     );
   }
 }
+
+class PersonWidget extends StatelessWidget {
+  final double? radius;
+  const PersonWidget({super.key, this.radius});
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      radius: radius ?? 20,
+      backgroundColor: const Color(0xFFDCDCDC),
+      foregroundColor: Colors.white,
+      child: Icon(Icons.person),
+    );
+  }
+}

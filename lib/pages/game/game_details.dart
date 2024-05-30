@@ -9,6 +9,7 @@ import 'package:app/models/gameEvent.dart';
 import 'package:app/pages/competition/competition_details.dart';
 import 'package:app/pages/equipe/equipe_details.dart';
 import 'package:app/pages/game/widget_details/composition_widget.dart';
+import 'package:app/pages/game/widget_details/evenement_widget.dart';
 import 'package:app/widget/classement_widget.dart';
 import 'package:app/pages/game/widget_details/journee_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
@@ -54,7 +55,7 @@ class _GameDetailsState extends State<GameDetails>
     int initial = 0;
     if (gameEtat case GameEtat.pause || GameEtat.direct || GameEtat.termine) {
       initial = composition && classement
-          ? 3
+          ? 4
           : composition
               ? 3
               : 2;
@@ -64,7 +65,7 @@ class _GameDetailsState extends State<GameDetails>
           if (classement) 'Classement',
           'Avant Match',
           if (composition) 'Composition',
-          'Evénement',
+          'Evenement',
           'Statistique',
         ],
         initial
@@ -99,6 +100,11 @@ class _GameDetailsState extends State<GameDetails>
           break;
         case 'COM':
           widgets.add(CompositionWidget(
+            game: game,
+          ));
+          break;
+        case 'EVE':
+          widgets.add(EvenementWidget(
             game: game,
           ));
           break;
@@ -243,7 +249,7 @@ class _GameDetailsState extends State<GameDetails>
                                 children: [
                                   ColumnWidget(
                                     text: game.home!,
-                                    id: game.idHome!,
+                                    id: game.idHome,
                                     isHome: true,
                                     event: gameEvent.homeEvent,
                                   ),
@@ -253,7 +259,7 @@ class _GameDetailsState extends State<GameDetails>
                                   ),
                                   ColumnWidget(
                                     text: game.away!,
-                                    id: game.idAway!,
+                                    id: game.idAway,
                                     isHome: false,
                                     event: gameEvent.awayEvent,
                                   ),
@@ -292,7 +298,7 @@ class _GameDetailsState extends State<GameDetails>
                       } else
                         notifier.value = 0.0;
                       context.read<GameProvider>().changePourcent(
-                          game.idGame!,
+                          game.idGame,
                           (notifier.value == 0.0 || notifier.value >= 1)
                               ? null
                               : notifier.value,
@@ -309,7 +315,7 @@ class _GameDetailsState extends State<GameDetails>
                     heroTag: 'etat',
                     onPressed: () {
                       context.read<GameProvider>().changeEtat(
-                          id: game.idGame!,
+                          id: game.idGame,
                           etat: game.etat.etat == GameEtat.direct
                               ? 'termine'
                               : 'direct');
@@ -321,14 +327,14 @@ class _GameDetailsState extends State<GameDetails>
                     onPressed: () {
                       context
                           .read<GameProvider>()
-                          .changeScore(id: game.idGame!, hs: 2, as: 0);
+                          .changeScore(id: game.idGame, hs: 2, as: 0);
                     },
                     child: Text('+/-'),
                   ),
                   FloatingActionButton(
                     heroTag: 'card',
                     onPressed: () {
-                      context.read<GameProvider>().changeCard(game.idGame!);
+                      context.read<GameProvider>().changeCard(game.idGame);
                     },
                     child: Text('Card'),
                   ),

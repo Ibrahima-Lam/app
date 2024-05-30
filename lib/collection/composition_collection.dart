@@ -5,6 +5,7 @@ import 'package:app/core/constants/strategie/rempl.dart';
 import 'package:app/core/constants/strategie/strategie_433.dart';
 import 'package:app/core/constants/strategie/strategie_442.dart';
 import 'package:app/models/composition.dart';
+import 'package:app/models/game.dart';
 
 class CompositionCollection implements Collection {
   List<Composition> _compositions;
@@ -113,6 +114,7 @@ class CompositionCollection implements Collection {
 }
 
 class CompositionSousCollection {
+  final Game game;
   List<JoueurComposition> homeInside;
   List<JoueurComposition> awayInside;
   List<JoueurComposition> homeOutside;
@@ -128,6 +130,7 @@ class CompositionSousCollection {
     required this.homeCoatch,
     required this.awayCoatch,
     required this.arbitres,
+    required this.game,
   });
 
   void changeHome(JoueurComposition sortant, JoueurComposition entrant) {

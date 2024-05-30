@@ -1,5 +1,14 @@
 import 'package:app/models/composition.dart';
 
+final JoueurComposition kRemplComposition = JoueurComposition(
+    left: 0,
+    top: 0,
+    idJoueur: 'joueur',
+    numero: 0,
+    isIn: false,
+    nom: 'rempl0',
+    idGame: 'game',
+    idParticipant: 'equipe');
 List<JoueurComposition> kRempl = [
   JoueurComposition(
       left: 0,

@@ -1,3 +1,4 @@
+import 'package:app/core/extension/string_extension.dart';
 import 'package:flutter/material.dart';
 
 class DropDownMenuWidget<T> extends StatelessWidget {
@@ -27,7 +28,8 @@ class DropDownMenuWidget<T> extends StatelessWidget {
         hint: Text(hint ?? ''),
         value: value,
         items: tab
-            .map((e) => DropdownMenuItem(value: e, child: Text(e.toString())))
+            .map((e) => DropdownMenuItem(
+                value: e, child: Text(e.toString().capitalise())))
             .toList(),
         onChanged: onChanged,
       ),

@@ -7,18 +7,18 @@ class GameEventProvider extends ChangeNotifier {
 
   Future<GameEvent> getEvent(Game game) async {
     EventStream homeEvent = EventStream(
-        idPartcipant: game.idHome!,
+        idPartcipant: game.idHome,
         redCard: 0,
         yellowCard: 0,
         goal: 0,
         pourcent: 0.4);
     EventStream awayEvent = EventStream(
-        idPartcipant: game.idAway!,
+        idPartcipant: game.idAway,
         redCard: 0,
         yellowCard: 0,
         goal: 0,
         pourcent: 1 - homeEvent.pourcent!);
     return GameEvent(
-        idGame: game.idGame!, homeEvent: homeEvent, awayEvent: awayEvent);
+        idGame: game.idGame, homeEvent: homeEvent, awayEvent: awayEvent);
   }
 }

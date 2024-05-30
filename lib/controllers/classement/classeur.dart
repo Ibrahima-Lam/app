@@ -107,7 +107,7 @@ class Classeur {
           games.where((game) => indice.toString() == game.idHome).toList();
       for (Game element in homeGames) {
         elements.add(Stat(
-          id: element.idHome!,
+          id: element.idHome,
           nom: element.home!,
           bm: element.homeScore!,
           be: element.awayScore!,
@@ -119,7 +119,7 @@ class Classeur {
           games.where((game) => indice.toString() == game.idAway).toList();
       for (Game element in awayGames) {
         elements.add(Stat(
-            id: element.idAway!,
+            id: element.idAway,
             nom: element.away!,
             bm: element.awayScore!,
             be: element.homeScore!,
