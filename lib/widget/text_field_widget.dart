@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 class TextFieldWidget extends StatelessWidget {
   final TextEditingController textEditingController;
   final String hintText;
+  final Widget? suffixIcon;
   const TextFieldWidget(
-      {super.key, required this.textEditingController, required this.hintText});
+      {super.key,
+      required this.textEditingController,
+      required this.hintText,
+      this.suffixIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +24,7 @@ class TextFieldWidget extends StatelessWidget {
       child: TextField(
         controller: textEditingController,
         decoration: InputDecoration(
+          suffixIcon: suffixIcon,
           contentPadding: EdgeInsets.only(bottom: 10.0),
           hintText: hintText,
           hintStyle: TextStyle(fontSize: 17),

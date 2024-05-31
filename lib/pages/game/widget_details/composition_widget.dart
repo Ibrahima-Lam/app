@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'package:app/collection/composition_collection.dart';
 import 'package:app/models/composition.dart';
 import 'package:app/models/game.dart';
@@ -36,7 +38,6 @@ class CompositionWidget extends StatelessWidget {
           }
 
           final CompositionCollection compositionCollection = snapshot.data!;
-
           compositionSousCollection = CompositionSousCollection(
             game: game,
             homeInside: compositionCollection.getTitulaire(
@@ -65,6 +66,8 @@ class CompositionWidget extends StatelessWidget {
                                     compositionSousCollection:
                                         compositionSousCollection,
                                   )));
+                          // ignore: invalid_use_of_visible_for_testing_member
+                          context.read<CompositionProvider>().notifyListeners();
                         },
                         child: Text('Paramettre de Composition')),
                   ),

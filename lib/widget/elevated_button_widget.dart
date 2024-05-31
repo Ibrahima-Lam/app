@@ -7,10 +7,23 @@ class ElevatedButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue, foregroundColor: Colors.white),
-        onPressed: onPressed,
-        child: Text(label ?? 'Envoyer'));
+    return SizedBox(
+      height: 40,
+      width: MediaQuery.sizeOf(context).width * .95,
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4.0))),
+          onPressed: onPressed,
+          child: Text(
+            label ?? 'Envoyer',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          )),
+    );
   }
 }

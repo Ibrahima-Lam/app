@@ -227,7 +227,7 @@ class _GameDetailsState extends State<GameDetails>
                                           fontWeight: FontWeight.normal),
                                     ),
                                     Text(
-                                      '${game.nomNiveau!.capitalise()}',
+                                      '${game.nomNiveau!.capitalize()}',
                                       style: const TextStyle(
                                           fontSize: 15,
                                           color: Colors.white,

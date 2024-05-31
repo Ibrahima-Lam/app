@@ -29,7 +29,7 @@ class DropDownMenuWidget<T> extends StatelessWidget {
         value: value,
         items: tab
             .map((e) => DropdownMenuItem(
-                value: e, child: Text(e.toString().capitalise())))
+                value: e, child: Text(e.toString().capitalize())))
             .toList(),
         onChanged: onChanged,
       ),

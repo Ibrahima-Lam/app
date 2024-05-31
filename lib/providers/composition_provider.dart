@@ -14,7 +14,9 @@ class CompositionProvider extends ChangeNotifier {
   }
 
   Future<CompositionCollection> getCompositions() async {
-    await setCollection();
+    if (compositionCollection.isEmpty) {
+      await setCollection();
+    }
     return compositionCollection;
   }
 

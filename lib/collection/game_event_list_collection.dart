@@ -1,5 +1,5 @@
 import 'package:app/collection/collection.dart';
-import 'package:app/models/Event.dart';
+import 'package:app/models/event.dart';
 import 'package:app/models/game.dart';
 
 class GameEventListCollection extends Collection {
@@ -18,6 +18,10 @@ class GameEventListCollection extends Collection {
 
   @override
   bool get isNotEmpty => _events.isNotEmpty;
+
+  void add(Event event) {
+    _events.add(event);
+  }
 
   List<GoalEvent> getGameGoalsEvents(
       {required String idGame, required String idParticipant}) {

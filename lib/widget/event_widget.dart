@@ -1,56 +1,90 @@
-import 'package:app/models/Event.dart';
+import 'package:app/models/event.dart';
 import 'package:app/models/game.dart';
+import 'package:app/pages/joueur/joueur_details.dart';
+import 'package:app/providers/joueur_provider.dart';
 import 'package:app/widget/composition_events_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class EventWidget extends StatelessWidget {
   final Event event;
   final Game game;
-  const EventWidget({super.key, required this.event, required this.game});
+  final Function(Event)? onDoubleTap;
+  const EventWidget(
+      {super.key, required this.event, required this.game, this.onDoubleTap});
+
+  void _onTap(BuildContext context) async {
+    String? id = event.idJoueur;
+    final String? idT = event.idTarget;
+    final bool check = await context.read<JoueurProvider>().checkId(id);
+    final bool check2 = await context.read<JoueurProvider>().checkId(idT ?? '');
+    if (check && check2) {
+      id = await showModalBottomSheet(
+          context: context,
+          builder: (context) => JoueurBottomSheetWidget(event: event));
+    } else if (check) {
+      id = event.idJoueur;
+    } else if (check2) {
+      id = event.idTarget;
+    }
+    if (!check || !check2) return;
+    if (id != null) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => JoueurDetails(idJoueur: id!)));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: Colors.grey, width: 0.5))),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
+    return GestureDetector(
+      onTap: () => _onTap(context),
+      onDoubleTap: onDoubleTap == null
+          ? null
+          : () {
+              onDoubleTap!(event);
+            },
+      child: Container(
+        height: 60,
+        decoration: const BoxDecoration(
+            border: Border(top: BorderSide(color: Colors.grey, width: 0.5))),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+                child: Container(
+              child: game.idHome != event.idParticipant
+                  ? null
+                  : EventSubWidget(
+                      event: event,
+                      isHome: true,
+                    ),
+            )),
+            Center(
               child: Container(
-            child: game.idHome != event.idParticipant
-                ? null
-                : EventSubWidget(
-                    event: event,
-                    isHome: true,
-                  ),
-          )),
-          Center(
-            child: Container(
-              padding: const EdgeInsets.all(5.0),
-              child: Text(
-                '${event.minute ?? 42}\'',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
+                padding: const EdgeInsets.all(5.0),
+                child: Text(
+                  '${event.minute ?? 42}\'',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
                     color: Colors.green,
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.w400,
-                    fontStyle: FontStyle.italic),
-              ),
-              width: 40,
-            ),
-          ),
-          Expanded(
-              child: Container(
-            child: game.idAway != event.idParticipant
-                ? null
-                : EventSubWidget(
-                    event: event,
-                    isHome: false,
                   ),
-          )),
-        ],
+                ),
+                width: 40,
+              ),
+            ),
+            Expanded(
+                child: Container(
+              child: game.idAway != event.idParticipant
+                  ? null
+                  : EventSubWidget(
+                      event: event,
+                      isHome: false,
+                    ),
+            )),
+          ],
+        ),
       ),
     );
   }
@@ -82,8 +116,9 @@ class EventSubWidget extends StatelessWidget {
                 child: Text(
                   event.nom,
                   style: const TextStyle(
-                    fontSize: 15,
+                    fontSize: 13,
                     fontWeight: FontWeight.w500,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ),
@@ -95,7 +130,8 @@ class EventSubWidget extends StatelessWidget {
                   child: Text(
                     event.nomTarget ?? '',
                     style: const TextStyle(
-                      fontSize: 13,
+                      overflow: TextOverflow.ellipsis,
+                      fontSize: 11,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -159,6 +195,35 @@ class IconsTypeWidget extends StatelessWidget {
               size: 15,
               color: Colors.grey,
             ),
+        ],
+      ),
+    );
+  }
+}
+
+class JoueurBottomSheetWidget extends StatelessWidget {
+  final Event event;
+  const JoueurBottomSheetWidget({super.key, required this.event});
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomSheet(
+      onClosing: () {},
+      builder: (context) => Column(
+        children: [
+          ListTile(
+            leading: PersonWidget(),
+            title: Text(event.nom),
+            onTap: () {
+              Navigator.pop(context, event.idJoueur);
+            },
+          ),
+          ListTile(
+              leading: PersonWidget(),
+              title: Text(event.nomTarget ?? ''),
+              onTap: () {
+                Navigator.pop(context, event.idTarget);
+              }),
         ],
       ),
     );
