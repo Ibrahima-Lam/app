@@ -27,7 +27,7 @@ class EventWidget extends StatelessWidget {
     } else if (check2) {
       id = event.idTarget;
     }
-    if (!check || !check2) return;
+    if (!check && !check2) return;
     if (id != null) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => JoueurDetails(idJoueur: id!)));

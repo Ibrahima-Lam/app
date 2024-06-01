@@ -4,11 +4,14 @@ class TextFieldWidget extends StatelessWidget {
   final TextEditingController textEditingController;
   final String hintText;
   final Widget? suffixIcon;
-  const TextFieldWidget(
-      {super.key,
-      required this.textEditingController,
-      required this.hintText,
-      this.suffixIcon});
+  final Widget? prefixIcon;
+  const TextFieldWidget({
+    super.key,
+    required this.textEditingController,
+    required this.hintText,
+    this.suffixIcon,
+    this.prefixIcon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +28,7 @@ class TextFieldWidget extends StatelessWidget {
         controller: textEditingController,
         decoration: InputDecoration(
           suffixIcon: suffixIcon,
+          prefixIcon: prefixIcon,
           contentPadding: EdgeInsets.only(bottom: 10.0),
           hintText: hintText,
           hintStyle: TextStyle(fontSize: 17),

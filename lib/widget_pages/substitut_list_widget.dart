@@ -7,68 +7,11 @@ import 'package:app/pages/joueur/joueur_details.dart';
 import 'package:app/providers/composition_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/widget/composition_bottom_sheet_widget.dart';
-import 'package:app/widget/composition_events_widget.dart';
+import 'package:app/widget/confirm_dialog_widget.dart';
+import 'package:app/widget/substitut_logo_widget.dart';
 import 'package:app/widget_pages/composition_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-class SubstitutLogoWidget extends StatelessWidget {
-  const SubstitutLogoWidget({super.key, required this.composition});
-  final JoueurComposition composition;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Container(
-          height: 40,
-          width: 40,
-        ),
-        Badge(
-          backgroundColor: Colors.black,
-          textColor: Colors.white,
-          offset: Offset(0, 5),
-          label: Text(composition.numero.toString()),
-          alignment: Alignment.bottomCenter,
-          child: CircleAvatar(
-            radius: 15,
-            backgroundColor: const Color(0xFFDCDCDC),
-            foregroundColor: Colors.white,
-            child: Icon(Icons.person),
-          ),
-        ),
-        if (composition.but > 0)
-          Positioned(
-              left: 0,
-              top: 0,
-              child: GoalWidget(
-                but: composition.but,
-              )),
-        if (composition.entrant != null)
-          Positioned(
-              left: 0,
-              top: 22,
-              child: Icon(
-                Icons.subdirectory_arrow_left,
-                color: Colors.red,
-                size: 20,
-              )),
-        if (composition.jaune > 0)
-          Positioned(right: 0, top: 5, child: CardWidget()),
-        if (composition.rouge > 0)
-          Positioned(
-              right: 3,
-              top: 0,
-              child: CardWidget(
-                isRed: true,
-              )),
-        if (composition.isCapitaine)
-          Positioned(right: 0, top: 25, child: CapitaineWidget()),
-      ],
-    );
-  }
-}
 
 // ignore: must_be_immutable
 class SubstitutListTile extends StatelessWidget {
@@ -193,21 +136,9 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
       final bool? confirm = await showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: Text("Confimation du changement"),
-            content: Text('Voulez vous effectuer cet Changement ?'),
-            actions: [
-              TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: Text('Non')),
-              TextButton(
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
-                  child: Text('Oui')),
-            ],
+          return ConfirmDialogWidget(
+            title: "Confimation du changement",
+            content: 'Voulez vous effectuer cet Changement ?',
           );
         },
       );

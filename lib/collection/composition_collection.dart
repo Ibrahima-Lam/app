@@ -45,7 +45,9 @@ class CompositionCollection implements Collection {
   }
 
   List<JoueurComposition> getTitulaire(
-      {required String idGame, required String idParticipant}) {
+      {required String idGame,
+      required String idParticipant,
+      bool create = true}) {
     List<JoueurComposition> titulaires =
         compositions.whereType<JoueurComposition>().toList();
 
@@ -54,22 +56,30 @@ class CompositionCollection implements Collection {
           element.idParticipant == idParticipant &&
           element.idGame == idGame;
     }).toList();
+    if (!create && titulaires.isEmpty) return [];
 
     if (titulaires.isEmpty) {
       titulaires = kStrategie433.map((e) {
         return e.copyWith(
-            idGame: idGame,
-            idParticipant: idParticipant,
-            idJoueur: 'G${idGame}P${idParticipant}J${kStrategie433.indexWhere(
-              (element) => element.nom == e.nom,
-            )}');
+          idGame: idGame,
+          idParticipant: idParticipant,
+          idJoueur: 'G${idGame}P${idParticipant}T${kStrategie433.indexWhere(
+            (element) => element.nom == e.nom,
+          )}',
+          idComposition:
+              'G${idGame}P${idParticipant}T${kStrategie433.indexWhere(
+            (element) => element.nom == e.nom,
+          )}',
+        );
       }).toList();
     }
     return titulaires;
   }
 
   List<JoueurComposition> getRempl(
-      {required String idGame, required String idParticipant}) {
+      {required String idGame,
+      required String idParticipant,
+      bool create = true}) {
     List<JoueurComposition> rempls =
         compositions.whereType<JoueurComposition>().toList();
     rempls = rempls
@@ -78,14 +88,17 @@ class CompositionCollection implements Collection {
             element.idParticipant == idParticipant &&
             element.idGame == idGame)
         .toList();
-
+    if (!create && rempls.isEmpty) return [];
     if (rempls.isEmpty) {
       rempls = kRempl.map((e) {
         return e.copyWith(
             isIn: false,
             idGame: idGame,
             idParticipant: idParticipant,
-            idJoueur: 'G${idGame}P${idParticipant}J${kRempl.indexWhere(
+            idJoueur: 'G${idGame}P${idParticipant}R${kRempl.indexWhere(
+              (element) => element.nom == e.nom,
+            )}',
+            idComposition: 'G${idGame}P${idParticipant}R${kRempl.indexWhere(
               (element) => element.nom == e.nom,
             )}');
       }).toList();
@@ -97,7 +110,13 @@ class CompositionCollection implements Collection {
     List<ArbitreComposition> arbitres =
         compositions.whereType<ArbitreComposition>().toList();
     if (arbitres.isEmpty) {
-      arbitres = kArbitres.map((e) => e.copyWith(idGame: idGame)).toList();
+      arbitres = kArbitres
+          .map((e) => e.copyWith(
+              idGame: idGame,
+              idComposition: 'G${idGame}A${arbitres.indexWhere(
+                (element) => element.nom == e.nom,
+              )}'))
+          .toList();
     }
     return arbitres;
   }
@@ -108,8 +127,32 @@ class CompositionCollection implements Collection {
         compositions.whereType<CoachComposition>().toList();
     late CoachComposition coach = coaches.firstWhere(
         (element) => element.idParticipant == idParticipant,
-        orElse: (() => kCoach.copyWith(idParticipant: idParticipant)));
+        orElse: (() => kCoach.copyWith(
+            idParticipant: idParticipant,
+            idComposition: 'G${idGame}P${idParticipant}}')));
     return coach;
+  }
+
+  JoueurComposition getJoueurComposition({
+    String? idComposition,
+    required String idGame,
+    required String idParticipant,
+    required String idJoueur,
+  }) {
+    try {
+      return compositions.whereType<JoueurComposition>().singleWhere(
+            (element) => element.idJoueur == idJoueur,
+          );
+    } catch (e) {
+      return compositions.whereType<JoueurComposition>().singleWhere(
+            (element) => element.idComposition == idComposition,
+            orElse: () => kRemplComposition.copyWith(
+              idComposition: idComposition,
+              idGame: idGame,
+              idParticipant: idParticipant,
+            ),
+          );
+    }
   }
 }
 

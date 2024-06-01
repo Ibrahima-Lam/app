@@ -2,6 +2,7 @@ import 'package:app/models/composition.dart';
 
 List<JoueurComposition> kStrategie433 = [
   JoueurComposition(
+      idComposition: 'C1' + DateTime.now().millisecondsSinceEpoch.toString(),
       isIn: true,
       idGame: 'game',
       idParticipant: 'equipe',
@@ -11,6 +12,7 @@ List<JoueurComposition> kStrategie433 = [
       left: 160,
       top: 730),
   JoueurComposition(
+      idComposition: 'C2' + DateTime.now().millisecondsSinceEpoch.toString(),
       isIn: true,
       idGame: 'game',
       idParticipant: 'equipe',
@@ -20,6 +22,7 @@ List<JoueurComposition> kStrategie433 = [
       left: 300,
       top: 630),
   JoueurComposition(
+      idComposition: 'C3' + DateTime.now().millisecondsSinceEpoch.toString(),
       isIn: true,
       idGame: 'game',
       idParticipant: 'equipe',
@@ -29,6 +32,7 @@ List<JoueurComposition> kStrategie433 = [
       left: 206,
       top: 650),
   JoueurComposition(
+      idComposition: 'C4' + DateTime.now().millisecondsSinceEpoch.toString(),
       isIn: true,
       idGame: 'game',
       idParticipant: 'equipe',
@@ -38,6 +42,7 @@ List<JoueurComposition> kStrategie433 = [
       left: 122,
       top: 650),
   JoueurComposition(
+      idComposition: 'C5' + DateTime.now().millisecondsSinceEpoch.toString(),
       isIn: true,
       idGame: 'game',
       idParticipant: 'equipe',
@@ -47,6 +52,7 @@ List<JoueurComposition> kStrategie433 = [
       left: 20,
       top: 630),
   JoueurComposition(
+      idComposition: 'C6' + DateTime.now().millisecondsSinceEpoch.toString(),
       isIn: true,
       idGame: 'game',
       idParticipant: 'equipe',
@@ -56,6 +62,7 @@ List<JoueurComposition> kStrategie433 = [
       left: 280,
       top: 530),
   JoueurComposition(
+      idComposition: 'C7' + DateTime.now().millisecondsSinceEpoch.toString(),
       isIn: true,
       idGame: 'game',
       idParticipant: 'equipe',
@@ -66,6 +73,7 @@ List<JoueurComposition> kStrategie433 = [
       left: 160,
       top: 540),
   JoueurComposition(
+      idComposition: 'C8' + DateTime.now().millisecondsSinceEpoch.toString(),
       isIn: true,
       idGame: 'game',
       idParticipant: 'equipe',
@@ -75,6 +83,7 @@ List<JoueurComposition> kStrategie433 = [
       left: 40,
       top: 530),
   JoueurComposition(
+      idComposition: 'C9' + DateTime.now().millisecondsSinceEpoch.toString(),
       isIn: true,
       idGame: 'game',
       idParticipant: 'equipe',
@@ -84,6 +93,7 @@ List<JoueurComposition> kStrategie433 = [
       left: 280,
       top: 420),
   JoueurComposition(
+      idComposition: 'C10' + DateTime.now().millisecondsSinceEpoch.toString(),
       isIn: true,
       idGame: 'game',
       idParticipant: 'equipe',
@@ -93,6 +103,7 @@ List<JoueurComposition> kStrategie433 = [
       left: 160,
       top: 430),
   JoueurComposition(
+      idComposition: 'C11' + DateTime.now().millisecondsSinceEpoch.toString(),
       isIn: true,
       idGame: 'game',
       idParticipant: 'equipe',

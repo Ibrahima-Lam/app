@@ -15,7 +15,10 @@ class EvenementWidget extends StatelessWidget {
   const EvenementWidget({super.key, required this.game});
   void _onDoubleTap(BuildContext context, Event event) async {
     await Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => EventListForm(event: event),
+      builder: (context) => EventListForm(
+        event: event,
+        isNew: false,
+      ),
     ));
     // ignore: invalid_use_of_protected_member
     context.read<GameEventListProvider>().notifyListeners();
@@ -43,7 +46,10 @@ class EvenementWidget extends StatelessWidget {
     }
     if (event != null) {
       final Event? ev = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => EventListForm(event: event!),
+        builder: (context) => EventListForm(
+          event: event!,
+          isNew: true,
+        ),
       ));
       if (ev == null) return null;
       await context.read<GameEventListProvider>().addEvent(event);

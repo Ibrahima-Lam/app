@@ -24,4 +24,13 @@ class CompositionProvider extends ChangeNotifier {
     await CompositionService.setCompositions(idGame, compos);
     setCollection();
   }
+
+  Future<void> setJoueurComposition(JoueurComposition composition,
+      {required String idGame,
+      required String idParticipant,
+      required String idJoueur}) async {
+    CompositionService.setJoueurComposition(composition,
+        idGame: idGame, idParticipant: idParticipant, idJoueur: idJoueur);
+    setCollection();
+  }
 }
