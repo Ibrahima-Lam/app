@@ -13,6 +13,7 @@ import 'package:app/providers/infos_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/providers/participation_provider.dart';
+import 'package:app/providers/statistique_provider.dart';
 import 'package:app/widget/drawer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => CounterProvider()),
+        ChangeNotifierProvider(create: (context) => StatistiqueProvider()),
         ChangeNotifierProvider(create: (context) => CompetitionProvider()),
         ChangeNotifierProvider(create: (context) => GameProvider()),
         ChangeNotifierProvider(create: (context) => GameEventProvider()),

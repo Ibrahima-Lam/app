@@ -37,6 +37,18 @@ class GoalEvent extends Event {
     required super.idGame,
     required super.idEvent,
   });
+
+  factory GoalEvent.fromJson(Map<String, dynamic> json) {
+    return GoalEvent(
+      idJoueur: json['idJoueur'].toString(),
+      nom: json['nomJoueur'].toString(),
+      idParticipant: json['idParticipant'].toString(),
+      idGame: json['idGame'].toString(),
+      idEvent: 'G' + json['idBut'].toString(),
+      minute: (json['minute'] ?? '').toString(),
+    );
+  }
+
   GoalEvent copyWith({
     String? type,
     String? idJoueur,
@@ -76,6 +88,18 @@ class CardEvent extends Event {
       required super.nom,
       super.idTarget,
       super.nomTarget});
+
+  factory CardEvent.fromJson(Map<String, dynamic> json) {
+    return CardEvent(
+      idJoueur: json['idJoueur'].toString(),
+      isRed: json['codeSanction'] != 'jaune',
+      minute: (json['minute'] ?? '').toString(),
+      nom: json['nomJoueur'].toString(),
+      idParticipant: json['idParticipant'].toString(),
+      idGame: json['idGame'].toString(),
+      idEvent: 'C' + json['idSanctionner'].toString(),
+    );
+  }
 
   CardEvent copyWith({
     String? type,

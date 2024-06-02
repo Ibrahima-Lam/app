@@ -56,11 +56,18 @@ class BottomModalSheetCompositionListWidget extends StatelessWidget {
                                 fontSize: 22, fontWeight: FontWeight.bold),
                           ),
                         ),
-                        CompositionSectionWidget(
-                            compositions: titulaires, title: "Titulaires"),
-                        const SizedBox(height: 10.0),
-                        CompositionSectionWidget(
-                            compositions: rempls, title: "Remplaçants"),
+                        if (titulaires.isNotEmpty || rempls.isNotEmpty)
+                          Column(children: [
+                            CompositionSectionWidget(
+                                compositions: titulaires, title: "Titulaires"),
+                            const SizedBox(height: 10.0),
+                            CompositionSectionWidget(
+                                compositions: rempls, title: "Remplaçants"),
+                          ])
+                        else
+                          Center(
+                            child: Text('Pas de composition disponible !'),
+                          ),
                       ],
                     ));
               },

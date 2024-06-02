@@ -34,19 +34,23 @@ class BottomModalSheetJoueurListWidget extends StatelessWidget {
               initialChildSize: 0.8,
               minChildSize: 0.8,
               builder: (context, scrollController) {
-                return Container(
-                  child: ListView.builder(
-                    controller: scrollController,
-                    itemCount: joueurs.length,
-                    itemBuilder: (context, index) {
-                      Joueur joueur = joueurs[index];
-                      return JoueurListTileWidget(
-                        joueur: joueur,
-                        onTap: () => Navigator.pop(context, joueur),
+                return joueurs.isEmpty
+                    ? Center(
+                        child: Text('Pas de joueurs disponible cette équipe !'),
+                      )
+                    : Container(
+                        child: ListView.builder(
+                          controller: scrollController,
+                          itemCount: joueurs.length,
+                          itemBuilder: (context, index) {
+                            Joueur joueur = joueurs[index];
+                            return JoueurListTileWidget(
+                              joueur: joueur,
+                              onTap: () => Navigator.pop(context, joueur),
+                            );
+                          },
+                        ),
                       );
-                    },
-                  ),
-                );
               },
             );
           });

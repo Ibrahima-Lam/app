@@ -96,26 +96,30 @@ class EvenementWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 5.0),
               child: ListView(
                 children: [
-                  EventSectionWidget(
-                      onDoubleTap: (p0) => _onDoubleTap(context, p0),
-                      events: gameEventListSousCollection.goals,
-                      game: game,
-                      title: 'Buts'),
-                  EventSectionWidget(
-                      onDoubleTap: (p0) => _onDoubleTap(context, p0),
-                      events: gameEventListSousCollection.yellowCards,
-                      game: game,
-                      title: 'Cartons Jaunes'),
-                  EventSectionWidget(
-                      onDoubleTap: (p0) => _onDoubleTap(context, p0),
-                      events: gameEventListSousCollection.redCards,
-                      game: game,
-                      title: 'Cartons Rouges'),
-                  EventSectionWidget(
-                      onDoubleTap: (p0) => _onDoubleTap(context, p0),
-                      events: gameEventListSousCollection.substitutions,
-                      game: game,
-                      title: 'Changements'),
+                  if (gameEventListSousCollection.goals.isNotEmpty)
+                    EventSectionWidget(
+                        onDoubleTap: (p0) => _onDoubleTap(context, p0),
+                        events: gameEventListSousCollection.goals,
+                        game: game,
+                        title: 'Buts'),
+                  if (gameEventListSousCollection.yellowCards.isNotEmpty)
+                    EventSectionWidget(
+                        onDoubleTap: (p0) => _onDoubleTap(context, p0),
+                        events: gameEventListSousCollection.yellowCards,
+                        game: game,
+                        title: 'Cartons Jaunes'),
+                  if (gameEventListSousCollection.redCards.isNotEmpty)
+                    EventSectionWidget(
+                        onDoubleTap: (p0) => _onDoubleTap(context, p0),
+                        events: gameEventListSousCollection.redCards,
+                        game: game,
+                        title: 'Cartons Rouges'),
+                  if (gameEventListSousCollection.substitutions.isNotEmpty)
+                    EventSectionWidget(
+                        onDoubleTap: (p0) => _onDoubleTap(context, p0),
+                        events: gameEventListSousCollection.substitutions,
+                        game: game,
+                        title: 'Changements'),
                   Card(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -136,7 +140,14 @@ class EvenementWidget extends StatelessWidget {
                             child: Text('Ajouter')),
                       ],
                     ),
-                  )
+                  ),
+                  if (gameEventListCollection.isEmpty)
+                    Container(
+                      height: 200.0,
+                      child: Center(
+                        child: Text('Pas evenement disponible !'),
+                      ),
+                    )
                 ],
               ),
             );

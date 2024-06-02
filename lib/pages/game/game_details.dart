@@ -10,6 +10,7 @@ import 'package:app/pages/competition/competition_details.dart';
 import 'package:app/pages/equipe/equipe_details.dart';
 import 'package:app/pages/game/widget_details/composition_widget.dart';
 import 'package:app/pages/game/widget_details/evenement_widget.dart';
+import 'package:app/pages/game/widget_details/statistique_widget.dart';
 import 'package:app/widget/classement_widget.dart';
 import 'package:app/pages/game/widget_details/journee_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
@@ -55,7 +56,7 @@ class _GameDetailsState extends State<GameDetails>
     int initial = 0;
     if (gameEtat case GameEtat.pause || GameEtat.direct || GameEtat.termine) {
       initial = composition && classement
-          ? 4
+          ? 5
           : composition
               ? 3
               : 2;
@@ -105,6 +106,10 @@ class _GameDetailsState extends State<GameDetails>
           break;
         case 'EVE':
           widgets.add(EvenementWidget(
+            game: game,
+          ));
+        case 'STA':
+          widgets.add(StatistiqueWidget(
             game: game,
           ));
           break;

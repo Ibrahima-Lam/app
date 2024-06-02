@@ -29,22 +29,7 @@ class GameEventListCollection extends Collection {
         .whereType<GoalEvent>()
         .where((element) => element.idGame == idGame)
         .toList();
-    if (evenement.isEmpty) {
-      evenement = [
-        GoalEvent(
-            idJoueur: 'joueur',
-            nom: 'Player',
-            idParticipant: idParticipant,
-            idGame: idGame,
-            idEvent: 'event1'),
-        GoalEvent(
-            idJoueur: 'joueur',
-            nom: 'Player',
-            idParticipant: idParticipant,
-            idGame: idGame,
-            idEvent: 'event2'),
-      ];
-    }
+
     return evenement;
   }
 
@@ -56,24 +41,7 @@ class GameEventListCollection extends Collection {
         .whereType<CardEvent>()
         .where((element) => element.idGame == idGame && element.isRed == isRed)
         .toList();
-    if (evenement.isEmpty) {
-      evenement = [
-        CardEvent(
-            isRed: isRed,
-            idJoueur: 'joueur',
-            nom: 'Player',
-            idParticipant: idParticipant,
-            idGame: idGame,
-            idEvent: 'event1'),
-        CardEvent(
-            isRed: isRed,
-            idJoueur: 'joueur',
-            nom: 'Player',
-            idParticipant: idParticipant,
-            idGame: idGame,
-            idEvent: 'event2'),
-      ];
-    }
+
     return evenement;
   }
 
@@ -85,22 +53,7 @@ class GameEventListCollection extends Collection {
         .whereType<RemplEvent>()
         .where((element) => element.idGame == idGame)
         .toList();
-    if (evenement.isEmpty) {
-      evenement = [
-        RemplEvent(
-            idJoueur: 'joueur',
-            nom: 'Player',
-            idParticipant: idParticipant,
-            idGame: idGame,
-            idEvent: 'event1'),
-        RemplEvent(
-            idJoueur: 'joueur',
-            nom: 'Player',
-            idParticipant: idParticipant,
-            idGame: idGame,
-            idEvent: 'event2'),
-      ];
-    }
+
     return evenement;
   }
 }
