@@ -4,4 +4,8 @@ extension StringExtension on String {
     final String last = this.substring(1);
     return first + last;
   }
+
+  int toInt() {
+    return double.parse(this).toInt();
+  }
 }

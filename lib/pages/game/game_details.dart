@@ -11,6 +11,7 @@ import 'package:app/pages/equipe/equipe_details.dart';
 import 'package:app/pages/game/widget_details/composition_widget.dart';
 import 'package:app/pages/game/widget_details/evenement_widget.dart';
 import 'package:app/pages/game/widget_details/statistique_widget.dart';
+import 'package:app/providers/statistique_provider.dart';
 import 'package:app/widget/classement_widget.dart';
 import 'package:app/pages/game/widget_details/journee_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
@@ -246,7 +247,6 @@ class _GameDetailsState extends State<GameDetails>
                           SizedBox(),
                           Consumer<GameProvider>(
                             builder: (context, value, child) {
-                              GameEvent gameEvent = value.getEvent(game);
                               return Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -256,17 +256,17 @@ class _GameDetailsState extends State<GameDetails>
                                     text: game.home!,
                                     id: game.idHome,
                                     isHome: true,
-                                    event: gameEvent.homeEvent,
+                                    game: game,
                                   ),
                                   ColumnScoreWidget(
                                     game: game,
-                                    timer: gameEvent.timer,
+                                    timer: null,
                                   ),
                                   ColumnWidget(
                                     text: game.away!,
                                     id: game.idAway,
                                     isHome: false,
-                                    event: gameEvent.awayEvent,
+                                    game: game,
                                   ),
                                 ],
                               );
@@ -291,59 +291,6 @@ class _GameDetailsState extends State<GameDetails>
                 body: TabBarView(
                   children: tabBarViewChildren(tabs),
                 ),
-              ),
-              floatingActionButton: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  FloatingActionButton(
-                    heroTag: 'stat',
-                    onPressed: () {
-                      if (notifier.value <= 1.0 && notifier.value >= 0) {
-                        notifier.value = notifier.value + 0.05;
-                      } else
-                        notifier.value = 0.0;
-                      context.read<GameProvider>().changePourcent(
-                          game.idGame,
-                          (notifier.value == 0.0 || notifier.value >= 1)
-                              ? null
-                              : notifier.value,
-                          timerEvent: TimerEvent(
-                              start: DateTime.now().toString(),
-                              duration: 45,
-                              extra: 3,
-                              retard: 0,
-                              initial: 0));
-                    },
-                    child: Text('%'),
-                  ),
-                  FloatingActionButton(
-                    heroTag: 'etat',
-                    onPressed: () {
-                      context.read<GameProvider>().changeEtat(
-                          id: game.idGame,
-                          etat: game.etat.etat == GameEtat.direct
-                              ? 'termine'
-                              : 'direct');
-                    },
-                    child: Text('Etat'),
-                  ),
-                  FloatingActionButton(
-                    heroTag: 'score',
-                    onPressed: () {
-                      context
-                          .read<GameProvider>()
-                          .changeScore(id: game.idGame, hs: 2, as: 0);
-                    },
-                    child: Text('+/-'),
-                  ),
-                  FloatingActionButton(
-                    heroTag: 'card',
-                    onPressed: () {
-                      context.read<GameProvider>().changeCard(game.idGame);
-                    },
-                    child: Text('Card'),
-                  ),
-                ],
               ),
             ),
           );
@@ -496,98 +443,103 @@ class ColumnWidget extends StatelessWidget {
   final String text;
   final String id;
   final bool isHome;
-
-  final EventStream event;
+  final Game game;
   const ColumnWidget(
       {super.key,
       required this.text,
       required this.id,
       required this.isHome,
-      required this.event});
-
-  int? get _valuePourcent =>
-      event.pourcent != null ? (event.pourcent! * 100).toInt() : null;
-  int get _yellow => event.yellowCard;
-  int get _red => event.redCard;
+      required this.game});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(minWidth: 120),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Container(
-            child: isHome
-                ? CardAndStatWidget(
-                    red: _red, yellow: _yellow, pourcent: _valuePourcent)
-                : null,
-          ),
-          Container(
-            height: 100,
-            constraints: BoxConstraints(maxWidth: 120),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => EquipeDetails(id: id))),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 25,
-                          child: Icon(Icons.people),
-                        ),
-                        Builder(
-                          builder: (context) {
-                            double? value = event.pourcent;
-                            if (value != null) {
+    return Consumer<StatistiqueProvider>(builder: (context, val, child) {
+      GameEvent gameEvent = val.getGameCardAndPossession(game);
+
+      int _yellow = (isHome
+          ? gameEvent.homeEvent.yellowCard
+          : gameEvent.awayEvent.yellowCard);
+      int _red =
+          (isHome ? gameEvent.homeEvent.redCard : gameEvent.awayEvent.redCard);
+      int _valuePourcent = (isHome
+              ? gameEvent.homeEvent.pourcent
+              : gameEvent.awayEvent.pourcent)!
+          .toInt();
+      double value = _valuePourcent / 100;
+
+      return Container(
+        constraints: BoxConstraints(minWidth: 120),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Container(
+              child: isHome
+                  ? CardAndStatWidget(
+                      red: _red, yellow: _yellow, pourcent: _valuePourcent)
+                  : null,
+            ),
+            Container(
+              height: 100,
+              constraints: BoxConstraints(maxWidth: 120),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => EquipeDetails(id: id))),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: 25,
+                            child: Icon(Icons.people),
+                          ),
+                          Builder(
+                            builder: (context) {
                               if (value >= 1) {
                                 value = 0;
                               }
-                            } else
-                              value = 0;
 
-                            return CircularProgressIndicator(
-                              backgroundColor: Colors.white,
-                              value: value,
-                              strokeAlign: 10,
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation((value >= 0.5
-                                  ? const Color.fromARGB(255, 5, 148, 10)
-                                  : const Color.fromARGB(255, 215, 21, 7))),
-                            );
-                          },
-                        )
-                      ],
-                    )),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 13,
-                    fontWeight: FontWeight.normal,
+                              return CircularProgressIndicator(
+                                backgroundColor: Colors.white,
+                                value: value,
+                                strokeAlign: 10,
+                                strokeWidth: 2,
+                                valueColor: AlwaysStoppedAnimation((value >= 0.5
+                                    ? const Color.fromARGB(255, 5, 148, 10)
+                                    : const Color.fromARGB(255, 215, 21, 7))),
+                              );
+                            },
+                          )
+                        ],
+                      )),
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-              ],
+                  Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Container(
-            child: !isHome
-                ? CardAndStatWidget(
-                    red: _red, yellow: _yellow, pourcent: _valuePourcent)
-                : null,
-          )
-        ],
-      ),
-    );
+            Container(
+              child: !isHome
+                  ? CardAndStatWidget(
+                      red: _red, yellow: _yellow, pourcent: _valuePourcent)
+                  : null,
+            )
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -626,7 +578,9 @@ class CardAndStatWidget extends StatelessWidget {
             ],
           ),
           Text(
-            pourcent != null ? '$pourcent%' : '',
+            pourcent != null && (pourcent ?? 0) > 0 && (pourcent ?? 0) < 100
+                ? '$pourcent%'
+                : '',
             style: TextStyle(color: Colors.white),
           )
         ],

@@ -15,11 +15,7 @@ class GameEventCollection implements Collection {
   List<GameEvent> get gameEvents => _gameEvents;
 
   @override
-  GameEvent? getElementAt(String id) {
-    final List<GameEvent> list =
-        _gameEvents.where((element) => element.idGame == id).toList();
-    return list.isNotEmpty ? list[0] : null;
-  }
+  getElementAt(String id) {}
 
   void add(GameEvent gameEvent) {
     _gameEvents.add(gameEvent);

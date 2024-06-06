@@ -1,7 +1,6 @@
 import 'package:app/collection/game_collection.dart';
 import 'package:app/collection/game_event_collection.dart';
-import 'package:app/models/game.dart';
-import 'package:app/models/gameEvent.dart';
+
 import 'package:app/service/game_service.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +15,7 @@ class GameProvider extends ChangeNotifier {
     }
     return gameCollection;
   }
-
+/* 
   Future<GameCollection> getGameEvents() async {
     if (gameEventCollection.isEmpty) {
       gameEventCollection = GameEventCollection([]);
@@ -54,9 +53,9 @@ class GameProvider extends ChangeNotifier {
         awayEvent: awayEvent);
     gameEventCollection.add(gameEvent);
     return gameEvent;
-  }
+  } */
 
-  void changePourcent(String id, double? pourcent, {TimerEvent? timerEvent}) {
+  /*  void changePourcent(String id, double? pourcent, {TimerEvent? timerEvent}) {
     gameEventCollection.gameEvents = gameEventCollection.gameEvents.map((e) {
       if (e.idGame == id) {
         pourcent = pourcent == null ? null : (pourcent! * 100).toInt() / 100;
@@ -82,5 +81,5 @@ class GameProvider extends ChangeNotifier {
       return e;
     }).toList();
     notifyListeners();
-  }
+  } */
 }

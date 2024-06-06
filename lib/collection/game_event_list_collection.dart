@@ -34,9 +34,7 @@ class GameEventListCollection extends Collection {
   }
 
   List<CardEvent> getGameCardEvents(
-      {required String idGame,
-      required String idParticipant,
-      bool isRed = false}) {
+      {required String idGame, bool isRed = false}) {
     List<CardEvent> evenement = events
         .whereType<CardEvent>()
         .where((element) => element.idGame == idGame && element.isRed == isRed)

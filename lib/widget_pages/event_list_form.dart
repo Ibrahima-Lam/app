@@ -5,6 +5,7 @@ import 'package:app/models/composition.dart';
 import 'package:app/models/event.dart';
 import 'package:app/models/joueur.dart';
 import 'package:app/providers/composition_provider.dart';
+import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/widget/bottom_modal_composition_list_widget.dart';
 import 'package:app/widget/composition_events_widget.dart';
 import 'package:app/widget/confirm_dialog_widget.dart';
@@ -49,7 +50,7 @@ class _EventListFormState extends State<EventListForm> {
       composition2!.entrant = composition;
     }
 
-    context.read<CompositionProvider>().notifyListeners();
+    context.read<GameEventListProvider>().notifyListeners();
     Navigator.pop(context, widget.event);
   }
 

@@ -24,7 +24,7 @@ class EvenementWidget extends StatelessWidget {
     context.read<GameEventListProvider>().notifyListeners();
   }
 
-  void _selectEvent(BuildContext context,
+  void _addEvent(BuildContext context,
       {required String idGame, required String idParticipant}) async {
     Event? event;
     final String? val = await showModalBottomSheet(
@@ -52,109 +52,107 @@ class EvenementWidget extends StatelessWidget {
         ),
       ));
       if (ev == null) return null;
-      await context.read<GameEventListProvider>().addEvent(event);
+      context.read<GameEventListProvider>().addEvent(event);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: context
-          .read<GameEventListProvider>()
-          .getGameEvents(idGame: game.idGame),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const Center(
-            child: Text('erreur!'),
-          );
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(
-              color: Colors.green,
-            ),
-          );
-        }
-        final GameEventListCollection gameEventListCollection = snapshot.data!;
-        return Consumer<GameEventListProvider>(
-          builder: (context, value, child) {
-            final GameEventListSousCollection gameEventListSousCollection =
-                GameEventListSousCollection(
-              game: game,
-              goals: gameEventListCollection.getGameGoalsEvents(
-                  idParticipant: game.idAway, idGame: game.idGame),
-              yellowCards: gameEventListCollection.getGameCardEvents(
-                  idParticipant: game.idHome, idGame: game.idGame),
-              redCards: gameEventListCollection.getGameCardEvents(
-                  idParticipant: game.idAway, idGame: game.idGame, isRed: true),
-              substitutions: gameEventListCollection.getGameSubstitutionEvents(
-                idParticipant: game.idAway,
-                idGame: game.idGame,
+        future: context
+            .read<GameEventListProvider>()
+            .getGameEvents(idGame: game.idGame),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('erreur!'),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.green,
               ),
             );
-            return Container(
-              padding: const EdgeInsets.symmetric(vertical: 5.0),
-              child: ListView(
-                children: [
-                  if (gameEventListSousCollection.goals.isNotEmpty)
-                    EventSectionWidget(
-                        onDoubleTap: (p0) => _onDoubleTap(context, p0),
-                        events: gameEventListSousCollection.goals,
-                        game: game,
-                        title: 'Buts'),
-                  if (gameEventListSousCollection.yellowCards.isNotEmpty)
-                    EventSectionWidget(
-                        onDoubleTap: (p0) => _onDoubleTap(context, p0),
-                        events: gameEventListSousCollection.yellowCards,
-                        game: game,
-                        title: 'Cartons Jaunes'),
-                  if (gameEventListSousCollection.redCards.isNotEmpty)
-                    EventSectionWidget(
-                        onDoubleTap: (p0) => _onDoubleTap(context, p0),
-                        events: gameEventListSousCollection.redCards,
-                        game: game,
-                        title: 'Cartons Rouges'),
-                  if (gameEventListSousCollection.substitutions.isNotEmpty)
-                    EventSectionWidget(
-                        onDoubleTap: (p0) => _onDoubleTap(context, p0),
-                        events: gameEventListSousCollection.substitutions,
-                        game: game,
-                        title: 'Changements'),
-                  Card(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        OutlinedButton(
-                            onPressed: () {
-                              _selectEvent(context,
-                                  idGame: game.idGame,
-                                  idParticipant: game.idHome);
-                            },
-                            child: Text('Ajouter')),
-                        OutlinedButton(
-                            onPressed: () {
-                              _selectEvent(context,
-                                  idGame: game.idGame,
-                                  idParticipant: game.idAway);
-                            },
-                            child: Text('Ajouter')),
-                      ],
-                    ),
-                  ),
-                  if (gameEventListCollection.isEmpty)
-                    Container(
-                      height: 200.0,
-                      child: Center(
-                        child: Text('Pas evenement disponible !'),
+          }
+
+          return Consumer<GameEventListProvider>(
+            builder: (context, value, child) {
+              final GameEventListSousCollection gameEventListSousCollection =
+                  GameEventListSousCollection(
+                game: game,
+                goals: value.getGameGoalsEvents(
+                    idParticipant: game.idAway, idGame: game.idGame),
+                yellowCards: value.getGameCardEvents(idGame: game.idGame),
+                redCards:
+                    value.getGameCardEvents(idGame: game.idGame, isRed: true),
+                substitutions: value.getGameSubstitutionEvents(
+                  idParticipant: game.idAway,
+                  idGame: game.idGame,
+                ),
+              );
+              return Container(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                child: ListView(
+                  children: [
+                    if (gameEventListSousCollection.goals.isNotEmpty)
+                      EventSectionWidget(
+                          onDoubleTap: (p0) => _onDoubleTap(context, p0),
+                          events: gameEventListSousCollection.goals,
+                          game: game,
+                          title: 'Buts'),
+                    if (gameEventListSousCollection.yellowCards.isNotEmpty)
+                      EventSectionWidget(
+                          onDoubleTap: (p0) => _onDoubleTap(context, p0),
+                          events: gameEventListSousCollection.yellowCards,
+                          game: game,
+                          title: 'Cartons Jaunes'),
+                    if (gameEventListSousCollection.redCards.isNotEmpty)
+                      EventSectionWidget(
+                          onDoubleTap: (p0) => _onDoubleTap(context, p0),
+                          events: gameEventListSousCollection.redCards,
+                          game: game,
+                          title: 'Cartons Rouges'),
+                    if (gameEventListSousCollection.substitutions.isNotEmpty)
+                      EventSectionWidget(
+                          onDoubleTap: (p0) => _onDoubleTap(context, p0),
+                          events: gameEventListSousCollection.substitutions,
+                          game: game,
+                          title: 'Changements'),
+                    Card(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          OutlinedButton(
+                              onPressed: () {
+                                _addEvent(context,
+                                    idGame: game.idGame,
+                                    idParticipant: game.idHome);
+                              },
+                              child: Text('Ajouter')),
+                          OutlinedButton(
+                              onPressed: () {
+                                _addEvent(context,
+                                    idGame: game.idGame,
+                                    idParticipant: game.idAway);
+                              },
+                              child: Text('Ajouter')),
+                        ],
                       ),
-                    )
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
+                    ),
+                    if (value.events.isEmpty)
+                      Container(
+                        height: 200.0,
+                        child: Center(
+                          child: Text('Pas evenement disponible !'),
+                        ),
+                      )
+                  ],
+                ),
+              );
+            },
+          );
+        });
   }
 }
 

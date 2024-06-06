@@ -1,11 +1,13 @@
+import 'package:app/models/game.dart';
+
 class GameEvent {
-  final String idGame;
+  final Game game;
   EventStream homeEvent;
   EventStream awayEvent;
   TimerEvent? timer;
 
   GameEvent(
-      {required this.idGame,
+      {required this.game,
       required this.homeEvent,
       required this.awayEvent,
       this.timer});
@@ -15,15 +17,16 @@ class EventStream {
   String idPartcipant;
   int redCard;
   int yellowCard;
-  double? pourcent;
+  num? pourcent;
   int goal;
 
-  EventStream(
-      {required this.idPartcipant,
-      this.redCard = 0,
-      this.yellowCard = 0,
-      this.goal = 0,
-      this.pourcent});
+  EventStream({
+    required this.idPartcipant,
+    this.redCard = 0,
+    this.yellowCard = 0,
+    this.goal = 0,
+    this.pourcent,
+  });
 }
 
 class TimerEvent {

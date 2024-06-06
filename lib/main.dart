@@ -13,6 +13,7 @@ import 'package:app/providers/infos_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/providers/participation_provider.dart';
+import 'package:app/providers/statistique_future_provider.dart';
 import 'package:app/providers/statistique_provider.dart';
 import 'package:app/widget/drawer_widget.dart';
 import 'package:flutter/material.dart';
@@ -30,11 +31,25 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => CounterProvider()),
-        ChangeNotifierProvider(create: (context) => StatistiqueProvider()),
+        ChangeNotifierProvider<GameEventListProvider>(
+          lazy: false,
+          create: (context) => GameEventListProvider([]),
+        ),
+        ChangeNotifierProvider<StatistiqueFutureProvider>(
+          lazy: false,
+          create: (context) => StatistiqueFutureProvider([]),
+        ),
+        ChangeNotifierProxyProvider2<StatistiqueFutureProvider,
+            GameEventListProvider, StatistiqueProvider>(
+          create: (context) => StatistiqueProvider(
+              context.read<StatistiqueFutureProvider>(),
+              context.read<GameEventListProvider>()),
+          update: (context, stats, events, previous) =>
+              StatistiqueProvider(stats, events),
+        ),
         ChangeNotifierProvider(create: (context) => CompetitionProvider()),
         ChangeNotifierProvider(create: (context) => GameProvider()),
         ChangeNotifierProvider(create: (context) => GameEventProvider()),
-        ChangeNotifierProvider(create: (context) => GameEventListProvider()),
         ChangeNotifierProvider(create: (context) => GroupeProvider()),
         ChangeNotifierProvider(create: (context) => ParticipantProvider()),
         ChangeNotifierProvider(create: (context) => ParticipationProvider()),

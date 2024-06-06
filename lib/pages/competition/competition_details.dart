@@ -5,7 +5,6 @@ import 'package:app/pages/competition/widget_details/equipe_list_widget.dart';
 import 'package:app/pages/competition/widget_details/games_list_widget.dart';
 import 'package:app/pages/competition/widget_details/infos_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
-import 'package:app/providers/game_provider.dart';
 import 'package:app/widget/tab_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -176,14 +175,6 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
                 body: TabBarView(
                   children: tabBarViewChildren(tabs),
                 ),
-              ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  context
-                      .read<GameProvider>()
-                      .changeEtat(id: '67', etat: 'Dir');
-                },
-                child: Icon(Icons.settings),
               ),
             ),
           );

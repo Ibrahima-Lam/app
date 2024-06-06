@@ -1,4 +1,5 @@
 import 'package:app/models/statistique.dart';
+import 'package:app/widget_pages/statistique_form.dart';
 import 'package:flutter/material.dart';
 
 class StatWidget extends StatelessWidget {
@@ -14,79 +15,91 @@ class StatWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10.0),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: const Border(
-            top: BorderSide(width: 0.5, color: Colors.grey),
-            bottom: BorderSide(width: 0.5, color: Colors.grey)),
-      ),
-      child: Column(
-        children: [
-          Container(
-            constraints: BoxConstraints(minHeight: 40),
-            child: Row(
-              children: [
-                Expanded(
-                    child: TextContentWiget(
-                  content:
-                      '${statistique.homeStatistique.toInt().toString()}${isPossession ? '%' : ''}',
-                  color:
-                      statistique.homeStatistique >= statistique.awayStatistique
-                          ? Colors.blueAccent
-                          : null,
-                )),
-                Center(
-                  child: Text(
-                    statistique.nomStatistique,
-                    style: style,
+    return GestureDetector(
+      onDoubleTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => StatistiqueForm(
+                  statistique: statistique,
+                )));
+      },
+      child: Container(
+        padding: EdgeInsets.all(10.0),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          border: const Border(
+              top: BorderSide(width: 0.5, color: Colors.grey),
+              bottom: BorderSide(width: 0.5, color: Colors.grey)),
+        ),
+        child: Column(
+          children: [
+            Container(
+              constraints: BoxConstraints(minHeight: 40),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: TextContentWiget(
+                    content:
+                        '${statistique.homeStatistique.toInt().toString()}${isPossession ? '%' : ''}',
+                    color: statistique.homeStatistique >=
+                            statistique.awayStatistique
+                        ? Colors.blueAccent
+                        : null,
+                  )),
+                  Center(
+                    child: Text(
+                      statistique.nomStatistique,
+                      style: style,
+                    ),
                   ),
-                ),
-                Expanded(
-                    child: TextContentWiget(
-                  content:
-                      '${statistique.awayStatistique.toInt().toString()}${isPossession ? '%' : ''}',
-                  color:
-                      statistique.homeStatistique <= statistique.awayStatistique
-                          ? Colors.greenAccent
-                          : null,
-                )),
-              ],
-            ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: LinearProgressIndicator(
-                    backgroundColor: one ? Colors.greenAccent : null,
-                    color: Colors.blueAccent,
-                    value: statistique.homeStatistique /
-                        (statistique.homeStatistique +
-                            statistique.awayStatistique),
-                  ),
-                ),
+                  Expanded(
+                      child: TextContentWiget(
+                    content:
+                        '${statistique.awayStatistique.toInt().toString()}${isPossession ? '%' : ''}',
+                    color: statistique.homeStatistique <=
+                            statistique.awayStatistique
+                        ? Colors.greenAccent
+                        : null,
+                  )),
+                ],
               ),
-              if (!one)
+            ),
+            Row(
+              children: [
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(5.0),
-                    child: RotatedBox(
-                      quarterTurns: 2,
-                      child: LinearProgressIndicator(
-                        color: Colors.greenAccent,
-                        value: statistique.awayStatistique /
-                            (statistique.homeStatistique +
-                                statistique.awayStatistique),
-                      ),
+                    child: LinearProgressIndicator(
+                      backgroundColor: one ? Colors.greenAccent : null,
+                      color: Colors.blueAccent,
+                      value: statistique.homeStatistique +
+                                  statistique.awayStatistique <=
+                              0
+                          ? 0
+                          : statistique.homeStatistique /
+                              (statistique.homeStatistique +
+                                  statistique.awayStatistique),
                     ),
                   ),
                 ),
-            ],
-          )
-        ],
+                if (!one)
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: RotatedBox(
+                        quarterTurns: 2,
+                        child: LinearProgressIndicator(
+                          color: Colors.greenAccent,
+                          value: statistique.awayStatistique /
+                              (statistique.homeStatistique +
+                                  statistique.awayStatistique),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
