@@ -31,7 +31,30 @@ class _EventListFormState extends State<EventListForm> {
   JoueurComposition? composition;
   JoueurComposition? composition2;
 
-  void _onSubmit() {
+  void _onSubmit() async {
+    widget.event.nom = nomController.text;
+    List<Event> evs = await context
+        .read<GameEventListProvider>()
+        .getGameEvents(idGame: widget.event.idGame);
+    final bool chk = evs.any((element) =>
+        element.idJoueur == widget.event.idJoueur &&
+        element.nom != nomController.text);
+    if (chk) {
+      final String? nom = await showDialog(
+        context: context,
+        builder: (context) => EventsimpleDialogWidget(event: widget.event),
+      );
+      if (nom != null) {
+        List<Event> evs = context
+            .read<GameEventListProvider>()
+            .getJoueurGameEvent(
+                idGame: widget.event.idGame, idJoueur: widget.event.idJoueur);
+        nomController.text = nom;
+        context.read<GameEventListProvider>().setJoueurGameEventNom(evs, nom);
+      } else
+        return;
+    }
+
     widget.event.nom = nomController.text;
     widget.event.minute = minuteController.text;
     widget.event.nomTarget = nomTargetController.text;
@@ -50,7 +73,6 @@ class _EventListFormState extends State<EventListForm> {
       composition2!.entrant = composition;
     }
 
-    context.read<GameEventListProvider>().notifyListeners();
     Navigator.pop(context, widget.event);
   }
 
@@ -300,5 +322,32 @@ class NomTargetWidget extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class EventsimpleDialogWidget extends StatelessWidget {
+  final Event event;
+  const EventsimpleDialogWidget({super.key, required this.event});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<GameEventListProvider>(builder: (context, val, child) {
+      List<Event> events = val.getJoueurGameEvent(
+          idGame: event.idGame, idJoueur: event.idJoueur);
+      events =
+          events.where((element) => element.idEvent != event.idEvent).toList();
+      events.add(event);
+      Set ids = Set();
+      events = events.where((element) => ids.add(element.nom)).toList();
+      return SimpleDialog(
+        title: Text('Choisir un seul nom pour ce joueur'),
+        children: [
+          ...events.map((e) => ListTile(
+                onTap: () => Navigator.pop(context, e.nom),
+                title: Text(e.nom),
+              ))
+        ],
+      );
+    });
   }
 }

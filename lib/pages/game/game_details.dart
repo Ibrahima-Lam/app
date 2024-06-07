@@ -57,7 +57,7 @@ class _GameDetailsState extends State<GameDetails>
     int initial = 0;
     if (gameEtat case GameEtat.pause || GameEtat.direct || GameEtat.termine) {
       initial = composition && classement
-          ? 5
+          ? 3
           : composition
               ? 3
               : 2;

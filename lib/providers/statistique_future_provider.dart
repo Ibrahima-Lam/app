@@ -16,4 +16,13 @@ class StatistiqueFutureProvider extends ChangeNotifier {
     _statistiques = val;
     notifyListeners();
   }
+
+  void addStat(Statistique statistique) {
+    _statistiques.add(statistique);
+    notifyListeners();
+  }
+
+  void setStat(Statistique statistique) {
+    notifyListeners();
+  }
 }

@@ -86,4 +86,8 @@ class StatistiqueProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void setStat(Statistique statistique) {
+    notifyListeners();
+  }
 }

@@ -20,8 +20,8 @@ class EvenementWidget extends StatelessWidget {
         isNew: false,
       ),
     ));
-    // ignore: invalid_use_of_protected_member
-    context.read<GameEventListProvider>().notifyListeners();
+
+    context.read<GameEventListProvider>().setEvent(event);
   }
 
   void _addEvent(BuildContext context,

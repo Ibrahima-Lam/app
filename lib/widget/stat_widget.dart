@@ -1,6 +1,8 @@
 import 'package:app/models/statistique.dart';
+import 'package:app/providers/statistique_provider.dart';
 import 'package:app/widget_pages/statistique_form.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StatWidget extends StatelessWidget {
   final Statistique statistique;
@@ -16,11 +18,14 @@ class StatWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onDoubleTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => StatistiqueForm(
-                  statistique: statistique,
-                )));
+      onDoubleTap: () async {
+        final bool? isSubmited =
+            await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => StatistiqueForm(
+                      statistique: statistique,
+                    )));
+        if (isSubmited ?? false)
+          context.read<StatistiqueProvider>().setStat(statistique);
       },
       child: Container(
         padding: EdgeInsets.all(10.0),
@@ -89,9 +94,13 @@ class StatWidget extends StatelessWidget {
                         quarterTurns: 2,
                         child: LinearProgressIndicator(
                           color: Colors.greenAccent,
-                          value: statistique.awayStatistique /
-                              (statistique.homeStatistique +
-                                  statistique.awayStatistique),
+                          value: statistique.homeStatistique +
+                                      statistique.awayStatistique <=
+                                  0
+                              ? 0
+                              : statistique.awayStatistique /
+                                  (statistique.homeStatistique +
+                                      statistique.awayStatistique),
                         ),
                       ),
                     ),

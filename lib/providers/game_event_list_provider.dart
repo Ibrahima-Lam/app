@@ -23,6 +23,23 @@ class GameEventListProvider extends ChangeNotifier {
     return events.where((element) => element.idGame == idGame).toList();
   }
 
+  List<Event> getJoueurGameEvent(
+      {required String idGame, required String idJoueur}) {
+    return _events
+        .where((element) =>
+            element.idJoueur == idJoueur && element.idGame == idGame)
+        .toList();
+  }
+
+  void setJoueurGameEventNom(List<Event> evs, String nom) {
+    for (Event ev in evs) {
+      int index =
+          _events.lastIndexWhere((element) => element.idEvent == ev.idEvent);
+      _events[index].nom = nom;
+    }
+    notifyListeners();
+  }
+
   (int, int) getYellowCardStat(Game game) {
     final int home = getGameCardEvents(idGame: game.idGame, isRed: false)
         .where((element) => element.idParticipant == game.idHome)
@@ -45,6 +62,10 @@ class GameEventListProvider extends ChangeNotifier {
 
   void addEvent(Event event) {
     _events.add(event);
+    notifyListeners();
+  }
+
+  void setEvent(Event event) {
     notifyListeners();
   }
 

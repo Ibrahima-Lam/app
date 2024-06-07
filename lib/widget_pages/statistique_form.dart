@@ -2,11 +2,9 @@
 
 import 'package:app/core/extension/string_extension.dart';
 import 'package:app/models/statistique.dart';
-import 'package:app/providers/statistique_provider.dart';
 import 'package:app/widget/elevated_button_widget.dart';
 import 'package:app/widget/text_field_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class StatistiqueForm extends StatefulWidget {
   final Statistique statistique;
@@ -54,9 +52,8 @@ class _StatistiqueFormState extends State<StatistiqueForm> {
                     num.parse(homeController.text);
                 widget.statistique.awayStatistique =
                     num.parse(awayController.text);
-                // ignore: invalid_use_of_visible_for_testing_member
-                context.read<StatistiqueProvider>().notifyListeners();
-                Navigator.pop(context);
+
+                Navigator.pop(context, true);
               },
             )
           ],
@@ -113,6 +110,8 @@ class _StatFormSliderWidgetState extends State<StatFormSliderWidget> {
         Center(child: Text(widget.homeController.text)),
         const SizedBox(height: 10),
         Slider(
+            activeColor: Colors.blueAccent,
+            inactiveColor: Colors.greenAccent,
             label: widget.homeController.text,
             value: double.parse(widget.homeController.text) / 100,
             onChanged: (val) {
