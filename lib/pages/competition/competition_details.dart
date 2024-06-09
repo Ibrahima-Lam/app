@@ -3,7 +3,7 @@ import 'package:app/models/competition.dart';
 import 'package:app/pages/competition/widget_details/classement_list_widget.dart';
 import 'package:app/pages/competition/widget_details/equipe_list_widget.dart';
 import 'package:app/pages/competition/widget_details/games_list_widget.dart';
-import 'package:app/pages/competition/widget_details/infos_list_widget.dart';
+import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/widget/tab_bar_widget.dart';
 import 'package:flutter/material.dart';

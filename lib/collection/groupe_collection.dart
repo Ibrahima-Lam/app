@@ -18,9 +18,9 @@ class GroupeCollection {
 
   void sortById([bool asc = true]) {
     if (asc) {
-      _groupes.sort((a, b) => a.idGroupe!.compareTo(b.idGroupe!));
+      _groupes.sort((a, b) => a.idGroupe.compareTo(b.idGroupe));
     } else
-      _groupes.sort((a, b) => a.idGroupe!.compareTo(b.idGroupe!));
+      _groupes.sort((a, b) => a.idGroupe.compareTo(b.idGroupe));
   }
 
   Groupe getElementAt(String id) {

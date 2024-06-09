@@ -98,7 +98,7 @@ class _GameDetailsState extends State<GameDetails>
           break;
         case 'CLA':
           widgets.add(ClassementWiget(
-              title: 'Groupe ${game.nomGroupe}', idGroupe: game.idGroupe!));
+              title: 'Groupe ${game.nomGroupe}', idGroupe: game.idGroupe));
           break;
         case 'COM':
           widgets.add(CompositionWidget(
@@ -481,7 +481,7 @@ class ColumnWidget extends StatelessWidget {
             ),
             Container(
               height: 100,
-              constraints: BoxConstraints(maxWidth: 120),
+              constraints: BoxConstraints(maxWidth: 115),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,

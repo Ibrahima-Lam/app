@@ -1,5 +1,5 @@
 class Groupe {
-  String? idGroupe;
+  String idGroupe;
   String? nomGroupe;
   String? codeEdition;
   String? codePhase;
@@ -7,7 +7,7 @@ class Groupe {
   String? typePhase;
 
   Groupe({
-    this.idGroupe,
+    required this.idGroupe,
     this.nomGroupe,
     this.codeEdition,
     this.codePhase,

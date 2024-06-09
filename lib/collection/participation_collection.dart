@@ -20,10 +20,10 @@ class ParticipationCollection implements Collection {
   void sortById([bool asc = true]) {
     if (asc) {
       _participations
-          .sort((a, b) => a.idParticipation!.compareTo(b.idParticipation!));
+          .sort((a, b) => a.idParticipation.compareTo(b.idParticipation));
     } else
       _participations
-          .sort((a, b) => a.idParticipation!.compareTo(b.idParticipation!));
+          .sort((a, b) => a.idParticipation.compareTo(b.idParticipation));
   }
 
   Participation getElementAt(String id) {
@@ -50,5 +50,14 @@ class ParticipationCollection implements Collection {
       parts = parts.where((element) => element.codePhase != 'grp').toList();
     }
     return parts;
+  }
+
+  Participation? getParticipationsById({required String idParticipant}) {
+    try {
+      return _participations.firstWhere((element) =>
+          element.idParticipant == idParticipant && element.codePhase == 'grp');
+    } catch (e) {
+      return null;
+    }
   }
 }

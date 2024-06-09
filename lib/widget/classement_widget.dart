@@ -7,24 +7,46 @@ import 'package:provider/provider.dart';
 
 class ClassementWiget extends StatelessWidget {
   final String title;
-  final String idGroupe;
+  final String? idGroupe;
+  final String? idParticipant;
+  final String? idTarget;
   const ClassementWiget(
-      {super.key, required this.title, required this.idGroupe});
+      {super.key,
+      required this.title,
+      this.idGroupe,
+      this.idParticipant,
+      this.idTarget});
+  factory ClassementWiget.equipe(
+          {required String title,
+          required String idParticipant,
+          required String idTarget}) =>
+      ClassementWiget(
+        title: title,
+        idParticipant: idParticipant,
+        idTarget: idTarget,
+      );
 
-  Future<List<Stat>> _getStat(BuildContext context, String idGroupe) async {
-    return await StatService(context: context)
-        .getStatByGroupe(idGroupe: idGroupe);
+  Future<List<Stat>> _getStat(BuildContext context) async {
+    List<Stat> stats = [];
+    if (idGroupe != null) {
+      stats = await StatService(context: context)
+          .getStatByGroupe(idGroupe: idGroupe!);
+    } else if (idParticipant != null) {
+      stats = await StatService(context: context)
+          .getStatByEquipe(idParticipant: idParticipant!);
+    }
+    return stats;
   }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<GameProvider>(builder: (context, val, child) {
       return FutureBuilder(
-          future: _getStat(context, idGroupe),
+          future: _getStat(context),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const Center(
-                child: Text('erreur!'),
+                child: Text('Erreur!'),
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -74,6 +96,7 @@ class ClassementWiget extends StatelessWidget {
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         TableWidget(
+                          idTarget: idTarget,
                           stats: stat,
                           expand: selected == 0,
                         )

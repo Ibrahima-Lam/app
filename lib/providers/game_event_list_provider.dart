@@ -23,6 +23,14 @@ class GameEventListProvider extends ChangeNotifier {
     return events.where((element) => element.idGame == idGame).toList();
   }
 
+  Future<List<Event>> getEquipeEvents({required String idParticipant}) async {
+    if (events.isNotEmpty) return events;
+    events = await EventService().getData();
+    return events
+        .where((element) => element.idParticipant == idParticipant)
+        .toList();
+  }
+
   List<Event> getJoueurGameEvent(
       {required String idGame, required String idJoueur}) {
     return _events

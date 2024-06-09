@@ -1,9 +1,9 @@
 import 'package:app/models/groupe.dart';
 
 class Participation extends Groupe {
-  int? idParticipation;
-  int? idParticipant;
-  int? idEquipe;
+  String idParticipation;
+  String idParticipant;
+  String? idEquipe;
   String? idEdition;
   String? nomEquipe;
   String? libelleEquipe;
@@ -14,8 +14,8 @@ class Participation extends Groupe {
   String? nomCompetition;
   String? localiteCompetition;
   Participation({
-    this.idParticipation,
-    this.idParticipant,
+    required this.idParticipation,
+    required this.idParticipant,
     this.idEquipe,
     this.idEdition,
     this.nomEquipe,
@@ -26,7 +26,7 @@ class Participation extends Groupe {
     this.codeCompetition,
     this.nomCompetition,
     this.localiteCompetition,
-    super.idGroupe,
+    required super.idGroupe,
     super.nomGroupe,
     super.codeEdition,
     super.codePhase,
@@ -36,13 +36,13 @@ class Participation extends Groupe {
 
   factory Participation.fromJson(Map<String, dynamic> json) {
     return Participation(
-      idParticipation: json["idParticipation"],
+      idParticipation: json["idParticipation"].toString(),
       idGroupe: json["idGroupe"].toString(),
-      idParticipant: json["idParticipant"],
+      idParticipant: json["idParticipant"].toString(),
       nomGroupe: json["nomGroupe"],
       codePhase: json["codePhase"],
       codeEdition: json["codeEdition"],
-      idEquipe: json["idEquipe"],
+      idEquipe: json["idEquipe"].toString(),
       idEdition: json["idEdition"],
       nomEquipe: json["nomEquipe"],
       libelleEquipe: json["libelleEquipe"],

@@ -102,7 +102,7 @@ class Classeur {
   List<Stat> teamGamesStat() {
     List<Stat> elements = [];
     for (Participation equipe in equipes) {
-      final int indice = equipe.idParticipant!;
+      final String indice = equipe.idParticipant;
       List<Game> homeGames =
           games.where((game) => indice.toString() == game.idHome).toList();
       for (Game element in homeGames) {

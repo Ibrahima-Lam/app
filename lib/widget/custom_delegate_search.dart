@@ -74,7 +74,7 @@ class CustomDelegateSearch extends SearchDelegate {
           q.add(element.nomCompetition!);
         }
         if (element is Participant) {
-          q.add(element.nomEquipe!);
+          q.add(element.nomEquipe);
           q.add(element.libelleEquipe!);
         }
         if (element is Game) {
@@ -152,14 +152,14 @@ class CustomDelegateSearch extends SearchDelegate {
       leading: query.isEmpty
           ? const Icon(Icons.timer_outlined)
           : const Icon(Icons.search),
-      title: Text(participant.nomEquipe!),
+      title: Text(participant.nomEquipe),
       subtitle: const Text('equipe'),
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
-                EquipeDetails(id: participant.idParticipant!)));
+                EquipeDetails(id: participant.idParticipant)));
         insertIntoHistoryProvider(participant);
-        query = participant.nomEquipe!;
+        query = participant.nomEquipe;
         buildResults(context);
       },
     );

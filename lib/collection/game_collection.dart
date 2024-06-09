@@ -82,6 +82,7 @@ class GameCollection implements Collection {
 
   List<Game> getGamesBy({
     String? idGroupe,
+    String? idPartcipant,
     String? codeNiveau,
     String? codeEdition,
     String? dateGame,
@@ -92,6 +93,7 @@ class GameCollection implements Collection {
     List<Game> gamesData = GameController().filterGamesBy(
       games,
       idGroupe: idGroupe,
+      idPartcipant: idPartcipant,
       codeNiveau: codeNiveau,
       codeEdition: codeEdition,
       dateGame: dateGame,

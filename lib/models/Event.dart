@@ -1,3 +1,5 @@
+import 'package:app/core/enums/event_type_enum.dart';
+
 abstract class Event {
   String type;
   String idEvent;
@@ -160,4 +162,13 @@ class RemplEvent extends Event {
         idTarget: idTarget ?? this.idTarget,
         nomTarget: nomTarget ?? this.nomTarget,
       );
+}
+
+class EventStatistique {
+  String id;
+  String nom;
+  int nombre;
+  EventType? type;
+  EventStatistique(
+      {required this.nom, required this.nombre, required this.id, this.type});
 }

@@ -1,10 +1,10 @@
 import 'package:app/models/searchable.dart';
 
 class Participant implements Searchable {
-  String? idParticipant;
+  String idParticipant;
   String? idEquipe;
   String? idEdition;
-  String? nomEquipe;
+  String nomEquipe;
   String? libelleEquipe;
   String? localiteEquipe;
   String? codeEdition;
@@ -14,10 +14,10 @@ class Participant implements Searchable {
   String? nomCompetition;
   String? localiteCompetition;
   Participant({
-    this.idParticipant,
+    required this.idParticipant,
     this.idEquipe,
     this.idEdition,
-    this.nomEquipe,
+    required this.nomEquipe,
     this.libelleEquipe,
     this.localiteEquipe,
     this.codeEdition,

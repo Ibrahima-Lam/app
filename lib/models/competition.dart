@@ -19,6 +19,12 @@ class Competition implements Searchable {
     this.type = const CompetitionTypeClass('coupe'),
   });
 
+  bool get hasClassement {
+    if (type.type case (CompetitionType.coupe || CompetitionType.championnat))
+      return true;
+    return false;
+  }
+
   factory Competition.fromJson(Map<String, dynamic> json) {
     return Competition(
       codeCompetition: json['codeCompetition'],

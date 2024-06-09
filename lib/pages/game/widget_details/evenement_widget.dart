@@ -6,6 +6,7 @@ import 'package:app/models/event.dart';
 import 'package:app/models/game.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/widget/event_widget.dart';
+import 'package:app/widget/section_title_widget.dart';
 import 'package:app/widget_pages/event_list_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -174,18 +175,7 @@ class EventSectionWidget extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
       child: Column(
         children: [
-          Container(
-            width: MediaQuery.sizeOf(context).width,
-            padding: const EdgeInsets.all(5.0),
-            decoration: const BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: Colors.black, width: 0.5))),
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
+          SectionTitleWidget(title: title),
           ...events
               .map((e) =>
                   EventWidget(event: e, onDoubleTap: onDoubleTap, game: game))

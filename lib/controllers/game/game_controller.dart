@@ -4,6 +4,7 @@ class GameController {
   List<Game> filterGamesBy(
     List<Game> games, {
     String? idGroupe,
+    String? idPartcipant,
     String? codeNiveau,
     String? codeEdition,
     String? dateGame,
@@ -13,6 +14,12 @@ class GameController {
   }) {
     if (idGroupe != null) {
       games = games.where((element) => element.idGroupe == idGroupe).toList();
+    }
+    if (idPartcipant != null) {
+      games = games
+          .where((element) =>
+              element.idHome == idPartcipant || element.idAway == idPartcipant)
+          .toList();
     }
     if (codeNiveau != null) {
       games =

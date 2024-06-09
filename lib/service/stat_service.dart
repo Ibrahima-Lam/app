@@ -17,6 +17,27 @@ class StatService {
   final BuildContext context;
   const StatService({required this.context});
 
+  Future<List<Stat>> getStatByEquipe({required String idParticipant}) async {
+    final GameCollection gameCollection =
+        await context.read<GameProvider>().getGames();
+
+    final ParticipationCollection participationCollection =
+        await context.read<ParticipationProvider>().getParticipations();
+    final Participation? participation = participationCollection
+        .getParticipationsById(idParticipant: idParticipant);
+    if (participation == null) return [];
+
+    final String idGroupe = participation.idGroupe;
+    final List<Participation> teams =
+        participationCollection.getParticipationsBy(
+      groupe: idGroupe,
+    );
+    final List<Game> matchs =
+        gameCollection.getGamesBy(idGroupe: idGroupe, played: true);
+    final List<Stat> stats = Classeur(games: matchs, equipes: teams).classer();
+    return stats;
+  }
+
   Future<List<Stat>> getStatByGroupe({required String idGroupe}) async {
     final GameCollection gameCollection =
         await context.read<GameProvider>().getGames();

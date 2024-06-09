@@ -72,7 +72,7 @@ class _EquipePageState extends State<EquipePage> {
                                 participants = val.isNotEmpty
                                     ? participants
                                         .where((element) =>
-                                            element.nomEquipe!
+                                            element.nomEquipe
                                                 .toUpperCase()
                                                 .startsWith(equipeNotifier.value
                                                     .toUpperCase()) ||
@@ -88,8 +88,8 @@ class _EquipePageState extends State<EquipePage> {
                                     itemCount: participants.length,
                                     itemBuilder: (context, index) =>
                                         EquipeListTileWidet(
-                                      id: participants[index].idParticipant!,
-                                      title: participants[index].nomEquipe!,
+                                      id: participants[index].idParticipant,
+                                      title: participants[index].nomEquipe,
                                       subtitle:
                                           participants[index].nomCompetition,
                                     ),
