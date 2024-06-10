@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class JoueurProvider extends ChangeNotifier {
   List<Joueur> _joueurs = [];
 
-  JoueurProvider();
+  List<Joueur> get joueurs => _joueurs;
 
   Future<void> setJoueurs() async {
     _joueurs = await JoueurService().getData();

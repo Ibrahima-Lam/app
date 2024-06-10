@@ -1,5 +1,6 @@
 import 'package:app/pages/equipe/equipe_page.dart';
 import 'package:app/pages/competition/competition_page.dart';
+import 'package:app/pages/joueur/joueur_page.dart';
 import 'package:flutter/material.dart';
 
 class DrawerWidget extends StatelessWidget {
@@ -38,7 +39,13 @@ class DrawerWidget extends StatelessWidget {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => EquipePage()));
               }),
-          listTileWidget(title: 'Joueurs'),
+          listTileWidget(
+              title: 'Joueurs',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => JoueurPage()));
+              }),
         ],
       ),
     );

@@ -1,31 +1,31 @@
 import 'package:app/models/joueur.dart';
+import 'package:app/pages/equipe/equipe_details.dart';
+import 'package:app/pages/joueur/widget_datails/joueur_match_list_widget.dart';
+import 'package:app/pages/joueur/widget_datails/joueur_performance_widget.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/widget/tab_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class JoueurDetails extends StatefulWidget {
+// ignore: must_be_immutable
+class JoueurDetails extends StatelessWidget {
   final String idJoueur;
-  const JoueurDetails({super.key, required this.idJoueur});
+  JoueurDetails({super.key, required this.idJoueur});
 
-  @override
-  State<JoueurDetails> createState() => _JoueurDetailsState();
-}
-
-class _JoueurDetailsState extends State<JoueurDetails> {
-  List<String> tabs = ['tab1', 'tab2', 'tab3', 'tab4', 'tab5'];
   late final Joueur joueur;
 
   Future<bool> _getJoueur(BuildContext context) async {
-    joueur =
-        await context.read<JoueurProvider>().getJoueursByid(widget.idJoueur);
+    joueur = await context.read<JoueurProvider>().getJoueursByid(idJoueur);
     return true;
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  bool favori = false;
+  Set<String> tabs = {'Fiche', 'Match', 'Infos', 'Performance', 'Statistique'};
+
+  Map<String, Widget> get tabBarViewWidget => {
+        'match': JoueurMatchListWidget(idJoueur: idJoueur),
+        'performance': JoueurPerformanceWidget(joueur: joueur),
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -54,16 +54,63 @@ class _JoueurDetailsState extends State<JoueurDetails> {
                     SliverAppBar(
                       title: Text(joueur.nomJoueur),
                       forceElevated: innerBoxIsScrolled,
-                      expandedHeight: 250.0,
+                      expandedHeight: 200.0,
                       pinned: true,
-                      flexibleSpace: const FlexibleSpaceBar(
+                      actions: [
+                        StatefulBuilder(
+                          builder: (context, setState) {
+                            return IconButton(
+                              onPressed: () {
+                                setState(() => favori = !favori);
+                              },
+                              icon:
+                                  Icon(favori ? Icons.star : Icons.star_border),
+                            );
+                          },
+                        )
+                      ],
+                      flexibleSpace: FlexibleSpaceBar(
                           background: Center(
-                        child: CircleAvatar(
-                          radius: 50,
-                          child: Icon(
-                            Icons.person,
-                            size: 50,
-                          ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              height: 50,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  child: IconButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EquipeDetails(
+                                                        id: joueur
+                                                            .idParticipant)));
+                                      },
+                                      icon: Icon(Icons.safety_check)),
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                CircleAvatar(
+                                  radius: 40,
+                                  child: Icon(
+                                    Icons.person,
+                                    size: 40,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                CircleAvatar(
+                                  child: Icon(Icons.check_circle),
+                                )
+                              ],
+                            ),
+                          ],
                         ),
                       )),
                       bottom: TabBarWidget.build(
@@ -77,54 +124,16 @@ class _JoueurDetailsState extends State<JoueurDetails> {
                 },
                 body: TabBarView(
                   children: [
-                    for (String _ in tabs) Count(),
+                    for (String tab in tabs)
+                      tabBarViewWidget[tab.toLowerCase()] ??
+                          Center(
+                            child: Text('Page vide!'),
+                          ),
                   ],
                 ),
               ),
             );
           }),
-      floatingActionButton: FloatingActionButton(onPressed: () {
-        Counter().increment();
-      }),
     );
-  }
-}
-
-class Count extends StatelessWidget {
-  Count({super.key});
-  final Counter counter = Counter();
-
-  @override
-  Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: counter,
-      builder: (context, child) {
-        return Column(
-          children: [
-            Container(
-              child: Text(counter.count.toString()),
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  counter.increment();
-                },
-                child: Text('increment'))
-          ],
-        );
-      },
-    );
-  }
-}
-
-class Counter extends ChangeNotifier {
-  int count = 0;
-  void increment() {
-    count++;
-    notifyListeners();
-  }
-
-  void decrement() {
-    count--;
-    notifyListeners();
   }
 }

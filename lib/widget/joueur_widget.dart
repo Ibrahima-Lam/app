@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 class JoueurListTileWidget extends StatelessWidget {
   final Joueur joueur;
   final Function? onTap;
-  const JoueurListTileWidget({super.key, required this.joueur, this.onTap});
+  final bool showEquipe;
+  const JoueurListTileWidget(
+      {super.key, required this.joueur, this.onTap, this.showEquipe = false});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class JoueurListTileWidget extends StatelessWidget {
           foregroundColor: Colors.white,
           child: Icon(Icons.person)),
       title: Text(joueur.nomJoueur),
+      subtitle: showEquipe ? Text(joueur.nomEquipe) : null,
     );
   }
 }
