@@ -146,8 +146,6 @@ class _GamePageState extends State<GamePage>
             }),
         floatButton: FloatingActionButton(
           onPressed: () {},
-          backgroundColor: Colors.green,
-          foregroundColor: Colors.white,
           child: const Icon(Icons.add),
         ),
       ),
@@ -192,9 +190,7 @@ class _CompetitionGamesWidgetState extends State<CompetitionGamesWidget> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.green,
-              ),
+              child: CircularProgressIndicator(),
             );
           }
           if (snapshot.hasError) {

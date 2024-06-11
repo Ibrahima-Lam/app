@@ -157,9 +157,7 @@ class _GameDetailsState extends State<GameDetails>
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Scaffold(
               body: const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.green,
-                ),
+                child: CircularProgressIndicator(),
               ),
             );
           }
@@ -173,8 +171,6 @@ class _GameDetailsState extends State<GameDetails>
                 controller: _scrollController,
                 headerSliverBuilder: (context, innerBoxIsScrolled) => [
                   SliverAppBar(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
                     pinned: true,
                     expandedHeight: 280,
                     leading: IconButton(

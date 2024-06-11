@@ -37,9 +37,7 @@ class _ExplorationPageState extends State<ExplorationPage> {
 
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.green,
-              ),
+              child: CircularProgressIndicator(),
             );
           }
           return const Center(

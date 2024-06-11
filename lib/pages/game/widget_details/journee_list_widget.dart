@@ -22,9 +22,7 @@ class JourneeWidget extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Scaffold(
               body: const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.green,
-                ),
+                child: CircularProgressIndicator(),
               ),
             );
           }

@@ -23,9 +23,7 @@ class BottomModalSheetCompositionListWidget extends StatelessWidget {
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.green,
-              ),
+              child: CircularProgressIndicator(),
             );
           }
           final CompositionCollection compositionCollection = snapshot.data!;

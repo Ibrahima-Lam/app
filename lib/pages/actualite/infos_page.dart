@@ -27,8 +27,6 @@ class _InfosPageState extends State<InfosPage> {
           onPressed: widget.openDrawer,
           icon: Icon(Icons.menu),
         ),
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
         title: const Text('Infos'),
         titleSpacing: 20,
       ),
@@ -43,9 +41,7 @@ class _InfosPageState extends State<InfosPage> {
 
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.green,
-                ),
+                child: CircularProgressIndicator(),
               );
             }
 

@@ -23,9 +23,10 @@ void main() {
   runApp(const MyApp());
 }
 
+final Color color = const Color(0xFF263238);
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -60,20 +61,28 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: Colors.green,
+          progressIndicatorTheme: ProgressIndicatorThemeData(
+            color: color,
+          ),
+          outlinedButtonTheme: OutlinedButtonThemeData(
+              style: ButtonStyle(
+            foregroundColor: MaterialStatePropertyAll(color),
+          )),
+          primaryColor: color,
           floatingActionButtonTheme: FloatingActionButtonThemeData(
-              backgroundColor: Colors.green, foregroundColor: Colors.white),
+              backgroundColor: color, foregroundColor: Colors.white),
           appBarTheme: AppBarTheme(
-            backgroundColor: Colors.green,
+            backgroundColor: color,
             foregroundColor: Colors.white,
           ),
-          scaffoldBackgroundColor: Color(0xFFEDE7F6),
+          // Color(0xFFEDE7F6)
+          scaffoldBackgroundColor: Color(0xFFF5F5F5),
           cardTheme:
               CardTheme(color: Colors.white, surfaceTintColor: Colors.white),
           drawerTheme: DrawerThemeData(
               backgroundColor: Colors.white, surfaceTintColor: Colors.white),
           navigationBarTheme: NavigationBarThemeData(
-            overlayColor: MaterialStatePropertyAll(Colors.green),
+            overlayColor: MaterialStatePropertyAll(color),
           ),
         ),
         home: GlobalPage(),
@@ -92,28 +101,28 @@ class GlobalPage extends StatefulWidget {
 class _GlobalPageState extends State<GlobalPage> {
   int currentIndex = 0;
   List<Widget> destinations = [
-    const NavigationDestination(
+    NavigationDestination(
       icon: Icon(Icons.home_outlined),
       selectedIcon: Icon(
         Icons.home,
-        color: Colors.green,
+        color: color,
       ),
       label: 'Match',
     ),
-    const NavigationDestination(
+    NavigationDestination(
       label: 'Infos',
       icon: Icon(Icons.info_outline),
       selectedIcon: Icon(
         Icons.info,
-        color: Colors.green,
+        color: color,
       ),
     ),
-    const NavigationDestination(
+    NavigationDestination(
       label: 'Explorer',
       icon: Icon(Icons.open_in_browser),
       selectedIcon: Icon(
         Icons.open_in_browser_sharp,
-        color: Colors.green,
+        color: color,
       ),
     ),
     NavigationDestination(
@@ -125,9 +134,9 @@ class _GlobalPageState extends State<GlobalPage> {
       selectedIcon: Badge(
           isLabelVisible: false,
           label: null,
-          child: const Icon(
+          child: Icon(
             Icons.notifications,
-            color: Colors.green,
+            color: color,
           )),
     ),
   ];
@@ -161,7 +170,7 @@ class _GlobalPageState extends State<GlobalPage> {
       ),
       bottomNavigationBar: NavigationBar(
         elevation: 5,
-        shadowColor: Colors.green,
+        shadowColor: color,
         indicatorColor: Colors.white,
         destinations: destinations,
         animationDuration: const Duration(milliseconds: 200),

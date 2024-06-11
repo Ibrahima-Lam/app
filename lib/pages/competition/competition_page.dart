@@ -45,9 +45,7 @@ class _CompetitionPageState extends State<CompetitionPage> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.green,
-                ),
+                child: CircularProgressIndicator(),
               );
             }
             if (snapshot.hasError) {

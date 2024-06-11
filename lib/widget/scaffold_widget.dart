@@ -24,7 +24,6 @@ class ScaffoldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEDE7F6),
       body: Builder(builder: (context) {
         return NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
@@ -37,8 +36,6 @@ class ScaffoldWidget extends StatelessWidget {
               pinned: true,
               title: const Text('Matchs'),
               elevation: 3,
-              backgroundColor: Colors.green,
-              foregroundColor: Colors.white,
               actions: [
                 IconButton(
                   onPressed: onPressedStream,

@@ -28,8 +28,6 @@ class _NotificationPageState extends State<NotificationPage> {
           onPressed: widget.openDrawer,
           icon: Icon(Icons.menu),
         ),
-        backgroundColor: Colors.green,
-        foregroundColor: Colors.white,
         title: const Text('Notification'),
         titleSpacing: 20,
         actions: [IconButton(onPressed: null, icon: const Icon(Icons.star))],
@@ -45,9 +43,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.green,
-                ),
+                child: CircularProgressIndicator(),
               );
             }
 

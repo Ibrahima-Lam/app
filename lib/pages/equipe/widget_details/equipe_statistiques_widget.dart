@@ -9,9 +9,9 @@ import 'package:app/widget/section_title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class JoueursStatistiquesWidget extends StatelessWidget {
+class EquipeStatistiquesWidget extends StatelessWidget {
   final String idParticipant;
-  const JoueursStatistiquesWidget({super.key, required this.idParticipant});
+  const EquipeStatistiquesWidget({super.key, required this.idParticipant});
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +54,13 @@ class JoueursStatistiquesWidget extends StatelessWidget {
                 : ListView(
                     children: [
                       if (buts.isNotEmpty)
-                        JoueursStatistiquesSectionWidget(
+                        EquipeStatistiquesSectionWidget(
                             title: 'Buts', statistiques: buts),
                       if (jaunes.isNotEmpty)
-                        JoueursStatistiquesSectionWidget(
+                        EquipeStatistiquesSectionWidget(
                             title: 'Cartons Jaunes', statistiques: jaunes),
                       if (rouges.isNotEmpty)
-                        JoueursStatistiquesSectionWidget(
+                        EquipeStatistiquesSectionWidget(
                             title: 'Cartons Rouges', statistiques: rouges),
                     ],
                   );
@@ -71,10 +71,10 @@ class JoueursStatistiquesWidget extends StatelessWidget {
   }
 }
 
-class JoueursStatistiquesSectionWidget extends StatelessWidget {
+class EquipeStatistiquesSectionWidget extends StatelessWidget {
   final String title;
   final List<EventStatistique> statistiques;
-  const JoueursStatistiquesSectionWidget(
+  const EquipeStatistiquesSectionWidget(
       {super.key, required this.title, required this.statistiques});
 
   @override
@@ -85,7 +85,7 @@ class JoueursStatistiquesSectionWidget extends StatelessWidget {
         children: [
           SectionTitleWidget(title: title),
           ...statistiques
-              .map((e) => JoueursStatistiquesListTileWidget(reducer: e))
+              .map((e) => EquipeStatistiquesListTileWidget(reducer: e))
               .toList()
         ],
       ),
@@ -93,9 +93,9 @@ class JoueursStatistiquesSectionWidget extends StatelessWidget {
   }
 }
 
-class JoueursStatistiquesListTileWidget extends StatelessWidget {
+class EquipeStatistiquesListTileWidget extends StatelessWidget {
   final EventStatistique reducer;
-  const JoueursStatistiquesListTileWidget({super.key, required this.reducer});
+  const EquipeStatistiquesListTileWidget({super.key, required this.reducer});
 
   @override
   Widget build(BuildContext context) {

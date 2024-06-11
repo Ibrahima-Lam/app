@@ -83,9 +83,7 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Scaffold(
               body: const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.green,
-                ),
+                child: CircularProgressIndicator(),
               ),
             );
           }
@@ -100,8 +98,6 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
                   return [
                     SliverAppBar(
                       title: Text(competition.nomCompetition!),
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
                       pinned: true,
                       expandedHeight: 250,
                       leading: IconButton(

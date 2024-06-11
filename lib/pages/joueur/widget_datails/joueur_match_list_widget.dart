@@ -1,4 +1,4 @@
-import 'package:app/controllers/game/game_controller.dart';
+import 'package:app/controllers/joueur/joueur_controller.dart';
 import 'package:app/models/composition.dart';
 import 'package:app/models/game.dart';
 import 'package:app/providers/composition_provider.dart';
@@ -35,7 +35,7 @@ class JoueurMatchListWidget extends StatelessWidget {
         }
         return Consumer2<GameProvider, CompositionProvider>(
           builder: (context, matchs, compos, child) {
-            List<Game> games = GameController.getJoueurConvocation(idJoueur,
+            List<Game> games = JoueurController.getJoueurConvocation(idJoueur,
                 compositions: compos.compositionCollection.compositions
                     .whereType<JoueurComposition>()
                     .toList(),

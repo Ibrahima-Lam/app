@@ -22,9 +22,7 @@ class ClassementListWidget extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.green,
-              ),
+              child: CircularProgressIndicator(),
             );
           }
           if (snapshot.hasError) {
@@ -46,8 +44,8 @@ class ClassementListWidget extends StatelessWidget {
               Container(
                 color: Colors.white,
                 child: ToggleButtons(
-                  fillColor: Colors.green,
-                  color: Colors.green,
+                  fillColor: Theme.of(context).primaryColor,
+                  color: Theme.of(context).primaryColor,
                   selectedColor: Colors.white,
                   onPressed: (index) {
                     setState(

@@ -1,4 +1,4 @@
-import 'package:app/controllers/game/game_controller.dart';
+import 'package:app/controllers/joueur/joueur_controller.dart';
 import 'package:app/core/enums/performance_type.dart';
 import 'package:app/core/extension/string_extension.dart';
 import 'package:app/models/joueur.dart';
@@ -33,7 +33,7 @@ class JoueurPerformanceWidget extends StatelessWidget {
         return Consumer2<GameProvider, GameEventListProvider>(
           builder: (context, matchs, events, child) {
             List<GamePerformances> gamePerformances =
-                GameController.getJoueurPerformance(joueur,
+                JoueurController.getJoueurPerformance(joueur,
                     games: matchs.gameCollection.games, events: events.events);
 
             return ListView(

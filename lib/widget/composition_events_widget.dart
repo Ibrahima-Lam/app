@@ -62,6 +62,10 @@ class CardWidget extends StatelessWidget {
 }
 
 class PersonWidget extends StatelessWidget {
+  /**
+   * le rayon du cercle 
+   * par defaut c'est 20
+   */
   final double? radius;
   const PersonWidget({super.key, this.radius});
 
