@@ -1,11 +1,14 @@
 import 'package:app/models/competition.dart';
 import 'package:app/models/game.dart';
+import 'package:app/models/joueur.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/models/searchable.dart';
 import 'package:app/pages/competition/competition_details.dart';
 import 'package:app/pages/equipe/equipe_details.dart';
+import 'package:app/pages/joueur/joueur_details.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/history_provider.dart';
+import 'package:app/providers/joueur_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/game_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +26,10 @@ class CustomDelegateSearch extends SearchDelegate {
             .competitions;
     final List<Participant> participants =
         await context.read<ParticipantProvider>().getParticipants();
-    liste = [...participants, ...comps];
+
+    final List<Joueur> joueurs =
+        await context.read<JoueurProvider>().getJoueurs();
+    liste = [...participants, ...comps, ...joueurs];
     return liste;
   }
 
@@ -83,8 +89,11 @@ class CustomDelegateSearch extends SearchDelegate {
           q.add(element.away!);
           q.add(filterFC(element.away!));
         }
+        if (element is Joueur) {
+          q.add(element.nomJoueur);
+        }
         for (String v in q) {
-          if (v.toUpperCase().startsWith(query.toUpperCase())) {
+          if (v.toUpperCase().contains(query.toUpperCase())) {
             return true;
           }
         }
@@ -101,30 +110,44 @@ class CustomDelegateSearch extends SearchDelegate {
         }
         if (!snapshot.hasData) {
           return const Center(
-            child: CircularProgressIndicator(
-              color: Colors.green,
-            ),
+            child: CircularProgressIndicator(),
           );
         }
 
-        return Consumer(builder: (context, value, child) {
-          return ListView.builder(
-            itemCount: elements.length,
-            itemBuilder: (context, index) {
-              if (elements[index] is Competition) {
-                return competitionListTile(
-                    context, elements[index] as Competition);
-              }
-              if (elements[index] is Participant) {
-                return equipeListTile(context, elements[index] as Participant);
-              }
-              if (elements[index] is Game) {
-                return GameWidget(game: elements[index] as Game);
-              }
-              return const ListTile();
-            },
-          );
-        });
+        return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(0),
+            ),
+            color: Color(0xFFF5F5F5),
+            child: Container(
+              height: MediaQuery.sizeOf(context).height,
+              child: SingleChildScrollView(
+                child: elements.isEmpty
+                    ? SizedBox(
+                        height: 200,
+                        child: Center(
+                          child: Text(query.isEmpty
+                              ? 'Taper votre recherche!'
+                              : 'Pas de correspondance !'),
+                        ),
+                      )
+                    : Column(
+                        children: [
+                          for (Searchable searchable in elements)
+                            if (searchable is Competition)
+                              competitionListTile(context, searchable)
+                            else if (searchable is Participant)
+                              equipeListTile(context, searchable)
+                            else if (searchable is Joueur)
+                              joueurListTile(context, searchable)
+                            else if (searchable is Game)
+                              GameWidget(game: searchable)
+                            else
+                              const ListTile(),
+                        ],
+                      ),
+              ),
+            ));
       },
     );
   }
@@ -165,23 +188,43 @@ class CustomDelegateSearch extends SearchDelegate {
     );
   }
 
+  Widget joueurListTile(BuildContext context, Joueur joueur) {
+    return ListTile(
+      leading: query.isEmpty
+          ? const Icon(Icons.timer_outlined)
+          : const Icon(Icons.search),
+      title: Text(joueur.nomJoueur),
+      subtitle: const Text('joueur'),
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => JoueurDetails(idJoueur: joueur.idJoueur)));
+        insertIntoHistoryProvider(joueur);
+        query = joueur.nomJoueur;
+        buildResults(context);
+      },
+    );
+  }
+
   void insertIntoHistoryProvider(Searchable searchable) {
     if (searchable is Participant) {
-      historyProvider.value = historyProvider.value.where((element) {
-        if (element is! Participant) {
-          return true;
-        }
+      historyProvider.value.retainWhere((element) {
+        if (element is! Participant) return true;
         return element.idParticipant != searchable.idParticipant;
-      }).toList();
+      });
       historyProvider.value.insert(0, searchable);
     }
     if (searchable is Competition) {
-      historyProvider.value = historyProvider.value.where((element) {
-        if (element is! Competition) {
-          return true;
-        }
+      historyProvider.value.retainWhere((element) {
+        if (element is! Competition) return true;
         return element.codeEdition != searchable.codeEdition;
-      }).toList();
+      });
+      historyProvider.value.insert(0, searchable);
+    }
+    if (searchable is Joueur) {
+      historyProvider.value.retainWhere((element) {
+        if (element is! Joueur) return true;
+        return element.idJoueur != searchable.idJoueur;
+      });
       historyProvider.value.insert(0, searchable);
     }
   }

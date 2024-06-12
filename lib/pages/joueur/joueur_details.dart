@@ -50,7 +50,9 @@ class JoueurDetails extends StatelessWidget {
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   return [
                     SliverAppBar(
-                      title: Text(joueur.nomJoueur),
+                      title: Text(
+                        joueur.nomJoueur,
+                      ),
                       forceElevated: innerBoxIsScrolled,
                       expandedHeight: 200.0,
                       pinned: true,

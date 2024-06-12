@@ -116,9 +116,7 @@ class _GamePageState extends State<GamePage>
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.green,
-                  ),
+                  child: CircularProgressIndicator(),
                 );
               }
 

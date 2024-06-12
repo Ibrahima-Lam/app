@@ -61,6 +61,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          textTheme: TextTheme(),
+
           progressIndicatorTheme: ProgressIndicatorThemeData(
             color: color,
           ),
@@ -76,7 +78,7 @@ class MyApp extends StatelessWidget {
             foregroundColor: Colors.white,
           ),
           // Color(0xFFEDE7F6)
-          scaffoldBackgroundColor: Color(0xFFF5F5F5),
+          scaffoldBackgroundColor: Color.fromARGB(255, 236, 232, 232),
           cardTheme:
               CardTheme(color: Colors.white, surfaceTintColor: Colors.white),
           drawerTheme: DrawerThemeData(

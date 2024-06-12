@@ -1,4 +1,6 @@
-class Joueur {
+import 'package:app/models/searchable.dart';
+
+class Joueur implements Searchable {
   String idJoueur;
   String nomJoueur;
   String idParticipant;
