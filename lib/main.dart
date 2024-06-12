@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
             foregroundColor: Colors.white,
           ),
           // Color(0xFFEDE7F6)
-          scaffoldBackgroundColor: Color.fromARGB(255, 236, 232, 232),
+          scaffoldBackgroundColor: Color.fromARGB(255, 232, 232, 232),
           cardTheme:
               CardTheme(color: Colors.white, surfaceTintColor: Colors.white),
           drawerTheme: DrawerThemeData(
