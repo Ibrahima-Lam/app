@@ -42,7 +42,8 @@ class JoueurMatchListWidget extends StatelessWidget {
             return Card(
               child: games.isEmpty
                   ? Center(
-                      child: Text('Pas composition disponible pour ce joueur!'),
+                      child:
+                          Text('Pas de composition disponible pour ce joueur!'),
                     )
                   : ListView(
                       children: games.map((e) => GameWidget(game: e)).toList(),

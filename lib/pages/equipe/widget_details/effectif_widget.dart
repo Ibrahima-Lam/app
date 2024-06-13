@@ -46,7 +46,9 @@ class EffectifJoueurSectionWidget extends StatelessWidget {
           return Consumer<JoueurProvider>(builder: (context, val, child) {
             List<Joueur> joueurs = snapshot.data ?? [];
             return joueurs.isEmpty
-                ? const SizedBox()
+                ? const Center(
+                    child: Text('Pas de membre disponible pour cette equipe!'),
+                  )
                 : Card(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(0)),

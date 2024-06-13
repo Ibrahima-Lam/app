@@ -100,55 +100,55 @@ class CustomDelegateSearch extends SearchDelegate {
         return false;
       },
     ).toList();
-    return FutureBuilder(
-      future: getData(context),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const Center(
-            child: Text('Erreur '),
-          );
-        }
-        if (!snapshot.hasData) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(0),
+      ),
+      child: Container(
+        height: MediaQuery.sizeOf(context).height,
+        child: FutureBuilder(
+          future: getData(context),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('Erreur '),
+              );
+            }
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-        return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(0),
-            ),
-            color: Color(0xFFF5F5F5),
-            child: Container(
-              height: MediaQuery.sizeOf(context).height,
-              child: SingleChildScrollView(
-                child: elements.isEmpty
-                    ? SizedBox(
-                        height: 200,
-                        child: Center(
-                          child: Text(query.isEmpty
-                              ? 'Taper votre recherche!'
-                              : 'Pas de correspondance !'),
-                        ),
-                      )
-                    : Column(
-                        children: [
-                          for (Searchable searchable in elements)
-                            if (searchable is Competition)
-                              competitionListTile(context, searchable)
-                            else if (searchable is Participant)
-                              equipeListTile(context, searchable)
-                            else if (searchable is Joueur)
-                              joueurListTile(context, searchable)
-                            else if (searchable is Game)
-                              GameWidget(game: searchable)
-                            else
-                              const ListTile(),
-                        ],
+            return SingleChildScrollView(
+              child: elements.isEmpty
+                  ? SizedBox(
+                      height: 200,
+                      child: Center(
+                        child: Text(query.isEmpty
+                            ? 'Taper votre recherche!'
+                            : 'Pas de correspondance !'),
                       ),
-              ),
-            ));
-      },
+                    )
+                  : Column(
+                      children: [
+                        for (Searchable searchable in elements)
+                          if (searchable is Competition)
+                            competitionListTile(context, searchable)
+                          else if (searchable is Participant)
+                            equipeListTile(context, searchable)
+                          else if (searchable is Joueur)
+                            joueurListTile(context, searchable)
+                          else if (searchable is Game)
+                            GameWidget(game: searchable)
+                          else
+                            const ListTile(),
+                      ],
+                    ),
+            );
+          },
+        ),
+      ),
     );
   }
 

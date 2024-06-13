@@ -497,15 +497,18 @@ class ColumnWidget extends StatelessWidget {
                               if (value >= 1) {
                                 value = 0;
                               }
-
+                              final Color color = (value >= 0.5
+                                  ? const Color.fromARGB(255, 5, 148, 10)
+                                  : const Color.fromARGB(255, 215, 21, 7));
                               return CircularProgressIndicator(
-                                backgroundColor: Colors.white,
-                                value: value,
+                                backgroundColor:
+                                    isHome ? (color) : Colors.white,
+                                value: isHome ? 1 - value : value,
                                 strokeAlign: 10,
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation((value >= 0.5
-                                    ? const Color.fromARGB(255, 5, 148, 10)
-                                    : const Color.fromARGB(255, 215, 21, 7))),
+                                valueColor: isHome
+                                    ? AlwaysStoppedAnimation(Colors.white)
+                                    : AlwaysStoppedAnimation(color),
                               );
                             },
                           )

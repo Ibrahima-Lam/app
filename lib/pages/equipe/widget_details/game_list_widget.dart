@@ -27,12 +27,20 @@ class GameListWidget extends StatelessWidget {
           builder: (context, value, child) {
             List<Game> games =
                 value.gameCollection.getGamesBy(idPartcipant: idParticipant);
-            return Card(
-              child: ListView.builder(
-                itemCount: games.length,
-                itemBuilder: (context, index) => GameWidget(game: games[index]),
-              ),
-            );
+            return games.isEmpty
+                ? const Center(
+                    child: Text('Pas de match disponible pour cette equipe!'),
+                  )
+                : SingleChildScrollView(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0)),
+                        child: Column(
+                          children:
+                              games.map((e) => GameWidget(game: e)).toList(),
+                        )),
+                  );
           },
         );
       },

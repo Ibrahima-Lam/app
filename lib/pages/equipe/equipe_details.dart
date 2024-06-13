@@ -82,7 +82,7 @@ class EquipeDetails extends StatelessWidget {
                       return [
                         SliverAppBar(
                           pinned: true,
-                          expandedHeight: 250,
+                          expandedHeight: 200,
                           leading: IconButton(
                             onPressed: () {
                               Navigator.pop(context);
@@ -148,7 +148,7 @@ class EquipeDetails extends StatelessWidget {
                                     ],
                                   ),
                                   const SizedBox(
-                                    height: 10,
+                                    height: 5,
                                   ),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,

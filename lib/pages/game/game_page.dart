@@ -49,7 +49,10 @@ class _GamePageState extends State<GamePage>
   }
 
   Future _showSearch() async {
-    await showSearch(context: context, delegate: CustomDelegateSearch());
+    await showSearch(
+      context: context,
+      delegate: CustomDelegateSearch(),
+    );
   }
 
   void _setTabs(DateTime? date) {
@@ -142,10 +145,6 @@ class _GamePageState extends State<GamePage>
                 );
               });
             }),
-        floatButton: FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(Icons.add),
-        ),
       ),
     );
   }

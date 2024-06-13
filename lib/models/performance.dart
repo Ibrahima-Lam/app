@@ -26,9 +26,7 @@ class Performance {
       };
     }
     if (type == PerformanceType.passe) {
-      return nombre == 1
-          ? '${nombre} passe decisive'
-          : '${nombre} passes decisives';
+      return 'passes decisives';
     }
     return '';
   }

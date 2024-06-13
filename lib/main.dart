@@ -77,12 +77,18 @@ class MyApp extends StatelessWidget {
             backgroundColor: color,
             foregroundColor: Colors.white,
           ),
-          // Color(0xFFEDE7F6)
+          // Color(0xFFEDE7F6) Color.fromARGB(255, 232, 232, 232)
           scaffoldBackgroundColor: Color.fromARGB(255, 232, 232, 232),
-          cardTheme:
-              CardTheme(color: Colors.white, surfaceTintColor: Colors.white),
+          cardTheme: CardTheme(
+            color: Colors.white,
+            surfaceTintColor: Colors.white,
+            shadowColor: Colors.blue,
+            elevation: 1,
+          ),
           drawerTheme: DrawerThemeData(
-              backgroundColor: Colors.white, surfaceTintColor: Colors.white),
+            backgroundColor: Colors.white,
+            surfaceTintColor: Colors.white,
+          ),
           navigationBarTheme: NavigationBarThemeData(
             overlayColor: MaterialStatePropertyAll(color),
           ),
@@ -100,30 +106,44 @@ class GlobalPage extends StatefulWidget {
   State<GlobalPage> createState() => _GlobalPageState();
 }
 
+final double size = 30;
+
 class _GlobalPageState extends State<GlobalPage> {
   int currentIndex = 0;
   List<Widget> destinations = [
     NavigationDestination(
-      icon: Icon(Icons.home_outlined),
+      icon: Icon(
+        Icons.home_outlined,
+        size: size,
+      ),
       selectedIcon: Icon(
         Icons.home,
+        size: size,
         color: color,
       ),
       label: 'Match',
     ),
     NavigationDestination(
       label: 'Infos',
-      icon: Icon(Icons.info_outline),
+      icon: Icon(
+        Icons.info_outline,
+        size: size,
+      ),
       selectedIcon: Icon(
         Icons.info,
+        size: size,
         color: color,
       ),
     ),
     NavigationDestination(
       label: 'Explorer',
-      icon: Icon(Icons.open_in_browser),
+      icon: Icon(
+        Icons.open_in_browser,
+        size: size,
+      ),
       selectedIcon: Icon(
-        Icons.open_in_browser_sharp,
+        Icons.open_in_browser,
+        size: size,
         color: color,
       ),
     ),
@@ -132,12 +152,16 @@ class _GlobalPageState extends State<GlobalPage> {
       icon: Badge(
           isLabelVisible: false,
           label: null,
-          child: const Icon(Icons.notifications_none)),
+          child: Icon(
+            Icons.notifications_none,
+            size: size,
+          )),
       selectedIcon: Badge(
           isLabelVisible: false,
           label: null,
           child: Icon(
             Icons.notifications,
+            size: size,
             color: color,
           )),
     ),

@@ -2,6 +2,7 @@ import 'package:app/models/joueur.dart';
 import 'package:app/pages/equipe/equipe_details.dart';
 import 'package:app/pages/joueur/widget_datails/joueur_match_list_widget.dart';
 import 'package:app/pages/joueur/widget_datails/joueur_performance_widget.dart';
+import 'package:app/pages/joueur/widget_datails/joueur_statistique_widget.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/widget/tab_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class JoueurDetails extends StatelessWidget {
   Map<String, Widget> get tabBarViewWidget => {
         'match': JoueurMatchListWidget(idJoueur: idJoueur),
         'performance': JoueurPerformanceWidget(joueur: joueur),
+        'statistique': JoueurStatistiqueWidget(joueur: joueur),
       };
 
   @override

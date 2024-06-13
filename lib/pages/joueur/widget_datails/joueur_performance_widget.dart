@@ -34,13 +34,18 @@ class JoueurPerformanceWidget extends StatelessWidget {
                 JoueurController.getJoueurPerformance(joueur,
                     games: matchs.gameCollection.games, events: events.events);
 
-            return ListView(
-              children: gamePerformances
-                  .map((e) => PerformanceSetionWidget(
-                        gamePerformances: e,
-                      ))
-                  .toList(),
-            );
+            return gamePerformances.isEmpty
+                ? const Center(
+                    child:
+                        Text('Pas de Performance disponible pour ce joueur!'),
+                  )
+                : ListView(
+                    children: gamePerformances
+                        .map((e) => PerformanceSetionWidget(
+                              gamePerformances: e,
+                            ))
+                        .toList(),
+                  );
           },
         );
       },
