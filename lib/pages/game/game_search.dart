@@ -1,5 +1,9 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:app/models/game.dart';
+import 'package:app/models/participant.dart';
 import 'package:app/providers/game_provider.dart';
+import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/game_widget.dart';
 import 'package:app/widget/text_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +13,7 @@ class GameSearchPage extends StatelessWidget {
   GameSearchPage({super.key});
   final TextEditingController homeController = TextEditingController();
   final TextEditingController awayController = TextEditingController();
+  List<Participant> participants = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,6 +22,35 @@ class GameSearchPage extends StatelessWidget {
       ),
       body: Column(
         children: [
+          Autocomplete<Participant>(
+            optionsBuilder: (textEditingValue) {
+              if (textEditingValue.text.isEmpty)
+                return Iterable<Participant>.empty();
+              return participants.where((element) => element.nomEquipe
+                  .toUpperCase()
+                  .startsWith(textEditingValue.text.toUpperCase()));
+            },
+            fieldViewBuilder:
+                (context, textEditingController, focusNode, onFieldSubmitted) =>
+                    TextField(
+              controller: textEditingController,
+              focusNode: focusNode,
+            ),
+            optionsViewBuilder: (context, onSelected, options) {
+              return Material(
+                child: ListView(
+                  children: options
+                      .map((e) => ListTile(
+                            title: Text(e.nomEquipe),
+                            onTap: () {
+                              onSelected(e);
+                            },
+                          ))
+                      .toList(),
+                ),
+              );
+            },
+          ),
           Row(
             children: [
               Expanded(
@@ -51,9 +85,10 @@ class GameSearchPage extends StatelessWidget {
                         child: CircularProgressIndicator(),
                       );
                     }
-                    return Consumer<GameProvider>(
-                      builder: (context, value, child) {
-                        List<Game> games = value.gameCollection.games;
+                    return Consumer2<GameProvider, ParticipantProvider>(
+                      builder: (context, matchs, equipes, child) {
+                        List<Game> games = matchs.gameCollection.games;
+                        participants = equipes.participants;
                         return ListenableBuilder(
                             listenable: homeController,
                             builder: (context, child) {

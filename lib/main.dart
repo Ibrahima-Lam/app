@@ -4,7 +4,7 @@ import 'package:app/pages/game/game_page.dart';
 import 'package:app/pages/notification/notification_page.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/composition_provider.dart';
-import 'package:app/providers/counter_provider.dart';
+import 'package:app/providers/user_provider.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/game_event_provider.dart';
 import 'package:app/providers/game_provider.dart';
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => CounterProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider<GameEventListProvider>(
           lazy: false,
           create: (context) => GameEventListProvider([]),
