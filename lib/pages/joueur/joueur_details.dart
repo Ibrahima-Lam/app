@@ -4,6 +4,7 @@ import 'package:app/pages/joueur/widget_datails/joueur_match_list_widget.dart';
 import 'package:app/pages/joueur/widget_datails/joueur_performance_widget.dart';
 import 'package:app/pages/joueur/widget_datails/joueur_statistique_widget.dart';
 import 'package:app/providers/joueur_provider.dart';
+import 'package:app/widget/joueur_logo_widget.dart';
 import 'package:app/widget/tab_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -97,11 +98,14 @@ class JoueurDetails extends StatelessWidget {
                                 const SizedBox(
                                   width: 20,
                                 ),
-                                CircleAvatar(
-                                  radius: 40,
-                                  child: Icon(
-                                    Icons.person,
+                                SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: JoueurImageLogoWidget(
+                                    url: joueur.imageUrl,
+                                    noColor: true,
                                     size: 40,
+                                    radius: 40,
                                   ),
                                 ),
                                 const SizedBox(

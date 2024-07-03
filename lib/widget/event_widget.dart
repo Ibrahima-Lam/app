@@ -3,6 +3,7 @@ import 'package:app/models/game.dart';
 import 'package:app/pages/joueur/joueur_details.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/widget/composition_events_widget.dart';
+import 'package:app/widget/joueur_logo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -102,8 +103,12 @@ class EventSubWidget extends StatelessWidget {
       children: [
         if (isHome)
           Container(
+            height: 50,
+            width: 50,
             padding: const EdgeInsets.all(5.0),
-            child: PersonWidget(radius: 15),
+            child: JoueurImageLogoWidget(
+              url: event.imageUrl,
+            ),
           ),
         if (!isHome) IconsTypeWidget(event: event),
         Expanded(
@@ -142,8 +147,12 @@ class EventSubWidget extends StatelessWidget {
         if (isHome) IconsTypeWidget(event: event),
         if (!isHome)
           Container(
+            height: 50,
+            width: 50,
             padding: const EdgeInsets.all(5.0),
-            child: PersonWidget(radius: 15),
+            child: JoueurImageLogoWidget(
+              url: event.imageUrl,
+            ),
           )
       ],
     );
@@ -212,14 +221,24 @@ class JoueurBottomSheetWidget extends StatelessWidget {
       builder: (context) => Column(
         children: [
           ListTile(
-            leading: PersonWidget(),
+            leading: Container(
+              padding: const EdgeInsets.symmetric(vertical: 5.0),
+              height: 50,
+              width: 50,
+              child: JoueurImageLogoWidget(url: event.imageUrl),
+            ),
             title: Text(event.nom),
             onTap: () {
               Navigator.pop(context, event.idJoueur);
             },
           ),
           ListTile(
-              leading: PersonWidget(),
+              leading: Container(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                height: 50,
+                width: 50,
+                child: JoueurImageLogoWidget(url: event.imageUrl),
+              ),
               title: Text(event.nomTarget ?? ''),
               onTap: () {
                 Navigator.pop(context, event.idTarget);

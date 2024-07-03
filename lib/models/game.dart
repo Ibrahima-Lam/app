@@ -4,6 +4,8 @@ import 'package:app/models/searchable.dart';
 class Game implements Searchable {
   String idGame;
   String idHome;
+  String? homeImage;
+  String? awayImage;
   String idAway;
   String? dateGame;
   String? stadeGame;
@@ -36,6 +38,8 @@ class Game implements Searchable {
     this.idGroupe,
     this.home,
     this.away,
+    this.homeImage,
+    this.awayImage,
     this.homeScore,
     this.awayScore,
     this.nomGroupe,

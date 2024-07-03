@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 class TableWidget extends StatelessWidget {
   final List<Stat> stats;
   final bool expand;
-  final String? idTarget;
+  final List<String>? targets;
   TableWidget(
-      {super.key, required this.stats, this.expand = true, this.idTarget});
+      {super.key, required this.stats, this.expand = true, this.targets});
   List<String> get cols => [
         'N.',
         'Equipe',
@@ -44,8 +44,8 @@ class TableWidget extends StatelessWidget {
             .toList(),
         rows: stats
             .map((e) => DataRow(
-                    color: idTarget == e.id
-                        ? MaterialStatePropertyAll(
+                    color: targets != null && targets!.contains(e.id)
+                        ? WidgetStatePropertyAll(
                             const Color.fromARGB(255, 213, 254, 254))
                         : null,
                     cells: [

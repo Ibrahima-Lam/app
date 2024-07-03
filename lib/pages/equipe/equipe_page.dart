@@ -85,7 +85,7 @@ class _EquipePageState extends State<EquipePage> {
                                   child: ListView.builder(
                                     itemCount: participants.length,
                                     itemBuilder: (context, index) =>
-                                        EquipeListTileWidet(
+                                        EquipeListTileWidget(
                                       id: participants[index].idParticipant,
                                       title: participants[index].nomEquipe,
                                       subtitle:

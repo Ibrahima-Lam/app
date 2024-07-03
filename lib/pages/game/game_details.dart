@@ -17,6 +17,7 @@ import 'package:app/pages/game/widget_details/journee_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/widget/custom_delegate_search.dart';
+import 'package:app/widget/equipe_logo_widget.dart';
 import 'package:app/widget/tab_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -98,7 +99,10 @@ class _GameDetailsState extends State<GameDetails>
           break;
         case 'CLA':
           widgets.add(ClassementWiget(
-              title: 'Groupe ${game.nomGroupe}', idGroupe: game.idGroupe));
+            title: 'Groupe ${game.nomGroupe}',
+            idGroupe: game.idGroupe,
+            targets: [game.idHome, game.idAway],
+          ));
           break;
         case 'COM':
           widgets.add(CompositionWidget(
@@ -488,9 +492,15 @@ class ColumnWidget extends StatelessWidget {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          CircleAvatar(
-                            radius: 25,
-                            child: Icon(Icons.people),
+                          Container(
+                            height: 50,
+                            width: 50,
+                            child: EquipeImageLogoWidget(
+                              noColor: true,
+                              url: isHome
+                                  ? (game.homeImage ?? '')
+                                  : (game.awayImage ?? ''),
+                            ),
                           ),
                           Builder(
                             builder: (context) {

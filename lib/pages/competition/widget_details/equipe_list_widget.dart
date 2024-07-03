@@ -86,7 +86,7 @@ class ParticipationWidget extends StatelessWidget {
                         ),
                       ),
                       for (Participation part in parts)
-                        EquipeListTileWidet(
+                        EquipeListTileWidget(
                           title: (part.nomEquipe!),
                           id: part.idParticipant.toString(),
                         )
@@ -135,7 +135,7 @@ class ParticipantWidget extends StatelessWidget {
             itemCount: participants.length,
             itemBuilder: (context, index) {
               final Participant participant = participants[index];
-              return EquipeListTileWidet(
+              return EquipeListTileWidget(
                   id: participant.idParticipant, title: participant.nomEquipe);
             },
           ));

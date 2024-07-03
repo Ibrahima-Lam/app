@@ -1,5 +1,6 @@
 import 'package:app/models/composition.dart';
 import 'package:app/widget/composition_events_widget.dart';
+import 'package:app/widget/joueur_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 class CompositionElementWidget extends StatelessWidget {
@@ -26,12 +27,14 @@ class CompositionElementWidget extends StatelessWidget {
             ),
             child: Stack(
               children: [
-                Container(
+                SizedBox(
                     height: 40,
                     width: 50,
-                    child: CircleAvatar(
-                      child: Icon(Icons.person),
+                    child: JoueurImageLogoWidget(
+                      url: composition.imageUrl,
+                      noColor: true,
                       radius: 15,
+                      size: 25,
                     )),
                 if (composition.but > 0)
                   Positioned(

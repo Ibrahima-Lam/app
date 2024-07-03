@@ -2,6 +2,7 @@ import 'package:app/core/enums/event_type_enum.dart';
 
 abstract class Event {
   String type;
+  String? imageUrl;
   String idEvent;
   String idJoueur;
   String nom;
@@ -14,6 +15,7 @@ abstract class Event {
   Event(
       {required this.type,
       required this.idJoueur,
+      required this.imageUrl,
       required this.idEvent,
       required this.idParticipant,
       required this.idGame,
@@ -38,6 +40,7 @@ class GoalEvent extends Event {
     required super.idParticipant,
     required super.idGame,
     required super.idEvent,
+    super.imageUrl,
   });
 
   factory GoalEvent.fromJson(Map<String, dynamic> json) {
@@ -48,6 +51,7 @@ class GoalEvent extends Event {
       idGame: json['idGame'].toString(),
       idEvent: 'G' + json['idBut'].toString(),
       minute: (json['minute'] ?? '').toString(),
+      imageUrl: '',
     );
   }
 
@@ -73,6 +77,7 @@ class GoalEvent extends Event {
         nomTarget: nomTarget ?? this.nomTarget,
         minute: minute ?? this.minute,
         propre: propre ?? this.propre,
+        imageUrl: '',
       );
 }
 
@@ -89,7 +94,8 @@ class CardEvent extends Event {
       super.minute,
       required super.nom,
       super.idTarget,
-      super.nomTarget});
+      super.nomTarget,
+      super.imageUrl});
 
   factory CardEvent.fromJson(Map<String, dynamic> json) {
     return CardEvent(
@@ -100,6 +106,7 @@ class CardEvent extends Event {
       idParticipant: json['idParticipant'].toString(),
       idGame: json['idGame'].toString(),
       idEvent: 'C' + json['idSanctionner'].toString(),
+      imageUrl: '',
     );
   }
 
@@ -125,6 +132,7 @@ class CardEvent extends Event {
         isRed: isRed ?? this.isRed,
         idTarget: idTarget ?? this.idTarget,
         nomTarget: nomTarget ?? this.nomTarget,
+        imageUrl: '',
       );
 }
 
@@ -138,7 +146,8 @@ class RemplEvent extends Event {
       required super.nom,
       super.minute,
       super.idTarget,
-      super.nomTarget});
+      super.nomTarget,
+      super.imageUrl});
 
   RemplEvent copyWith({
     String? idJoueur,
@@ -161,14 +170,20 @@ class RemplEvent extends Event {
         minute: minute ?? this.minute,
         idTarget: idTarget ?? this.idTarget,
         nomTarget: nomTarget ?? this.nomTarget,
+        imageUrl: '',
       );
 }
 
 class EventStatistique {
   String id;
+  String? imageUrl;
   String nom;
   int nombre;
   EventType? type;
   EventStatistique(
-      {required this.nom, required this.nombre, required this.id, this.type});
+      {required this.nom,
+      required this.nombre,
+      required this.id,
+      this.type,
+      this.imageUrl});
 }

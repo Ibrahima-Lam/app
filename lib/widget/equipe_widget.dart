@@ -1,11 +1,12 @@
 import 'package:app/pages/equipe/equipe_details.dart';
+import 'package:app/widget/equipe_logo_widget.dart';
 import 'package:flutter/material.dart';
 
-class EquipeListTileWidet extends StatelessWidget {
+class EquipeListTileWidget extends StatelessWidget {
   final String title;
   final String? subtitle;
   final String id;
-  const EquipeListTileWidet(
+  const EquipeListTileWidget(
       {super.key, required this.id, required this.title, this.subtitle});
 
   @override
@@ -21,13 +22,11 @@ class EquipeListTileWidet extends StatelessWidget {
             ),
           );
         },
-        leading: CircleAvatar(
-          backgroundColor: Color(0xFFDCDCDC),
-          radius: 20,
-          child: Icon(
-            Icons.people,
-            color: Colors.white,
-          ),
+        leading: Container(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+          height: 60,
+          width: 60,
+          child: EquipeImageLogoWidget(),
         ),
         title: Text(title),
         subtitle: subtitle != null ? Text(subtitle!) : null,

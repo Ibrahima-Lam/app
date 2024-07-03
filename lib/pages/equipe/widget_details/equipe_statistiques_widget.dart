@@ -4,7 +4,7 @@ import 'package:app/models/event.dart';
 import 'package:app/pages/joueur/joueur_details.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/composition_events_widget.dart';
+import 'package:app/widget/joueur_logo_widget.dart';
 import 'package:app/widget/section_title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -105,7 +105,12 @@ class EquipeStatistiquesListTileWidget extends StatelessWidget {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => JoueurDetails(idJoueur: reducer.id)));
       },
-      leading: PersonWidget(),
+      leading: Container(
+        padding: const EdgeInsets.symmetric(vertical: 5.0),
+        height: 50,
+        width: 50,
+        child: JoueurImageLogoWidget(url: reducer.imageUrl),
+      ),
       title: Text(reducer.nom),
       trailing: Text(
         reducer.nombre.toString(),

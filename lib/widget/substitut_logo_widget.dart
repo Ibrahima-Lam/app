@@ -1,5 +1,6 @@
 import 'package:app/models/composition.dart';
 import 'package:app/widget/composition_events_widget.dart';
+import 'package:app/widget/joueur_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 class SubstitutLogoWidget extends StatelessWidget {
@@ -21,11 +22,14 @@ class SubstitutLogoWidget extends StatelessWidget {
           offset: Offset(0, 5),
           label: Text(composition.numero.toString()),
           alignment: Alignment.bottomCenter,
-          child: CircleAvatar(
-            radius: 15,
-            backgroundColor: const Color(0xFFDCDCDC),
-            foregroundColor: Colors.white,
-            child: Icon(Icons.person),
+          child: SizedBox(
+            height: 40,
+            width: 40,
+            child: JoueurImageLogoWidget(
+              url: composition.imageUrl,
+              size: 30,
+              radius: 15,
+            ),
           ),
         ),
         if (composition.but > 0)

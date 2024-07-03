@@ -239,7 +239,7 @@ class NomTargetWidget extends StatelessWidget {
       return Card(
         child: DropdownMenu(
             menuStyle: MenuStyle(
-                backgroundColor: MaterialStatePropertyAll(Colors.white)),
+                backgroundColor: WidgetStatePropertyAll(Colors.white)),
             width: MediaQuery.sizeOf(context).width * .95,
             label: Text('Selectionner la cause'),
             enableSearch: true,

@@ -5,12 +5,14 @@ class TextFieldWidget extends StatelessWidget {
   final String hintText;
   final Widget? suffixIcon;
   final Widget? prefixIcon;
+  final FocusNode? focusNode;
   const TextFieldWidget({
     super.key,
     required this.textEditingController,
     required this.hintText,
     this.suffixIcon,
     this.prefixIcon,
+    this.focusNode,
   });
 
   @override
@@ -25,6 +27,7 @@ class TextFieldWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextField(
+        focusNode: focusNode,
         controller: textEditingController,
         decoration: InputDecoration(
           suffixIcon: suffixIcon,

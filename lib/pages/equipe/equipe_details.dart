@@ -5,6 +5,7 @@ import 'package:app/models/competition.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/pages/competition/competition_details.dart';
 import 'package:app/pages/equipe/widget_details/competition_list_widget.dart';
+import 'package:app/pages/equipe/widget_details/equipe_fiche_list_widget.dart';
 import 'package:app/pages/equipe/widget_details/game_list_widget.dart';
 import 'package:app/pages/equipe/widget_details/joueur_delegate_search_widget.dart';
 import 'package:app/pages/equipe/widget_details/effectif_widget.dart';
@@ -12,6 +13,7 @@ import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/classement_widget.dart';
 import 'package:app/pages/equipe/widget_details/equipe_statistiques_widget.dart';
+import 'package:app/widget/equipe_logo_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:app/widget/tab_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +41,7 @@ class EquipeDetails extends StatelessWidget {
         'infos': InfosListWiget(),
         'competition': CompetitionListWidget(),
         'statistique': EquipeStatistiquesWidget(idParticipant: id),
+        'fiche': EquipeFicheListWidget(participant: participant),
       };
 
   late final Participant participant;
@@ -133,38 +136,16 @@ class EquipeDetails extends StatelessWidget {
                                         ),
                                       ),
                                       const SizedBox(width: 20),
-                                      CircleAvatar(
+                                      EquipeImageLogoWidget(
+                                        noColor: true,
+                                        url: participant.image,
                                         radius: 40,
-                                        child: Icon(
-                                          Icons.people,
-                                          size: 40,
-                                        ),
+                                        size: 40,
                                       ),
                                       const SizedBox(width: 20),
                                       CircleAvatar(
                                         radius: 20,
                                         child: Icon(Icons.safety_check),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(2),
-                                        child: FittedBox(
-                                          child: Text(
-                                            participant.libelleEquipe!,
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
                                       ),
                                     ],
                                   ),

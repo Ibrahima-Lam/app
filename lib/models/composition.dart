@@ -95,6 +95,7 @@ class JoueurComposition extends EquipeComposition {
   int? tempsEntrants;
   int? tempsSortant;
   int but;
+  String? imageUrl;
   bool isCapitaine;
 
   JoueurComposition({
@@ -115,11 +116,13 @@ class JoueurComposition extends EquipeComposition {
     super.jaune = 0,
     super.rouge = 0,
     required super.idComposition,
+    this.imageUrl,
   });
 
   JoueurComposition copyWith(
       {String? idJoueur,
       String? idGame,
+      String? imageUrl,
       String? idParticipant,
       String? nom,
       int? numero,
@@ -154,6 +157,7 @@ class JoueurComposition extends EquipeComposition {
       sortant: sortant ?? this.sortant,
       tempsEntrants: tempsEntrants ?? this.tempsEntrants,
       idComposition: idComposition ?? this.idComposition,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 }

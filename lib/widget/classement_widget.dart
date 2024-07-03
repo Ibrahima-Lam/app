@@ -9,13 +9,13 @@ class ClassementWiget extends StatelessWidget {
   final String title;
   final String? idGroupe;
   final String? idParticipant;
-  final String? idTarget;
+  final List<String>? targets;
   const ClassementWiget(
       {super.key,
       required this.title,
       this.idGroupe,
       this.idParticipant,
-      this.idTarget});
+      this.targets});
   factory ClassementWiget.equipe(
           {required String title,
           required String idParticipant,
@@ -23,7 +23,7 @@ class ClassementWiget extends StatelessWidget {
       ClassementWiget(
         title: title,
         idParticipant: idParticipant,
-        idTarget: idTarget,
+        targets: [idTarget],
       );
 
   Future<List<Stat>> _getStat(BuildContext context) async {
@@ -94,7 +94,7 @@ class ClassementWiget extends StatelessWidget {
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         TableWidget(
-                          idTarget: idTarget,
+                          targets: targets,
                           stats: stat,
                           expand: selected == 0,
                         )

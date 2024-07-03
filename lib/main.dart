@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
           ),
           outlinedButtonTheme: OutlinedButtonThemeData(
               style: ButtonStyle(
-            foregroundColor: MaterialStatePropertyAll(color),
+            foregroundColor: WidgetStatePropertyAll(color),
           )),
           primaryColor: color,
           floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -90,7 +90,7 @@ class MyApp extends StatelessWidget {
             surfaceTintColor: Colors.white,
           ),
           navigationBarTheme: NavigationBarThemeData(
-            overlayColor: MaterialStatePropertyAll(color),
+            overlayColor: WidgetStatePropertyAll(color),
           ),
         ),
         home: GlobalPage(),
@@ -197,7 +197,7 @@ class _GlobalPageState extends State<GlobalPage> {
       bottomNavigationBar: NavigationBar(
         elevation: 5,
         shadowColor: color,
-        indicatorColor: Colors.white,
+        indicatorColor: const Color(0xFFF5F5F5),
         destinations: destinations,
         animationDuration: const Duration(milliseconds: 200),
         selectedIndex: currentIndex,

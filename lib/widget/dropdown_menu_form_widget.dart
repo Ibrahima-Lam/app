@@ -10,7 +10,7 @@ class DropdownMenuFormWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownMenu(
         menuStyle:
-            MenuStyle(backgroundColor: MaterialStatePropertyAll(Colors.white)),
+            MenuStyle(backgroundColor: WidgetStatePropertyAll(Colors.white)),
         width: MediaQuery.sizeOf(context).width * .95,
         label: Text('Selectionner la cause'),
         enableSearch: true,
