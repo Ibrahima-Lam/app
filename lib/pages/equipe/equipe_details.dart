@@ -38,7 +38,7 @@ class EquipeDetails extends StatelessWidget {
         'classement':
             ClassementWiget.equipe(title: '', idParticipant: id, idTarget: id),
         'effectif': EffectifWidget(idParticipant: id),
-        'infos': InfosListWiget(),
+        'infos': InfosListWiget(idPartcipant: id),
         'competition': CompetitionListWidget(),
         'statistique': EquipeStatistiquesWidget(idParticipant: id),
         'fiche': EquipeFicheListWidget(participant: participant),
@@ -138,7 +138,7 @@ class EquipeDetails extends StatelessWidget {
                                       const SizedBox(width: 20),
                                       EquipeImageLogoWidget(
                                         noColor: true,
-                                        url: participant.image,
+                                        url: participant.imageUrl,
                                         radius: 40,
                                         size: 40,
                                       ),

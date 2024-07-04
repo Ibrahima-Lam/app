@@ -113,18 +113,21 @@ class Classeur {
           be: element.awayScore!,
           diff: element.homeScore! - element.awayScore!,
           date: element.dateGame,
+          imageUrl: element.homeImage,
         ));
       }
       List<Game> awayGames =
           games.where((game) => indice.toString() == game.idAway).toList();
       for (Game element in awayGames) {
         elements.add(Stat(
-            id: element.idAway,
-            nom: element.away!,
-            bm: element.awayScore!,
-            be: element.homeScore!,
-            diff: element.awayScore! - element.homeScore!,
-            date: element.dateGame));
+          id: element.idAway,
+          nom: element.away!,
+          bm: element.awayScore!,
+          be: element.homeScore!,
+          diff: element.awayScore! - element.homeScore!,
+          date: element.dateGame,
+          imageUrl: element.awayImage,
+        ));
       }
     }
     elements.sort((a, b) => a.date!.compareTo(b.date!));

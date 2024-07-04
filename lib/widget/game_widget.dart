@@ -3,6 +3,7 @@ import 'package:app/core/enums/game_etat_enum.dart';
 import 'package:app/core/enums/show_niveau_enum.dart';
 import 'package:app/pages/game/game_details.dart';
 import 'package:app/models/game.dart';
+import 'package:app/widget/equipe_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 class GameWidget extends StatelessWidget {
@@ -155,4 +156,114 @@ class GameWidget extends StatelessWidget {
       textAlign: TextAlign.center,
     );
   }
+}
+
+class GameFullWidget extends StatelessWidget {
+  final Game game;
+  final bool showDate;
+  final bool showEtat;
+
+  const GameFullWidget(
+      {super.key,
+      required this.game,
+      this.showDate = true,
+      this.showEtat = true});
+  GameEtat get _etat => game.etat.etat;
+
+  Color get _colorEtat {
+    return switch (_etat) {
+      GameEtat.direct || GameEtat.pause => Colors.green,
+      GameEtat.reporte => Colors.red,
+      _ => Colors.grey
+    };
+  }
+
+  Color get _colorScore {
+    return switch (_etat) {
+      GameEtat.direct || GameEtat.pause => Colors.green,
+      GameEtat.reporte => Colors.red,
+      _ => Colors.black
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+      shadowColor: Colors.white,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => GameDetails(id: game.idGame)));
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: equipeWidget(game.home!, game.homeImage ?? ''),
+              ),
+              Container(
+                constraints: BoxConstraints(minHeight: 100),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(game.nomNiveau ?? ''),
+                    Text(
+                      game.score,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: _colorScore,
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        if (showDate)
+                          Text(
+                            DateController.frDate(game.dateGame, abbr: true),
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        if (game.isPlayed &&
+                            showEtat &&
+                            _etat != GameEtat.avant)
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 3.0),
+                            color: _colorEtat,
+                            child: Text(
+                              game.etat.text.substring(0, 3).toUpperCase(),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 10),
+                            ),
+                          )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Expanded(child: equipeWidget(game.away!, game.awayImage ?? '')),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget equipeWidget(String name, String imageUrl) => Column(
+        children: [
+          SizedBox(
+            height: 60,
+            width: 60,
+            child: EquipeImageLogoWidget(
+              url: imageUrl,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(name),
+        ],
+      );
 }

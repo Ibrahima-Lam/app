@@ -1,13 +1,17 @@
 import 'package:app/controllers/competition/date.dart';
+import 'package:app/core/enums/categorie_enum.dart';
 import 'package:app/models/game.dart';
+import 'package:app/models/joueur.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/pages/game/game_details.dart';
+import 'package:app/pages/joueur/joueur_details.dart';
 import 'package:app/providers/game_provider.dart';
+import 'package:app/providers/joueur_provider.dart';
+import 'package:app/widget/circular_logo_widget.dart';
 import 'package:app/widget/equipe_logo_widget.dart';
-import 'package:app/widget/joueur_logo_widget.dart';
+import 'package:app/widget/fiches_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class EquipeFicheListWidget extends StatelessWidget {
   final Participant participant;
@@ -21,19 +25,17 @@ class EquipeFicheListWidget extends StatelessWidget {
               color: Colors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5)))),
-      child: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              FicheInfosWidget(idPartcipant: participant.idParticipant),
-              SomePlayerWidget(idPartcipant: participant.idParticipant),
-              LastGameWidget(idParticipant: participant.idParticipant),
-              NextGameWidget(idParticipant: participant.idParticipant),
-              InformationEquipeWidget(participant: participant),
-              MoreInfosWidget(idPartcipant: participant.idParticipant),
-              FicheSponsorWidget(idPartcipant: participant.idParticipant),
-            ],
-          ),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            FicheInfosWidget(idPartcipant: participant.idParticipant),
+            SomePlayerWidget(idPartcipant: participant.idParticipant),
+            LastGameWidget(idParticipant: participant.idParticipant),
+            NextGameWidget(idParticipant: participant.idParticipant),
+            InformationEquipeWidget(participant: participant),
+            MoreInfosWidget(idPartcipant: participant.idParticipant),
+            FicheSponsorWidget(idPartcipant: participant.idParticipant),
+          ],
         ),
       ),
     );
@@ -181,7 +183,7 @@ class InformationEquipeWidget extends StatelessWidget {
                     height: 60,
                     width: 60,
                     //Todos url de l' equipe
-                    child: EquipeImageLogoWidget(),
+                    child: EquipeImageLogoWidget(url: participant.imageUrl),
                   ),
                   Expanded(
                     child: Column(
@@ -279,52 +281,37 @@ class SomePlayerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
-      color: Colors.white,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ...List.generate(
-                5, (index) => CircularLogoWidget(path: 'images/messi.jpg')),
-          ],
+    return Consumer<JoueurProvider>(builder: (context, value, child) {
+      List<Joueur> joueurs = value.joueurs
+          .where((element) => element.idParticipant == idPartcipant)
+          .take(5)
+          .toList();
+      return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
+        color: Colors.white,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ...joueurs.map((e) => GestureDetector(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            JoueurDetails(idJoueur: e.idJoueur))),
+                    child: CircularLogoWidget(
+                        path: e.imageUrl ?? '', categorie: Categorie.equipe),
+                  )),
+              ...List.generate(
+                  5 - joueurs.length,
+                  (index) => CircularLogoWidget(
+                        path: '',
+                        categorie: Categorie.equipe,
+                      )),
+            ],
+          ),
         ),
-      ),
-    );
-  }
-}
-
-class CircularLogoWidget extends StatelessWidget {
-  final String path;
-
-  final double? size;
-  const CircularLogoWidget({super.key, required this.path, this.size});
-
-  @override
-  Widget build(BuildContext context) {
-    final s = size != null ? Size(size!, size!) : Size(70, 70);
-    return Container(
-      height: s.height,
-      width: s.width,
-      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-      ),
-      child: PhysicalModel(
-        elevation: 5,
-        shape: BoxShape.circle,
-        color: Colors.white,
-        child: Container(
-            padding: EdgeInsets.all(3.0),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-            ),
-            child: JoueurImageLogoWidget(url: path)),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -344,7 +331,6 @@ class LastGameWidget extends StatelessWidget {
           ? const SizedBox()
           : FicheGameWidget(
               game: game,
-              title: 'Dernier match',
             );
     });
   }
@@ -366,7 +352,6 @@ class NextGameWidget extends StatelessWidget {
           ? const SizedBox()
           : FicheGameWidget(
               game: game,
-              title: 'Prochain match',
             );
     });
   }
@@ -374,8 +359,8 @@ class NextGameWidget extends StatelessWidget {
 
 class FicheGameWidget extends StatelessWidget {
   final Game game;
-  final String title;
-  const FicheGameWidget({super.key, required this.game, required this.title});
+
+  const FicheGameWidget({super.key, required this.game});
 
   @override
   Widget build(BuildContext context) {
@@ -392,12 +377,13 @@ class FicheGameWidget extends StatelessWidget {
                   builder: (context) => GameDetails(id: game.idGame)));
             },
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
                   child: equipeWidget(game.home!, game.homeImage ?? ''),
                 ),
                 Container(
-                  constraints: BoxConstraints(minHeight: 80),
+                  constraints: BoxConstraints(minHeight: 100),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -409,7 +395,10 @@ class FicheGameWidget extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(DateController.frDate(game.dateGame, abbr: true))
+                      Text(
+                        DateController.frDate(game.dateGame, abbr: true),
+                        style: const TextStyle(fontSize: 12),
+                      )
                     ],
                   ),
                 ),
@@ -437,80 +426,4 @@ class FicheGameWidget extends StatelessWidget {
           Text(name),
         ],
       );
-}
-
-class FicheInfosWidget extends StatelessWidget {
-  final String idPartcipant;
-  const FicheInfosWidget({super.key, required this.idPartcipant});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 5.0),
-      child: Card(
-        child: Container(
-          width: MediaQuery.sizeOf(context).width,
-          constraints: const BoxConstraints(
-            minHeight: 100,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CachedNetworkImage(
-                imageUrl: '',
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) =>
-                    Image.asset('images/messi.jpg'),
-              ),
-              const SizedBox(height: 5),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                child: Text(
-                  'a la une de cette equipe elle a perdu son premier de la competition face a son dephin! ',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class FicheSponsorWidget extends StatelessWidget {
-  final String idPartcipant;
-  const FicheSponsorWidget({super.key, required this.idPartcipant});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 5.0),
-      child: Card(
-        child: Container(
-          width: MediaQuery.sizeOf(context).width,
-          constraints: const BoxConstraints(
-            minHeight: 200,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CachedNetworkImage(
-                imageUrl: '',
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) =>
-                    Image.asset('images/messi.jpg'),
-              ),
-              Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text('sponsor officielle'))
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }

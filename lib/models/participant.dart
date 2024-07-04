@@ -13,7 +13,7 @@ class Participant implements Searchable {
   String? codeCompetition;
   String? nomCompetition;
   String? localiteCompetition;
-  String? image;
+  String? imageUrl;
   Participant({
     required this.idParticipant,
     this.idEquipe,
@@ -27,7 +27,7 @@ class Participant implements Searchable {
     this.codeCompetition,
     this.nomCompetition,
     this.localiteCompetition,
-    this.image,
+    this.imageUrl,
   });
 
   factory Participant.fromJson(Map<String, dynamic> json) {

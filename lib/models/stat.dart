@@ -1,6 +1,7 @@
 class Stat {
   int num;
   String id;
+  String? imageUrl;
   String nom;
   int pts;
   int nm;
@@ -28,6 +29,7 @@ class Stat {
     this.res = '',
     this.date,
     this.playing = false,
+    this.imageUrl,
   });
   Map<String, dynamic> toJson() {
     return {

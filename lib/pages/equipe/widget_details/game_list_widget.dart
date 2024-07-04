@@ -37,8 +37,9 @@ class GameListWidget extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(0)),
                         child: Column(
-                          children:
-                              games.map((e) => GameWidget(game: e)).toList(),
+                          children: games
+                              .map((e) => GameFullWidget(game: e))
+                              .toList(),
                         )),
                   );
           },

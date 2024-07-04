@@ -280,7 +280,7 @@ class _CompetitionGamesWidgetState extends State<CompetitionGamesWidget> {
                                 color: Colors.grey,
                               ),
                               for (final g in gamelist)
-                                GameWidget(
+                                GameFullWidget(
                                   game: g,
                                   showDate: false,
                                 ),

@@ -4,12 +4,12 @@ import 'package:app/pages/game/game_page.dart';
 import 'package:app/pages/notification/notification_page.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/composition_provider.dart';
+import 'package:app/providers/infos_provider.dart';
 import 'package:app/providers/user_provider.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/game_event_provider.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/providers/groupe_provider.dart';
-import 'package:app/providers/infos_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/providers/participation_provider.dart';
@@ -48,13 +48,13 @@ class MyApp extends StatelessWidget {
           update: (context, stats, events, previous) =>
               StatistiqueProvider(stats, events),
         ),
+        ChangeNotifierProvider(create: (context) => InfosProvider()),
         ChangeNotifierProvider(create: (context) => CompetitionProvider()),
         ChangeNotifierProvider(create: (context) => GameProvider()),
         ChangeNotifierProvider(create: (context) => GameEventProvider()),
         ChangeNotifierProvider(create: (context) => GroupeProvider()),
         ChangeNotifierProvider(create: (context) => ParticipantProvider()),
         ChangeNotifierProvider(create: (context) => ParticipationProvider()),
-        ChangeNotifierProvider(create: (context) => InfosProvider()),
         ChangeNotifierProvider(create: (context) => CompositionProvider()),
         ChangeNotifierProvider(create: (context) => JoueurProvider()),
       ],

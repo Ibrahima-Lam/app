@@ -52,7 +52,7 @@ class DateController {
     final String abbrday = '${semaine[dt.weekday - 1].substring(0, 3)}.';
 
     String abbrmonth =
-        '${mois[dt.month - 1].substring(0, mois[dt.month - 1].length > 3 ? 3 : null)}';
+        '${mois[dt.month - 1].substring(0, mois[dt.month - 1].length > 4 ? 4 : null)}.';
 
     if (mois[dt.month - 1].length <= 5) {
       abbrmonth = mois[dt.month - 1];

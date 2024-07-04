@@ -1,9 +1,9 @@
-import 'package:app/models/infos.dart';
+import 'package:app/models/infos/infos.dart';
 
 class InfosService {
-  static Future<List<Infos>> getData() async {
+  static Stream<Infos> getData() async* {
     await Future.delayed(const Duration(seconds: 1));
-    return List.generate(
+    List<Infos> infos = List.generate(
       20,
       (index) => Infos(
           id: index.toString(),
@@ -15,5 +15,9 @@ class InfosService {
           datetime: DateTime.now().toString(),
           source: 'RMC sport'),
     );
+    for (var info in infos) {
+      await Future.delayed(const Duration(seconds: 1));
+      yield info;
+    }
   }
 }

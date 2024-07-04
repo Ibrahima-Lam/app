@@ -1,6 +1,5 @@
-import 'package:app/models/infos.dart';
+import 'package:app/models/infos/infos.dart';
 import 'package:app/providers/infos_provider.dart';
-import 'package:app/service/infos_service.dart';
 import 'package:app/widget/drawer_widget.dart';
 import 'package:app/widget/infos_widget.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +14,6 @@ class InfosPage extends StatefulWidget {
 }
 
 class _InfosPageState extends State<InfosPage> {
-  Future<List<Infos>> getData() async {
-    return await InfosService.getData();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,19 +25,16 @@ class _InfosPageState extends State<InfosPage> {
         title: const Text('Infos'),
         titleSpacing: 20,
       ),
-      body: FutureBuilder<List<Infos>>(
-          future: context.read<InfosProvider>().getInformations(),
+      body: StreamBuilder(
+          stream: context.read<InfosProvider>().getInformations(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const Center(
-                child: Text('Erreur!'),
+                child: Text('erreur!'),
               );
             }
-
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
 
             return Consumer<InfosProvider>(builder: (context, value, child) {

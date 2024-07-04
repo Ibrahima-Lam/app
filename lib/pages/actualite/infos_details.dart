@@ -1,7 +1,10 @@
 import 'package:app/controllers/competition/date.dart';
-import 'package:app/models/infos.dart';
+import 'package:app/models/infos/infos.dart';
+import 'package:app/providers/infos_provider.dart';
 import 'package:app/widget/infos_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class InfosDetails extends StatefulWidget {
   final Infos infos;
@@ -50,10 +53,15 @@ class _InfosDetailsState extends State<InfosDetails> {
                   child: Container(
                     constraints: BoxConstraints(minHeight: 200),
                     width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(widget.infos.image!),
-                          fit: BoxFit.cover),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.infos.imageUrl ?? '',
+                      errorWidget: (context, url, error) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('images/europa.jpg'),
+                              fit: BoxFit.cover),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -136,7 +144,7 @@ class _InfosDetailsState extends State<InfosDetails> {
                         SizedBox(
                           height: 5,
                         ),
-                        AutreInfosWidet(),
+                        AutreInfosWidet(info: widget.infos),
                       ],
                     ),
                   ),
@@ -161,26 +169,18 @@ class _InfosDetailsState extends State<InfosDetails> {
 // -----------------------------------------Autre infos-----------------------------------------------
 
 class AutreInfosWidet extends StatelessWidget {
-  const AutreInfosWidet({super.key});
+  final Infos info;
+  const AutreInfosWidet({super.key, required this.info});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: List.generate(
-            5,
-            (index) => InfosLessWidget(
-                  infos: Infos(
-                      id: '$index',
-                      text:
-                          'the text of an other new. $index it to get this here cause it can allow to be informed in all brakinking news ',
-                      title:
-                          'title of an other infos $index i hope this this title is so usefull cause it help to access by link to go there',
-                      datetime: DateTime.parse('2024-03-23').toString(),
-                      source: 'Bein Sport'),
-                )),
-      ),
-    );
+    return Consumer<InfosProvider>(builder: (context, val, child) {
+      List<Infos> infos = val.getInfosByInfo(info: info);
+      return Container(
+        child: Column(
+            children: infos.map((e) => InfosLessWidget(infos: e)).toList()),
+      );
+    });
   }
 }
 

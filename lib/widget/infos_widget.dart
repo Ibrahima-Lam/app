@@ -1,6 +1,7 @@
 import 'package:app/controllers/competition/date.dart';
-import 'package:app/models/infos.dart';
+import 'package:app/models/infos/infos.dart';
 import 'package:app/pages/actualite/infos_details.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class InfosWidget extends StatefulWidget {
@@ -32,6 +33,7 @@ class _InfosWidgetState extends State<InfosWidget> {
         setState(() {});
       },
       child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
         color: Colors.white,
         child: Container(
           padding: const EdgeInsets.all(5),
@@ -47,12 +49,17 @@ class _InfosWidgetState extends State<InfosWidget> {
                     child: Container(
                       height: 140,
                       width: MediaQuery.of(context).size.width * .30,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(
-                              widget.infos.image!,
-                            ),
-                            fit: BoxFit.cover),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.infos.imageUrl ?? '',
+                        errorWidget: (context, url, error) => Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(
+                                  'images/europa.jpg',
+                                ),
+                                fit: BoxFit.cover),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -150,11 +157,18 @@ class _InfosFullWidgetState extends State<InfosFullWidget> {
                 tag: widget.infos.id,
                 child: Container(
                   height: 300,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(widget.infos.image!),
-                        fit: BoxFit.cover),
+                  width: MediaQuery.of(context).size.width * .30,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.infos.imageUrl ?? '',
+                    errorWidget: (context, url, error) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage(
+                              'images/europa.jpg',
+                            ),
+                            fit: BoxFit.cover),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -220,12 +234,17 @@ class InfosLessWidget extends StatelessWidget {
               child: Container(
                 height: 140,
                 width: MediaQuery.of(context).size.width * .30,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(
-                        infos.image!,
-                      ),
-                      fit: BoxFit.cover),
+                child: CachedNetworkImage(
+                  imageUrl: infos.imageUrl ?? '',
+                  errorWidget: (context, url, error) => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(
+                            'images/europa.jpg',
+                          ),
+                          fit: BoxFit.cover),
+                    ),
+                  ),
                 ),
               ),
             ),
