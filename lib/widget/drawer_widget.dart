@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 final Color color = const Color(0xFF263238);
-final double size = 25;
+final double size = 30;
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({super.key});
@@ -21,6 +21,7 @@ class DrawerWidget extends StatelessWidget {
       return Drawer(
         elevation: 20,
         backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
         child: ListView(
           children: [
             DrawerHeader(

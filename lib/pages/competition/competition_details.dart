@@ -1,8 +1,10 @@
 import 'package:app/core/enums/competition_type.dart';
 import 'package:app/models/competition.dart';
 import 'package:app/pages/competition/widget_details/classement_list_widget.dart';
+import 'package:app/pages/competition/widget_details/competition_statistique_widget.dart';
 import 'package:app/pages/competition/widget_details/equipe_list_widget.dart';
 import 'package:app/pages/competition/widget_details/games_list_widget.dart';
+import 'package:app/widget/competition_logo_image.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/widget/tab_bar_widget.dart';
@@ -25,10 +27,17 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
   List<String> tabBarString(CompetitionType competitionType) {
     if (competitionType
         case CompetitionType.championnat || CompetitionType.coupe) {
-      return ['Match', 'Classement', 'Infos', 'Buteur', 'Equipes', 'Arbitres'];
+      return [
+        'Match',
+        'Classement',
+        'Infos',
+        'Statistique',
+        'Equipes',
+        'Arbitres'
+      ];
     }
     if (competitionType == CompetitionType.finale) {
-      return ['Match', 'Infos', 'Buteur', 'Equipes', 'Arbitres'];
+      return ['Match', 'Infos', 'Statistique', 'Equipes', 'Arbitres'];
     }
 
     return ['Match', 'Infos'];
@@ -53,6 +62,13 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
           widgets.add(
             EquipeListWidget(
               competition: competition,
+            ),
+          );
+          break;
+        case 'STA':
+          widgets.add(
+            CompetitionStatistiqueWidget(
+              idEdition: competition.codeEdition!,
             ),
           );
           break;
@@ -124,14 +140,10 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
                                     width: 10,
                                   ),
                                   Container(
-                                    width: 100,
-                                    height: 100,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: AssetImage('images/photo.jpg'),
-                                      ),
+                                    width: 90,
+                                    height: 90,
+                                    child: CompetitionImageLogoWidget(
+                                      url: competition.imageUrl ?? '',
                                     ),
                                   ),
                                   const SizedBox(

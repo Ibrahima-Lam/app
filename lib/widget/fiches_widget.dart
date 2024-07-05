@@ -57,15 +57,15 @@ class FicheInfosWidget extends StatelessWidget {
                           constraints: const BoxConstraints(
                             minHeight: 100,
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Stack(
+                            alignment: Alignment.bottomCenter,
                             children: [
                               CachedNetworkImage(
                                 imageUrl: '',
                                 placeholder: (context, url) =>
                                     CircularProgressIndicator(),
                                 errorWidget: (context, url, error) =>
-                                    Image.asset('images/europa.jpg'),
+                                    Image.asset('images/santiago.jpg'),
                               ),
                               const SizedBox(height: 5),
                               Container(
@@ -74,8 +74,8 @@ class FicheInfosWidget extends StatelessWidget {
                                 child: Text(
                                   info.title,
                                   style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
@@ -119,11 +119,10 @@ class FicheSponsorWidget extends StatelessWidget {
                 imageUrl: '',
                 placeholder: (context, url) => CircularProgressIndicator(),
                 errorWidget: (context, url, error) =>
-                    Image.asset('images/messi.jpg'),
+                    Image.asset('images/fusion.jpg'),
               ),
               Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text('sponsor officielle'))
+                  padding: const EdgeInsets.all(10.0), child: Text('Sponsor'))
             ],
           ),
         ),

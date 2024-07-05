@@ -19,6 +19,7 @@ import 'package:app/providers/game_provider.dart';
 import 'package:app/widget/custom_delegate_search.dart';
 import 'package:app/widget/equipe_logo_widget.dart';
 import 'package:app/widget/tab_bar_widget.dart';
+import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:app/core/extension/string_extension.dart';
@@ -65,8 +66,8 @@ class _GameDetailsState extends State<GameDetails>
       return (
         [
           'Journée',
+          'Infos',
           if (classement) 'Classement',
-          'Avant Match',
           if (composition) 'Composition',
           'Evenement',
           'Statistique',
@@ -82,8 +83,8 @@ class _GameDetailsState extends State<GameDetails>
     return (
       [
         'Journée',
+        'Infos',
         if (classement) 'Classement',
-        'Avant Match',
         if (composition) 'Composition'
       ],
       initial
@@ -116,6 +117,13 @@ class _GameDetailsState extends State<GameDetails>
         case 'STA':
           widgets.add(StatistiqueWidget(
             game: game,
+          ));
+          break;
+        case 'INF':
+          widgets.add(InfosListWiget(
+            idGame: game.idGame,
+            idPartcipant: game.idHome,
+            idPartcipant2: game.idAway,
           ));
           break;
 

@@ -29,9 +29,10 @@ class InfosProvider extends ChangeNotifier {
     String? idGame,
     String? idJoueur,
     String? idPartcipant,
+    String? idPartcipant2,
   }) {
-    if ((idEdition, idGame, idPartcipant, idJoueur)
-        case (null, null, null, null)) return [];
+    if ((idEdition, idGame, idPartcipant, idJoueur, idPartcipant2)
+        case (null, null, null, null, null)) return [];
     List<Infos> listes = infos;
     if (idEdition != null)
       listes =
@@ -41,6 +42,10 @@ class InfosProvider extends ChangeNotifier {
     if (idPartcipant != null)
       listes = listes
           .where((element) => element.idPartcipant == idPartcipant)
+          .toList();
+    if (idPartcipant2 != null)
+      listes = listes
+          .where((element) => element.idPartcipant == idPartcipant2)
           .toList();
     if (idJoueur != null)
       listes = listes.where((element) => element.idJoueur == idJoueur).toList();

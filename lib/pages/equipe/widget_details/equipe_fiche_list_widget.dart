@@ -182,7 +182,6 @@ class InformationEquipeWidget extends StatelessWidget {
                   Container(
                     height: 60,
                     width: 60,
-                    //Todos url de l' equipe
                     child: EquipeImageLogoWidget(url: participant.imageUrl),
                   ),
                   Expanded(
@@ -299,13 +298,13 @@ class SomePlayerWidget extends StatelessWidget {
                         builder: (context) =>
                             JoueurDetails(idJoueur: e.idJoueur))),
                     child: CircularLogoWidget(
-                        path: e.imageUrl ?? '', categorie: Categorie.equipe),
+                        path: e.imageUrl ?? '', categorie: Categorie.joueur),
                   )),
               ...List.generate(
                   5 - joueurs.length,
                   (index) => CircularLogoWidget(
                         path: '',
-                        categorie: Categorie.equipe,
+                        categorie: Categorie.joueur,
                       )),
             ],
           ),

@@ -144,6 +144,7 @@ class _InfosFullWidgetState extends State<InfosFullWidget> {
         setState(() {});
       },
       child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
         elevation: 2,
         color: Colors.white,
         child: Container(

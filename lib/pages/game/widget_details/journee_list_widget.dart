@@ -36,7 +36,7 @@ class JourneeWidget extends StatelessWidget {
                   child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    for (Game game in games) GameWidget(game: game),
+                    for (Game game in games) GameFullWidget(game: game),
                   ],
                 ),
               )),

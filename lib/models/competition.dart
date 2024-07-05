@@ -8,6 +8,7 @@ class Competition implements Searchable {
   String? codeEdition;
   String? nomEdition;
   String? anneeEdition;
+  String? imageUrl;
   CompetitionTypeClass type;
   Competition({
     this.codeCompetition,
@@ -17,6 +18,7 @@ class Competition implements Searchable {
     this.nomEdition,
     this.anneeEdition,
     this.type = const CompetitionTypeClass('coupe'),
+    this.imageUrl,
   });
 
   bool get hasClassement {

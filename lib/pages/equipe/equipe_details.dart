@@ -13,6 +13,7 @@ import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/classement_widget.dart';
 import 'package:app/pages/equipe/widget_details/equipe_statistiques_widget.dart';
+import 'package:app/widget/competition_logo_image.dart';
 import 'package:app/widget/equipe_logo_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:app/widget/tab_bar_widget.dart';
@@ -130,9 +131,11 @@ class EquipeDetails extends StatelessWidget {
                                                     CompetitionDetails(
                                                         id: competition
                                                             .codeEdition!))),
-                                        child: CircleAvatar(
-                                          radius: 20,
-                                          child: Icon(Icons.house),
+                                        child: SizedBox(
+                                          height: 50,
+                                          width: 50,
+                                          child: CompetitionImageLogoWidget(
+                                              url: competition.imageUrl ?? ''),
                                         ),
                                       ),
                                       const SizedBox(width: 20),
@@ -145,7 +148,7 @@ class EquipeDetails extends StatelessWidget {
                                       const SizedBox(width: 20),
                                       CircleAvatar(
                                         radius: 20,
-                                        child: Icon(Icons.safety_check),
+                                        child: Icon(Icons.house),
                                       ),
                                     ],
                                   ),

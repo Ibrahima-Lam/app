@@ -6,12 +6,14 @@ import 'package:provider/provider.dart';
 
 class InfosListWiget extends StatelessWidget {
   final String? idPartcipant;
+  final String? idPartcipant2;
   final String? idJoueur;
   final String? idEdition;
   final String? idGame;
   const InfosListWiget(
       {super.key,
       this.idPartcipant,
+      this.idPartcipant2,
       this.idEdition,
       this.idGame,
       this.idJoueur});
@@ -36,6 +38,7 @@ class InfosListWiget extends StatelessWidget {
               idGame: idGame,
               idJoueur: idJoueur,
               idPartcipant: idPartcipant,
+              idPartcipant2: idPartcipant2,
             );
 
             return liste.isEmpty
