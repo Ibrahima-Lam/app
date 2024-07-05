@@ -42,6 +42,7 @@ class ClassementListWidget extends StatelessWidget {
             isSelected[selected] = true;
             List<Widget> statsWidgets = [
               Container(
+                width: MediaQuery.sizeOf(context).width,
                 color: Colors.white,
                 child: ToggleButtons(
                   fillColor: Theme.of(context).primaryColor,
@@ -69,23 +70,26 @@ class ClassementListWidget extends StatelessWidget {
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.zero),
                   color: Colors.white,
-                  child: Column(
-                    children: [
-                      Text(
-                        'Groupe $key',
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      TableWidget(
-                        stats: value,
-                        expand: selected == 0,
-                      )
-                    ],
+                  child: SizedBox(
+                    width: MediaQuery.sizeOf(context).width,
+                    child: Column(
+                      children: [
+                        Text(
+                          'Groupe $key',
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        TableWidget(
+                          stats: value,
+                          expand: selected == 0,
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ));
             });
-            return ListView(children: statsWidgets);
+            return SingleChildScrollView(child: Column(children: statsWidgets));
           });
         },
       );

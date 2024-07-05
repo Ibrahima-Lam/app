@@ -4,14 +4,22 @@ import 'package:flutter/material.dart';
 
 class InfosProvider extends ChangeNotifier {
   List<Infos> infos = [];
+  InfosProvider() {
+    InfosService.getData().listen(
+      (inf) {
+        infos.add(inf);
+        notifyListeners();
+      },
+    );
+  }
 
   Stream<Infos> getInformations() async* {
-    if (infos.isEmpty) {
+    /*  if (infos.isEmpty) {
       await for (Infos inf in InfosService.getData()) {
         infos.add(inf);
         yield inf;
       }
-    }
+    } */
   }
 
   List<Infos> getInfosByInfo({required Infos info}) {

@@ -1,6 +1,7 @@
 import 'package:app/models/competition.dart';
 import 'package:app/pages/competition/competition_details.dart';
 import 'package:app/providers/competition_provider.dart';
+import 'package:app/widget/competition_logo_image.dart';
 import 'package:app/widget/text_search_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -118,7 +119,12 @@ class CompetitionListTileWidget extends StatelessWidget {
             builder: (context) =>
                 CompetitionDetails(id: competition.codeEdition!)));
       },
-      leading: Icon(Icons.house_rounded),
+      leading: Container(
+        height: 60,
+        width: 60,
+        padding: EdgeInsets.symmetric(vertical: 2.0),
+        child: CompetitionImageLogoWidget(url: competition.imageUrl),
+      ),
       title: Text(competition.nomCompetition!),
       subtitle: Text(competition.localiteCompetition ?? ''),
     );

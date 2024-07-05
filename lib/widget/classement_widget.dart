@@ -60,48 +60,54 @@ class ClassementWiget extends StatelessWidget {
             return StatefulBuilder(builder: (context, setState) {
               final List<bool> isSelected = [false, false];
               isSelected[selected] = true;
-              return ListView(
-                children: [
-                  Container(
-                    color: Colors.white,
-                    child: ToggleButtons(
-                      fillColor: Theme.of(context).primaryColor,
-                      color: Theme.of(context).primaryColor,
-                      selectedColor: Colors.white,
-                      onPressed: (index) {
-                        setState(
-                          () {
-                            selected = index;
-                          },
-                        );
-                      },
-                      children: [
-                        Text('Tous'),
-                        Text('Moins'),
-                      ],
-                      isSelected: isSelected,
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      color: Colors.white,
+                      child: ToggleButtons(
+                        fillColor: Theme.of(context).primaryColor,
+                        color: Theme.of(context).primaryColor,
+                        selectedColor: Colors.white,
+                        onPressed: (index) {
+                          setState(
+                            () {
+                              selected = index;
+                            },
+                          );
+                        },
+                        children: [
+                          Text('Tous'),
+                          Text('Moins'),
+                        ],
+                        isSelected: isSelected,
+                      ),
                     ),
-                  ),
-                  Card(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero),
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        Text(
-                          '$title',
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                    Card(
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero),
+                      color: Colors.white,
+                      child: SizedBox(
+                        width: MediaQuery.sizeOf(context).width,
+                        child: Column(
+                          children: [
+                            Text(
+                              '$title',
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            TableWidget(
+                              targets: targets,
+                              stats: stat,
+                              expand: selected == 0,
+                            )
+                          ],
                         ),
-                        TableWidget(
-                          targets: targets,
-                          stats: stat,
-                          expand: selected == 0,
-                        )
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             });
           });

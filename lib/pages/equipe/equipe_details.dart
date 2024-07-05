@@ -4,7 +4,6 @@ import 'package:app/collection/competition_collection.dart';
 import 'package:app/models/competition.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/pages/competition/competition_details.dart';
-import 'package:app/pages/equipe/widget_details/competition_list_widget.dart';
 import 'package:app/pages/equipe/widget_details/equipe_fiche_list_widget.dart';
 import 'package:app/pages/equipe/widget_details/game_list_widget.dart';
 import 'package:app/pages/equipe/widget_details/joueur_delegate_search_widget.dart';
@@ -40,7 +39,6 @@ class EquipeDetails extends StatelessWidget {
             ClassementWiget.equipe(title: '', idParticipant: id, idTarget: id),
         'effectif': EffectifWidget(idParticipant: id),
         'infos': InfosListWiget(idPartcipant: id),
-        'competition': CompetitionListWidget(),
         'statistique': EquipeStatistiquesWidget(idParticipant: id),
         'fiche': EquipeFicheListWidget(participant: participant),
       };

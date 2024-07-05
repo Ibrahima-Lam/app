@@ -66,35 +66,37 @@ class ParticipationWidget extends StatelessWidget {
           );
         }
 
-        return ListView(
-          children: [
-            for (Groupe groupe in groupes)
-              Card(
-                child: Builder(builder: (context) {
-                  final List<Participation> parts = participations
-                      .where((element) => element.idGroupe == groupe.idGroupe)
-                      .toList();
-                  return Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(5.0),
-                        height: 40,
-                        child: Text(
-                          'Groupe ${groupe.nomGroupe}',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              for (Groupe groupe in groupes)
+                Card(
+                  child: Builder(builder: (context) {
+                    final List<Participation> parts = participations
+                        .where((element) => element.idGroupe == groupe.idGroupe)
+                        .toList();
+                    return Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(5.0),
+                          height: 40,
+                          child: Text(
+                            'Groupe ${groupe.nomGroupe}',
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
                         ),
-                      ),
-                      for (Participation part in parts)
-                        EquipeListTileWidget(
-                          title: (part.nomEquipe!),
-                          id: part.idParticipant.toString(),
-                        )
-                    ],
-                  );
-                }),
-              )
-          ],
+                        for (Participation part in parts)
+                          EquipeListTileWidget(
+                            title: (part.nomEquipe!),
+                            id: part.idParticipant.toString(),
+                          )
+                      ],
+                    );
+                  }),
+                )
+            ],
+          ),
         );
       },
     );
@@ -131,13 +133,15 @@ class ParticipantWidget extends StatelessWidget {
             );
           }
           return Card(
-              child: ListView.builder(
-            itemCount: participants.length,
-            itemBuilder: (context, index) {
-              final Participant participant = participants[index];
-              return EquipeListTileWidget(
-                  id: participant.idParticipant, title: participant.nomEquipe);
-            },
+              child: SingleChildScrollView(
+            child: Column(
+              children: [
+                for (Participant participant in participants)
+                  EquipeListTileWidget(
+                      id: participant.idParticipant,
+                      title: participant.nomEquipe)
+              ],
+            ),
           ));
         });
   }

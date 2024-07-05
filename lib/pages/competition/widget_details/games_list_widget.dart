@@ -40,49 +40,51 @@ class MatchsWidget extends StatelessWidget {
                 child: Text('Pas de Données!'),
               );
             }
-            return ListView(
-              children: niveaux.map((niveau) {
-                final List<Game> matchs = gameCollection.getGamesBy(
-                    codeNiveau: niveau.codeNiveau,
-                    codeEdition: competition.codeEdition);
-                final List<Widget> matchsWidget = [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      color: Color(0xFFE0E0E0),
-                      padding: const EdgeInsets.all(5),
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      child: Text(
-                        niveau.nomNiveau!,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+            return SingleChildScrollView(
+              child: Column(
+                children: niveaux.map((niveau) {
+                  final List<Game> matchs = gameCollection.getGamesBy(
+                      codeNiveau: niveau.codeNiveau,
+                      codeEdition: competition.codeEdition);
+                  final List<Widget> matchsWidget = [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        color: Color(0xFFE0E0E0),
+                        padding: const EdgeInsets.all(5),
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        child: Text(
+                          niveau.nomNiveau!,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  ];
+                  matchsWidget
+                      .addAll(matchs.map((match) => GameWidget(game: match)));
+                  return Container(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Card(
+                      elevation: 2,
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Column(
+                          children: matchsWidget,
+                        ),
                       ),
                     ),
-                  )
-                ];
-                matchsWidget
-                    .addAll(matchs.map((match) => GameWidget(game: match)));
-                return Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Card(
-                    elevation: 2,
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Column(
-                        children: matchsWidget,
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
+                  );
+                }).toList(),
+              ),
             );
           });
         });

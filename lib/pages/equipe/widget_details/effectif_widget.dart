@@ -11,12 +11,10 @@ class EffectifWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        EffectifJoueurSectionWidget(
-          idParticipant: idParticipant,
-        )
-      ],
+    return SingleChildScrollView(
+      child: EffectifJoueurSectionWidget(
+        idParticipant: idParticipant,
+      ),
     );
   }
 }
@@ -46,12 +44,16 @@ class EffectifJoueurSectionWidget extends StatelessWidget {
           return Consumer<JoueurProvider>(builder: (context, val, child) {
             List<Joueur> joueurs = snapshot.data ?? [];
             return joueurs.isEmpty
-                ? const Center(
-                    child: Text('Pas de membre disponible pour cette equipe!'),
+                ? Container(
+                    height: MediaQuery.sizeOf(context).height,
+                    child: const Center(
+                      child:
+                          Text('Pas de membre disponible pour cette equipe!'),
+                    ),
                   )
                 : Card(
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0)),
+                        borderRadius: BorderRadius.circular(3)),
                     child: Column(
                       children: [
                         SectionTitleWidget(title: "Joueurs"),

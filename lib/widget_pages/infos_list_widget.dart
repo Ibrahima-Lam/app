@@ -46,13 +46,12 @@ class InfosListWiget extends StatelessWidget {
                     child: Text(
                         'Pas d\'information disponible pour cette element!'),
                   )
-                : ListView.separated(
-                    itemCount: liste.length,
-                    separatorBuilder: (context, index) => const SizedBox(),
-                    itemBuilder: (context, index) => InfosWidget(
-                      infos: liste[index],
-                    ),
-                  );
+                : SingleChildScrollView(
+                    child: Column(
+                    children: [
+                      for (Infos info in liste) InfosWidget(infos: info)
+                    ],
+                  ));
           });
         });
   }

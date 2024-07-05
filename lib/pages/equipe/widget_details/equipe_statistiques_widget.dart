@@ -49,18 +49,20 @@ class EquipeStatistiquesWidget extends StatelessWidget {
                     child: Text(
                         'Pas de statistique disponible pour cette equipe!'),
                   )
-                : ListView(
-                    children: [
-                      if (buts.isNotEmpty)
-                        EquipeStatistiquesSectionWidget(
-                            title: 'Buts', statistiques: buts),
-                      if (jaunes.isNotEmpty)
-                        EquipeStatistiquesSectionWidget(
-                            title: 'Cartons Jaunes', statistiques: jaunes),
-                      if (rouges.isNotEmpty)
-                        EquipeStatistiquesSectionWidget(
-                            title: 'Cartons Rouges', statistiques: rouges),
-                    ],
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        if (buts.isNotEmpty)
+                          EquipeStatistiquesSectionWidget(
+                              title: 'Buts', statistiques: buts),
+                        if (jaunes.isNotEmpty)
+                          EquipeStatistiquesSectionWidget(
+                              title: 'Cartons Jaunes', statistiques: jaunes),
+                        if (rouges.isNotEmpty)
+                          EquipeStatistiquesSectionWidget(
+                              title: 'Cartons Rouges', statistiques: rouges),
+                      ],
+                    ),
                   );
           },
         );

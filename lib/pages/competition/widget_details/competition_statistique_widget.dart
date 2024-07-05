@@ -54,23 +54,25 @@ class CompetitionStatistiqueWidget extends StatelessWidget {
             buts.sort((a, b) => b.nombre - a.nombre);
             jaunes.sort((a, b) => b.nombre - a.nombre);
             rouges.sort((a, b) => b.nombre - a.nombre);
-            return events.isEmpty
+            return buts.isEmpty && rouges.isEmpty && jaunes.isEmpty
                 ? Center(
                     child: Text(
-                        'Pas de statistique disponible pour cette equipe!'),
+                        'Pas de statistique disponible pour cette competition!'),
                   )
-                : ListView(
-                    children: [
-                      if (buts.isNotEmpty)
-                        CompetitionStatistiquesSectionWidget(
-                            title: 'Buts', statistiques: buts),
-                      if (jaunes.isNotEmpty)
-                        CompetitionStatistiquesSectionWidget(
-                            title: 'Cartons Jaunes', statistiques: jaunes),
-                      if (rouges.isNotEmpty)
-                        CompetitionStatistiquesSectionWidget(
-                            title: 'Cartons Rouges', statistiques: rouges),
-                    ],
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        if (buts.isNotEmpty)
+                          CompetitionStatistiquesSectionWidget(
+                              title: 'Buts', statistiques: buts),
+                        if (jaunes.isNotEmpty)
+                          CompetitionStatistiquesSectionWidget(
+                              title: 'Cartons Jaunes', statistiques: jaunes),
+                        if (rouges.isNotEmpty)
+                          CompetitionStatistiquesSectionWidget(
+                              title: 'Cartons Rouges', statistiques: rouges),
+                      ],
+                    ),
                   );
           },
         );

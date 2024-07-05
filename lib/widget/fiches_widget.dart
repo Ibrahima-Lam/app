@@ -60,21 +60,32 @@ class FicheInfosWidget extends StatelessWidget {
                           child: Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              CachedNetworkImage(
-                                imageUrl: '',
-                                placeholder: (context, url) =>
-                                    CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    Image.asset('images/santiago.jpg'),
+                              Container(
+                                width: MediaQuery.sizeOf(context).width,
+                                padding: const EdgeInsets.only(
+                                    top: 5, left: 2, right: 2, bottom: 5),
+                                constraints:
+                                    const BoxConstraints(maxHeight: 250),
+                                child: CachedNetworkImage(
+                                  imageUrl: '',
+                                  placeholder: (context, url) =>
+                                      CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                    'images/santiago.jpg',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
-                              const SizedBox(height: 5),
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 5, vertical: 5),
                                 child: Text(
                                   info.title,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 3,
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -119,7 +130,7 @@ class FicheSponsorWidget extends StatelessWidget {
                 imageUrl: '',
                 placeholder: (context, url) => CircularProgressIndicator(),
                 errorWidget: (context, url, error) =>
-                    Image.asset('images/fusion.jpg'),
+                    Image.asset('images/fusion.jpg', fit: BoxFit.cover),
               ),
               Container(
                   padding: const EdgeInsets.all(10.0), child: Text('Sponsor'))

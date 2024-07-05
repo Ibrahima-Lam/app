@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_use_of_protected_member
+// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 
 import 'package:app/collection/composition_collection.dart';
 import 'package:app/models/composition.dart';
@@ -53,80 +53,86 @@ class CompositionWidget extends StatelessWidget {
                 idGame: game.idGame, idParticipant: game.idAway),
           );
           return Consumer<CompositionProvider>(builder: (context, val, child) {
-            return ListView(
-              children: [
-                Card(
-                  child: Center(
-                    child: OutlinedButton(
-                        onPressed: () async {
-                          await Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => CompositionSetter(
-                                    compositionSousCollection:
-                                        compositionSousCollection,
-                                  )));
-                          // ignore: invalid_use_of_visible_for_testing_member
-                          context.read<CompositionProvider>().notifyListeners();
-                        },
-                        child: Text('Paramettre de Composition')),
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Card(
+                    child: Center(
+                      child: OutlinedButton(
+                          onPressed: () async {
+                            await Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => CompositionSetter(
+                                      compositionSousCollection:
+                                          compositionSousCollection,
+                                    )));
+
+                            context
+                                .read<CompositionProvider>()
+                                .notifyListeners();
+                          },
+                          child: Text('Paramettre de Composition')),
+                    ),
                   ),
-                ),
-                Card(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        height: 900,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            RotatedBox(
-                              quarterTurns: 1,
-                              child: Container(
-                                height: MediaQuery.of(context).size.width,
-                                width: 800,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage('images/stade.jpg'),
-                                        fit: BoxFit.fill)),
+                  Card(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          height: 900,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              RotatedBox(
+                                quarterTurns: 1,
+                                child: Container(
+                                  height: MediaQuery.of(context).size.width,
+                                  width: 800,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage('images/stade.jpg'),
+                                          fit: BoxFit.fill)),
+                                ),
                               ),
-                            ),
-                            PlayerListWidget(
-                              compositionSousCollection:
-                                  compositionSousCollection,
-                            ),
-                          ],
+                              PlayerListWidget(
+                                compositionSousCollection:
+                                    compositionSousCollection,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Positioned(
-                        top: 0,
-                        left: 0,
-                        child: CoachAndTeamWidget(
-                            equipe: game.home ?? '',
-                            composition: compositionSousCollection.homeCoatch),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: CoachAndTeamWidget(
-                            equipe: game.away ?? '',
-                            composition: compositionSousCollection.awayCoatch),
-                      ),
-                    ],
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          child: CoachAndTeamWidget(
+                              equipe: game.home ?? '',
+                              composition:
+                                  compositionSousCollection.homeCoatch),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: CoachAndTeamWidget(
+                              equipe: game.away ?? '',
+                              composition:
+                                  compositionSousCollection.awayCoatch),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SubstitutListWidget(
-                  compositionSousCollection: compositionSousCollection,
-                ),
-                ArbitreWidget(
-                  compositionSousCollection: compositionSousCollection,
-                ),
-                const SizedBox(
-                  height: 20,
-                )
-              ],
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SubstitutListWidget(
+                    compositionSousCollection: compositionSousCollection,
+                  ),
+                  ArbitreWidget(
+                    compositionSousCollection: compositionSousCollection,
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  )
+                ],
+              ),
             );
           });
         });

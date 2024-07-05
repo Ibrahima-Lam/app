@@ -42,23 +42,25 @@ class StatistiqueWidget extends StatelessWidget {
         List<Statistique> statistiques = value.getGameStatistiques(game);
 
         return Card(
-          child: ListView(
-            children: [
-              ...statistiques.map((e) => StatWidget(
-                    statistique: e,
-                    one: ['possession'].contains(e.codeStatistique),
-                  )),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  OutlinedButton(
-                      onPressed: () {
-                        _addStat(context, statistiques);
-                      },
-                      child: Text('Ajouter')),
-                ],
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                ...statistiques.map((e) => StatWidget(
+                      statistique: e,
+                      one: ['possession'].contains(e.codeStatistique),
+                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    OutlinedButton(
+                        onPressed: () {
+                          _addStat(context, statistiques);
+                        },
+                        child: Text('Ajouter')),
+                  ],
+                ),
+              ],
+            ),
           ),
         );
       },

@@ -1,6 +1,7 @@
 import 'package:app/core/enums/competition_type.dart';
 import 'package:app/models/competition.dart';
 import 'package:app/pages/competition/widget_details/classement_list_widget.dart';
+import 'package:app/pages/competition/widget_details/competition_fiche_list_widget.dart';
 import 'package:app/pages/competition/widget_details/competition_statistique_widget.dart';
 import 'package:app/pages/competition/widget_details/equipe_list_widget.dart';
 import 'package:app/pages/competition/widget_details/games_list_widget.dart';
@@ -28,6 +29,7 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
     if (competitionType
         case CompetitionType.championnat || CompetitionType.coupe) {
       return [
+        'Fiche',
         'Match',
         'Classement',
         'Infos',
@@ -37,10 +39,10 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
       ];
     }
     if (competitionType == CompetitionType.finale) {
-      return ['Match', 'Infos', 'Statistique', 'Equipes', 'Arbitres'];
+      return ['Fiche', 'Match', 'Infos', 'Statistique', 'Equipes', 'Arbitres'];
     }
 
-    return ['Match', 'Infos'];
+    return ['Fiche', 'Match', 'Infos'];
   }
 
   List<Widget> tabBarViewChildren(List<String> tabs) {
@@ -68,6 +70,13 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
         case 'STA':
           widgets.add(
             CompetitionStatistiqueWidget(
+              idEdition: competition.codeEdition!,
+            ),
+          );
+          break;
+        case 'FIC':
+          widgets.add(
+            CompetitionFicheListWidget(
               idEdition: competition.codeEdition!,
             ),
           );

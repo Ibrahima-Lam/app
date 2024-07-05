@@ -92,61 +92,63 @@ class EvenementWidget extends StatelessWidget {
               );
               return Container(
                 padding: const EdgeInsets.symmetric(vertical: 5.0),
-                child: ListView(
-                  children: [
-                    if (gameEventListSousCollection.goals.isNotEmpty)
-                      EventSectionWidget(
-                          onDoubleTap: (p0) => _onDoubleTap(context, p0),
-                          events: gameEventListSousCollection.goals,
-                          game: game,
-                          title: 'Buts'),
-                    if (gameEventListSousCollection.yellowCards.isNotEmpty)
-                      EventSectionWidget(
-                          onDoubleTap: (p0) => _onDoubleTap(context, p0),
-                          events: gameEventListSousCollection.yellowCards,
-                          game: game,
-                          title: 'Cartons Jaunes'),
-                    if (gameEventListSousCollection.redCards.isNotEmpty)
-                      EventSectionWidget(
-                          onDoubleTap: (p0) => _onDoubleTap(context, p0),
-                          events: gameEventListSousCollection.redCards,
-                          game: game,
-                          title: 'Cartons Rouges'),
-                    if (gameEventListSousCollection.substitutions.isNotEmpty)
-                      EventSectionWidget(
-                          onDoubleTap: (p0) => _onDoubleTap(context, p0),
-                          events: gameEventListSousCollection.substitutions,
-                          game: game,
-                          title: 'Changements'),
-                    Card(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          OutlinedButton(
-                              onPressed: () {
-                                _addEvent(context,
-                                    idGame: game.idGame,
-                                    idParticipant: game.idHome);
-                              },
-                              child: Text('Ajouter')),
-                          OutlinedButton(
-                              onPressed: () {
-                                _addEvent(context,
-                                    idGame: game.idGame,
-                                    idParticipant: game.idAway);
-                              },
-                              child: Text('Ajouter')),
-                        ],
-                      ),
-                    ),
-                    if (value.events.isEmpty)
-                      Container(
-                        height: 200.0,
-                        child: Center(
-                          child: Text('Pas evenement disponible !'),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      if (gameEventListSousCollection.goals.isNotEmpty)
+                        EventSectionWidget(
+                            onDoubleTap: (p0) => _onDoubleTap(context, p0),
+                            events: gameEventListSousCollection.goals,
+                            game: game,
+                            title: 'Buts'),
+                      if (gameEventListSousCollection.yellowCards.isNotEmpty)
+                        EventSectionWidget(
+                            onDoubleTap: (p0) => _onDoubleTap(context, p0),
+                            events: gameEventListSousCollection.yellowCards,
+                            game: game,
+                            title: 'Cartons Jaunes'),
+                      if (gameEventListSousCollection.redCards.isNotEmpty)
+                        EventSectionWidget(
+                            onDoubleTap: (p0) => _onDoubleTap(context, p0),
+                            events: gameEventListSousCollection.redCards,
+                            game: game,
+                            title: 'Cartons Rouges'),
+                      if (gameEventListSousCollection.substitutions.isNotEmpty)
+                        EventSectionWidget(
+                            onDoubleTap: (p0) => _onDoubleTap(context, p0),
+                            events: gameEventListSousCollection.substitutions,
+                            game: game,
+                            title: 'Changements'),
+                      Card(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            OutlinedButton(
+                                onPressed: () {
+                                  _addEvent(context,
+                                      idGame: game.idGame,
+                                      idParticipant: game.idHome);
+                                },
+                                child: Text('Ajouter')),
+                            OutlinedButton(
+                                onPressed: () {
+                                  _addEvent(context,
+                                      idGame: game.idGame,
+                                      idParticipant: game.idAway);
+                                },
+                                child: Text('Ajouter')),
+                          ],
                         ),
-                      )
-                  ],
+                      ),
+                      if (value.events.isEmpty)
+                        Container(
+                          height: 200.0,
+                          child: Center(
+                            child: Text('Pas evenement disponible !'),
+                          ),
+                        )
+                    ],
+                  ),
                 ),
               );
             },
