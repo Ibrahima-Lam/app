@@ -100,7 +100,7 @@ class DrawerWidget extends StatelessWidget {
                 Icons.person_3_rounded,
                 size: size,
               ),
-              title: 'Coachs',
+              title: 'Entraineurs',
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context)

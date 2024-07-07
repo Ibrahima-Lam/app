@@ -1,6 +1,7 @@
 import 'package:app/collection/composition_collection.dart';
 import 'package:app/core/constants/arbitre/kArbitre.dart';
 import 'package:app/models/composition.dart';
+import 'package:app/widget/section_title_widget.dart';
 import 'package:flutter/material.dart';
 
 class ArbitreWidget extends StatefulWidget {
@@ -19,43 +20,39 @@ class _ArbitreWidgetState extends State<ArbitreWidget> {
     return Card(
       child: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            width: MediaQuery.sizeOf(context).width,
-            color: Color(0xFFDCDCDC),
-            child: const Text(
-              'Les Arbitres',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-          ),
-          Column(children: [
-            ...widget.compositionSousCollection.arbitres
-                .map((e) => CompositionArbitreListTileWidget(
-                      composition: e,
-                      onDoubleTap: widget.onDoubleTap == null
-                          ? null
-                          : (p) async {
-                              await widget.onDoubleTap!(p);
-                              setState(() {});
-                            },
-                    ))
-                .toList(),
-            if (widget.onDoubleTap != null)
-              OutlinedButton(
-                  onPressed: () {
-                    setState(() {
-                      widget.compositionSousCollection.arbitres
-                          .add(kArbitreComposition.copyWith(
-                        idGame: widget.compositionSousCollection.game.idGame,
-                      ));
-                    });
-                  },
-                  child: Text('Ajouter')),
-          ]),
+          SectionTitleWidget(title: 'Arbitres'),
+          widget.compositionSousCollection.arbitres.isEmpty
+              ? const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text('Pas d\'arbitre disponible !'),
+                  ),
+                )
+              : Column(children: [
+                  ...widget.compositionSousCollection.arbitres
+                      .map((e) => CompositionArbitreListTileWidget(
+                            composition: e,
+                            onDoubleTap: widget.onDoubleTap == null
+                                ? null
+                                : (p) async {
+                                    await widget.onDoubleTap!(p);
+                                    setState(() {});
+                                  },
+                          ))
+                      .toList(),
+                  if (widget.onDoubleTap != null)
+                    OutlinedButton(
+                        onPressed: () {
+                          setState(() {
+                            widget.compositionSousCollection.arbitres
+                                .add(kArbitreComposition.copyWith(
+                              idGame:
+                                  widget.compositionSousCollection.game.idGame,
+                            ));
+                          });
+                        },
+                        child: Text('Ajouter')),
+                ]),
         ],
       ),
     );

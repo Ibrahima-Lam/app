@@ -45,9 +45,11 @@ class JoueurMatchListWidget extends StatelessWidget {
                       child:
                           Text('Pas de composition disponible pour ce joueur!'),
                     )
-                  : ListView(
-                      children:
-                          games.map((e) => GameFullWidget(game: e)).toList(),
+                  : SingleChildScrollView(
+                      child: Column(
+                        children:
+                            games.map((e) => GameFullWidget(game: e)).toList(),
+                      ),
                     ),
             );
           },

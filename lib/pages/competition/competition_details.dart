@@ -2,6 +2,7 @@ import 'package:app/core/enums/competition_type.dart';
 import 'package:app/models/competition.dart';
 import 'package:app/pages/competition/widget_details/arbitre_list_widget.dart';
 import 'package:app/pages/competition/widget_details/classement_list_widget.dart';
+import 'package:app/pages/competition/widget_details/competition_coach_list_widget.dart';
 import 'package:app/pages/competition/widget_details/competition_fiche_list_widget.dart';
 import 'package:app/pages/competition/widget_details/competition_statistique_widget.dart';
 import 'package:app/pages/competition/widget_details/equipe_list_widget.dart';
@@ -27,23 +28,18 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
   List<String> tabs = [];
 
   List<String> tabBarString(CompetitionType competitionType) {
-    if (competitionType
-        case CompetitionType.championnat || CompetitionType.coupe) {
-      return [
-        'Fiche',
-        'Match',
+    return [
+      'Fiche',
+      'Match',
+      if (competitionType
+          case CompetitionType.championnat || CompetitionType.coupe)
         'Classement',
-        'Infos',
-        'Statistique',
-        'Equipes',
-        'Arbitres'
-      ];
-    }
-    if (competitionType == CompetitionType.finale) {
-      return ['Fiche', 'Match', 'Infos', 'Statistique', 'Equipes', 'Arbitres'];
-    }
-
-    return ['Fiche', 'Match', 'Infos', 'Arbitres'];
+      'Infos',
+      'Statistique',
+      'Equipes',
+      'Entraineurs',
+      'Arbitres'
+    ];
   }
 
   List<Widget> tabBarViewChildren(List<String> tabs) {
@@ -85,6 +81,13 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
         case 'ARB':
           widgets.add(
             ArbitreListWidget(
+              idEdition: competition.codeEdition!,
+            ),
+          );
+          break;
+        case 'ENT':
+          widgets.add(
+            CompetitionCoachListWidget(
               idEdition: competition.codeEdition!,
             ),
           );

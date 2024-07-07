@@ -51,6 +51,21 @@ class ArbitreDetails extends StatelessWidget {
                       return [
                         SliverAppBar(
                           title: Text(arbitre.nomArbitre),
+                          actions: [
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Icon(
+                                arbitre.role == 'assistant'
+                                    ? Icons.flag
+                                    : arbitre.role == 'principale'
+                                        ? Icons.sports
+                                        : arbitre.role == 'var'
+                                            ? Icons.tv
+                                            : Icons
+                                                .settings_backup_restore_outlined,
+                              ),
+                            ),
+                          ],
                           expandedHeight: 200,
                           pinned: true,
                           flexibleSpace: FlexibleSpaceBar(

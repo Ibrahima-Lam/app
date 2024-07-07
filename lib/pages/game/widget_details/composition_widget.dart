@@ -43,10 +43,11 @@ class CompositionWidget extends StatelessWidget {
             awayInside: compositionCollection.getTitulaire(
                 idGame: game.idGame, idParticipant: game.idAway),
             homeOutside: compositionCollection.getRempl(
-                idGame: game.idGame, idParticipant: game.idHome),
+                create: false, idGame: game.idGame, idParticipant: game.idHome),
             awayOutside: compositionCollection.getRempl(
-                idGame: game.idGame, idParticipant: game.idAway),
-            arbitres: compositionCollection.getArbitres(idGame: game.idGame),
+                create: false, idGame: game.idGame, idParticipant: game.idAway),
+            arbitres: compositionCollection.getArbitresBygame(
+                idGame: game.idGame, create: false),
             homeCoatch: compositionCollection.getCoach(
                 idGame: game.idGame, idParticipant: game.idHome),
             awayCoatch: compositionCollection.getCoach(

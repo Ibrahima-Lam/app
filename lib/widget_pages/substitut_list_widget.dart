@@ -8,6 +8,7 @@ import 'package:app/providers/composition_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/widget/composition_bottom_sheet_widget.dart';
 import 'package:app/widget/confirm_dialog_widget.dart';
+import 'package:app/widget/section_title_widget.dart';
 import 'package:app/widget/substitut_logo_widget.dart';
 import 'package:app/widget_pages/composition_form.dart';
 import 'package:flutter/material.dart';
@@ -161,19 +162,7 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
     return Card(
       child: Column(
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.all(10),
-            color: const Color(0xFFDCDCDC),
-            child: const Text(
-              'Remplaçants',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+          SectionTitleWidget(title: 'Remplaçants'),
           Container(
               padding: EdgeInsets.all(10),
               decoration: const BoxDecoration(
@@ -198,66 +187,76 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
                   ),
                 ],
               )),
-          Row(children: [
-            Expanded(
-              child: Column(children: [
-                for (JoueurComposition home in homes)
-                  SubstitutListTile(
-                    isHome: true,
-                    onTap: widget.onTap == null
-                        ? _onTap
-                        : (p0) async {
-                            await widget.onTap!(home);
-                            setState(() {});
-                          },
-                    onDoubleTap: widget.onDoubleTap == null
-                        ? null
-                        : (JoueurComposition comp) {
-                            home = comp;
-                            setState(() {});
-                          },
-                    onLongPress: widget.onLongPress == null
-                        ? null
-                        : (composition) {
-                            _onLongPress(
-                                composition,
-                                widget.compositionSousCollection.homeInside,
-                                true);
-                          },
-                    composition: home,
+          widget.compositionSousCollection.homeOutside.isEmpty &&
+                  widget.compositionSousCollection.awayOutside.isEmpty
+              ? const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text('Pas de remplaçant disponible !'),
                   ),
-              ]),
-            ),
-            Expanded(
-              child: Column(children: [
-                for (JoueurComposition away in aways)
-                  SubstitutListTile(
-                    isHome: false,
-                    onTap: widget.onTap == null
-                        ? _onTap
-                        : (p0) async {
-                            await widget.onTap!(away);
-                            setState(() {});
-                          },
-                    onDoubleTap: widget.onDoubleTap == null
-                        ? null
-                        : (JoueurComposition comp) {
-                            away = comp;
-                            setState(() {});
-                          },
-                    onLongPress: widget.onLongPress == null
-                        ? null
-                        : (composition) {
-                            _onLongPress(
-                                composition,
-                                widget.compositionSousCollection.awayInside,
-                                false);
-                          },
-                    composition: away,
+                )
+              : Row(children: [
+                  Expanded(
+                    child: Column(children: [
+                      for (JoueurComposition home in homes)
+                        SubstitutListTile(
+                          isHome: true,
+                          onTap: widget.onTap == null
+                              ? _onTap
+                              : (p0) async {
+                                  await widget.onTap!(home);
+                                  setState(() {});
+                                },
+                          onDoubleTap: widget.onDoubleTap == null
+                              ? null
+                              : (JoueurComposition comp) {
+                                  home = comp;
+                                  setState(() {});
+                                },
+                          onLongPress: widget.onLongPress == null
+                              ? null
+                              : (composition) {
+                                  _onLongPress(
+                                      composition,
+                                      widget
+                                          .compositionSousCollection.homeInside,
+                                      true);
+                                },
+                          composition: home,
+                        ),
+                    ]),
                   ),
-              ]),
-            ),
-          ]),
+                  Expanded(
+                    child: Column(children: [
+                      for (JoueurComposition away in aways)
+                        SubstitutListTile(
+                          isHome: false,
+                          onTap: widget.onTap == null
+                              ? _onTap
+                              : (p0) async {
+                                  await widget.onTap!(away);
+                                  setState(() {});
+                                },
+                          onDoubleTap: widget.onDoubleTap == null
+                              ? null
+                              : (JoueurComposition comp) {
+                                  away = comp;
+                                  setState(() {});
+                                },
+                          onLongPress: widget.onLongPress == null
+                              ? null
+                              : (composition) {
+                                  _onLongPress(
+                                      composition,
+                                      widget
+                                          .compositionSousCollection.awayInside,
+                                      false);
+                                },
+                          composition: away,
+                        ),
+                    ]),
+                  ),
+                ]),
           if (widget.onDoubleTap != null)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

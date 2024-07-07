@@ -33,12 +33,14 @@ class JoueurStatistiqueWidget extends StatelessWidget {
                         events: value.events)
                     .where((element) => element.nombre > 0)
                     .toList();
-            return ListView(
-              children: [
-                JoueurStatistiqueSectionWidget(
-                  eventStatistiques: eventStatistiques,
-                ),
-              ],
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  JoueurStatistiqueSectionWidget(
+                    eventStatistiques: eventStatistiques,
+                  ),
+                ],
+              ),
             );
           },
         );

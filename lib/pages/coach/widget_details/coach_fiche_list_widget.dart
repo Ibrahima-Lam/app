@@ -1,8 +1,12 @@
 import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/coachs/coach.dart';
+import 'package:app/models/participant.dart';
+import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/coach_logo_widget.dart';
+import 'package:app/widget/equipe_logo_widget.dart';
 import 'package:app/widget/fiches_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CoachFicheListWidget extends StatelessWidget {
   final Coach coach;
@@ -100,6 +104,37 @@ class InformationCoachWidget extends StatelessWidget {
                         image: AssetImage(
                           '',
                         )),
+                  ),
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Consumer<ParticipantProvider>(
+                        builder: (context, val, child) {
+                      if (val.participants.isEmpty) return const SizedBox();
+                      Participant participant = val.participants.firstWhere(
+                          (element) =>
+                              element.idParticipant == coach.idParticipant);
+                      return Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                                height: 50,
+                                width: 50,
+                                child: EquipeImageLogoWidget(
+                                    url: participant.imageUrl)),
+                            SizedBox(width: 10),
+                            Text(
+                              participant.nomEquipe,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
                   ),
                 ),
               )

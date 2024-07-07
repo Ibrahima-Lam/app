@@ -58,6 +58,12 @@ class CoachDetails extends StatelessWidget {
                       return [
                         SliverAppBar(
                           title: Text(coach.nomCoach),
+                          actions: [
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Icon(Icons.person_2_rounded),
+                            ),
+                          ],
                           expandedHeight: 200,
                           pinned: true,
                           flexibleSpace: FlexibleSpaceBar(

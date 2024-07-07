@@ -39,12 +39,14 @@ class JoueurPerformanceWidget extends StatelessWidget {
                     child:
                         Text('Pas de Performance disponible pour ce joueur!'),
                   )
-                : ListView(
-                    children: gamePerformances
-                        .map((e) => PerformanceSetionWidget(
-                              gamePerformances: e,
-                            ))
-                        .toList(),
+                : SingleChildScrollView(
+                    child: Column(
+                      children: gamePerformances
+                          .map((e) => PerformanceSetionWidget(
+                                gamePerformances: e,
+                              ))
+                          .toList(),
+                    ),
                   );
           },
         );

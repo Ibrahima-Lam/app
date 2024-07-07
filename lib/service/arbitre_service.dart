@@ -28,4 +28,11 @@ List<Map<String, dynamic>> arbitres = [
     'idEdition': 'thialgou2023',
     'imageUrl': '',
   },
+  {
+    'idArbitre': 'a4',
+    'nomArbitre': 'Saidou Bocar',
+    'role': 'assistant',
+    'idEdition': 'thialgou2023',
+    'imageUrl': '',
+  },
 ];

@@ -107,9 +107,22 @@ class CompositionCollection implements Collection {
   }
 
 // Todo
-  List<ArbitreComposition> getArbitres({String? idGame}) {
+  List<ArbitreComposition> getArbitres() {
     List<ArbitreComposition> arbitres =
         compositions.whereType<ArbitreComposition>().toList();
+
+    return arbitres;
+  }
+
+  List<ArbitreComposition> getArbitresBygame(
+      {required String idGame, bool create = true}) {
+    List<ArbitreComposition> arbitres = compositions
+        .whereType<ArbitreComposition>()
+        .where(
+          (element) => element.idGame == idGame,
+        )
+        .toList();
+    if (!create && arbitres.isEmpty) return [];
     if (arbitres.isEmpty) {
       arbitres = kArbitres
           .map((e) => e.copyWith(
@@ -123,19 +136,11 @@ class CompositionCollection implements Collection {
   }
 
   // Todo
-  List<CoachComposition> getCoachs({String? idGame}) {
-    List<CoachComposition> arbitres =
+  List<CoachComposition> getCoachs() {
+    List<CoachComposition> coaches =
         compositions.whereType<CoachComposition>().toList();
-    if (arbitres.isEmpty) {
-      arbitres = [kCoach]
-          .map((e) => e.copyWith(
-              idGame: idGame,
-              idComposition: 'G${idGame}A${arbitres.indexWhere(
-                (element) => element.nom == e.nom,
-              )}'))
-          .toList();
-    }
-    return arbitres;
+
+    return coaches;
   }
 
   CoachComposition getCoach(
