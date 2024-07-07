@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:app/collection/competition_collection.dart';
+import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/competition.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/pages/competition/competition_details.dart';
@@ -38,7 +39,9 @@ class EquipeDetails extends StatelessWidget {
         'classement':
             ClassementWiget.equipe(title: '', idParticipant: id, idTarget: id),
         'effectif': EffectifWidget(idParticipant: id),
-        'infos': InfosListWiget(idPartcipant: id),
+        'infos': InfosListWiget(
+          categorieParams: CategorieParams(idPartcipant: id),
+        ),
         'statistique': EquipeStatistiquesWidget(idParticipant: id),
         'fiche': EquipeFicheListWidget(participant: participant),
       };

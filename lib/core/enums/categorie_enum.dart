@@ -1,1 +1,1 @@
-enum Categorie { joueur, match, equipe, competition }
+enum Categorie { joueur, match, equipe, competition, arbitre, coatch }

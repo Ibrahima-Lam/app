@@ -1,4 +1,6 @@
 import 'package:app/models/user.dart';
+import 'package:app/pages/arbitre/arbitre_page.dart';
+import 'package:app/pages/coach/coach_page.dart';
 import 'package:app/pages/equipe/equipe_page.dart';
 import 'package:app/pages/competition/competition_page.dart';
 import 'package:app/pages/game/game_search.dart';
@@ -99,6 +101,11 @@ class DrawerWidget extends StatelessWidget {
                 size: size,
               ),
               title: 'Coachs',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) => CoachPage()));
+              },
             ),
             listTileWidget(
               icon: Icon(
@@ -107,6 +114,11 @@ class DrawerWidget extends StatelessWidget {
                 size: size,
               ),
               title: 'Arbitres',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ArbitrePage()));
+              },
             ),
             const Divider(),
             listTileWidget(
@@ -145,6 +157,14 @@ class DrawerWidget extends StatelessWidget {
               ),
               title: 'Nous contacter',
             ),
+            listTileWidget(
+              icon: Icon(
+                color: color,
+                Icons.dangerous_outlined,
+                size: size,
+              ),
+              title: 'Signaler',
+            ),
           ],
         ),
       );
@@ -154,6 +174,8 @@ class DrawerWidget extends StatelessWidget {
   Widget listTileWidget(
       {required String title, Icon? icon, Function()? onTap}) {
     return ListTile(
+      minTileHeight: 52,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
       minVerticalPadding: 0,
       horizontalTitleGap: 10,
       onTap: onTap,

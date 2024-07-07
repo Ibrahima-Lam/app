@@ -1,12 +1,13 @@
-import 'package:app/models/joueur.dart';
-import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/joueur_widget.dart';
+import 'package:app/models/arbitres/arbitre.dart';
+
+import 'package:app/providers/arbitre_provider.dart';
+import 'package:app/widget/arbitre_list_tile_widget.dart';
 import 'package:app/widget/text_search_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class JoueurPage extends StatelessWidget {
-  JoueurPage({super.key});
+class ArbitrePage extends StatelessWidget {
+  ArbitrePage({super.key});
 
   final TextEditingController textEditingController = TextEditingController();
 
@@ -14,11 +15,11 @@ class JoueurPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Joueurs'),
+        title: Text('Arbitres'),
       ),
       body: Container(
         child: FutureBuilder(
-          future: context.read<JoueurProvider>().getJoueurs(),
+          future: context.read<ArbitreProvider>().getData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -30,9 +31,9 @@ class JoueurPage extends StatelessWidget {
                 child: Text('Erreur!'),
               );
             }
-            return Consumer<JoueurProvider>(builder: (context, value, child) {
-              List<Joueur> joueurs = value.joueurs;
-              return joueurs.length == 0
+            return Consumer<ArbitreProvider>(builder: (context, value, child) {
+              List<Arbitre> arbitres = value.arbitres;
+              return arbitres.length == 0
                   ? const Center(
                       child: Text('Pas de données!'),
                     )
@@ -40,28 +41,27 @@ class JoueurPage extends StatelessWidget {
                       children: [
                         TextSearchFieldWidget(
                             textEditingController: textEditingController,
-                            hintText: 'Recherche de joueur...'),
+                            hintText: 'Recherche d\'arbitre...'),
                         Expanded(
                             child: Card(
                           child: ListenableBuilder(
                               listenable: textEditingController,
                               builder: (context, child) {
-                                joueurs = textEditingController.text.isNotEmpty
-                                    ? joueurs
-                                        .where((element) => element.nomJoueur
+                                arbitres = textEditingController.text.isNotEmpty
+                                    ? arbitres
+                                        .where((element) => element.nomArbitre
                                             .toUpperCase()
                                             .contains(textEditingController.text
                                                 .toUpperCase()))
                                         .toList()
-                                    : value.joueurs;
+                                    : value.arbitres;
 
                                 return Scrollbar(
                                   child: ListView.builder(
-                                    itemCount: joueurs.length,
+                                    itemCount: arbitres.length,
                                     itemBuilder: (context, index) =>
-                                        JoueurListTileWidget(
-                                      joueur: joueurs[index],
-                                      showEquipe: true,
+                                        ArbitreListTileWidget(
+                                      arbitre: arbitres[index],
                                     ),
                                   ),
                                 );

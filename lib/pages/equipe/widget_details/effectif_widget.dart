@@ -36,8 +36,11 @@ class EffectifJoueurSectionWidget extends StatelessWidget {
             );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Container(
+              height: MediaQuery.sizeOf(context).height * .75,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
 

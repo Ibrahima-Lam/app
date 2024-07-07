@@ -1,6 +1,7 @@
 import 'package:app/controllers/competition/date.dart';
 import 'package:app/core/enums/game_etat_enum.dart';
 import 'package:app/core/enums/show_niveau_enum.dart';
+import 'package:app/core/extension/string_extension.dart';
 import 'package:app/pages/game/game_details.dart';
 import 'package:app/models/game.dart';
 import 'package:app/widget/equipe_logo_widget.dart';
@@ -93,7 +94,7 @@ class GameWidget extends StatelessWidget {
                 ConstrainedBox(
                   constraints: const BoxConstraints(minWidth: 50),
                   child: Text(
-                    _niveauText,
+                    _niveauText.capitalize(),
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontSize: 13, color: Colors.grey),
                   ),
@@ -210,7 +211,7 @@ class GameFullWidget extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(game.nomNiveau ?? ''),
+                    Text((game.nomNiveau ?? '').capitalize()),
                     Text(
                       game.score,
                       style: TextStyle(

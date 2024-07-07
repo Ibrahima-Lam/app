@@ -1,4 +1,5 @@
 import 'package:app/controllers/competition/date.dart';
+import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/infos/infos.dart';
 import 'package:app/providers/infos_provider.dart';
 import 'package:app/widget/infos_widget.dart';
@@ -32,7 +33,7 @@ class _InfosDetailsState extends State<InfosDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEDE7F6),
+      /* backgroundColor: Color(0xFFEDE7F6), violet clair */
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
@@ -175,7 +176,15 @@ class AutreInfosWidet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<InfosProvider>(builder: (context, val, child) {
-      List<Infos> infos = val.getInfosByInfo(info: info);
+      List<Infos> infos = val.getInfosBy(
+          categorie: CategorieParams(
+        idEdition: info.idEdition,
+        idGame: info.idGame,
+        idPartcipant: info.idPartcipant,
+        idJoueur: info.idJoueur,
+        idArbitre: info.idArbitre,
+        idCoach: info.idCoach,
+      ));
       return Container(
         child: Column(
             children: infos.map((e) => InfosLessWidget(infos: e)).toList()),

@@ -2,6 +2,8 @@ import 'package:app/pages/actualite/infos_page.dart';
 import 'package:app/pages/exploration/exploration_page.dart';
 import 'package:app/pages/game/game_page.dart';
 import 'package:app/pages/notification/notification_page.dart';
+import 'package:app/providers/arbitre_provider.dart';
+import 'package:app/providers/coach_provider.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/composition_provider.dart';
 import 'package:app/providers/infos_provider.dart';
@@ -49,6 +51,8 @@ class MyApp extends StatelessWidget {
               StatistiqueProvider(stats, events),
         ),
         ChangeNotifierProvider(create: (context) => InfosProvider()),
+        ChangeNotifierProvider(create: (context) => CoachProvider()),
+        ChangeNotifierProvider(create: (context) => ArbitreProvider()),
         ChangeNotifierProvider(create: (context) => CompetitionProvider()),
         ChangeNotifierProvider(create: (context) => GameProvider()),
         ChangeNotifierProvider(create: (context) => GameEventProvider()),

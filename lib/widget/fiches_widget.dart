@@ -1,3 +1,4 @@
+import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/infos/infos.dart';
 import 'package:app/pages/actualite/infos_details.dart';
 import 'package:app/providers/infos_provider.dart';
@@ -6,16 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class FicheInfosWidget extends StatelessWidget {
-  final String? idPartcipant;
-  final String? idJoueur;
-  final String? idEdition;
-  final String? idGame;
-  const FicheInfosWidget(
-      {super.key,
-      this.idPartcipant,
-      this.idEdition,
-      this.idGame,
-      this.idJoueur});
+  final CategorieParams categorieParams;
+  const FicheInfosWidget({
+    super.key,
+    required this.categorieParams,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +30,10 @@ class FicheInfosWidget extends StatelessWidget {
           return Consumer<InfosProvider>(builder: (context, infos, child) {
             final Infos? info = infos
                 .infos
-                /* .getInfosBy(
-                  idEdition: idEdition,
-                  idGame: idGame,
-                  idJoueur: idJoueur,
-                  idPartcipant: idPartcipant,
-                ) */
+
+                /* Todo  .getInfosBy(
+                 categorie: categorieParams
+                )  */
                 .lastOrNull;
             return info == null
                 ? const SizedBox()
@@ -102,16 +96,11 @@ class FicheInfosWidget extends StatelessWidget {
 }
 
 class FicheSponsorWidget extends StatelessWidget {
-  final String? idPartcipant;
-  final String? idJoueur;
-  final String? idEdition;
-  final String? idGame;
-  const FicheSponsorWidget(
-      {super.key,
-      this.idPartcipant,
-      this.idEdition,
-      this.idGame,
-      this.idJoueur});
+  final CategorieParams categorieParams;
+  const FicheSponsorWidget({
+    super.key,
+    required this.categorieParams,
+  });
 
   @override
   Widget build(BuildContext context) {

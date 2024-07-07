@@ -1,5 +1,6 @@
 import 'package:app/collection/game_collection.dart';
 import 'package:app/controllers/niveau/niveau_controller.dart';
+import 'package:app/core/extension/string_extension.dart';
 import 'package:app/models/competition.dart';
 import 'package:app/models/game.dart';
 import 'package:app/models/niveau.dart';
@@ -50,12 +51,16 @@ class MatchsWidget extends StatelessWidget {
                     GestureDetector(
                       onTap: () {},
                       child: Container(
-                        color: Color(0xFFE0E0E0),
                         padding: const EdgeInsets.all(5),
                         width: MediaQuery.of(context).size.width,
                         height: 50,
+                        decoration: const BoxDecoration(
+                            gradient: LinearGradient(colors: [
+                          Color.fromARGB(255, 215, 238, 215),
+                          Color(0xFFF5F5F5)
+                        ])),
                         child: Text(
-                          niveau.nomNiveau!,
+                          niveau.nomNiveau!.capitalize(),
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

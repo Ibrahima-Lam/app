@@ -106,11 +106,28 @@ class CompositionCollection implements Collection {
     return rempls;
   }
 
-  List<ArbitreComposition> getArbitres({required String idGame}) {
+// Todo
+  List<ArbitreComposition> getArbitres({String? idGame}) {
     List<ArbitreComposition> arbitres =
         compositions.whereType<ArbitreComposition>().toList();
     if (arbitres.isEmpty) {
       arbitres = kArbitres
+          .map((e) => e.copyWith(
+              idGame: idGame,
+              idComposition: 'G${idGame}A${arbitres.indexWhere(
+                (element) => element.nom == e.nom,
+              )}'))
+          .toList();
+    }
+    return arbitres;
+  }
+
+  // Todo
+  List<CoachComposition> getCoachs({String? idGame}) {
+    List<CoachComposition> arbitres =
+        compositions.whereType<CoachComposition>().toList();
+    if (arbitres.isEmpty) {
+      arbitres = [kCoach]
           .map((e) => e.copyWith(
               idGame: idGame,
               idComposition: 'G${idGame}A${arbitres.indexWhere(

@@ -6,6 +6,7 @@ import 'package:app/models/game.dart';
 import 'package:app/pages/competition/competition_details.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/game_provider.dart';
+import 'package:app/widget/competition_logo_image.dart';
 import 'package:app/widget/custom_delegate_search.dart';
 import 'package:app/widget/game_widget.dart';
 import 'package:app/widget/scaffold_widget.dart';
@@ -203,92 +204,136 @@ class _CompetitionGamesWidgetState extends State<CompetitionGamesWidget> {
                 ? Center(
                     child: Text(_message),
                   )
-                : ListView.separated(
-                    itemCount: widget.competitions.length,
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: 5,
-                    ),
-                    itemBuilder: (context, index) {
-                      Competition competition = widget.competitions[index];
-                      final List<Game> gamelist = gameCollection.getGamesBy(
-                        dateGame: widget.date,
-                        codeEdition: competition.codeEdition,
-                      );
-                      if (gamelist.isEmpty) {
-                        return SizedBox();
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                        child: Card(
-                          color: Colors.white,
-                          surfaceTintColor: Colors.white,
-                          elevation: 1,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                          shadowColor: Colors.grey,
+                : Column(
+                    children: [
+                      Expanded(
                           child: Column(
-                            children: [
-                              GestureDetector(
-                                behavior: HitTestBehavior.translucent,
-                                onTap: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            CompetitionDetails(
-                                              id: competition.codeEdition!,
-                                            ))),
-                                child: Container(
-                                  height: 40,
-                                  padding: EdgeInsets.all(5),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                        children: [
+                          for (Competition competition in widget.competitions)
+                            Builder(
+                              builder: (context) {
+                                final List<Game> gamelist =
+                                    gameCollection.getGamesBy(
+                                  dateGame: widget.date,
+                                  codeEdition: competition.codeEdition,
+                                );
+                                if (gamelist.isEmpty) {
+                                  return SizedBox();
+                                }
+                                return Card(
+                                  color: Colors.white,
+                                  surfaceTintColor: Colors.white,
+                                  elevation: 1,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
+                                  shadowColor: Colors.grey,
+                                  child: Column(
                                     children: [
-                                      Row(
-                                        children: [
-                                          Icon(Icons.cabin),
-                                          SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(
-                                            competition.nomCompetition!,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.w500,
+                                      GestureDetector(
+                                        behavior: HitTestBehavior.translucent,
+                                        onTap: () => Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CompetitionDetails(
+                                                      id: competition
+                                                          .codeEdition!,
+                                                    ))),
+                                        child: Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width,
+                                          height: 50,
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: const BoxDecoration(
+                                            border: Border.symmetric(
+                                              vertical: BorderSide(
+                                                width: 0.5,
+                                                color: Colors.grey,
+                                              ),
+                                              horizontal: BorderSide(
+                                                width: 0.5,
+                                                color: Colors.grey,
+                                              ),
                                             ),
-                                          )
-                                        ],
+                                            gradient: LinearGradient(colors: [
+                                              Color.fromARGB(
+                                                  255, 215, 238, 215),
+                                              Colors.white,
+                                              Color.fromARGB(
+                                                  255, 215, 238, 215),
+                                            ]),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Expanded(
+                                                child: Row(
+                                                  children: [
+                                                    SizedBox(
+                                                        width: 40,
+                                                        height: 40,
+                                                        child:
+                                                            CompetitionImageLogoWidget(
+                                                                url: competition
+                                                                    .imageUrl)),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Container(
+                                                      child: Text(
+                                                        competition
+                                                            .nomCompetition!,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 60,
+                                                child: PopupMenuButton(
+                                                  color: Colors.white,
+                                                  surfaceTintColor:
+                                                      Colors.white,
+                                                  itemBuilder: (context) => [
+                                                    PopupMenuItem(
+                                                        child:
+                                                            Icon(Icons.star)),
+                                                    PopupMenuItem(
+                                                        child: Icon(Icons
+                                                            .notifications)),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
                                       ),
-                                      PopupMenuButton(
-                                        color: Colors.white,
-                                        surfaceTintColor: Colors.white,
-                                        itemBuilder: (context) => [
-                                          PopupMenuItem(
-                                              child: Icon(Icons.star)),
-                                          PopupMenuItem(
-                                              child: Icon(Icons.notifications)),
-                                        ],
-                                      )
+                                      for (final g in gamelist)
+                                        GameFullWidget(
+                                          game: g,
+                                          showDate: false,
+                                        ),
                                     ],
                                   ),
-                                ),
-                              ),
-                              const Divider(
-                                color: Colors.grey,
-                              ),
-                              for (final g in gamelist)
-                                GameFullWidget(
-                                  game: g,
-                                  showDate: false,
-                                ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
+                                );
+                              },
+                            )
+                        ],
+                      )),
+                    ],
                   );
           });
         });

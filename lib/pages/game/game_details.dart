@@ -3,6 +3,7 @@ import 'package:app/collection/game_collection.dart';
 import 'package:app/controllers/competition/date.dart';
 import 'package:app/core/class/abbreviable.dart';
 import 'package:app/core/enums/game_etat_enum.dart';
+import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/competition.dart';
 import 'package:app/models/game.dart';
 import 'package:app/models/gameEvent.dart';
@@ -121,9 +122,11 @@ class _GameDetailsState extends State<GameDetails>
           break;
         case 'INF':
           widgets.add(InfosListWiget(
-            idGame: game.idGame,
-            idPartcipant: game.idHome,
-            idPartcipant2: game.idAway,
+            categorieParams: CategorieParams(
+              idGame: game.idGame,
+              idPartcipant: game.idHome,
+              idPartcipant2: game.idAway,
+            ),
           ));
           break;
 

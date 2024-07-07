@@ -1,5 +1,6 @@
 import 'package:app/controllers/competition/date.dart';
 import 'package:app/core/enums/categorie_enum.dart';
+import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/game.dart';
 import 'package:app/models/joueur.dart';
 import 'package:app/models/participant.dart';
@@ -28,13 +29,20 @@ class EquipeFicheListWidget extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            FicheInfosWidget(idPartcipant: participant.idParticipant),
+            FicheInfosWidget(
+              categorieParams:
+                  CategorieParams(idPartcipant: participant.idParticipant),
+            ),
             SomePlayerWidget(idPartcipant: participant.idParticipant),
-            LastGameWidget(idParticipant: participant.idParticipant),
-            NextGameWidget(idParticipant: participant.idParticipant),
+            EquipeFichePreviousGameWidget(
+                idParticipant: participant.idParticipant),
+            EquipeFicheNextGameWidget(idParticipant: participant.idParticipant),
             InformationEquipeWidget(participant: participant),
             MoreInfosWidget(idPartcipant: participant.idParticipant),
-            FicheSponsorWidget(idPartcipant: participant.idParticipant),
+            FicheSponsorWidget(
+              categorieParams:
+                  CategorieParams(idPartcipant: participant.idParticipant),
+            ),
           ],
         ),
       ),
@@ -314,9 +322,9 @@ class SomePlayerWidget extends StatelessWidget {
   }
 }
 
-class LastGameWidget extends StatelessWidget {
+class EquipeFichePreviousGameWidget extends StatelessWidget {
   final String idParticipant;
-  const LastGameWidget({super.key, required this.idParticipant});
+  const EquipeFichePreviousGameWidget({super.key, required this.idParticipant});
 
   @override
   Widget build(BuildContext context) {
@@ -335,9 +343,9 @@ class LastGameWidget extends StatelessWidget {
   }
 }
 
-class NextGameWidget extends StatelessWidget {
+class EquipeFicheNextGameWidget extends StatelessWidget {
   final String idParticipant;
-  const NextGameWidget({super.key, required this.idParticipant});
+  const EquipeFicheNextGameWidget({super.key, required this.idParticipant});
 
   @override
   Widget build(BuildContext context) {

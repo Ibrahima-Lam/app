@@ -1,3 +1,4 @@
+import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/infos/infos.dart';
 import 'package:app/providers/infos_provider.dart';
 import 'package:app/widget/infos_widget.dart';
@@ -5,18 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class InfosListWiget extends StatelessWidget {
-  final String? idPartcipant;
-  final String? idPartcipant2;
-  final String? idJoueur;
-  final String? idEdition;
-  final String? idGame;
-  const InfosListWiget(
-      {super.key,
-      this.idPartcipant,
-      this.idPartcipant2,
-      this.idEdition,
-      this.idGame,
-      this.idJoueur});
+  final CategorieParams? categorieParams;
+  const InfosListWiget({super.key, this.categorieParams});
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +24,7 @@ class InfosListWiget extends StatelessWidget {
           }
 
           return Consumer<InfosProvider>(builder: (context, value, child) {
-            final List<Infos> liste = value.getInfosBy(
-              idEdition: idEdition,
-              idGame: idGame,
-              idJoueur: idJoueur,
-              idPartcipant: idPartcipant,
-              idPartcipant2: idPartcipant2,
-            );
+            final List<Infos> liste = value.infos;
 
             return liste.isEmpty
                 ? const Center(

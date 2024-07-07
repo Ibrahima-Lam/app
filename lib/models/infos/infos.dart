@@ -16,6 +16,8 @@ class Infos with _$Infos {
     String? idGame,
     String? idPartcipant,
     String? idJoueur,
+    String? idArbitre,
+    String? idCoach,
   }) = _Infos;
   factory Infos.fromJson(Map<String, Object?> json) => _$InfosFromJson(json);
 }

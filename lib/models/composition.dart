@@ -12,8 +12,10 @@ abstract class Composition {
 
 class ArbitreComposition extends Composition {
   String role;
+  String idArbitre;
   ArbitreComposition(
       {required this.role,
+      required this.idArbitre,
       required super.idGame,
       required super.nom,
       required super.idComposition});
@@ -22,9 +24,11 @@ class ArbitreComposition extends Composition {
     String? idGame,
     String? role,
     String? idComposition,
+    String? idArbitre,
   }) =>
       ArbitreComposition(
         idComposition: idComposition ?? this.idComposition,
+        idArbitre: idArbitre ?? this.idArbitre,
         nom: nom ?? this.nom,
         idGame: idGame ?? this.idGame,
         role: role ?? this.role,

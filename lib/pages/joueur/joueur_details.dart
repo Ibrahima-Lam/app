@@ -1,3 +1,4 @@
+import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/joueur.dart';
 import 'package:app/pages/equipe/equipe_details.dart';
 import 'package:app/pages/joueur/widget_datails/joueur_fiche_list_widget.dart';
@@ -31,7 +32,9 @@ class JoueurDetails extends StatelessWidget {
         'match': JoueurMatchListWidget(idJoueur: idJoueur),
         'performance': JoueurPerformanceWidget(joueur: joueur),
         'statistique': JoueurStatistiqueWidget(joueur: joueur),
-        'infos': InfosListWiget(idJoueur: idJoueur),
+        'infos': InfosListWiget(
+          categorieParams: CategorieParams(idJoueur: idJoueur),
+        ),
       };
 
   @override

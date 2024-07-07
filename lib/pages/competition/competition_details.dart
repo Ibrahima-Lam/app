@@ -1,5 +1,6 @@
 import 'package:app/core/enums/competition_type.dart';
 import 'package:app/models/competition.dart';
+import 'package:app/pages/competition/widget_details/arbitre_list_widget.dart';
 import 'package:app/pages/competition/widget_details/classement_list_widget.dart';
 import 'package:app/pages/competition/widget_details/competition_fiche_list_widget.dart';
 import 'package:app/pages/competition/widget_details/competition_statistique_widget.dart';
@@ -42,7 +43,7 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
       return ['Fiche', 'Match', 'Infos', 'Statistique', 'Equipes', 'Arbitres'];
     }
 
-    return ['Fiche', 'Match', 'Infos'];
+    return ['Fiche', 'Match', 'Infos', 'Arbitres'];
   }
 
   List<Widget> tabBarViewChildren(List<String> tabs) {
@@ -77,6 +78,13 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
         case 'FIC':
           widgets.add(
             CompetitionFicheListWidget(
+              idEdition: competition.codeEdition!,
+            ),
+          );
+          break;
+        case 'ARB':
+          widgets.add(
+            ArbitreListWidget(
               idEdition: competition.codeEdition!,
             ),
           );

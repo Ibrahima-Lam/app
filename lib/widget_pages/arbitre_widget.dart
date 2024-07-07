@@ -34,7 +34,7 @@ class _ArbitreWidgetState extends State<ArbitreWidget> {
           ),
           Column(children: [
             ...widget.compositionSousCollection.arbitres
-                .map((e) => ArbitreListTileWidget(
+                .map((e) => CompositionArbitreListTileWidget(
                       composition: e,
                       onDoubleTap: widget.onDoubleTap == null
                           ? null
@@ -62,10 +62,10 @@ class _ArbitreWidgetState extends State<ArbitreWidget> {
   }
 }
 
-class ArbitreListTileWidget extends StatelessWidget {
+class CompositionArbitreListTileWidget extends StatelessWidget {
   final ArbitreComposition composition;
   final Function(ArbitreComposition)? onDoubleTap;
-  const ArbitreListTileWidget(
+  const CompositionArbitreListTileWidget(
       {super.key, required this.composition, this.onDoubleTap});
 
   @override

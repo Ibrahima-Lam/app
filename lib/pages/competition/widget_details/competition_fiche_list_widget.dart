@@ -1,12 +1,16 @@
 import 'package:app/core/enums/categorie_enum.dart';
+import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/competition.dart';
+import 'package:app/models/game.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/pages/equipe/equipe_details.dart';
 import 'package:app/providers/competition_provider.dart';
+import 'package:app/providers/game_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/circular_logo_widget.dart';
 import 'package:app/widget/competition_logo_image.dart';
 import 'package:app/widget/fiches_widget.dart';
+import 'package:app/widget/game_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,10 +29,16 @@ class CompetitionFicheListWidget extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            FicheInfosWidget(idEdition: idEdition),
+            FicheInfosWidget(
+              categorieParams: CategorieParams(idEdition: idEdition),
+            ),
             SomeTeamWidget(idEdition: idEdition),
+            CompetitionFichePreviousGameWidget(idEdition: idEdition),
+            CompetitionFicheNextGameWidget(idEdition: idEdition),
             InformationCompetitionWidget(idEdition: idEdition),
-            FicheSponsorWidget(idEdition: idEdition),
+            FicheSponsorWidget(
+              categorieParams: CategorieParams(idEdition: idEdition),
+            ),
           ],
         ),
       ),
@@ -59,27 +69,30 @@ class SomeTeamWidget extends StatelessWidget {
             List<Participant> participants = value.participants
                 .where((element) => element.idEdition == idEdition)
                 .toList();
-            return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
-              color: Colors.white,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ...participants.map((e) => GestureDetector(
-                          onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      EquipeDetails(id: e.idParticipant))),
-                          child: CircularLogoWidget(
-                              path: e.imageUrl ?? '',
-                              categorie: Categorie.equipe),
-                        )),
-                  ],
-                ),
-              ),
-            );
+            return participants.isEmpty
+                ? const SizedBox()
+                : Container(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 5.0, vertical: 10),
+                    color: Colors.white,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ...participants.map((e) => GestureDetector(
+                                onTap: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) => EquipeDetails(
+                                            id: e.idParticipant))),
+                                child: CircularLogoWidget(
+                                    path: e.imageUrl ?? '',
+                                    categorie: Categorie.equipe),
+                              )),
+                        ],
+                      ),
+                    ),
+                  );
           });
         });
   }
@@ -213,6 +226,49 @@ class InformationCompetitionWidget extends StatelessWidget {
           ),
         ),
       );
+    });
+  }
+}
+
+class CompetitionFichePreviousGameWidget extends StatelessWidget {
+  final String idEdition;
+  const CompetitionFichePreviousGameWidget(
+      {super.key, required this.idEdition});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<GameProvider>(builder: (context, val, child) {
+      Game? game;
+      try {
+        game = val.gameCollection.played.lastWhere((element) =>
+            element.codeEdition == idEdition || element.idAway == idEdition);
+      } catch (e) {}
+      return game == null
+          ? const SizedBox()
+          : GameFullWidget(
+              game: game,
+            );
+    });
+  }
+}
+
+class CompetitionFicheNextGameWidget extends StatelessWidget {
+  final String idEdition;
+  const CompetitionFicheNextGameWidget({super.key, required this.idEdition});
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<GameProvider>(builder: (context, val, child) {
+      Game? game;
+      try {
+        game = val.gameCollection.noPlayed
+            .firstWhere((element) => element.codeEdition == idEdition);
+      } catch (e) {}
+      return game == null
+          ? const SizedBox()
+          : GameFullWidget(
+              game: game,
+            );
     });
   }
 }

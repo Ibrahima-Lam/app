@@ -1,3 +1,4 @@
+import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/infos/infos.dart';
 import 'package:app/service/infos_service.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class InfosProvider extends ChangeNotifier {
     } */
   }
 
-  List<Infos> getInfosByInfo({required Infos info}) {
+  /* List<Infos> getInfosByInfo({required Infos info}) {
     List<Infos> listes = getInfosBy(
       idEdition: info.idEdition,
       idGame: info.idGame,
@@ -30,33 +31,31 @@ class InfosProvider extends ChangeNotifier {
       idPartcipant: info.idPartcipant,
     );
     return listes;
-  }
+  } */
 
-  List<Infos> getInfosBy({
-    String? idEdition,
-    String? idGame,
-    String? idJoueur,
-    String? idPartcipant,
-    String? idPartcipant2,
-  }) {
-    if ((idEdition, idGame, idPartcipant, idJoueur, idPartcipant2)
-        case (null, null, null, null, null)) return [];
+  List<Infos> getInfosBy({required CategorieParams categorie}) {
+    if (categorie.isNull) return [];
     List<Infos> listes = infos;
-    if (idEdition != null)
-      listes =
-          listes.where((element) => element.idEdition == idEdition).toList();
-    if (idGame != null)
-      listes = listes.where((element) => element.idGame == idGame).toList();
-    if (idPartcipant != null)
+    if (categorie.idEdition != null)
       listes = listes
-          .where((element) => element.idPartcipant == idPartcipant)
+          .where((element) => element.idEdition == categorie.idEdition)
           .toList();
-    if (idPartcipant2 != null)
+    if (categorie.idGame != null)
       listes = listes
-          .where((element) => element.idPartcipant == idPartcipant2)
+          .where((element) => element.idGame == categorie.idGame)
           .toList();
-    if (idJoueur != null)
-      listes = listes.where((element) => element.idJoueur == idJoueur).toList();
+    if (categorie.idPartcipant != null)
+      listes = listes
+          .where((element) => element.idPartcipant == categorie.idPartcipant)
+          .toList();
+    if (categorie.idPartcipant2 != null)
+      listes = listes
+          .where((element) => element.idPartcipant == categorie.idPartcipant2)
+          .toList();
+    if (categorie.idJoueur != null)
+      listes = listes
+          .where((element) => element.idJoueur == categorie.idJoueur)
+          .toList();
     return listes;
   }
 }

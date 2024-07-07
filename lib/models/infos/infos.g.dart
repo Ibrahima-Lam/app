@@ -17,6 +17,8 @@ _$InfosImpl _$$InfosImplFromJson(Map<String, dynamic> json) => _$InfosImpl(
       idGame: json['idGame'] as String?,
       idPartcipant: json['idPartcipant'] as String?,
       idJoueur: json['idJoueur'] as String?,
+      idArbitre: json['idArbitre'] as String?,
+      idCoach: json['idCoach'] as String?,
     );
 
 Map<String, dynamic> _$$InfosImplToJson(_$InfosImpl instance) =>
@@ -31,4 +33,6 @@ Map<String, dynamic> _$$InfosImplToJson(_$InfosImpl instance) =>
       'idGame': instance.idGame,
       'idPartcipant': instance.idPartcipant,
       'idJoueur': instance.idJoueur,
+      'idArbitre': instance.idArbitre,
+      'idCoach': instance.idCoach,
     };

@@ -1,6 +1,7 @@
 import 'package:app/controllers/joueur/joueur_controller.dart';
 import 'package:app/core/enums/performance_type.dart';
 import 'package:app/core/extension/string_extension.dart';
+import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/joueur.dart';
 import 'package:app/models/performance.dart';
 import 'package:app/providers/game_event_list_provider.dart';
@@ -26,10 +27,14 @@ class JoueurFicheListWidget extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            FicheInfosWidget(idJoueur: joueur.idJoueur),
+            FicheInfosWidget(
+              categorieParams: CategorieParams(idJoueur: joueur.idJoueur),
+            ),
             LastPerformanceWidget(joueur: joueur),
             InformationJoueurWidget(joueur: joueur),
-            FicheSponsorWidget(idJoueur: joueur.idJoueur),
+            FicheSponsorWidget(
+              categorieParams: CategorieParams(idJoueur: joueur.idJoueur),
+            ),
           ],
         ),
       ),
@@ -153,7 +158,6 @@ class InformationJoueurWidget extends StatelessWidget {
                     itemBuilder: (context) => [
                       PopupMenuItem(child: Text('Ajouter au favori')),
                       PopupMenuItem(child: Text('Voir plus')),
-                      PopupMenuItem(child: Text('Contacter')),
                     ],
                   )
                 ],

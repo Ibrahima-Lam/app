@@ -30,6 +30,8 @@ mixin _$Infos {
   String? get idGame => throw _privateConstructorUsedError;
   String? get idPartcipant => throw _privateConstructorUsedError;
   String? get idJoueur => throw _privateConstructorUsedError;
+  String? get idArbitre => throw _privateConstructorUsedError;
+  String? get idCoach => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -51,7 +53,9 @@ abstract class $InfosCopyWith<$Res> {
       String? idEdition,
       String? idGame,
       String? idPartcipant,
-      String? idJoueur});
+      String? idJoueur,
+      String? idArbitre,
+      String? idCoach});
 }
 
 /// @nodoc
@@ -77,6 +81,8 @@ class _$InfosCopyWithImpl<$Res, $Val extends Infos>
     Object? idGame = freezed,
     Object? idPartcipant = freezed,
     Object? idJoueur = freezed,
+    Object? idArbitre = freezed,
+    Object? idCoach = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -119,6 +125,14 @@ class _$InfosCopyWithImpl<$Res, $Val extends Infos>
           ? _value.idJoueur
           : idJoueur // ignore: cast_nullable_to_non_nullable
               as String?,
+      idArbitre: freezed == idArbitre
+          ? _value.idArbitre
+          : idArbitre // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idCoach: freezed == idCoach
+          ? _value.idCoach
+          : idCoach // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -140,7 +154,9 @@ abstract class _$$InfosImplCopyWith<$Res> implements $InfosCopyWith<$Res> {
       String? idEdition,
       String? idGame,
       String? idPartcipant,
-      String? idJoueur});
+      String? idJoueur,
+      String? idArbitre,
+      String? idCoach});
 }
 
 /// @nodoc
@@ -164,6 +180,8 @@ class __$$InfosImplCopyWithImpl<$Res>
     Object? idGame = freezed,
     Object? idPartcipant = freezed,
     Object? idJoueur = freezed,
+    Object? idArbitre = freezed,
+    Object? idCoach = freezed,
   }) {
     return _then(_$InfosImpl(
       id: null == id
@@ -206,6 +224,14 @@ class __$$InfosImplCopyWithImpl<$Res>
           ? _value.idJoueur
           : idJoueur // ignore: cast_nullable_to_non_nullable
               as String?,
+      idArbitre: freezed == idArbitre
+          ? _value.idArbitre
+          : idArbitre // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idCoach: freezed == idCoach
+          ? _value.idCoach
+          : idCoach // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -223,7 +249,9 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
       this.idEdition,
       this.idGame,
       this.idPartcipant,
-      this.idJoueur});
+      this.idJoueur,
+      this.idArbitre,
+      this.idCoach});
 
   factory _$InfosImpl.fromJson(Map<String, dynamic> json) =>
       _$$InfosImplFromJson(json);
@@ -248,10 +276,14 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
   final String? idPartcipant;
   @override
   final String? idJoueur;
+  @override
+  final String? idArbitre;
+  @override
+  final String? idCoach;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Infos(id: $id, text: $text, title: $title, datetime: $datetime, source: $source, imageUrl: $imageUrl, idEdition: $idEdition, idGame: $idGame, idPartcipant: $idPartcipant, idJoueur: $idJoueur)';
+    return 'Infos(id: $id, text: $text, title: $title, datetime: $datetime, source: $source, imageUrl: $imageUrl, idEdition: $idEdition, idGame: $idGame, idPartcipant: $idPartcipant, idJoueur: $idJoueur, idArbitre: $idArbitre, idCoach: $idCoach)';
   }
 
   @override
@@ -268,7 +300,9 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
       ..add(DiagnosticsProperty('idEdition', idEdition))
       ..add(DiagnosticsProperty('idGame', idGame))
       ..add(DiagnosticsProperty('idPartcipant', idPartcipant))
-      ..add(DiagnosticsProperty('idJoueur', idJoueur));
+      ..add(DiagnosticsProperty('idJoueur', idJoueur))
+      ..add(DiagnosticsProperty('idArbitre', idArbitre))
+      ..add(DiagnosticsProperty('idCoach', idCoach));
   }
 
   @override
@@ -290,13 +324,28 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
             (identical(other.idPartcipant, idPartcipant) ||
                 other.idPartcipant == idPartcipant) &&
             (identical(other.idJoueur, idJoueur) ||
-                other.idJoueur == idJoueur));
+                other.idJoueur == idJoueur) &&
+            (identical(other.idArbitre, idArbitre) ||
+                other.idArbitre == idArbitre) &&
+            (identical(other.idCoach, idCoach) || other.idCoach == idCoach));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, text, title, datetime,
-      source, imageUrl, idEdition, idGame, idPartcipant, idJoueur);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      text,
+      title,
+      datetime,
+      source,
+      imageUrl,
+      idEdition,
+      idGame,
+      idPartcipant,
+      idJoueur,
+      idArbitre,
+      idCoach);
 
   @JsonKey(ignore: true)
   @override
@@ -323,7 +372,9 @@ abstract class _Infos implements Infos {
       final String? idEdition,
       final String? idGame,
       final String? idPartcipant,
-      final String? idJoueur}) = _$InfosImpl;
+      final String? idJoueur,
+      final String? idArbitre,
+      final String? idCoach}) = _$InfosImpl;
 
   factory _Infos.fromJson(Map<String, dynamic> json) = _$InfosImpl.fromJson;
 
@@ -347,6 +398,10 @@ abstract class _Infos implements Infos {
   String? get idPartcipant;
   @override
   String? get idJoueur;
+  @override
+  String? get idArbitre;
+  @override
+  String? get idCoach;
   @override
   @JsonKey(ignore: true)
   _$$InfosImplCopyWith<_$InfosImpl> get copyWith =>
