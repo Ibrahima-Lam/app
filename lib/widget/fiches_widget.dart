@@ -37,8 +37,9 @@ class FicheInfosWidget extends StatelessWidget {
                 .lastOrNull;
             return info == null
                 ? const SizedBox()
-                : Padding(
+                : Container(
                     padding: const EdgeInsets.only(top: 5.0),
+                    constraints: const BoxConstraints(minHeight: 200),
                     child: GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
@@ -62,12 +63,13 @@ class FicheInfosWidget extends StatelessWidget {
                                     const BoxConstraints(maxHeight: 250),
                                 child: CachedNetworkImage(
                                   imageUrl: '',
-                                  placeholder: (context, url) =>
-                                      CircularProgressIndicator(),
                                   errorWidget: (context, url, error) =>
-                                      Image.asset(
-                                    'images/santiago.jpg',
-                                    fit: BoxFit.cover,
+                                      AnimatedContainer(
+                                    duration: Durations.medium1,
+                                    child: Image.asset(
+                                      'images/santiago.jpg',
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -117,9 +119,9 @@ class FicheSponsorWidget extends StatelessWidget {
             children: [
               CachedNetworkImage(
                 imageUrl: '',
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) =>
-                    Image.asset('images/fusion.jpg', fit: BoxFit.cover),
+                errorWidget: (context, url, error) => AnimatedContainer(
+                    duration: Durations.medium1,
+                    child: Image.asset('images/fusion.jpg', fit: BoxFit.cover)),
               ),
               Container(
                   padding: const EdgeInsets.all(10.0), child: Text('Sponsor'))

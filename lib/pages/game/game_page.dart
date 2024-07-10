@@ -1,16 +1,22 @@
 import 'package:app/collection/competition_collection.dart';
-import 'package:app/collection/game_collection.dart';
 import 'package:app/controllers/competition/date.dart';
+import 'package:app/core/enums/categorie_enum.dart';
 import 'package:app/models/competition.dart';
+import 'package:app/models/event.dart';
 import 'package:app/models/game.dart';
+import 'package:app/models/joueur.dart';
 import 'package:app/pages/competition/competition_details.dart';
 import 'package:app/providers/competition_provider.dart';
+import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/game_provider.dart';
-import 'package:app/widget/competition_logo_image.dart';
-import 'package:app/widget/custom_delegate_search.dart';
+import 'package:app/providers/joueur_provider.dart';
+import 'package:app/widget/logos/circular_logo_widget.dart';
+import 'package:app/widget/logos/competition_logo_image.dart';
+import 'package:app/widget/modals/custom_delegate_search.dart';
 import 'package:app/widget/game_widget.dart';
-import 'package:app/widget/scaffold_widget.dart';
-import 'package:app/widget/tab_bar_widget.dart';
+import 'package:app/widget/skelton/scaffold_widget.dart';
+import 'package:app/widget/sponsor_list_widget.dart';
+import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -157,6 +163,140 @@ class _GamePageState extends State<GamePage>
   }
 }
 
+// --------------------------------------Top Icons------------------------------------------
+class TopIconsWidget extends StatelessWidget {
+  final List<Competition> competitions;
+  final String dateGame;
+  final GameProvider gameProvider;
+  final bool playing;
+  const TopIconsWidget(
+      {super.key,
+      required this.competitions,
+      required this.dateGame,
+      required this.gameProvider,
+      required this.playing});
+  List<Game> get games => gameProvider
+      .getGamesBy(playing: playing, dateGame: dateGame)
+      .reversed
+      .toList();
+
+  List<Game> get lastGames => [
+        ...games.reversed
+            .where(
+              (element) =>
+                  element.dateGame!.compareTo(dateGame) <= 0 &&
+                  lastComps.elementAtOrNull(0)?.codeEdition ==
+                      element.codeEdition,
+            )
+            .take(2)
+            .toList(),
+        ...games.reversed
+            .where(
+              (element) =>
+                  element.dateGame!.compareTo(dateGame) <= 0 &&
+                  lastComps.elementAtOrNull(1)?.codeEdition ==
+                      element.codeEdition,
+            )
+            .take(2)
+            .toList(),
+      ];
+  List<Competition> get comps => competitions
+      .where(
+          (element) => games.any((e) => e.codeEdition == element.codeEdition))
+      .toList();
+  List<Competition> get lastComps => [
+        ...comps,
+        ...competitions
+            .where((element) =>
+                gameProvider.played.reversed
+                    .any((e) => e.codeEdition == element.codeEdition) &&
+                !comps.any(
+                  (elmt) => element.codeEdition == elmt.codeEdition,
+                ))
+            .toList()
+      ].take(2).toList();
+
+  List<Widget> getWidtgetsByGames(List<Game> games,
+      JoueurProvider joueurProvider, GameEventListProvider eventProvider) {
+    games.sort((a, b) => (a.dateGame ?? '').compareTo(b.dateGame ?? ''));
+    return [
+      ...games.expand((element) sync* {
+        List<GoalEvent> goals = eventProvider.events
+            .whereType<GoalEvent>()
+            .where((element) => games.any((e) => element.idGame == e.idGame))
+            .toList();
+
+        yield CircularLogoWidget(
+          path: element.homeImage ?? '',
+          categorie: Categorie.equipe,
+          id: element.idHome,
+          tap: true,
+        );
+        List<Joueur> homePlayers = joueurProvider.joueurs
+            .where((pl) => pl.idParticipant == element.idHome)
+            .where(
+                (element) => goals.any((e) => element.idJoueur == e.idJoueur))
+            .toList();
+        yield* homePlayers.map((p) => CircularLogoWidget(
+            path: p.imageUrl ?? '',
+            categorie: Categorie.joueur,
+            tap: true,
+            id: p.idJoueur));
+
+        yield CircularLogoWidget(
+          path: element.awayImage ?? '',
+          categorie: Categorie.equipe,
+          id: element.idAway,
+          tap: true,
+        );
+        List<Joueur> awayPlayers = joueurProvider.joueurs
+            .where((pl) => pl.idParticipant == element.idAway)
+            .where(
+                (element) => goals.any((e) => element.idJoueur == e.idJoueur))
+            .toList();
+        yield* awayPlayers.map((p) => CircularLogoWidget(
+            path: p.imageUrl ?? '',
+            categorie: Categorie.joueur,
+            tap: true,
+            id: p.idJoueur));
+      }),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer2<JoueurProvider, GameEventListProvider>(
+        builder: (context, joueurProvider, eventProvider, _) {
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 5),
+        width: MediaQuery.sizeOf(context).height,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Builder(builder: (context) {
+            List<Widget> elements = [
+              ...lastComps.map((e) {
+                return CircularLogoWidget(
+                  path: e.imageUrl ?? '',
+                  categorie: Categorie.competition,
+                  id: e.codeEdition,
+                  tap: true,
+                );
+              }),
+              ...getWidtgetsByGames(lastGames, joueurProvider, eventProvider),
+            ].take(20).toList().reversed.toList();
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: elements,
+            );
+          }),
+        ),
+      );
+    });
+  }
+}
+
 // -----------------------------------WIDGET----------------------------------------------
 
 class CompetitionGamesWidget extends StatefulWidget {
@@ -197,143 +337,149 @@ class _CompetitionGamesWidgetState extends State<CompetitionGamesWidget> {
             );
           }
           return Consumer<GameProvider>(builder: (context, value, child) {
-            GameCollection gameCollection = value.gameCollection;
-            return gameCollection
+            return value
                     .getGamesBy(dateGame: widget.date, playing: widget.playing)
                     .isEmpty
                 ? Center(
                     child: Text(_message),
                   )
-                : Column(
-                    children: [
-                      Expanded(
-                          child: Column(
-                        children: [
-                          for (Competition competition in widget.competitions)
-                            Builder(
-                              builder: (context) {
-                                final List<Game> gamelist =
-                                    gameCollection.getGamesBy(
-                                  dateGame: widget.date,
-                                  codeEdition: competition.codeEdition,
-                                );
-                                if (gamelist.isEmpty) {
-                                  return SizedBox();
-                                }
-                                return Card(
-                                  color: Colors.white,
-                                  surfaceTintColor: Colors.white,
-                                  elevation: 1,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(3),
-                                  ),
-                                  shadowColor: Colors.grey,
-                                  child: Column(
-                                    children: [
-                                      GestureDetector(
-                                        behavior: HitTestBehavior.translucent,
-                                        onTap: () => Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    CompetitionDetails(
-                                                      id: competition
-                                                          .codeEdition!,
-                                                    ))),
-                                        child: Container(
-                                          width:
-                                              MediaQuery.sizeOf(context).width,
-                                          height: 50,
-                                          padding: const EdgeInsets.all(5),
-                                          decoration: const BoxDecoration(
-                                            border: Border.symmetric(
-                                              vertical: BorderSide(
-                                                width: 0.5,
-                                                color: Colors.grey,
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Column(
+                          children: [
+                            TopIconsWidget(
+                              playing: widget.playing,
+                              gameProvider: value,
+                              dateGame: widget.date,
+                              competitions: widget.competitions,
+                            ),
+                            for (Competition competition in widget.competitions)
+                              Builder(
+                                builder: (context) {
+                                  final List<Game> gamelist = value.getGamesBy(
+                                    dateGame: widget.date,
+                                    codeEdition: competition.codeEdition,
+                                  );
+                                  if (gamelist.isEmpty) {
+                                    return SizedBox();
+                                  }
+                                  return Card(
+                                    color: Colors.white,
+                                    surfaceTintColor: Colors.white,
+                                    elevation: 1,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(3),
+                                    ),
+                                    shadowColor: Colors.grey,
+                                    child: Column(
+                                      children: [
+                                        GestureDetector(
+                                          behavior: HitTestBehavior.translucent,
+                                          onTap: () => Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CompetitionDetails(
+                                                        id: competition
+                                                            .codeEdition,
+                                                      ))),
+                                          child: Container(
+                                            width: MediaQuery.sizeOf(context)
+                                                .width,
+                                            height: 50,
+                                            padding: const EdgeInsets.all(5),
+                                            decoration: const BoxDecoration(
+                                              border: Border.symmetric(
+                                                vertical: BorderSide(
+                                                  width: 0.5,
+                                                  color: Colors.grey,
+                                                ),
+                                                horizontal: BorderSide(
+                                                  width: 0.5,
+                                                  color: Colors.grey,
+                                                ),
                                               ),
-                                              horizontal: BorderSide(
-                                                width: 0.5,
-                                                color: Colors.grey,
-                                              ),
+                                              gradient: LinearGradient(colors: [
+                                                Color.fromARGB(
+                                                    255, 215, 238, 215),
+                                                Colors.white,
+                                                Color.fromARGB(
+                                                    255, 215, 238, 215),
+                                              ]),
                                             ),
-                                            gradient: LinearGradient(colors: [
-                                              Color.fromARGB(
-                                                  255, 215, 238, 215),
-                                              Colors.white,
-                                              Color.fromARGB(
-                                                  255, 215, 238, 215),
-                                            ]),
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Expanded(
-                                                child: Row(
-                                                  children: [
-                                                    SizedBox(
-                                                        width: 40,
-                                                        height: 40,
-                                                        child:
-                                                            CompetitionImageLogoWidget(
-                                                                url: competition
-                                                                    .imageUrl)),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Container(
-                                                      child: Text(
-                                                        competition
-                                                            .nomCompetition!,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      SizedBox(
+                                                          width: 40,
+                                                          height: 40,
+                                                          child: CompetitionImageLogoWidget(
+                                                              url: competition
+                                                                  .imageUrl)),
+                                                      SizedBox(
+                                                        width: 10,
                                                       ),
-                                                    )
-                                                  ],
+                                                      Container(
+                                                        child: Text(
+                                                          competition
+                                                              .nomCompetition,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                width: 60,
-                                                child: PopupMenuButton(
-                                                  color: Colors.white,
-                                                  surfaceTintColor:
-                                                      Colors.white,
-                                                  itemBuilder: (context) => [
-                                                    PopupMenuItem(
-                                                        child:
-                                                            Icon(Icons.star)),
-                                                    PopupMenuItem(
-                                                        child: Icon(Icons
-                                                            .notifications)),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
+                                                SizedBox(
+                                                  width: 60,
+                                                  child: PopupMenuButton(
+                                                    color: Colors.white,
+                                                    surfaceTintColor:
+                                                        Colors.white,
+                                                    itemBuilder: (context) => [
+                                                      PopupMenuItem(
+                                                          child:
+                                                              Icon(Icons.star)),
+                                                      PopupMenuItem(
+                                                          child: Icon(Icons
+                                                              .notifications)),
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      for (final g in gamelist)
-                                        GameFullWidget(
-                                          game: g,
-                                          showDate: false,
-                                        ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            )
-                        ],
-                      )),
-                    ],
+                                        for (final g in gamelist)
+                                          GameLessWidget(
+                                            game: g,
+                                            showDate: false,
+                                          ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            SponsorListWidget(),
+                          ],
+                        ),
+                      ],
+                    ),
                   );
           });
         });

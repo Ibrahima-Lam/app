@@ -14,14 +14,14 @@ class GameEvent {
 }
 
 class EventStream {
-  String idPartcipant;
+  String idParticipant;
   int redCard;
   int yellowCard;
   num? pourcent;
   int goal;
 
   EventStream({
-    required this.idPartcipant,
+    required this.idParticipant,
     this.redCard = 0,
     this.yellowCard = 0,
     this.goal = 0,

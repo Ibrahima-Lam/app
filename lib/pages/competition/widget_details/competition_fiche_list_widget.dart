@@ -7,8 +7,8 @@ import 'package:app/pages/equipe/equipe_details.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/providers/participant_provider.dart';
-import 'package:app/widget/circular_logo_widget.dart';
-import 'package:app/widget/competition_logo_image.dart';
+import 'package:app/widget/logos/circular_logo_widget.dart';
+import 'package:app/widget/logos/competition_logo_image.dart';
 import 'package:app/widget/fiches_widget.dart';
 import 'package:app/widget/game_widget.dart';
 import 'package:flutter/material.dart';
@@ -193,7 +193,7 @@ class InformationCompetitionWidget extends StatelessWidget {
                               const SizedBox(
                                 width: 10.0,
                               ),
-                              Text(competition!.nomCompetition ?? ''),
+                              Text(competition!.nomCompetition),
                             ],
                           ),
                           Row(
@@ -240,7 +240,7 @@ class CompetitionFichePreviousGameWidget extends StatelessWidget {
     return Consumer<GameProvider>(builder: (context, val, child) {
       Game? game;
       try {
-        game = val.gameCollection.played.lastWhere((element) =>
+        game = val.played.lastWhere((element) =>
             element.codeEdition == idEdition || element.idAway == idEdition);
       } catch (e) {}
       return game == null
@@ -261,7 +261,7 @@ class CompetitionFicheNextGameWidget extends StatelessWidget {
     return Consumer<GameProvider>(builder: (context, val, child) {
       Game? game;
       try {
-        game = val.gameCollection.noPlayed
+        game = val.noPlayed
             .firstWhere((element) => element.codeEdition == idEdition);
       } catch (e) {}
       return game == null

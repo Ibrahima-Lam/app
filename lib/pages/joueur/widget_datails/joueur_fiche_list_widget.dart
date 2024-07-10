@@ -8,7 +8,7 @@ import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/widget/fiches_widget.dart';
 import 'package:app/widget/game_widget.dart';
-import 'package:app/widget/joueur_logo_widget.dart';
+import 'package:app/widget/logos/joueur_logo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +55,7 @@ class LastPerformanceWidget extends StatelessWidget {
             builder: (context, matchs, events, child) {
           GamePerformances? gamePerformance =
               JoueurController.getJoueurPerformance(joueur,
-                      games: matchs.gameCollection.games, events: events.events)
+                      games: matchs.games, events: events.events)
                   .lastOrNull;
           return gamePerformance == null
               ? const SizedBox()

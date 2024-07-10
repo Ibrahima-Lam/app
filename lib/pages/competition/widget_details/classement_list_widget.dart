@@ -1,7 +1,7 @@
 import 'package:app/models/stat.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/service/stat_service.dart';
-import 'package:app/widget/table_widget.dart';
+import 'package:app/widget/classement/table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -64,27 +64,24 @@ class ClassementListWidget extends StatelessWidget {
               )
             ];
             statistiques.forEach((key, value) {
-              statsWidgets.add(Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero),
-                  color: Colors.white,
-                  child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width,
-                    child: Column(
-                      children: [
-                        Text(
-                          'Groupe $key',
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        TableWidget(
-                          stats: value,
-                          expand: selected == 0,
-                        )
-                      ],
-                    ),
+              statsWidgets.add(Card(
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero),
+                color: Colors.white,
+                child: SizedBox(
+                  width: MediaQuery.sizeOf(context).width,
+                  child: Column(
+                    children: [
+                      Text(
+                        'Groupe $key',
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      TableWidget(
+                        stats: value,
+                        expand: selected == 0,
+                      )
+                    ],
                   ),
                 ),
               ));

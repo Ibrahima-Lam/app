@@ -1,15 +1,17 @@
 import 'package:app/controllers/competition/date.dart';
 import 'package:app/core/enums/categorie_enum.dart';
+import 'package:app/core/extension/int_extension.dart';
 import 'package:app/core/params/categorie/categorie_params.dart';
+import 'package:app/models/event.dart';
 import 'package:app/models/game.dart';
 import 'package:app/models/joueur.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/pages/game/game_details.dart';
-import 'package:app/pages/joueur/joueur_details.dart';
+import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/circular_logo_widget.dart';
-import 'package:app/widget/equipe_logo_widget.dart';
+import 'package:app/widget/logos/circular_logo_widget.dart';
+import 'package:app/widget/logos/equipe_logo_widget.dart';
 import 'package:app/widget/fiches_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,17 +33,17 @@ class EquipeFicheListWidget extends StatelessWidget {
           children: [
             FicheInfosWidget(
               categorieParams:
-                  CategorieParams(idPartcipant: participant.idParticipant),
+                  CategorieParams(idParticipant: participant.idParticipant),
             ),
-            SomePlayerWidget(idPartcipant: participant.idParticipant),
+            SomePlayerWidget(idParticipant: participant.idParticipant),
             EquipeFichePreviousGameWidget(
                 idParticipant: participant.idParticipant),
             EquipeFicheNextGameWidget(idParticipant: participant.idParticipant),
             InformationEquipeWidget(participant: participant),
-            MoreInfosWidget(idPartcipant: participant.idParticipant),
+            MoreInfosWidget(idParticipant: participant.idParticipant),
             FicheSponsorWidget(
               categorieParams:
-                  CategorieParams(idPartcipant: participant.idParticipant),
+                  CategorieParams(idParticipant: participant.idParticipant),
             ),
           ],
         ),
@@ -51,8 +53,8 @@ class EquipeFicheListWidget extends StatelessWidget {
 }
 
 class MoreInfosWidget extends StatelessWidget {
-  final String idPartcipant;
-  const MoreInfosWidget({super.key, required this.idPartcipant});
+  final String idParticipant;
+  const MoreInfosWidget({super.key, required this.idParticipant});
   final double size = 30.0;
   @override
   Widget build(BuildContext context) {
@@ -64,8 +66,8 @@ class MoreInfosWidget extends StatelessWidget {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Consumer<GameProvider>(builder: (context, val, child) {
-              final List<Game> games = val.gameCollection
-                  .getGamesBy(idPartcipant: idPartcipant)
+              final List<Game> games = val
+                  .getGamesBy(idParticipant: idParticipant)
                   .where((element) => element.isPlayed)
                   .toList();
 
@@ -78,7 +80,7 @@ class MoreInfosWidget extends StatelessWidget {
               for (Game game in games) {
                 if (game.homeScore == game.awayScore) {
                   n++;
-                  if (idPartcipant == game.idHome) {
+                  if (idParticipant == game.idHome) {
                     bm += game.homeScore ?? 0;
                     be += game.awayScore ?? 0;
                   } else {
@@ -87,7 +89,7 @@ class MoreInfosWidget extends StatelessWidget {
                   }
                   continue;
                 }
-                if (idPartcipant == game.idHome) {
+                if (idParticipant == game.idHome) {
                   if (game.isHomeVictoire)
                     v++;
                   else
@@ -283,39 +285,78 @@ class InformationEquipeWidget extends StatelessWidget {
 }
 
 class SomePlayerWidget extends StatelessWidget {
-  final String idPartcipant;
-  const SomePlayerWidget({super.key, required this.idPartcipant});
+  final String idParticipant;
+  const SomePlayerWidget({super.key, required this.idParticipant});
+  List<Widget> _getWidtgetsByParticipant(String idParticipant,
+      JoueurProvider joueurProvider, GameEventListProvider eventProvider) {
+    List<GoalEvent> goals = eventProvider.events
+        .whereType<GoalEvent>()
+        .where((element) => element.idParticipant == idParticipant)
+        .toList();
+    final List<Joueur> joueurs = joueurProvider.joueurs
+        .where((element) => element.idParticipant == idParticipant)
+        .toList();
+    List<Joueur> buteurs = joueurs
+        .where((element) => goals.any((e) => element.idJoueur == e.idJoueur))
+        .toList();
+    buteurs.sort((a, b) =>
+        goals.lastIndexWhere((element) => b.idJoueur == element.idJoueur) -
+        goals.lastIndexWhere((element) => a.idJoueur == element.idJoueur));
+    List<Joueur> noButeurs = joueurs
+        .where((element) => !buteurs.any((e) => e.idJoueur == element.idJoueur))
+        .toList();
+
+    return [
+      ...buteurs
+          .map(
+            (e) => CircularLogoWidget(
+                path: e.imageUrl ?? '',
+                categorie: Categorie.joueur,
+                tap: true,
+                id: e.idJoueur),
+          )
+          .toList(),
+      ...noButeurs
+          .map(
+            (e) => CircularLogoWidget(
+                path: e.imageUrl ?? '',
+                categorie: Categorie.joueur,
+                tap: true,
+                id: e.idJoueur),
+          )
+          .toList(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<JoueurProvider>(builder: (context, value, child) {
-      List<Joueur> joueurs = value.joueurs
-          .where((element) => element.idParticipant == idPartcipant)
-          .take(5)
-          .toList();
+    return Consumer2<JoueurProvider, GameEventListProvider>(
+        builder: (context, joueurProvider, eventProvider, child) {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
         color: Colors.white,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ...joueurs.map((e) => GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            JoueurDetails(idJoueur: e.idJoueur))),
-                    child: CircularLogoWidget(
-                        path: e.imageUrl ?? '', categorie: Categorie.joueur),
-                  )),
-              ...List.generate(
-                  5 - joueurs.length,
-                  (index) => CircularLogoWidget(
-                        path: '',
-                        categorie: Categorie.joueur,
-                      )),
-            ],
-          ),
+          child: Builder(builder: (context) {
+            List<Widget> elements = [
+              ..._getWidtgetsByParticipant(
+                  idParticipant, joueurProvider, eventProvider)
+                ..reversed,
+            ];
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ...elements,
+                ...List.generate(
+                    (5 - elements.length).positiveOrZero,
+                    (index) => CircularLogoWidget(
+                          path: '',
+                          categorie: Categorie.joueur,
+                        )),
+              ].take(5).toList(),
+            );
+          }),
         ),
       );
     });
@@ -331,7 +372,7 @@ class EquipeFichePreviousGameWidget extends StatelessWidget {
     return Consumer<GameProvider>(builder: (context, val, child) {
       Game? game;
       try {
-        game = val.gameCollection.played.lastWhere((element) =>
+        game = val.played.lastWhere((element) =>
             element.idHome == idParticipant || element.idAway == idParticipant);
       } catch (e) {}
       return game == null
@@ -352,7 +393,7 @@ class EquipeFicheNextGameWidget extends StatelessWidget {
     return Consumer<GameProvider>(builder: (context, val, child) {
       Game? game;
       try {
-        game = val.gameCollection.noPlayed.firstWhere((element) =>
+        game = val.noPlayed.firstWhere((element) =>
             element.idHome == idParticipant || element.idAway == idParticipant);
       } catch (e) {}
       return game == null

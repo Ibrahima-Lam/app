@@ -1,6 +1,6 @@
 import 'package:app/models/composition.dart';
-import 'package:app/widget/composition_events_widget.dart';
-import 'package:app/widget/dropdown_menu_widget.dart';
+import 'package:app/widget/events/composition_events_widget.dart';
+import 'package:app/widget/form/dropdown_menu_widget.dart';
 import 'package:flutter/material.dart';
 
 class EventFormWidget extends StatefulWidget {

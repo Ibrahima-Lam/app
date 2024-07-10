@@ -1,6 +1,6 @@
 import 'package:app/models/coachs/coach.dart';
 import 'package:app/pages/coach/coach_details.dart';
-import 'package:app/widget/coach_logo_widget.dart';
+import 'package:app/widget/logos/coach_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 class CoachListTileWidget extends StatelessWidget {
@@ -22,6 +22,10 @@ class CoachListTileWidget extends StatelessWidget {
       ),
       title: Text(coach.nomCoach),
       subtitle: Text(coach.role),
+      trailing: Icon(
+        Icons.person_2_rounded,
+        color: Colors.blueAccent,
+      ),
     );
   }
 }

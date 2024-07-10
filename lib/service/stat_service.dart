@@ -1,4 +1,3 @@
-import 'package:app/collection/game_collection.dart';
 import 'package:app/collection/groupe_collection.dart';
 import 'package:app/collection/participation_collection.dart';
 import 'package:app/controllers/classement/classeur.dart';
@@ -18,8 +17,8 @@ class StatService {
   const StatService({required this.context});
 
   Future<List<Stat>> getStatByEquipe({required String idParticipant}) async {
-    final GameCollection gameCollection =
-        await context.read<GameProvider>().getGames();
+    final GameProvider gameProvider = await context.read<GameProvider>()
+      ..getGames();
 
     final ParticipationCollection participationCollection =
         await context.read<ParticipationProvider>().getParticipations();
@@ -33,29 +32,29 @@ class StatService {
       groupe: idGroupe,
     );
     final List<Game> matchs =
-        gameCollection.getGamesBy(idGroupe: idGroupe, played: true);
+        gameProvider.getGamesBy(idGroupe: idGroupe, played: true);
     final List<Stat> stats = Classeur(games: matchs, equipes: teams).classer();
     return stats;
   }
 
   Future<List<Stat>> getStatByGroupe({required String idGroupe}) async {
-    final GameCollection gameCollection =
-        await context.read<GameProvider>().getGames();
+    final GameProvider gameProvider = await context.read<GameProvider>()
+      ..getGames();
 
     final ParticipationCollection participationCollection =
         await context.read<ParticipationProvider>().getParticipations();
     final List<Participation> teams =
         participationCollection.getParticipationsBy(groupe: idGroupe);
     final List<Game> matchs =
-        gameCollection.getGamesBy(idGroupe: idGroupe, played: true);
+        gameProvider.getGamesBy(idGroupe: idGroupe, played: true);
     final List<Stat> stats = Classeur(games: matchs, equipes: teams).classer();
     return stats;
   }
 
   Future<Map<String, List<Stat>>> getStatByEdition(
       {required String codeEdition}) async {
-    final GameCollection gameCollection =
-        await context.read<GameProvider>().getGames();
+    final GameProvider gameProvider = await context.read<GameProvider>()
+      ..getGames();
 
     final ParticipationCollection participationCollection =
         await context.read<ParticipationProvider>().getParticipations();
@@ -68,7 +67,7 @@ class StatService {
       final List<Participation> teams =
           participationCollection.getParticipationsBy(groupe: groupe.idGroupe);
       final List<Game> matchs =
-          gameCollection.getGamesBy(idGroupe: groupe.idGroupe, played: true);
+          gameProvider.getGamesBy(idGroupe: groupe.idGroupe, played: true);
       final List<Stat> stat = Classeur(games: matchs, equipes: teams).classer();
       stats[groupe.nomGroupe!] = stat;
     }

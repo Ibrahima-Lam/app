@@ -4,7 +4,7 @@ import 'package:app/core/enums/show_niveau_enum.dart';
 import 'package:app/core/extension/string_extension.dart';
 import 'package:app/pages/game/game_details.dart';
 import 'package:app/models/game.dart';
-import 'package:app/widget/equipe_logo_widget.dart';
+import 'package:app/widget/logos/equipe_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 class GameWidget extends StatelessWidget {
@@ -255,16 +255,144 @@ class GameFullWidget extends StatelessWidget {
   Widget equipeWidget(String name, String imageUrl) => Column(
         children: [
           SizedBox(
-            height: 60,
-            width: 60,
+            height: 50,
+            width: 50,
             child: EquipeImageLogoWidget(
               url: imageUrl,
             ),
           ),
           SizedBox(
-            height: 10,
+            height: 5,
           ),
-          Text(name),
+          Text(
+            name,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
+        ],
+      );
+}
+
+class GameLessWidget extends StatelessWidget {
+  final Game game;
+  final bool showDate;
+  final bool showEtat;
+
+  const GameLessWidget(
+      {super.key,
+      required this.game,
+      this.showDate = true,
+      this.showEtat = true});
+  GameEtat get _etat => game.etat.etat;
+
+  Color get _colorEtat {
+    return switch (_etat) {
+      GameEtat.direct || GameEtat.pause => Colors.green,
+      GameEtat.reporte => Colors.red,
+      _ => Colors.grey
+    };
+  }
+
+  Color get _colorScore {
+    return switch (_etat) {
+      GameEtat.direct || GameEtat.pause => Colors.green,
+      GameEtat.reporte => Colors.red,
+      _ => Colors.black
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+      shadowColor: Colors.white,
+      child: Container(
+        height: 80,
+        padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => GameDetails(id: game.idGame)));
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: equipeWidget(game.home!, game.homeImage ?? ''),
+              ),
+              Container(
+                height: MediaQuery.sizeOf(context).height,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text((game.nomNiveau ?? '').capitalize()),
+                    Text(
+                      game.score,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: _colorScore,
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        if (showDate)
+                          Text(
+                            DateController.frDate(game.dateGame, abbr: true),
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        if (game.isPlayed &&
+                            showEtat &&
+                            _etat != GameEtat.avant)
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 3.0),
+                            color: _colorEtat,
+                            child: Text(
+                              game.etat.text.substring(0, 3).toUpperCase(),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 10),
+                            ),
+                          )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Expanded(child: equipeWidget(game.away!, game.awayImage ?? '')),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget equipeWidget(String name, String imageUrl) => Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          SizedBox(
+            height: 40,
+            width: 40,
+            child: EquipeImageLogoWidget(
+              url: imageUrl,
+            ),
+          ),
+          SizedBox(
+            height: 2,
+          ),
+          Text(
+            name,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 14,
+            ),
+          ),
         ],
       );
 }

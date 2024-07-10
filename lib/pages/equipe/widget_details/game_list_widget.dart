@@ -25,8 +25,7 @@ class GameListWidget extends StatelessWidget {
         }
         return Consumer<GameProvider>(
           builder: (context, value, child) {
-            List<Game> games =
-                value.gameCollection.getGamesBy(idPartcipant: idParticipant);
+            List<Game> games = value.getGamesBy(idParticipant: idParticipant);
             return games.isEmpty
                 ? const Center(
                     child: Text('Pas de match disponible pour cette equipe!'),

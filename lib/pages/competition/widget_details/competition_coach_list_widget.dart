@@ -3,7 +3,6 @@ import 'package:app/providers/coach_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/coach_list_tile_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class CompetitionCoachListWidget extends StatelessWidget {
@@ -38,21 +37,23 @@ class CompetitionCoachListWidget extends StatelessWidget {
                     (element) => participants.contains(element.idParticipant))
                 .toList();
 
-            return SingleChildScrollView(
-              child: coaches.isEmpty
-                  ? SizedBox(
-                      height: MediaQuery.sizeOf(context).height * .75,
-                      child: const Center(
-                        child: Text(
-                            'Pas d\'entraineur disponible pour cette competition !'),
-                      ),
-                    )
-                  : Column(
-                      children: coaches
-                          .map((e) => CoachListTileWidget(coach: e))
-                          .toList(),
+            return coaches.isEmpty
+                ? SizedBox(
+                    height: MediaQuery.sizeOf(context).height * .75,
+                    child: const Center(
+                      child: Text(
+                          'Pas d\'entraineur disponible pour cette competition !'),
                     ),
-            );
+                  )
+                : SingleChildScrollView(
+                    child: Card(
+                      child: Column(
+                        children: coaches
+                            .map((e) => CoachListTileWidget(coach: e))
+                            .toList(),
+                      ),
+                    ),
+                  );
           });
         });
   }

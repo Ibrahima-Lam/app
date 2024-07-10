@@ -3,7 +3,7 @@ import 'package:app/core/enums/event_type_enum.dart';
 import 'package:app/models/event.dart';
 import 'package:app/models/joueur.dart';
 import 'package:app/providers/game_event_list_provider.dart';
-import 'package:app/widget/composition_events_widget.dart';
+import 'package:app/widget/events/composition_events_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

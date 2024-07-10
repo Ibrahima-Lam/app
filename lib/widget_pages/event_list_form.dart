@@ -6,12 +6,12 @@ import 'package:app/models/event.dart';
 import 'package:app/models/joueur.dart';
 import 'package:app/providers/composition_provider.dart';
 import 'package:app/providers/game_event_list_provider.dart';
-import 'package:app/widget/bottom_modal_composition_list_widget.dart';
-import 'package:app/widget/composition_events_widget.dart';
-import 'package:app/widget/confirm_dialog_widget.dart';
-import 'package:app/widget/elevated_button_widget.dart';
-import 'package:app/widget/bottom_modal_joueur_list_widget.dart';
-import 'package:app/widget/text_field_widget.dart';
+import 'package:app/widget/modals/bottom_modal_composition_list_widget.dart';
+import 'package:app/widget/events/composition_events_widget.dart';
+import 'package:app/widget/modals/confirm_dialog_widget.dart';
+import 'package:app/widget/form/elevated_button_widget.dart';
+import 'package:app/widget/modals/bottom_modal_joueur_list_widget.dart';
+import 'package:app/widget/form/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

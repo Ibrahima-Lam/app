@@ -1,4 +1,3 @@
-import 'package:app/collection/game_collection.dart';
 import 'package:app/controllers/niveau/niveau_controller.dart';
 import 'package:app/core/extension/string_extension.dart';
 import 'package:app/models/competition.dart';
@@ -31,10 +30,10 @@ class MatchsWidget extends StatelessWidget {
             );
           }
 
-          return Consumer<GameProvider>(builder: (context, value, child) {
-            final GameCollection gameCollection = value.gameCollection;
+          return Consumer<GameProvider>(
+              builder: (context, gameProvider, child) {
             final List<Game> games =
-                gameCollection.getGamesBy(codeEdition: competition.codeEdition);
+                gameProvider.getGamesBy(codeEdition: competition.codeEdition);
             final List<Niveau> niveaux = NiveauController.getGamesNiveau(games);
             if (niveaux.isEmpty) {
               return const Center(
@@ -44,7 +43,7 @@ class MatchsWidget extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: niveaux.map((niveau) {
-                  final List<Game> matchs = gameCollection.getGamesBy(
+                  final List<Game> matchs = gameProvider.getGamesBy(
                       codeNiveau: niveau.codeNiveau,
                       codeEdition: competition.codeEdition);
                   final List<Widget> matchsWidget = [

@@ -1,7 +1,7 @@
 import 'package:app/models/stat.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/service/stat_service.dart';
-import 'package:app/widget/table_widget.dart';
+import 'package:app/widget/classement/table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

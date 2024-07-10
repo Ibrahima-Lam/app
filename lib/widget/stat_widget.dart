@@ -7,7 +7,12 @@ import 'package:provider/provider.dart';
 class StatWidget extends StatelessWidget {
   final Statistique statistique;
   final bool one;
-  const StatWidget({super.key, required this.statistique, this.one = true});
+  final bool checkUser;
+  const StatWidget(
+      {super.key,
+      required this.statistique,
+      this.one = true,
+      this.checkUser = false});
 
   final TextStyle style = const TextStyle(
     fontSize: 16,
@@ -18,15 +23,17 @@ class StatWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onDoubleTap: () async {
-        final bool? isSubmited =
-            await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => StatistiqueForm(
-                      statistique: statistique,
-                    )));
-        if (isSubmited ?? false)
-          context.read<StatistiqueProvider>().setStat(statistique);
-      },
+      onDoubleTap: checkUser
+          ? () async {
+              final bool? isSubmited =
+                  await Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => StatistiqueForm(
+                            statistique: statistique,
+                          )));
+              if (isSubmited ?? false)
+                context.read<StatistiqueProvider>().setStat(statistique);
+            }
+          : null,
       child: Container(
         padding: EdgeInsets.all(10.0),
         decoration: const BoxDecoration(

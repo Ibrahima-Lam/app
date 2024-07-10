@@ -5,7 +5,7 @@ import 'package:app/models/participant.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/game_widget.dart';
-import 'package:app/widget/text_field_widget.dart';
+import 'package:app/widget/form/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -106,7 +106,7 @@ class _GameSearchPageState extends State<GameSearchPage> {
                         }
                         return Consumer<GameProvider>(
                           builder: (context, matchs, child) {
-                            List<Game> games = matchs.gameCollection.games;
+                            List<Game> games = matchs.games;
 
                             return Builder(builder: (context) {
                               List<Game> elements =

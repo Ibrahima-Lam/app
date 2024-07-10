@@ -23,18 +23,23 @@ class ArbitreListWidget extends StatelessWidget {
           }
 
           return Consumer<ArbitreProvider>(builder: (context, val, child) {
-            final List<Arbitre> arbitres = val.arbitres;
-            return Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(3.0)),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: arbitres
-                      .map((e) => ArbitreListTileWidget(arbitre: e))
-                      .toList(),
-                ),
-              ),
-            );
+            final List<Arbitre> arbitres = val.arbitres
+                .where((element) => element.idEdition == idEdition)
+                .toList();
+            return arbitres.isEmpty
+                ? const Center(
+                    child: Text(
+                        'Pas d\'arbitre disponible pour cette competition'),
+                  )
+                : SingleChildScrollView(
+                    child: Card(
+                      child: Column(
+                        children: arbitres
+                            .map((e) => ArbitreListTileWidget(arbitre: e))
+                            .toList(),
+                      ),
+                    ),
+                  );
           });
         });
   }

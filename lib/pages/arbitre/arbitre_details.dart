@@ -6,9 +6,9 @@ import 'package:app/pages/arbitre/widget_details/arbitre_game_list_widget.dart';
 import 'package:app/pages/competition/competition_details.dart';
 import 'package:app/providers/arbitre_provider.dart';
 import 'package:app/providers/competition_provider.dart';
-import 'package:app/widget/arbitre_logo_widget.dart';
-import 'package:app/widget/competition_logo_image.dart';
-import 'package:app/widget/tab_bar_widget.dart';
+import 'package:app/widget/logos/arbitre_logo_widget.dart';
+import 'package:app/widget/logos/competition_logo_image.dart';
+import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -85,7 +85,7 @@ class ArbitreDetails extends StatelessWidget {
                                                 builder: (context) =>
                                                     CompetitionDetails(
                                                         id: competition
-                                                            .codeEdition!))),
+                                                            .codeEdition))),
                                         child: SizedBox(
                                           height: 50,
                                           width: 50,

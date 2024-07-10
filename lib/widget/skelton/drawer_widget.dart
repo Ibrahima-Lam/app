@@ -5,8 +5,10 @@ import 'package:app/pages/equipe/equipe_page.dart';
 import 'package:app/pages/competition/competition_page.dart';
 import 'package:app/pages/game/game_search.dart';
 import 'package:app/pages/joueur/joueur_page.dart';
+import 'package:app/pages/skelton/login_page.dart';
 import 'package:app/providers/user_provider.dart';
-import 'package:app/widget/composition_events_widget.dart';
+import 'package:app/widget/events/composition_events_widget.dart';
+import 'package:app/widget/modals/confirm_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -35,7 +37,7 @@ class DrawerWidget extends StatelessWidget {
                   PersonWidget(radius: 30),
                   const SizedBox(height: 10),
                   Text(
-                    user?.name ?? 'Utilisateur',
+                    user?.name ?? 'Pas d\'utilisateur',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 20,
@@ -128,8 +130,20 @@ class DrawerWidget extends StatelessWidget {
                 size: size,
               ),
               title: user == null ? 'Se connecter' : 'Se Deconnecter',
-              onTap: () {
-                context.read<UserProvider>().changeUser();
+              onTap: () async {
+                if (user == null) {
+                  await Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                } else {
+                  final bool? logout = await showDialog(
+                      context: context,
+                      builder: (context) => ConfirmDialogWidget(
+                            title: 'Confirmation de deconnexion',
+                            content: 'Voulez vous deconnecter ?',
+                          ));
+                  if (logout == true)
+                    context.read<UserProvider>().deconnectUser();
+                }
               },
             ),
             listTileWidget(

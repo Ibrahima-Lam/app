@@ -2,8 +2,8 @@
 
 import 'package:app/core/extension/string_extension.dart';
 import 'package:app/models/statistique.dart';
-import 'package:app/widget/elevated_button_widget.dart';
-import 'package:app/widget/text_field_widget.dart';
+import 'package:app/widget/form/elevated_button_widget.dart';
+import 'package:app/widget/form/text_field_widget.dart';
 import 'package:flutter/material.dart';
 
 class StatistiqueForm extends StatefulWidget {

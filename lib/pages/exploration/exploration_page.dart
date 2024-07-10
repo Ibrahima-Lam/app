@@ -1,4 +1,4 @@
-import 'package:app/widget/drawer_widget.dart';
+import 'package:app/widget/skelton/drawer_widget.dart';
 import 'package:flutter/material.dart';
 
 class ExplorationPage extends StatefulWidget {

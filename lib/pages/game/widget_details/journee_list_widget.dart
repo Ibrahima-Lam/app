@@ -28,18 +28,19 @@ class JourneeWidget extends StatelessWidget {
           }
 
           return Consumer<GameProvider>(builder: (context, val, child) {
-            final List<Game> games = val.gameCollection.getGamesBy(
+            final List<Game> games = val.getGamesBy(
                 idGroupe: game.idGroupe, codeNiveau: game.codeNiveau);
             return Container(
               padding: EdgeInsets.symmetric(vertical: 5),
-              child: Card(
-                  child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    for (Game game in games) GameFullWidget(game: game),
-                  ],
+              child: SingleChildScrollView(
+                child: Card(
+                  child: Column(
+                    children: [
+                      for (Game game in games) GameFullWidget(game: game),
+                    ],
+                  ),
                 ),
-              )),
+              ),
             );
           });
         });

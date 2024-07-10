@@ -2,19 +2,19 @@ import 'package:app/core/enums/competition_type.dart';
 import 'package:app/models/searchable.dart';
 
 class Competition implements Searchable {
-  String? codeCompetition;
-  String? nomCompetition;
+  String codeCompetition;
+  String nomCompetition;
   String? localiteCompetition;
-  String? codeEdition;
+  String codeEdition;
   String? nomEdition;
   String? anneeEdition;
   String? imageUrl;
   CompetitionTypeClass type;
   Competition({
-    this.codeCompetition,
-    this.nomCompetition,
+    required this.codeCompetition,
+    required this.nomCompetition,
     this.localiteCompetition,
-    this.codeEdition,
+    required this.codeEdition,
     this.nomEdition,
     this.anneeEdition,
     this.type = const CompetitionTypeClass('coupe'),

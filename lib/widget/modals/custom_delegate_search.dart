@@ -77,7 +77,7 @@ class CustomDelegateSearch extends SearchDelegate {
       (element) {
         List<String> q = [];
         if (element is Competition) {
-          q.add(element.nomCompetition!);
+          q.add(element.nomCompetition);
         }
         if (element is Participant) {
           q.add(element.nomEquipe);
@@ -157,14 +157,14 @@ class CustomDelegateSearch extends SearchDelegate {
       leading: query.isEmpty
           ? const Icon(Icons.timer_outlined)
           : const Icon(Icons.search),
-      title: Text(competition.nomCompetition!),
+      title: Text(competition.nomCompetition),
       subtitle: const Text('competition'),
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
-                CompetitionDetails(id: competition.codeEdition!)));
+                CompetitionDetails(id: competition.codeEdition)));
         insertIntoHistoryProvider(competition);
-        query = competition.nomCompetition!;
+        query = competition.nomCompetition;
         buildResults(context);
       },
     );

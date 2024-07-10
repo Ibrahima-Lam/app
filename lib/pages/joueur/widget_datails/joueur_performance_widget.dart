@@ -32,7 +32,7 @@ class JoueurPerformanceWidget extends StatelessWidget {
           builder: (context, matchs, events, child) {
             List<GamePerformances> gamePerformances =
                 JoueurController.getJoueurPerformance(joueur,
-                    games: matchs.gameCollection.games, events: events.events);
+                    games: matchs.games, events: events.events);
 
             return gamePerformances.isEmpty
                 ? const Center(

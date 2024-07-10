@@ -1,5 +1,15 @@
-extension ListExtension on List {
-  List unique<T>(T Function(dynamic) f, bool Function(dynamic) g) {
-    return this.where(g).toList();
+extension ListExtension<T> on List {
+  T? singleWhereOrNull<T>(
+    bool Function(T e) f, {
+    T Function()? orElse,
+  }) {
+    try {
+      return this.singleWhere(
+        (a) => f(a),
+        orElse: orElse != null ? () => orElse() : null,
+      );
+    } catch (e) {
+      return null;
+    }
   }
 }

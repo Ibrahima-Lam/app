@@ -1,5 +1,4 @@
 import 'package:app/collection/competition_collection.dart';
-import 'package:app/collection/game_collection.dart';
 import 'package:app/controllers/competition/date.dart';
 import 'package:app/core/class/abbreviable.dart';
 import 'package:app/core/enums/game_etat_enum.dart';
@@ -12,20 +11,23 @@ import 'package:app/pages/equipe/equipe_details.dart';
 import 'package:app/pages/game/widget_details/composition_widget.dart';
 import 'package:app/pages/game/widget_details/evenement_widget.dart';
 import 'package:app/pages/game/widget_details/statistique_widget.dart';
+import 'package:app/providers/paramettre_provider.dart';
+import 'package:app/providers/score_provider.dart';
 import 'package:app/providers/statistique_provider.dart';
-import 'package:app/widget/classement_widget.dart';
+import 'package:app/widget/classement/classement_widget.dart';
 import 'package:app/pages/game/widget_details/journee_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/game_provider.dart';
-import 'package:app/widget/custom_delegate_search.dart';
-import 'package:app/widget/equipe_logo_widget.dart';
-import 'package:app/widget/tab_bar_widget.dart';
+import 'package:app/widget/game/game_bottom_navbar_edit_widget.dart';
+import 'package:app/widget/modals/confirm_dialog_widget.dart';
+import 'package:app/widget/modals/custom_delegate_search.dart';
+import 'package:app/widget/logos/equipe_logo_widget.dart';
+import 'package:app/widget/modals/score_form_modal_widget.dart';
+import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:app/core/extension/string_extension.dart';
-
-final ValueNotifier<double> notifier = ValueNotifier(0.0);
 
 class GameDetails extends StatefulWidget {
   final String id;
@@ -34,21 +36,18 @@ class GameDetails extends StatefulWidget {
   State<GameDetails> createState() => _GameDetailsState();
 }
 
-class _GameDetailsState extends State<GameDetails>
-    with SingleTickerProviderStateMixin, Abbreviable {
+class _GameDetailsState extends State<GameDetails> with Abbreviable {
   late Game game;
   late Competition competition;
   late final ScrollController _scrollController;
   final ValueNotifier<bool> _isExpended = ValueNotifier(true);
+  bool checkUser = false;
 
   Future<bool> _getData(BuildContext context) async {
-    GameCollection _gameColletion =
-        await context.read<GameProvider>().getGames();
-    game = _gameColletion.getElementAt(widget.id);
+    GameProvider gameProvider = await context.read<GameProvider>()
+      ..getGames();
+    game = gameProvider.getElementAt(widget.id);
     String? codeEdition = game.codeEdition;
-    if (codeEdition == null) {
-      throw Exception('Erreur competition!');
-    }
     CompetitionCollection _competitionColletion =
         await context.read<CompetitionProvider>().getCompetitions();
     competition = _competitionColletion.getElementAt(codeEdition);
@@ -92,7 +91,7 @@ class _GameDetailsState extends State<GameDetails>
     );
   }
 
-  List<Widget> tabBarViewChildren(List<String> tabs) {
+  List<Widget> tabBarViewChildren(List<String> tabs, bool checkUser) {
     List<Widget> widgets = [];
     for (String tab in tabs) {
       switch (tab.toUpperCase().substring(0, 3)) {
@@ -108,15 +107,18 @@ class _GameDetailsState extends State<GameDetails>
           break;
         case 'COM':
           widgets.add(CompositionWidget(
+            checkUser: checkUser,
             game: game,
           ));
           break;
         case 'EVE':
           widgets.add(EvenementWidget(
+            checkUser: checkUser,
             game: game,
           ));
         case 'STA':
           widgets.add(StatistiqueWidget(
+            checkUser: checkUser,
             game: game,
           ));
           break;
@@ -124,8 +126,8 @@ class _GameDetailsState extends State<GameDetails>
           widgets.add(InfosListWiget(
             categorieParams: CategorieParams(
               idGame: game.idGame,
-              idPartcipant: game.idHome,
-              idPartcipant2: game.idAway,
+              idParticipant: game.idHome,
+              idParticipant2: game.idAway,
             ),
           ));
           break;
@@ -178,133 +180,177 @@ class _GameDetailsState extends State<GameDetails>
           }
           var (tabs, initial) = tabBarString(game.etat.etat,
               composition: true, classement: game.codePhase == 'grp');
-          return DefaultTabController(
-            initialIndex: initial,
-            length: tabs.length,
-            child: Scaffold(
-              body: NestedScrollView(
-                controller: _scrollController,
-                headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                  SliverAppBar(
-                    pinned: true,
-                    expandedHeight: 280,
-                    leading: IconButton(
-                      icon: const Icon(Icons.navigate_before),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                    actions: [
-                      IconButton(
-                          onPressed: () {
-                            showSearch(
-                                context: context,
-                                delegate: CustomDelegateSearch());
-                          },
-                          icon: Icon(Icons.search))
-                    ],
-                    centerTitle: true,
-                    title: ValueListenableBuilder(
-                        valueListenable: _isExpended,
-                        builder: (context, val, child) {
-                          return AnimatedOpacity(
-                            opacity: _isExpended.value ? 0.0 : 1.0,
-                            duration: Duration(milliseconds: 300),
-                            child: Text(
-                              '${abbr(game.home!)} ${game.score} ${abbr(game.away.toString())}',
-                              style: const TextStyle(fontSize: 17),
+          return Consumer<ParamettreProvider>(builder: (context, val, _) {
+            checkUser = val.checkUser(competition.codeEdition);
+            return DefaultTabController(
+              initialIndex: initial,
+              length: tabs.length,
+              child: Scaffold(
+                body: NestedScrollView(
+                  controller: _scrollController,
+                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                    SliverAppBar(
+                      pinned: true,
+                      expandedHeight: 280,
+                      leading: IconButton(
+                        icon: const Icon(Icons.navigate_before),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                      actions: [
+                        IconButton(
+                            onPressed: () {
+                              showSearch(
+                                  context: context,
+                                  delegate: CustomDelegateSearch());
+                            },
+                            icon: Icon(Icons.search))
+                      ],
+                      centerTitle: true,
+                      title: ValueListenableBuilder(
+                          valueListenable: _isExpended,
+                          builder: (context, val, child) {
+                            return AnimatedOpacity(
+                              opacity: _isExpended.value ? 0.0 : 1.0,
+                              duration: Duration(milliseconds: 300),
+                              child: Text(
+                                '${abbr(game.home!)} ${game.score} ${abbr(game.away.toString())}',
+                                style: const TextStyle(fontSize: 17),
+                              ),
+                            );
+                          }),
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              height: 20,
                             ),
-                          );
-                        }),
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Center(
-                              child: TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => CompetitionDetails(
-                                          id: game.codeEdition!),
-                                    ),
-                                  );
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '${competition.nomCompetition}. ',
-                                      style: const TextStyle(
-                                          fontSize: 17,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                    Text(
-                                      '${game.nomNiveau!.capitalize()}',
-                                      style: const TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ],
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Center(
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            CompetitionDetails(
+                                                id: game.codeEdition),
+                                      ),
+                                    );
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '${competition.nomCompetition}. ',
+                                        style: const TextStyle(
+                                            fontSize: 17,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                      Text(
+                                        '${game.nomNiveau!.capitalize()}',
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(),
-                          Consumer<GameProvider>(
-                            builder: (context, value, child) {
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ColumnWidget(
-                                    text: game.home!,
-                                    id: game.idHome,
-                                    isHome: true,
-                                    game: game,
-                                  ),
-                                  ColumnScoreWidget(
-                                    game: game,
-                                    timer: null,
-                                  ),
-                                  ColumnWidget(
-                                    text: game.away!,
-                                    id: game.idAway,
-                                    isHome: false,
-                                    game: game,
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                          SizedBox(
-                            height: 20,
-                          )
+                            SizedBox(),
+                            Consumer<GameProvider>(
+                              builder: (context, value, child) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ColumnWidget(
+                                      text: game.home!,
+                                      id: game.idHome,
+                                      isHome: true,
+                                      game: game,
+                                    ),
+                                    ColumnScoreWidget(
+                                      game: game,
+                                      timer: null,
+                                    ),
+                                    ColumnWidget(
+                                      text: game.away!,
+                                      id: game.idAway,
+                                      isHome: false,
+                                      game: game,
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                            SizedBox(
+                              height: 20,
+                            )
+                          ],
+                        ),
+                      ),
+                      bottom: TabBarWidget.build(
+                        tabs: [
+                          for (final tab in tabs)
+                            Tab(
+                              text: tab,
+                            )
                         ],
                       ),
                     ),
-                    bottom: TabBarWidget.build(
-                      tabs: [
-                        for (final tab in tabs)
-                          Tab(
-                            text: tab,
-                          )
-                      ],
-                    ),
+                  ],
+                  body: TabBarView(
+                    children: tabBarViewChildren(tabs, checkUser),
                   ),
-                ],
-                body: TabBarView(
-                  children: tabBarViewChildren(tabs),
                 ),
+                floatingActionButton: checkUser
+                    ? FloatingActionButton(
+                        onPressed: () async {
+                          (int, int)? values = await showModalBottomSheet(
+                              context: context,
+                              builder: (context) => ScoreFormModalWidget(
+                                  homeScore: game.homeScore,
+                                  awayScore: game.awayScore));
+                          if (values != null) {
+                            bool confirm = await showDialog(
+                                context: context,
+                                builder: (context) => ConfirmDialogWidget(
+                                    title: 'Changer le score',
+                                    content: 'Voulez vous changer le score ?'));
+                            if (confirm)
+                              context.read<ScoreProvider>().changeScore(
+                                  idGame: game.idGame,
+                                  hs: values.$1,
+                                  as: values.$2);
+                          } else if (game.homeScore != null &&
+                              game.awayScore != null) {
+                            bool confirm = await showDialog(
+                                context: context,
+                                builder: (context) => ConfirmDialogWidget(
+                                    title: 'Annulation de Score',
+                                    content: 'Voulez vous annulez le score ?'));
+                            if (confirm) {
+                              context.read<ScoreProvider>().changeScore(
+                                  idGame: game.idGame, hs: null, as: null);
+                            }
+                          }
+                        },
+                        child: Icon(Icons.edit),
+                      )
+                    : null,
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.endFloat,
+                bottomNavigationBar: checkUser
+                    ? GameBottomNavbarEditWidget(idGame: game.idGame)
+                    : null,
               ),
-            ),
-          );
+            );
+          });
         });
   }
 }
@@ -328,7 +374,7 @@ class ColumnScoreWidget extends StatelessWidget {
           Column(
             children: [
               Text(
-                DateController.abbrDate(game.dateGame!, year: true),
+                DateController.abbrDate(game.dateGame, year: true),
                 style: const TextStyle(
                     color: Colors.white,
                     fontSize: 12,

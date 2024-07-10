@@ -1,8 +1,8 @@
 import 'package:app/models/composition.dart';
 import 'package:app/models/joueur.dart';
-import 'package:app/widget/elevated_button_widget.dart';
-import 'package:app/widget/bottom_modal_joueur_list_widget.dart';
-import 'package:app/widget/text_field_widget.dart';
+import 'package:app/widget/form/elevated_button_widget.dart';
+import 'package:app/widget/modals/bottom_modal_joueur_list_widget.dart';
+import 'package:app/widget/form/text_field_widget.dart';
 import 'package:flutter/material.dart';
 
 class CompositionForm extends StatefulWidget {

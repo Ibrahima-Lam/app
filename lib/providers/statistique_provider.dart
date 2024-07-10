@@ -68,12 +68,12 @@ class StatistiqueProvider extends ChangeNotifier {
       game: game,
       homeEvent: EventStream(
           pourcent: possession.homeStatistique,
-          idPartcipant: game.idHome,
+          idParticipant: game.idHome,
           redCard: red.homeStatistique.toInt(),
           yellowCard: yellow.homeStatistique.toInt()),
       awayEvent: EventStream(
           pourcent: possession.awayStatistique,
-          idPartcipant: game.idAway,
+          idParticipant: game.idAway,
           redCard: red.awayStatistique.toInt(),
           yellowCard: yellow.awayStatistique.toInt()),
     );

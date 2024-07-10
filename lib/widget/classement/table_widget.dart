@@ -1,6 +1,6 @@
 import 'package:app/models/stat.dart';
 import 'package:app/pages/equipe/equipe_details.dart';
-import 'package:app/widget/equipe_logo_widget.dart';
+import 'package:app/widget/logos/equipe_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 class TableWidget extends StatelessWidget {

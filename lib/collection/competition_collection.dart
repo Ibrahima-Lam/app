@@ -16,8 +16,6 @@ class CompetitionCollection implements Collection<Competition> {
 
   @override
   Competition getElementAt(String id) {
-    return _competitions
-        .where((element) => element.codeEdition == id)
-        .toList()[0];
+    return _competitions.firstWhere((element) => element.codeEdition == id);
   }
 }

@@ -3,6 +3,7 @@ import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/infos/infos.dart';
 import 'package:app/providers/infos_provider.dart';
 import 'package:app/widget/infos_widget.dart';
+import 'package:app/widget/sponsor_list_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -153,11 +154,7 @@ class _InfosDetailsState extends State<InfosDetails> {
                 SizedBox(
                   height: 10,
                 ),
-                SponsorWidget(),
-                SizedBox(
-                  height: 10,
-                ),
-                PubWidget(),
+                SponsorListWidget(),
               ],
             ),
           ),
@@ -180,7 +177,7 @@ class AutreInfosWidet extends StatelessWidget {
           categorie: CategorieParams(
         idEdition: info.idEdition,
         idGame: info.idGame,
-        idPartcipant: info.idPartcipant,
+        idParticipant: info.idParticipant,
         idJoueur: info.idJoueur,
         idArbitre: info.idArbitre,
         idCoach: info.idCoach,
@@ -190,105 +187,5 @@ class AutreInfosWidet extends StatelessWidget {
             children: infos.map((e) => InfosLessWidget(infos: e)).toList()),
       );
     });
-  }
-}
-
-class PubWidget extends StatelessWidget {
-  const PubWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      shadowColor: Colors.grey,
-      color: Colors.white,
-      surfaceTintColor: Colors.white,
-      child: Container(
-        padding: EdgeInsets.all(5.0),
-        constraints: BoxConstraints(minHeight: 300),
-        child: Column(
-          children: [
-            Center(
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Publicité',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                  ),
-                ),
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                    child: Container(
-                  constraints: BoxConstraints(minHeight: 160),
-                  color: Colors.amber,
-                ))
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                    child: Container(
-                  constraints: BoxConstraints(minHeight: 100),
-                  color: Colors.blueAccent,
-                )),
-                Expanded(
-                    child: Container(
-                  constraints: BoxConstraints(minHeight: 100),
-                  color: Colors.greenAccent,
-                )),
-                Expanded(
-                    child: Container(
-                  constraints: BoxConstraints(minHeight: 100),
-                  color: Colors.redAccent,
-                )),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SponsorWidget extends StatelessWidget {
-  const SponsorWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      shadowColor: Colors.grey,
-      color: Colors.white,
-      surfaceTintColor: Colors.white,
-      child: Container(
-        padding: EdgeInsets.all(5.0),
-        constraints: BoxConstraints(minHeight: 300),
-        child: Column(
-          children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  'Contenu sponsorisé',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                  ),
-                ),
-              ),
-            ),
-            CircleAvatar(
-              radius: 60,
-              child: Text('Pub'),
-            )
-          ],
-        ),
-      ),
-    );
   }
 }

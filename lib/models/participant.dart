@@ -7,7 +7,7 @@ class Participant implements Searchable {
   String nomEquipe;
   String? libelleEquipe;
   String? localiteEquipe;
-  String? codeEdition;
+  String codeEdition;
   String? anneeEdition;
   String? nomEdition;
   String? codeCompetition;
@@ -21,7 +21,7 @@ class Participant implements Searchable {
     required this.nomEquipe,
     this.libelleEquipe,
     this.localiteEquipe,
-    this.codeEdition,
+    required this.codeEdition,
     this.anneeEdition,
     this.nomEdition,
     this.codeCompetition,

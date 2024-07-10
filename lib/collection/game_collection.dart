@@ -30,12 +30,30 @@ class GameCollection implements Collection {
 
   void changeScore(
       {required String id,
-      required int homeScore,
-      required int awayScore}) async {
+      required int? homeScore,
+      required int? awayScore}) async {
     games = games.map((e) {
       if (e.idGame == id) {
         e.homeScore = homeScore;
         e.awayScore = awayScore;
+      }
+      return e;
+    }).toList();
+  }
+
+  void changeDate({required String id, required String? date}) async {
+    games = games.map((e) {
+      if (e.idGame == id) {
+        e.dateGame = date;
+      }
+      return e;
+    }).toList();
+  }
+
+  void changeHeure({required String id, required String? heure}) async {
+    games = games.map((e) {
+      if (e.idGame == id) {
+        e.heureGame = heure;
       }
       return e;
     }).toList();
@@ -55,7 +73,7 @@ class GameCollection implements Collection {
       .toList();
 
   Game getElementAt(String id) {
-    return _games.where((element) => element.idGame == id).toList()[0];
+    return _games.singleWhere((element) => element.idGame == id);
   }
 
   void filterGamesBy({
@@ -82,7 +100,7 @@ class GameCollection implements Collection {
 
   List<Game> getGamesBy({
     String? idGroupe,
-    String? idPartcipant,
+    String? idParticipant,
     String? codeNiveau,
     String? codeEdition,
     String? dateGame,
@@ -93,7 +111,7 @@ class GameCollection implements Collection {
     List<Game> gamesData = GameController().filterGamesBy(
       games,
       idGroupe: idGroupe,
-      idPartcipant: idPartcipant,
+      idParticipant: idParticipant,
       codeNiveau: codeNiveau,
       codeEdition: codeEdition,
       dateGame: dateGame,

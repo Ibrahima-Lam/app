@@ -1,6 +1,6 @@
 import 'package:app/models/composition.dart';
-import 'package:app/widget/composition_events_widget.dart';
-import 'package:app/widget/joueur_logo_widget.dart';
+import 'package:app/widget/events/composition_events_widget.dart';
+import 'package:app/widget/logos/joueur_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 class SubstitutLogoWidget extends StatelessWidget {

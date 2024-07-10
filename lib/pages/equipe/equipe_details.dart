@@ -11,12 +11,12 @@ import 'package:app/pages/equipe/widget_details/joueur_delegate_search_widget.da
 import 'package:app/pages/equipe/widget_details/effectif_widget.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/participant_provider.dart';
-import 'package:app/widget/classement_widget.dart';
+import 'package:app/widget/classement/classement_widget.dart';
 import 'package:app/pages/equipe/widget_details/equipe_statistiques_widget.dart';
-import 'package:app/widget/competition_logo_image.dart';
-import 'package:app/widget/equipe_logo_widget.dart';
+import 'package:app/widget/logos/competition_logo_image.dart';
+import 'package:app/widget/logos/equipe_logo_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
-import 'package:app/widget/tab_bar_widget.dart';
+import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +40,7 @@ class EquipeDetails extends StatelessWidget {
             ClassementWiget.equipe(title: '', idParticipant: id, idTarget: id),
         'effectif': EffectifWidget(idParticipant: id),
         'infos': InfosListWiget(
-          categorieParams: CategorieParams(idPartcipant: id),
+          categorieParams: CategorieParams(idParticipant: id),
         ),
         'statistique': EquipeStatistiquesWidget(idParticipant: id),
         'fiche': EquipeFicheListWidget(participant: participant),
@@ -54,7 +54,7 @@ class EquipeDetails extends StatelessWidget {
     participant = await context.read<ParticipantProvider>().getParticipant(id);
     CompetitionCollection competitionCollection =
         await context.read<CompetitionProvider>().getCompetitions();
-    competition = competitionCollection.getElementAt(participant.codeEdition!);
+    competition = competitionCollection.getElementAt(participant.codeEdition);
     return true;
   }
 
@@ -131,7 +131,7 @@ class EquipeDetails extends StatelessWidget {
                                                 builder: (context) =>
                                                     CompetitionDetails(
                                                         id: competition
-                                                            .codeEdition!))),
+                                                            .codeEdition))),
                                         child: SizedBox(
                                           height: 50,
                                           width: 50,

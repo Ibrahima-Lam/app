@@ -28,7 +28,7 @@ mixin _$Infos {
   String? get imageUrl => throw _privateConstructorUsedError;
   String? get idEdition => throw _privateConstructorUsedError;
   String? get idGame => throw _privateConstructorUsedError;
-  String? get idPartcipant => throw _privateConstructorUsedError;
+  String? get idParticipant => throw _privateConstructorUsedError;
   String? get idJoueur => throw _privateConstructorUsedError;
   String? get idArbitre => throw _privateConstructorUsedError;
   String? get idCoach => throw _privateConstructorUsedError;
@@ -52,7 +52,7 @@ abstract class $InfosCopyWith<$Res> {
       String? imageUrl,
       String? idEdition,
       String? idGame,
-      String? idPartcipant,
+      String? idParticipant,
       String? idJoueur,
       String? idArbitre,
       String? idCoach});
@@ -79,7 +79,7 @@ class _$InfosCopyWithImpl<$Res, $Val extends Infos>
     Object? imageUrl = freezed,
     Object? idEdition = freezed,
     Object? idGame = freezed,
-    Object? idPartcipant = freezed,
+    Object? idParticipant = freezed,
     Object? idJoueur = freezed,
     Object? idArbitre = freezed,
     Object? idCoach = freezed,
@@ -117,9 +117,9 @@ class _$InfosCopyWithImpl<$Res, $Val extends Infos>
           ? _value.idGame
           : idGame // ignore: cast_nullable_to_non_nullable
               as String?,
-      idPartcipant: freezed == idPartcipant
-          ? _value.idPartcipant
-          : idPartcipant // ignore: cast_nullable_to_non_nullable
+      idParticipant: freezed == idParticipant
+          ? _value.idParticipant
+          : idParticipant // ignore: cast_nullable_to_non_nullable
               as String?,
       idJoueur: freezed == idJoueur
           ? _value.idJoueur
@@ -153,7 +153,7 @@ abstract class _$$InfosImplCopyWith<$Res> implements $InfosCopyWith<$Res> {
       String? imageUrl,
       String? idEdition,
       String? idGame,
-      String? idPartcipant,
+      String? idParticipant,
       String? idJoueur,
       String? idArbitre,
       String? idCoach});
@@ -178,7 +178,7 @@ class __$$InfosImplCopyWithImpl<$Res>
     Object? imageUrl = freezed,
     Object? idEdition = freezed,
     Object? idGame = freezed,
-    Object? idPartcipant = freezed,
+    Object? idParticipant = freezed,
     Object? idJoueur = freezed,
     Object? idArbitre = freezed,
     Object? idCoach = freezed,
@@ -216,9 +216,9 @@ class __$$InfosImplCopyWithImpl<$Res>
           ? _value.idGame
           : idGame // ignore: cast_nullable_to_non_nullable
               as String?,
-      idPartcipant: freezed == idPartcipant
-          ? _value.idPartcipant
-          : idPartcipant // ignore: cast_nullable_to_non_nullable
+      idParticipant: freezed == idParticipant
+          ? _value.idParticipant
+          : idParticipant // ignore: cast_nullable_to_non_nullable
               as String?,
       idJoueur: freezed == idJoueur
           ? _value.idJoueur
@@ -248,7 +248,7 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
       this.imageUrl,
       this.idEdition,
       this.idGame,
-      this.idPartcipant,
+      this.idParticipant,
       this.idJoueur,
       this.idArbitre,
       this.idCoach});
@@ -273,7 +273,7 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
   @override
   final String? idGame;
   @override
-  final String? idPartcipant;
+  final String? idParticipant;
   @override
   final String? idJoueur;
   @override
@@ -283,7 +283,7 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Infos(id: $id, text: $text, title: $title, datetime: $datetime, source: $source, imageUrl: $imageUrl, idEdition: $idEdition, idGame: $idGame, idPartcipant: $idPartcipant, idJoueur: $idJoueur, idArbitre: $idArbitre, idCoach: $idCoach)';
+    return 'Infos(id: $id, text: $text, title: $title, datetime: $datetime, source: $source, imageUrl: $imageUrl, idEdition: $idEdition, idGame: $idGame, idParticipant: $idParticipant, idJoueur: $idJoueur, idArbitre: $idArbitre, idCoach: $idCoach)';
   }
 
   @override
@@ -299,7 +299,7 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
       ..add(DiagnosticsProperty('imageUrl', imageUrl))
       ..add(DiagnosticsProperty('idEdition', idEdition))
       ..add(DiagnosticsProperty('idGame', idGame))
-      ..add(DiagnosticsProperty('idPartcipant', idPartcipant))
+      ..add(DiagnosticsProperty('idParticipant', idParticipant))
       ..add(DiagnosticsProperty('idJoueur', idJoueur))
       ..add(DiagnosticsProperty('idArbitre', idArbitre))
       ..add(DiagnosticsProperty('idCoach', idCoach));
@@ -321,8 +321,8 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
             (identical(other.idEdition, idEdition) ||
                 other.idEdition == idEdition) &&
             (identical(other.idGame, idGame) || other.idGame == idGame) &&
-            (identical(other.idPartcipant, idPartcipant) ||
-                other.idPartcipant == idPartcipant) &&
+            (identical(other.idParticipant, idParticipant) ||
+                other.idParticipant == idParticipant) &&
             (identical(other.idJoueur, idJoueur) ||
                 other.idJoueur == idJoueur) &&
             (identical(other.idArbitre, idArbitre) ||
@@ -342,7 +342,7 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
       imageUrl,
       idEdition,
       idGame,
-      idPartcipant,
+      idParticipant,
       idJoueur,
       idArbitre,
       idCoach);
@@ -371,7 +371,7 @@ abstract class _Infos implements Infos {
       final String? imageUrl,
       final String? idEdition,
       final String? idGame,
-      final String? idPartcipant,
+      final String? idParticipant,
       final String? idJoueur,
       final String? idArbitre,
       final String? idCoach}) = _$InfosImpl;
@@ -395,7 +395,7 @@ abstract class _Infos implements Infos {
   @override
   String? get idGame;
   @override
-  String? get idPartcipant;
+  String? get idParticipant;
   @override
   String? get idJoueur;
   @override

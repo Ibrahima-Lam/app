@@ -1,6 +1,6 @@
 import 'package:app/models/joueur.dart';
 import 'package:app/pages/joueur/joueur_details.dart';
-import 'package:app/widget/joueur_logo_widget.dart';
+import 'package:app/widget/logos/joueur_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 class JoueurListTileWidget extends StatelessWidget {

@@ -51,7 +51,8 @@ class _InfosWidgetState extends State<InfosWidget> {
                       width: MediaQuery.of(context).size.width * .30,
                       child: CachedNetworkImage(
                         imageUrl: widget.infos.imageUrl ?? '',
-                        errorWidget: (context, url, error) => Container(
+                        errorWidget: (context, url, error) => AnimatedContainer(
+                          duration: Durations.medium1,
                           decoration: BoxDecoration(
                             image: DecorationImage(
                                 image: AssetImage(
@@ -161,7 +162,8 @@ class _InfosFullWidgetState extends State<InfosFullWidget> {
                   width: MediaQuery.of(context).size.width * .30,
                   child: CachedNetworkImage(
                     imageUrl: widget.infos.imageUrl ?? '',
-                    errorWidget: (context, url, error) => Container(
+                    errorWidget: (context, url, error) => AnimatedContainer(
+                      duration: Durations.medium1,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                             image: AssetImage(
@@ -237,7 +239,8 @@ class InfosLessWidget extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * .30,
                 child: CachedNetworkImage(
                   imageUrl: infos.imageUrl ?? '',
-                  errorWidget: (context, url, error) => Container(
+                  errorWidget: (context, url, error) => AnimatedContainer(
+                    duration: Durations.medium1,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage(

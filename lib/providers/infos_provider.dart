@@ -28,7 +28,7 @@ class InfosProvider extends ChangeNotifier {
       idEdition: info.idEdition,
       idGame: info.idGame,
       idJoueur: info.idJoueur,
-      idPartcipant: info.idPartcipant,
+      idParticipant: info.idParticipant,
     );
     return listes;
   } */
@@ -44,13 +44,13 @@ class InfosProvider extends ChangeNotifier {
       listes = listes
           .where((element) => element.idGame == categorie.idGame)
           .toList();
-    if (categorie.idPartcipant != null)
+    if (categorie.idParticipant != null)
       listes = listes
-          .where((element) => element.idPartcipant == categorie.idPartcipant)
+          .where((element) => element.idParticipant == categorie.idParticipant)
           .toList();
-    if (categorie.idPartcipant2 != null)
+    if (categorie.idParticipant2 != null)
       listes = listes
-          .where((element) => element.idPartcipant == categorie.idPartcipant2)
+          .where((element) => element.idParticipant == categorie.idParticipant2)
           .toList();
     if (categorie.idJoueur != null)
       listes = listes

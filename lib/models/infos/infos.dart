@@ -14,7 +14,7 @@ class Infos with _$Infos {
     String? imageUrl,
     String? idEdition,
     String? idGame,
-    String? idPartcipant,
+    String? idParticipant,
     String? idJoueur,
     String? idArbitre,
     String? idCoach,

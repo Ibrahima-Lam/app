@@ -32,7 +32,7 @@ class CoachGameListWidget extends StatelessWidget {
                 .toList();
             List<String> ids = compositions.map((e) => e.idGame).toList();
 
-            List<Game> maths = games.gameCollection.games
+            List<Game> maths = games.games
                 .where((element) => ids.contains(element.idGame))
                 .toList();
 
@@ -41,8 +41,8 @@ class CoachGameListWidget extends StatelessWidget {
                     child:
                         Text('Pas de composition disponible pour cet arbitre!'),
                   )
-                : Card(
-                    child: SingleChildScrollView(
+                : SingleChildScrollView(
+                    child: Card(
                       child: Column(
                         children:
                             maths.map((e) => GameFullWidget(game: e)).toList(),

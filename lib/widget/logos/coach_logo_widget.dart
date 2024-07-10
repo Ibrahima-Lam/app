@@ -25,7 +25,6 @@ class CoachImageLogoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: url ?? '',
-      placeholder: (context, url) => CircularProgressIndicator(),
       errorWidget: (context, url, error) => ''.isEmpty
           ? Container(
               constraints: BoxConstraints(maxHeight: 80, maxWidth: 80),

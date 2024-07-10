@@ -1,8 +1,8 @@
 import 'package:app/models/composition.dart';
-import 'package:app/widget/composition_events_widget.dart';
-import 'package:app/widget/dropdown_menu_widget.dart';
-import 'package:app/widget/elevated_button_widget.dart';
-import 'package:app/widget/text_field_widget.dart';
+import 'package:app/widget/events/composition_events_widget.dart';
+import 'package:app/widget/form/dropdown_menu_widget.dart';
+import 'package:app/widget/form/elevated_button_widget.dart';
+import 'package:app/widget/form/text_field_widget.dart';
 import 'package:flutter/material.dart';
 
 class CoachFormWidget extends StatefulWidget {

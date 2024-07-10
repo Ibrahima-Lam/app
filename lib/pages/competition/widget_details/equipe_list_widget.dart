@@ -9,7 +9,7 @@ import 'package:app/models/participation.dart';
 import 'package:app/providers/groupe_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/providers/participation_provider.dart';
-import 'package:app/widget/equipe_widget.dart';
+import 'package:app/widget/equipe/equipe_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -112,7 +112,7 @@ class ParticipantWidget extends StatelessWidget {
     return FutureBuilder(
         future: context
             .read<ParticipantProvider>()
-            .getParticipantByEdition(competition.codeEdition!),
+            .getParticipantByEdition(competition.codeEdition),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(

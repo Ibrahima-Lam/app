@@ -2,8 +2,8 @@ import 'package:app/models/event.dart';
 import 'package:app/models/game.dart';
 import 'package:app/pages/joueur/joueur_details.dart';
 import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/composition_events_widget.dart';
-import 'package:app/widget/joueur_logo_widget.dart';
+import 'package:app/widget/events/composition_events_widget.dart';
+import 'package:app/widget/logos/joueur_logo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

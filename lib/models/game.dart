@@ -16,7 +16,7 @@ class Game implements Searchable {
   int? homeScore;
   int? awayScore;
   String? nomGroupe;
-  String? codeEdition;
+  String codeEdition;
   String? anneeEdition;
   String? codePhase;
   String? codeNiveau;
@@ -43,7 +43,7 @@ class Game implements Searchable {
     this.homeScore,
     this.awayScore,
     this.nomGroupe,
-    this.codeEdition,
+    required this.codeEdition,
     this.anneeEdition,
     this.codePhase,
     this.codeNiveau,

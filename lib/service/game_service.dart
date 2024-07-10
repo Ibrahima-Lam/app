@@ -572,7 +572,7 @@ const games = [
     "idGame": 67,
     "idHome": "15",
     "idAway": "13",
-    "dateGame": "2024-07-07",
+    "dateGame": "2024-07-08",
     "stadeGame": "Stade de Thidé",
     "heureGame": "16:00",
     "idGroupe": 5,

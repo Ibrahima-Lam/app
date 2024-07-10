@@ -1,8 +1,8 @@
 import 'package:app/models/competition.dart';
 import 'package:app/pages/competition/competition_details.dart';
 import 'package:app/providers/competition_provider.dart';
-import 'package:app/widget/competition_logo_image.dart';
-import 'package:app/widget/text_search_field_widget.dart';
+import 'package:app/widget/logos/competition_logo_image.dart';
+import 'package:app/widget/form/text_search_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -78,7 +78,7 @@ class _CompetitionPageState extends State<CompetitionPage> {
                                             .value.isNotEmpty
                                         ? value.collection.competitions
                                             .where((element) => element
-                                                .nomCompetition!
+                                                .nomCompetition
                                                 .toUpperCase()
                                                 .startsWith(competitionNotifier
                                                     .value
@@ -117,7 +117,7 @@ class CompetitionListTileWidget extends StatelessWidget {
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
-                CompetitionDetails(id: competition.codeEdition!)));
+                CompetitionDetails(id: competition.codeEdition)));
       },
       leading: Container(
         height: 60,
@@ -125,7 +125,7 @@ class CompetitionListTileWidget extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 2.0),
         child: CompetitionImageLogoWidget(url: competition.imageUrl),
       ),
-      title: Text(competition.nomCompetition!),
+      title: Text(competition.nomCompetition),
       subtitle: Text(competition.localiteCompetition ?? ''),
     );
   }

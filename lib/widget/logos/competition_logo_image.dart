@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class JoueurImageLogoWidget extends StatelessWidget {
+class CompetitionImageLogoWidget extends StatelessWidget {
   final String? url;
   final String? image;
   final double? radius;
@@ -10,7 +10,7 @@ class JoueurImageLogoWidget extends StatelessWidget {
 
   final MaterialColor? backgroundColor;
   final MaterialColor? color;
-  const JoueurImageLogoWidget({
+  const CompetitionImageLogoWidget({
     super.key,
     this.url,
     this.image,
@@ -25,14 +25,13 @@ class JoueurImageLogoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: url ?? '',
-      placeholder: (context, url) => CircularProgressIndicator(),
       errorWidget: (context, url, error) => ''.isEmpty
           ? Container(
               constraints: BoxConstraints(maxHeight: 80, maxWidth: 80),
               decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                      image: AssetImage('images/messi.jpg'),
+                      image: AssetImage('images/europa.jpg'),
                       fit: BoxFit.cover)),
             )
           : CircleAvatar(

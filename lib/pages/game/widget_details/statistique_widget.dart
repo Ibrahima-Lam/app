@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:app/core/constants/statistique/kStatistique.dart';
 import 'package:app/models/game.dart';
 import 'package:app/models/statistique.dart';
@@ -10,7 +12,8 @@ import 'package:provider/provider.dart';
 
 class StatistiqueWidget extends StatelessWidget {
   final Game game;
-  const StatistiqueWidget({super.key, required this.game});
+  final bool checkUser;
+  StatistiqueWidget({super.key, required this.game, required this.checkUser});
 
   void _addStat(BuildContext context, List<Statistique> stats) async {
     final (String, String)? entry = await showModalBottomSheet(
@@ -46,19 +49,21 @@ class StatistiqueWidget extends StatelessWidget {
             child: Column(
               children: [
                 ...statistiques.map((e) => StatWidget(
+                      checkUser: checkUser,
                       statistique: e,
                       one: ['possession'].contains(e.codeStatistique),
                     )),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    OutlinedButton(
-                        onPressed: () {
-                          _addStat(context, statistiques);
-                        },
-                        child: Text('Ajouter')),
-                  ],
-                ),
+                if (checkUser)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      OutlinedButton(
+                          onPressed: () {
+                            _addStat(context, statistiques);
+                          },
+                          child: Text('Ajouter')),
+                    ],
+                  ),
               ],
             ),
           ),

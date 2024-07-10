@@ -1,6 +1,6 @@
 import 'package:app/models/infos/infos.dart';
 import 'package:app/providers/infos_provider.dart';
-import 'package:app/widget/drawer_widget.dart';
+import 'package:app/widget/skelton/drawer_widget.dart';
 import 'package:app/widget/infos_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

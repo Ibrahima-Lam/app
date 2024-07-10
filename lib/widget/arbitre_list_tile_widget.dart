@@ -1,6 +1,6 @@
 import 'package:app/models/arbitres/arbitre.dart';
 import 'package:app/pages/arbitre/arbitre_details.dart';
-import 'package:app/widget/arbitre_logo_widget.dart';
+import 'package:app/widget/logos/arbitre_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 class ArbitreListTileWidget extends StatelessWidget {

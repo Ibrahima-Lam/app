@@ -8,7 +8,7 @@ import 'package:app/pages/joueur/joueur_details.dart';
 import 'package:app/providers/composition_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/widget/coach_and_team_widget.dart';
-import 'package:app/widget/composition_element_widget.dart';
+import 'package:app/widget/composition/composition_element_widget.dart';
 import 'package:app/widget_pages/arbitre_widget.dart';
 import 'package:app/widget_pages/substitut_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,8 @@ import 'package:provider/provider.dart';
 // ignore: must_be_immutable
 class CompositionWidget extends StatelessWidget {
   final Game game;
-  CompositionWidget({super.key, required this.game});
+  final bool checkUser;
+  CompositionWidget({super.key, required this.game, required this.checkUser});
   late CompositionSousCollection compositionSousCollection;
   @override
   Widget build(BuildContext context) {
@@ -57,23 +58,25 @@ class CompositionWidget extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  Card(
-                    child: Center(
-                      child: OutlinedButton(
-                          onPressed: () async {
-                            await Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => CompositionSetter(
-                                      compositionSousCollection:
-                                          compositionSousCollection,
-                                    )));
+                  if (checkUser)
+                    Card(
+                      child: Center(
+                        child: OutlinedButton(
+                            onPressed: () async {
+                              await Navigator.of(context)
+                                  .push(MaterialPageRoute(
+                                      builder: (context) => CompositionSetter(
+                                            compositionSousCollection:
+                                                compositionSousCollection,
+                                          )));
 
-                            context
-                                .read<CompositionProvider>()
-                                .notifyListeners();
-                          },
-                          child: Text('Paramettre de Composition')),
+                              context
+                                  .read<CompositionProvider>()
+                                  .notifyListeners();
+                            },
+                            child: Text('Paramettre de Composition')),
+                      ),
                     ),
-                  ),
                   Card(
                     child: Stack(
                       alignment: Alignment.center,

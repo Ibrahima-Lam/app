@@ -37,7 +37,7 @@ class JoueurMatchListWidget extends StatelessWidget {
                 compositions: compos.compositionCollection.compositions
                     .whereType<JoueurComposition>()
                     .toList(),
-                games: matchs.gameCollection.games);
+                games: matchs.games);
 
             return Card(
               child: games.isEmpty
