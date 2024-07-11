@@ -3,35 +3,58 @@ import 'package:app/core/enums/game_etat_enum.dart';
 import 'package:app/core/extension/list_extension.dart';
 import 'package:app/models/game.dart';
 import 'package:app/models/scores/score.dart';
-import 'package:app/providers/score_provider.dart';
 
 import 'package:app/service/game_service.dart';
+import 'package:app/service/score_service.dart';
 import 'package:flutter/material.dart';
 
 class GameProvider extends ChangeNotifier {
   List<Game> _games;
-  ScoreProvider scoreProvider;
-  GameProvider(this._games, {required this.scoreProvider}) {
-    _games.map((element) {
-      Score? score = scoreProvider.scores
-          .singleWhereOrNull((e) => e.idGame == element.idGame);
-      if (score != null) {
-        element.homeScore = score.homeScore;
-        element.awayScore = score.awayScore;
-      }
+  List<Score> _scores;
+
+  GameProvider(
+      [this._games = const [], this._scores = const []]); /* {
+    _
+  } */
+  List<Score> get scores => _scores;
+  void set scores(List<Score> val) => _scores = val;
+
+  List<Game> get games => _games;
+  void set games(List<Game> val) {
+    _games = val.map((element) {
+      Score? score =
+          scores.singleWhereOrNull((e) => e.idGame == element.idGame);
+      if (score != null) element.score = score;
       return element;
     }).toList();
+
+    notifyListeners();
   }
 
   Future setGames() async {
     games = await GameService().getData;
   }
 
+  Future setScores() async {
+    scores = await ScoreService.getData();
+  }
+
   Future<List<Game>> getGames() async {
-    if (isEmpty) {
-      await setGames();
-    }
+    if (scores.isEmpty) setScores();
+    if (games.isEmpty) await setGames();
     return games;
+  }
+
+  Future changeScore(
+      {required String idGame, required int? hs, required int? as}) async {
+    scores = scores.map((e) {
+      if (e.idGame == idGame) {
+        e.homeScore = hs;
+        e.awayScore = as;
+      }
+      return e;
+    }).toList();
+    games = games;
   }
 
 /* 
@@ -97,13 +120,6 @@ class GameProvider extends ChangeNotifier {
     }).toList();
     notifyListeners();
   } */
-  bool get isEmpty => games.isEmpty;
-  bool get isNotEmpty => games.isNotEmpty;
-  List<Game> get games => _games;
-  void set games(List<Game> val) {
-    _games = val;
-    notifyListeners();
-  }
 
   void sortByDate([bool asc = true]) {
     if (asc) {
@@ -116,19 +132,6 @@ class GameProvider extends ChangeNotifier {
     games = games.map((e) {
       if (e.idGame == id) {
         e.etat = GameEtatClass(etat);
-      }
-      return e;
-    }).toList();
-  }
-
-  void changeScore(
-      {required String id,
-      required int? homeScore,
-      required int? awayScore}) async {
-    games = games.map((e) {
-      if (e.idGame == id) {
-        e.homeScore = homeScore;
-        e.awayScore = awayScore;
       }
       return e;
     }).toList();

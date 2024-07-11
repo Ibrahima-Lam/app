@@ -79,10 +79,10 @@ class Classeur {
       Game aller = matchs[0];
       Game retour = matchs[1];
       int diff = (aller.idHome == a.id)
-          ? (aller.homeScore! + retour.awayScore!) -
-              (aller.awayScore! + retour.homeScore!)
-          : -((aller.homeScore! + retour.awayScore!) -
-              (aller.awayScore! + retour.homeScore!));
+          ? (aller.score!.homeScore! + retour.score!.awayScore!) -
+              (aller.score!.awayScore! + retour.score!.homeScore!)
+          : -((aller.score!.homeScore! + retour.score!.awayScore!) -
+              (aller.score!.awayScore! + retour.score!.homeScore!));
       if (diff != 0) {
         return diff > 0 ? -1 : 1;
       }
@@ -90,8 +90,8 @@ class Classeur {
     if (matchs.isNotEmpty) {
       Game match = matchs[0];
       int diff = (match.idHome == a.id)
-          ? match.homeScore! - match.awayScore!
-          : -(match.homeScore! - match.awayScore!);
+          ? match.score!.homeScore! - match.score!.awayScore!
+          : -(match.score!.homeScore! - match.score!.awayScore!);
       if (diff != 0) {
         return diff > 0 ? -1 : 1;
       }
@@ -109,9 +109,9 @@ class Classeur {
         elements.add(Stat(
           id: element.idHome,
           nom: element.home!,
-          bm: element.homeScore!,
-          be: element.awayScore!,
-          diff: element.homeScore! - element.awayScore!,
+          bm: element.score!.homeScore!,
+          be: element.score!.awayScore!,
+          diff: element.score!.homeScore! - element.score!.awayScore!,
           date: element.dateGame,
           imageUrl: element.homeImage,
         ));
@@ -122,9 +122,9 @@ class Classeur {
         elements.add(Stat(
           id: element.idAway,
           nom: element.away!,
-          bm: element.awayScore!,
-          be: element.homeScore!,
-          diff: element.awayScore! - element.homeScore!,
+          bm: element.score!.awayScore!,
+          be: element.score!.homeScore!,
+          diff: element.score!.awayScore! - element.score!.homeScore!,
           date: element.dateGame,
           imageUrl: element.awayImage,
         ));

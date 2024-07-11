@@ -32,14 +32,12 @@ class GameListWidget extends StatelessWidget {
                   )
                 : SingleChildScrollView(
                     padding: const EdgeInsets.only(top: 10),
-                    child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(0)),
-                        child: Column(
-                          children: games
-                              .map((e) => GameFullWidget(game: e))
-                              .toList(),
-                        )),
+                    child: Column(
+                      children: games
+                          .map((e) => GameFullWidget(
+                              game: e, verticalMargin: 1, elevation: 0))
+                          .toList(),
+                    ),
                   );
           },
         );

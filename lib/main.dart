@@ -8,7 +8,6 @@ import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/composition_provider.dart';
 import 'package:app/providers/infos_provider.dart';
 import 'package:app/providers/paramettre_provider.dart';
-import 'package:app/providers/score_provider.dart';
 import 'package:app/providers/user_provider.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/game_event_provider.dart';
@@ -36,8 +35,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProvider(
-            lazy: false, create: (context) => ScoreProvider()),
         ChangeNotifierProvider<GameEventListProvider>(
           lazy: false,
           create: (context) => GameEventListProvider([]),
@@ -60,12 +57,8 @@ class MyApp extends StatelessWidget {
                 ParamettreProvider(userProvider: context.read<UserProvider>()),
             update: (context, value, previous) =>
                 ParamettreProvider(userProvider: value)),
-        ChangeNotifierProxyProvider<ScoreProvider, GameProvider>(
-            create: (context) =>
-                GameProvider([], scoreProvider: context.read<ScoreProvider>()),
-            update: (context, value, previous) =>
-                GameProvider(previous?.games ?? [], scoreProvider: value)),
         ChangeNotifierProvider(create: (context) => InfosProvider()),
+        ChangeNotifierProvider(create: (context) => GameProvider()),
         ChangeNotifierProvider(create: (context) => CoachProvider()),
         ChangeNotifierProvider(create: (context) => ArbitreProvider()),
         ChangeNotifierProvider(create: (context) => CompetitionProvider()),

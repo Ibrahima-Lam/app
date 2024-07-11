@@ -181,7 +181,7 @@ class TopIconsWidget extends StatelessWidget {
       .toList();
 
   List<Game> get lastGames => [
-        ...games.reversed
+        ...gameProvider.games.reversed
             .where(
               (element) =>
                   element.dateGame!.compareTo(dateGame) <= 0 &&
@@ -190,7 +190,7 @@ class TopIconsWidget extends StatelessWidget {
             )
             .take(2)
             .toList(),
-        ...games.reversed
+        ...gameProvider.games.reversed
             .where(
               (element) =>
                   element.dateGame!.compareTo(dateGame) <= 0 &&
@@ -364,49 +364,51 @@ class _CompetitionGamesWidgetState extends State<CompetitionGamesWidget> {
                                   if (gamelist.isEmpty) {
                                     return SizedBox();
                                   }
-                                  return Card(
-                                    color: Colors.white,
-                                    surfaceTintColor: Colors.white,
-                                    elevation: 1,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(3),
-                                    ),
-                                    shadowColor: Colors.grey,
-                                    child: Column(
-                                      children: [
-                                        GestureDetector(
-                                          behavior: HitTestBehavior.translucent,
-                                          onTap: () => Navigator.of(context)
-                                              .push(MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CompetitionDetails(
-                                                        id: competition
-                                                            .codeEdition,
-                                                      ))),
+                                  return Column(
+                                    children: [
+                                      GestureDetector(
+                                        behavior: HitTestBehavior.translucent,
+                                        onTap: () => Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CompetitionDetails(
+                                                      id: competition
+                                                          .codeEdition,
+                                                    ))),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(4.0)),
+                                          shadowColor: Colors.grey,
+                                          elevation: 2,
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 3, vertical: 1),
                                           child: Container(
                                             width: MediaQuery.sizeOf(context)
                                                 .width,
                                             height: 50,
                                             padding: const EdgeInsets.all(5),
-                                            decoration: const BoxDecoration(
-                                              border: Border.symmetric(
-                                                vertical: BorderSide(
-                                                  width: 0.5,
-                                                  color: Colors.grey,
+                                            decoration: BoxDecoration(
+                                                border: Border.symmetric(
+                                                  vertical: BorderSide(
+                                                    width: 0.5,
+                                                    color: Colors.grey,
+                                                  ),
+                                                  horizontal: BorderSide(
+                                                    width: 0.5,
+                                                    color: Colors.grey,
+                                                  ),
                                                 ),
-                                                horizontal: BorderSide(
-                                                  width: 0.5,
-                                                  color: Colors.grey,
-                                                ),
-                                              ),
-                                              gradient: LinearGradient(colors: [
-                                                Color.fromARGB(
-                                                    255, 215, 238, 215),
-                                                Colors.white,
-                                                Color.fromARGB(
-                                                    255, 215, 238, 215),
-                                              ]),
-                                            ),
+                                                gradient:
+                                                    LinearGradient(colors: [
+                                                  Color.fromARGB(
+                                                      255, 215, 238, 215),
+                                                  Colors.white,
+                                                  Color.fromARGB(
+                                                      255, 215, 238, 215),
+                                                ]),
+                                                borderRadius:
+                                                    BorderRadius.circular(4.0)),
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
@@ -465,13 +467,16 @@ class _CompetitionGamesWidgetState extends State<CompetitionGamesWidget> {
                                             ),
                                           ),
                                         ),
-                                        for (final g in gamelist)
-                                          GameLessWidget(
-                                            game: g,
-                                            showDate: false,
-                                          ),
-                                      ],
-                                    ),
+                                      ),
+                                      for (final g in gamelist)
+                                        GameLessWidget(
+                                          game: g,
+                                          showDate: false,
+                                        ),
+                                      const SizedBox(
+                                        height: 5.0,
+                                      )
+                                    ],
                                   );
                                 },
                               ),

@@ -6,6 +6,14 @@ class ScoreService {
     await Future.delayed(Durations.extralong4);
     return scores.map((e) => Score.fromJson(e)).toList();
   }
+
+  static Stream<Score> getScores() async* {
+    List<Score> scores = await Future.delayed(Durations.extralong4);
+    for (var score in scores) {
+      yield score;
+    }
+    ;
+  }
 }
 
 List<Map<String, dynamic>> scores = [

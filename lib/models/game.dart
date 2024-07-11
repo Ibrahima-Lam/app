@@ -1,4 +1,5 @@
 import 'package:app/core/enums/game_etat_enum.dart';
+import 'package:app/models/scores/score.dart';
 import 'package:app/models/searchable.dart';
 
 class Game implements Searchable {
@@ -13,8 +14,7 @@ class Game implements Searchable {
   String? idGroupe;
   String? home;
   String? away;
-  int? homeScore;
-  int? awayScore;
+
   String? nomGroupe;
   String codeEdition;
   String? anneeEdition;
@@ -27,6 +27,7 @@ class Game implements Searchable {
   int? awayScorePenalty;
   GameEtatClass etat;
   String nomCompetition;
+  Score? score;
 
   Game({
     required this.idGame,
@@ -40,8 +41,6 @@ class Game implements Searchable {
     this.away,
     this.homeImage,
     this.awayImage,
-    this.homeScore,
-    this.awayScore,
     this.nomGroupe,
     required this.codeEdition,
     this.anneeEdition,
@@ -50,10 +49,9 @@ class Game implements Searchable {
     this.nomNiveau,
     this.nomPhase,
     this.typePhase,
-    this.homeScorePenalty,
-    this.awayScorePenalty,
     this.etat = const GameEtatClass('termine'),
     this.nomCompetition = '',
+    this.score,
   });
 
   final String versus = 'VS';
@@ -69,8 +67,6 @@ class Game implements Searchable {
       idGroupe: json["idGroupe"].toString(),
       home: json["home"],
       away: json["away"],
-      homeScore: json["homeScore"],
-      awayScore: json["awayScore"],
       nomGroupe: json["nomGroupe"],
       codeEdition: json["codeEdition"],
       anneeEdition: json["anneeEdition"],
@@ -79,28 +75,29 @@ class Game implements Searchable {
       nomNiveau: json["nomNiveau"],
       nomPhase: json["nomPhase"],
       typePhase: json["typePhase"],
-      homeScorePenalty: json["homeScorePenalty"],
-      awayScorePenalty: json["awayScorePenalty"],
     );
   }
 
-  bool get isPlayed => homeScore != null && awayScore != null;
+  bool get isPlayed => score?.homeScore != null && score?.awayScore != null;
   bool get isNotPlayed => !isPlayed;
   bool get isPlaying =>
       etat.etat == GameEtat.direct || etat.etat == GameEtat.pause;
-  bool get hasTiraubut => homeScorePenalty != null && awayScorePenalty != null;
-  bool get isHomeVictoire => isPlayed ? homeScore! > awayScore! : false;
-  bool get isAwayVictoire => isPlayed ? homeScore! < awayScore! : false;
+  bool get hasTiraubut =>
+      score?.homeScorePenalty != null && score?.awayScorePenalty != null;
+  bool get isHomeVictoire =>
+      isPlayed ? (score?.homeScore ?? 0) > (score?.awayScore ?? 0) : false;
+  bool get isAwayVictoire =>
+      isPlayed ? (score?.homeScore ?? 0) < (score?.awayScore ?? 0) : false;
 
-  String get score {
-    final String score = isPlayed
+  String get scoreText {
+    final String scoreText = isPlayed
         ? (hasTiraubut
-            ? '(${homeScorePenalty})  ${homeScore}-${awayScore}  (${awayScorePenalty})'
-            : '${homeScore}-${awayScore}')
+            ? '(${score?.homeScorePenalty})  ${score?.homeScore}-${score?.awayScore}  (${score?.awayScorePenalty})'
+            : '${score?.homeScore}-${score?.awayScore}')
         : heureGame != null
             ? heureGame!
             : versus;
-    return score;
+    return scoreText;
   }
 
   Map<String, dynamic> toJson() {
@@ -114,8 +111,6 @@ class Game implements Searchable {
       "idGroupe": idGroupe,
       "home": home,
       "away": away,
-      "homeScore": homeScore,
-      "awayScore": awayScore,
       "nomGroupe": nomGroupe,
       "codeEdition": codeEdition,
       "anneeEdition": anneeEdition,

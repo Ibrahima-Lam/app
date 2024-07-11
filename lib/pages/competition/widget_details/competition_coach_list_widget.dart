@@ -46,12 +46,17 @@ class CompetitionCoachListWidget extends StatelessWidget {
                     ),
                   )
                 : SingleChildScrollView(
-                    child: Card(
-                      child: Column(
-                        children: coaches
-                            .map((e) => CoachListTileWidget(coach: e))
-                            .toList(),
-                      ),
+                    child: Column(
+                      children: coaches
+                          .map((e) => Card(
+                              elevation: 2,
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 1, horizontal: 4),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0)),
+                              shadowColor: Colors.grey,
+                              child: CoachListTileWidget(coach: e)))
+                          .toList(),
                     ),
                   );
           });

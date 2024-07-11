@@ -116,7 +116,7 @@ class GameWidget extends StatelessWidget {
                 Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      game.score,
+                      game.scoreText,
                       style: _styleScore,
                     )),
                 Expanded(child: textTeam(game.away!, game.isAwayVictoire)),
@@ -163,12 +163,19 @@ class GameFullWidget extends StatelessWidget {
   final Game game;
   final bool showDate;
   final bool showEtat;
+  final double? verticalMargin;
+  final double? horizontalMargin;
+  final double? elevation;
 
-  const GameFullWidget(
-      {super.key,
-      required this.game,
-      this.showDate = true,
-      this.showEtat = true});
+  const GameFullWidget({
+    super.key,
+    required this.game,
+    this.showDate = true,
+    this.showEtat = true,
+    this.elevation,
+    this.verticalMargin,
+    this.horizontalMargin,
+  });
   GameEtat get _etat => game.etat.etat;
 
   Color get _colorEtat {
@@ -190,8 +197,11 @@ class GameFullWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: elevation ?? 2,
+      margin: EdgeInsets.symmetric(
+          vertical: verticalMargin ?? 4, horizontal: horizontalMargin ?? 4),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-      shadowColor: Colors.white,
+      shadowColor: Colors.grey,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
         child: GestureDetector(
@@ -213,7 +223,7 @@ class GameFullWidget extends StatelessWidget {
                   children: [
                     Text((game.nomNiveau ?? '').capitalize()),
                     Text(
-                      game.score,
+                      game.scoreText,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -255,14 +265,14 @@ class GameFullWidget extends StatelessWidget {
   Widget equipeWidget(String name, String imageUrl) => Column(
         children: [
           SizedBox(
-            height: 50,
-            width: 50,
+            height: 60,
+            width: 60,
             child: EquipeImageLogoWidget(
               url: imageUrl,
             ),
           ),
           SizedBox(
-            height: 5,
+            height: 8.0,
           ),
           Text(
             name,
@@ -308,8 +318,10 @@ class GameLessWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 2,
+      margin: EdgeInsets.symmetric(vertical: 1, horizontal: 4),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-      shadowColor: Colors.white,
+      shadowColor: Colors.grey,
       child: Container(
         height: 80,
         padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
@@ -332,7 +344,7 @@ class GameLessWidget extends StatelessWidget {
                   children: [
                     Text((game.nomNiveau ?? '').capitalize()),
                     Text(
-                      game.score,
+                      game.scoreText,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

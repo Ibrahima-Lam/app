@@ -33,12 +33,15 @@ class JourneeWidget extends StatelessWidget {
             return Container(
               padding: EdgeInsets.symmetric(vertical: 5),
               child: SingleChildScrollView(
-                child: Card(
-                  child: Column(
-                    children: [
-                      for (Game game in games) GameFullWidget(game: game),
-                    ],
-                  ),
+                child: Column(
+                  children: [
+                    for (Game game in games)
+                      GameFullWidget(
+                        game: game,
+                        verticalMargin: 1,
+                        elevation: 0,
+                      ),
+                  ],
                 ),
               ),
             );

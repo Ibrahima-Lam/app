@@ -78,14 +78,14 @@ class MoreInfosWidget extends StatelessWidget {
               int bm = 0;
               int be = 0;
               for (Game game in games) {
-                if (game.homeScore == game.awayScore) {
+                if (game.score?.homeScore == game.score?.awayScore) {
                   n++;
                   if (idParticipant == game.idHome) {
-                    bm += game.homeScore ?? 0;
-                    be += game.awayScore ?? 0;
+                    bm += game.score?.homeScore ?? 0;
+                    be += game.score?.awayScore ?? 0;
                   } else {
-                    bm += game.awayScore ?? 0;
-                    be += game.homeScore ?? 0;
+                    bm += game.score?.awayScore ?? 0;
+                    be += game.score?.homeScore ?? 0;
                   }
                   continue;
                 }
@@ -94,16 +94,16 @@ class MoreInfosWidget extends StatelessWidget {
                     v++;
                   else
                     d++;
-                  bm += game.homeScore ?? 0;
-                  be += game.awayScore ?? 0;
+                  bm += game.score?.homeScore ?? 0;
+                  be += game.score?.awayScore ?? 0;
                   continue;
                 } else {
                   if (game.isAwayVictoire)
                     v++;
                   else
                     d++;
-                  bm += game.awayScore ?? 0;
-                  be += game.homeScore ?? 0;
+                  bm += game.score?.awayScore ?? 0;
+                  be += game.score?.homeScore ?? 0;
                   continue;
                 }
               }
@@ -437,7 +437,7 @@ class FicheGameWidget extends StatelessWidget {
                     children: [
                       Text(game.nomNiveau ?? ''),
                       Text(
-                        game.score,
+                        game.scoreText,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

@@ -12,7 +12,6 @@ import 'package:app/pages/game/widget_details/composition_widget.dart';
 import 'package:app/pages/game/widget_details/evenement_widget.dart';
 import 'package:app/pages/game/widget_details/statistique_widget.dart';
 import 'package:app/providers/paramettre_provider.dart';
-import 'package:app/providers/score_provider.dart';
 import 'package:app/providers/statistique_provider.dart';
 import 'package:app/widget/classement/classement_widget.dart';
 import 'package:app/pages/game/widget_details/journee_list_widget.dart';
@@ -213,7 +212,7 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
                               opacity: _isExpended.value ? 0.0 : 1.0,
                               duration: Duration(milliseconds: 300),
                               child: Text(
-                                '${abbr(game.home!)} ${game.score} ${abbr(game.away.toString())}',
+                                '${abbr(game.home!)} ${game.scoreText} ${abbr(game.away.toString())}',
                                 style: const TextStyle(fontSize: 17),
                               ),
                             );
@@ -314,8 +313,8 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
                           (int, int)? values = await showModalBottomSheet(
                               context: context,
                               builder: (context) => ScoreFormModalWidget(
-                                  homeScore: game.homeScore,
-                                  awayScore: game.awayScore));
+                                  homeScore: game.score?.homeScore,
+                                  awayScore: game.score?.awayScore));
                           if (values != null) {
                             bool confirm = await showDialog(
                                 context: context,
@@ -323,19 +322,19 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
                                     title: 'Changer le score',
                                     content: 'Voulez vous changer le score ?'));
                             if (confirm)
-                              context.read<ScoreProvider>().changeScore(
+                              context.read<GameProvider>().changeScore(
                                   idGame: game.idGame,
                                   hs: values.$1,
                                   as: values.$2);
-                          } else if (game.homeScore != null &&
-                              game.awayScore != null) {
+                          } else if (game.score?.homeScore != null &&
+                              game.score?.awayScore != null) {
                             bool confirm = await showDialog(
                                 context: context,
                                 builder: (context) => ConfirmDialogWidget(
                                     title: 'Annulation de Score',
                                     content: 'Voulez vous annulez le score ?'));
                             if (confirm) {
-                              context.read<ScoreProvider>().changeScore(
+                              context.read<GameProvider>().changeScore(
                                   idGame: game.idGame, hs: null, as: null);
                             }
                           }
@@ -369,7 +368,7 @@ class ColumnScoreWidget extends StatelessWidget {
         children: [
           SizedBox(),
           TextScore(
-            '${game.score}',
+            '${game.scoreText}',
           ),
           Column(
             children: [

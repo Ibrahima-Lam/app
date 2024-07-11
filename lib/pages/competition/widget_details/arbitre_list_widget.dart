@@ -32,12 +32,17 @@ class ArbitreListWidget extends StatelessWidget {
                         'Pas d\'arbitre disponible pour cette competition'),
                   )
                 : SingleChildScrollView(
-                    child: Card(
-                      child: Column(
-                        children: arbitres
-                            .map((e) => ArbitreListTileWidget(arbitre: e))
-                            .toList(),
-                      ),
+                    child: Column(
+                      children: arbitres
+                          .map((e) => Card(
+                              elevation: 2,
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 1, horizontal: 4),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0)),
+                              shadowColor: Colors.grey,
+                              child: ArbitreListTileWidget(arbitre: e)))
+                          .toList(),
                     ),
                   );
           });
