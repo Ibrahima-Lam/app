@@ -7,15 +7,16 @@ class TextFieldWidget extends StatelessWidget {
   final bool obscureText;
   final Widget? prefixIcon;
   final FocusNode? focusNode;
-  const TextFieldWidget({
-    super.key,
-    required this.textEditingController,
-    required this.hintText,
-    this.suffixIcon,
-    this.prefixIcon,
-    this.focusNode,
-    this.obscureText = false,
-  });
+  final TextInputType? keyboardType;
+  const TextFieldWidget(
+      {super.key,
+      required this.textEditingController,
+      required this.hintText,
+      this.suffixIcon,
+      this.prefixIcon,
+      this.focusNode,
+      this.obscureText = false,
+      this.keyboardType});
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,7 @@ class TextFieldWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: TextField(
+        keyboardType: keyboardType,
         obscureText: obscureText,
         focusNode: focusNode,
         controller: textEditingController,

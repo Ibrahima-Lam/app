@@ -2,6 +2,7 @@ import 'package:app/controllers/game/game_controller.dart';
 import 'package:app/core/enums/game_etat_enum.dart';
 import 'package:app/core/extension/list_extension.dart';
 import 'package:app/models/game.dart';
+import 'package:app/models/gameEvent.dart';
 import 'package:app/models/scores/score.dart';
 
 import 'package:app/service/game_service.dart';
@@ -47,13 +48,34 @@ class GameProvider extends ChangeNotifier {
 
   Future changeScore(
       {required String idGame, required int? hs, required int? as}) async {
-    scores = scores.map((e) {
-      if (e.idGame == idGame) {
-        e.homeScore = hs;
-        e.awayScore = as;
-      }
-      return e;
-    }).toList();
+    Score? score = scores.singleWhereOrNull((e) => e.idGame == idGame);
+    final bool check = score != null;
+    if (!check) {
+      score = Score(idGame: idGame, homeScore: hs, awayScore: as);
+    } else {
+      score.homeScore = hs;
+      score.awayScore = as;
+    }
+    if (!check) {
+      scores.add(score);
+    }
+
+    games = games;
+  }
+
+  Future changeTimer(
+      {required String idGame, required TimerEvent? timer}) async {
+    Score? score = scores.singleWhereOrNull((e) => e.idGame == idGame);
+    final bool check = score != null;
+    if (!check) {
+      score = Score(idGame: idGame, timer: timer);
+    } else {
+      score.timer = timer;
+    }
+    if (!check) {
+      scores.add(score);
+    }
+
     games = games;
   }
 

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app/collection/competition_collection.dart';
 import 'package:app/controllers/competition/date.dart';
 import 'package:app/core/class/abbreviable.dart';
@@ -18,10 +20,8 @@ import 'package:app/pages/game/widget_details/journee_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/widget/game/game_bottom_navbar_edit_widget.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
 import 'package:app/widget/modals/custom_delegate_search.dart';
 import 'package:app/widget/logos/equipe_logo_widget.dart';
-import 'package:app/widget/modals/score_form_modal_widget.dart';
 import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -275,7 +275,7 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
                                     ),
                                     ColumnScoreWidget(
                                       game: game,
-                                      timer: null,
+                                      timer: game.score?.timer,
                                     ),
                                     ColumnWidget(
                                       text: game.away!,
@@ -307,46 +307,8 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
                     children: tabBarViewChildren(tabs, checkUser),
                   ),
                 ),
-                floatingActionButton: checkUser
-                    ? FloatingActionButton(
-                        onPressed: () async {
-                          (int, int)? values = await showModalBottomSheet(
-                              context: context,
-                              builder: (context) => ScoreFormModalWidget(
-                                  homeScore: game.score?.homeScore,
-                                  awayScore: game.score?.awayScore));
-                          if (values != null) {
-                            bool confirm = await showDialog(
-                                context: context,
-                                builder: (context) => ConfirmDialogWidget(
-                                    title: 'Changer le score',
-                                    content: 'Voulez vous changer le score ?'));
-                            if (confirm)
-                              context.read<GameProvider>().changeScore(
-                                  idGame: game.idGame,
-                                  hs: values.$1,
-                                  as: values.$2);
-                          } else if (game.score?.homeScore != null &&
-                              game.score?.awayScore != null) {
-                            bool confirm = await showDialog(
-                                context: context,
-                                builder: (context) => ConfirmDialogWidget(
-                                    title: 'Annulation de Score',
-                                    content: 'Voulez vous annulez le score ?'));
-                            if (confirm) {
-                              context.read<GameProvider>().changeScore(
-                                  idGame: game.idGame, hs: null, as: null);
-                            }
-                          }
-                        },
-                        child: Icon(Icons.edit),
-                      )
-                    : null,
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.endFloat,
-                bottomNavigationBar: checkUser
-                    ? GameBottomNavbarEditWidget(idGame: game.idGame)
-                    : null,
+                bottomNavigationBar:
+                    checkUser ? GameBottomNavbarEditWidget(game: game) : null,
               ),
             );
           });
@@ -393,28 +355,37 @@ class ColumnScoreWidget extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class EtatWidget extends StatelessWidget {
+class EtatWidget extends StatefulWidget {
   GameEtatClass etat;
   final TimerEvent? timer;
   EtatWidget({super.key, required this.etat, this.timer});
+
+  @override
+  State<EtatWidget> createState() => _EtatWidgetState();
+}
+
+class _EtatWidgetState extends State<EtatWidget> {
   double _opacity = 1.0;
 
   Color get _colorEtat {
-    return switch (etat.etat) {
+    return switch (widget.etat.etat) {
       GameEtat.direct || GameEtat.pause => Colors.green,
-      GameEtat.reporte => Colors.red,
+      GameEtat.reporte || GameEtat.annule || GameEtat.arrete => Colors.red,
       _ => Colors.grey
     };
   }
 
   Stream<String> timeStream() async* {
-    int start =
-        DateTimeRange(start: DateTime.parse(timer!.start), end: DateTime.now())
-                .duration
-                .inSeconds +
-            (timer!.initial + timer!.retard + 1) * 60;
-    int duration = (timer!.duration + timer!.initial) * 60;
-    int extra = (timer!.extra) * 60;
+    if (widget.timer?.start == null) return;
+    int start = DateTimeRange(
+                start: DateTime.parse(widget.timer!.start!),
+                end: DateTime.now())
+            .duration
+            .inSeconds +
+        ((widget.timer?.initial ?? 0) + (widget.timer!.retard ?? 0) + 1) * 60;
+    int duration =
+        (widget.timer?.duration ?? 0 + (widget.timer?.initial ?? 0)) * 60;
+    int extra = (widget.timer?.extra ?? 0) * 60;
     String except = duration != (45 * 60) && duration != (90 * 60)
         ? ' |${duration ~/ 60}'
         : '';
@@ -423,9 +394,49 @@ class EtatWidget extends StatelessWidget {
         yield '${i ~/ 60}\'$except';
       else
         yield '${duration ~/ 60} + ${extra ~/ 60}\'${except}';
+
       _opacity = i.isOdd ? 0.0 : 1.0;
       await Future.delayed(Duration(seconds: 1));
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.etat.etat == GameEtat.avant
+        ? const SizedBox(
+            height: 30,
+          )
+        : Container(
+            constraints: BoxConstraints(minWidth: 80),
+            padding: EdgeInsets.all(2.0),
+            margin: EdgeInsets.all(5.0),
+            color: Colors.white,
+            child: widget.etat.etat != GameEtat.direct
+                ? textWidget(widget.etat.text)
+                : StreamBuilder(
+                    stream: widget.timer != null &&
+                            widget.etat.etat == GameEtat.direct
+                        ? timeStream()
+                        : null,
+                    builder: (context, snapshot) {
+                      String text = widget.etat.text;
+                      if (snapshot.hasData) {
+                        text = '${snapshot.data}';
+                      }
+                      if (snapshot.connectionState == ConnectionState.done ||
+                          snapshot.connectionState == ConnectionState.waiting ||
+                          !snapshot.hasData ||
+                          snapshot.hasError) {
+                        _opacity = 1.0;
+                        text = widget.etat.text;
+                      }
+                      return AnimatedOpacity(
+                        opacity: _opacity,
+                        duration: Duration(microseconds: 800),
+                        child: textWidget(text),
+                      );
+                    }),
+          );
   }
 
   Widget textWidget(String text) {
@@ -435,45 +446,6 @@ class EtatWidget extends StatelessWidget {
       style: TextStyle(
           color: _colorEtat, fontSize: 13, fontWeight: FontWeight.w400),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return !etat.started
-        ? const SizedBox(
-            height: 30,
-          )
-        : Container(
-            constraints: BoxConstraints(minWidth: 80),
-            padding: EdgeInsets.all(2.0),
-            margin: EdgeInsets.all(5.0),
-            color: Colors.white,
-            child: etat.etat != GameEtat.direct
-                ? textWidget(etat.text)
-                : StreamBuilder<String>(
-                    stream: timer != null && etat.etat == GameEtat.direct
-                        ? timeStream()
-                        : null,
-                    builder: (context, snapshot) {
-                      String text = etat.text;
-                      if (snapshot.hasData &&
-                          snapshot.connectionState != ConnectionState.done) {
-                        text = '${snapshot.data}';
-                      }
-                      if (snapshot.connectionState == ConnectionState.done ||
-                          snapshot.connectionState == ConnectionState.waiting ||
-                          !snapshot.hasData ||
-                          snapshot.hasError) {
-                        _opacity = 1.0;
-                        text = etat.text;
-                      }
-                      return AnimatedOpacity(
-                        opacity: _opacity,
-                        duration: Duration(microseconds: 800),
-                        child: textWidget(text),
-                      );
-                    }),
-          );
   }
 }
 

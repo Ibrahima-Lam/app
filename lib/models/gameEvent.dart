@@ -30,17 +30,49 @@ class EventStream {
 }
 
 class TimerEvent {
-  String start;
-  int duration;
-  int extra;
-  int initial;
-  int retard;
+  String? start;
+  int? duration;
+  int? extra;
+  int? initial;
+  int? retard;
+  String? etat;
 
   TimerEvent({
     required this.start,
     required this.duration,
-    required this.extra,
+    this.extra = 0,
     this.initial = 0,
     this.retard = 0,
+    this.etat,
   });
+  TimerEvent copyWith(
+          {String? start,
+          int? duration,
+          int? extra,
+          int? initial,
+          int? retard,
+          String? etat}) =>
+      TimerEvent(
+        start: start ?? this.start,
+        duration: duration ?? this.duration,
+        extra: extra ?? this.extra,
+        initial: initial ?? this.initial,
+        retard: retard ?? this.retard,
+      );
+  factory TimerEvent.fromJson(Map<String, dynamic> json) => TimerEvent(
+        start: json['start'],
+        duration: json['duration'],
+        extra: json['extra'],
+        retard: json['retard'],
+        initial: json['initial'],
+        etat: json['etat'],
+      );
+  Map<String, dynamic> toJson() => {
+        'start': start,
+        'duration': duration,
+        'extra': extra,
+        'retard': retard,
+        'initial': initial,
+        'etat': etat,
+      };
 }

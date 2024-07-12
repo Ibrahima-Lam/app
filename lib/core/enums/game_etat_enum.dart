@@ -1,4 +1,4 @@
-enum GameEtat { annule, reporte, avant, direct, pause, termine }
+enum GameEtat { annule, reporte, avant, direct, pause, arrete, termine }
 
 class GameEtatClass {
   final String _text;
@@ -20,8 +20,14 @@ class GameEtatClass {
         return GameEtat.direct;
       case 'MI-':
         return GameEtat.pause;
+      case 'PAU':
+        return GameEtat.pause;
       case 'TER':
         return GameEtat.termine;
+      case 'ANN':
+        return GameEtat.annule;
+      case 'ARR':
+        return GameEtat.arrete;
       default:
         return GameEtat.avant;
     }
@@ -37,6 +43,10 @@ class GameEtatClass {
         return 'Mi-temps';
       case GameEtat.termine:
         return 'Terminé';
+      case GameEtat.arrete:
+        return 'Arreté';
+      case GameEtat.annule:
+        return 'Annulé';
       default:
         return 'Avant';
     }
