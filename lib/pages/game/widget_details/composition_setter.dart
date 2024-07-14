@@ -117,7 +117,8 @@ class _CompositionSetterWidgetState extends State<CompositionSetterWidget> {
                   child: CoachAndTeamWidget(
                       onDoubleTap: () => _onDoubleTapCoach(
                           widget.compositionSousCollection.homeCoatch),
-                      equipe: widget.compositionSousCollection.game.home ?? '',
+                      equipe:
+                          widget.compositionSousCollection.game.home.nomEquipe,
                       composition: widget.compositionSousCollection.homeCoatch),
                 ),
                 Positioned(
@@ -126,7 +127,8 @@ class _CompositionSetterWidgetState extends State<CompositionSetterWidget> {
                   child: CoachAndTeamWidget(
                       onDoubleTap: () => _onDoubleTapCoach(
                           widget.compositionSousCollection.awayCoatch),
-                      equipe: widget.compositionSousCollection.game.away ?? '',
+                      equipe:
+                          widget.compositionSousCollection.game.away.nomEquipe,
                       composition: widget.compositionSousCollection.awayCoatch),
                 ),
               ],

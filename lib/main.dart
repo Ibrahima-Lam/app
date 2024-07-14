@@ -10,7 +10,6 @@ import 'package:app/providers/infos_provider.dart';
 import 'package:app/providers/paramettre_provider.dart';
 import 'package:app/providers/user_provider.dart';
 import 'package:app/providers/game_event_list_provider.dart';
-import 'package:app/providers/game_event_provider.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/providers/groupe_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
@@ -34,11 +33,45 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => CompetitionProvider()),
+        ChangeNotifierProvider(create: (context) => ParticipantProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => InfosProvider()),
+        ChangeNotifierProvider(create: (context) => CoachProvider()),
+        ChangeNotifierProvider(create: (context) => ArbitreProvider()),
+        ChangeNotifierProvider(
+            lazy: false, create: (context) => GroupeProvider()),
+        ChangeNotifierProvider(create: (context) => CompositionProvider()),
+        ChangeNotifierProvider(create: (context) => JoueurProvider()),
         ChangeNotifierProvider<GameEventListProvider>(
           lazy: false,
           create: (context) => GameEventListProvider([]),
         ),
+        ChangeNotifierProxyProvider3<ParticipantProvider, GameEventListProvider,
+                GroupeProvider, GameProvider>(
+            lazy: false,
+            create: (context) => GameProvider([], [],
+                participantProvider: ParticipantProvider(),
+                gameEventListProvider: GameEventListProvider([]),
+                groupeProvider: GroupeProvider([])),
+            update: (context, parts, events, groupes, previous) => GameProvider(
+                  previous?.games ?? [],
+                  previous?.scores ?? [],
+                  participantProvider: parts,
+                  gameEventListProvider: events,
+                  groupeProvider: groupes,
+                )),
+        ChangeNotifierProxyProvider2<ParticipantProvider, GroupeProvider,
+                ParticipationProvider>(
+            create: (context) => ParticipationProvider([],
+                participantProvider: context.read<ParticipantProvider>(),
+                groupeProvider: context.read<GroupeProvider>()),
+            update: (context, parts, groupes, previous) =>
+                ParticipationProvider(
+                  previous?.participations ?? [],
+                  participantProvider: parts,
+                  groupeProvider: groupes,
+                )),
         ChangeNotifierProvider<StatistiqueFutureProvider>(
           lazy: false,
           create: (context) => StatistiqueFutureProvider([]),
@@ -57,17 +90,6 @@ class MyApp extends StatelessWidget {
                 ParamettreProvider(userProvider: context.read<UserProvider>()),
             update: (context, value, previous) =>
                 ParamettreProvider(userProvider: value)),
-        ChangeNotifierProvider(create: (context) => InfosProvider()),
-        ChangeNotifierProvider(create: (context) => GameProvider()),
-        ChangeNotifierProvider(create: (context) => CoachProvider()),
-        ChangeNotifierProvider(create: (context) => ArbitreProvider()),
-        ChangeNotifierProvider(create: (context) => CompetitionProvider()),
-        ChangeNotifierProvider(create: (context) => GameEventProvider()),
-        ChangeNotifierProvider(create: (context) => GroupeProvider()),
-        ChangeNotifierProvider(create: (context) => ParticipantProvider()),
-        ChangeNotifierProvider(create: (context) => ParticipationProvider()),
-        ChangeNotifierProvider(create: (context) => CompositionProvider()),
-        ChangeNotifierProvider(create: (context) => JoueurProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

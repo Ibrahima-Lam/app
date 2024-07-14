@@ -108,12 +108,12 @@ class Classeur {
       for (Game element in homeGames) {
         elements.add(Stat(
           id: element.idHome,
-          nom: element.home!,
+          nom: element.home.nomEquipe,
           bm: element.score!.homeScore!,
           be: element.score!.awayScore!,
           diff: element.score!.homeScore! - element.score!.awayScore!,
           date: element.dateGame,
-          imageUrl: element.homeImage,
+          imageUrl: element.home.imageUrl,
         ));
       }
       List<Game> awayGames =
@@ -121,12 +121,12 @@ class Classeur {
       for (Game element in awayGames) {
         elements.add(Stat(
           id: element.idAway,
-          nom: element.away!,
+          nom: element.away.nomEquipe,
           bm: element.score!.awayScore!,
           be: element.score!.homeScore!,
           diff: element.score!.awayScore! - element.score!.homeScore!,
           date: element.dateGame,
-          imageUrl: element.awayImage,
+          imageUrl: element.away.imageUrl,
         ));
       }
     }

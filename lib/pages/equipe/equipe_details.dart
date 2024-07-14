@@ -86,6 +86,7 @@ class EquipeDetails extends StatelessWidget {
                     headerSliverBuilder: (context, innerBoxIsScrolled) {
                       return [
                         SliverAppBar(
+                          centerTitle: true,
                           pinned: true,
                           expandedHeight: 200,
                           leading: IconButton(
@@ -94,7 +95,12 @@ class EquipeDetails extends StatelessWidget {
                             },
                             icon: const Icon(Icons.navigate_before),
                           ),
-                          title: Text(participant.nomEquipe),
+                          title: Text(
+                            participant.nomEquipe,
+                            style: TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
                           actions: [
                             StatefulBuilder(
                               builder: (context, setState) => IconButton(
@@ -121,7 +127,7 @@ class EquipeDetails extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const SizedBox(height: 50),
+                                  const SizedBox(height: 30),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [

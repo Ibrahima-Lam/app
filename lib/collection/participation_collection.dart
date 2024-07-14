@@ -38,16 +38,20 @@ class ParticipationCollection implements Collection {
       CompetitionPhase phase = CompetitionPhase.tout}) {
     List<Participation> parts = _participations;
     if (edition != null) {
-      parts = parts.where((element) => element.codeEdition == edition).toList();
+      parts = parts
+          .where((element) => element.participant.codeEdition == edition)
+          .toList();
     }
     if (groupe != null) {
       parts = parts.where((element) => element.idGroupe == groupe).toList();
     }
     if (phase == CompetitionPhase.groupe) {
-      parts = parts.where((element) => element.codePhase == 'grp').toList();
+      parts =
+          parts.where((element) => element.groupe.codePhase == 'grp').toList();
     }
     if (phase == CompetitionPhase.elimination) {
-      parts = parts.where((element) => element.codePhase != 'grp').toList();
+      parts =
+          parts.where((element) => element.groupe.codePhase != 'grp').toList();
     }
     return parts;
   }
@@ -55,7 +59,8 @@ class ParticipationCollection implements Collection {
   Participation? getParticipationsById({required String idParticipant}) {
     try {
       return _participations.firstWhere((element) =>
-          element.idParticipant == idParticipant && element.codePhase == 'grp');
+          element.idParticipant == idParticipant &&
+          element.groupe.codePhase == 'grp');
     } catch (e) {
       return null;
     }

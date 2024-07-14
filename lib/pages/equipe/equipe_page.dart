@@ -1,4 +1,6 @@
+import 'package:app/models/competition.dart';
 import 'package:app/models/participant.dart';
+import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/equipe/equipe_widget.dart';
 import 'package:app/widget/form/text_search_field_widget.dart';
@@ -50,9 +52,11 @@ class _EquipePageState extends State<EquipePage> {
                 child: Text('Erreur!'),
               );
             }
-            return Consumer<ParticipantProvider>(
-                builder: (context, value, child) {
-              List<Participant> participants = value.participants;
+            return Consumer2<ParticipantProvider, CompetitionProvider>(builder:
+                (context, participantProvider, competitionProvider, child) {
+              List<Participant> participants = participantProvider.participants;
+              Competition getCompetition(String id) =>
+                  competitionProvider.collection.getElementAt(id);
               return participants.length == 0
                   ? const Center(
                       child: Text('Pas de données!'),
@@ -79,7 +83,7 @@ class _EquipePageState extends State<EquipePage> {
                                                 .startsWith(equipeNotifier.value
                                                     .toUpperCase()))
                                         .toList()
-                                    : value.participants;
+                                    : participantProvider.participants;
 
                                 return Scrollbar(
                                   child: ListView.builder(
@@ -88,8 +92,9 @@ class _EquipePageState extends State<EquipePage> {
                                         EquipeListTileWidget(
                                       id: participants[index].idParticipant,
                                       title: participants[index].nomEquipe,
-                                      subtitle:
-                                          participants[index].nomCompetition,
+                                      subtitle: getCompetition(
+                                              participants[index].codeEdition)
+                                          .nomCompetition,
                                     ),
                                   ),
                                 );

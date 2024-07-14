@@ -172,14 +172,14 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.compositionSousCollection.game.home ?? '',
+                    widget.compositionSousCollection.game.home.nomEquipe,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    widget.compositionSousCollection.game.away ?? '',
+                    widget.compositionSousCollection.game.away.nomEquipe,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

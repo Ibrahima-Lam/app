@@ -6,6 +6,7 @@ import 'package:app/pages/joueur/widget_datails/joueur_match_list_widget.dart';
 import 'package:app/pages/joueur/widget_datails/joueur_performance_widget.dart';
 import 'package:app/pages/joueur/widget_datails/joueur_statistique_widget.dart';
 import 'package:app/providers/joueur_provider.dart';
+import 'package:app/widget/logos/equipe_logo_widget.dart';
 import 'package:app/widget/logos/joueur_logo_widget.dart';
 import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
@@ -60,11 +61,15 @@ class JoueurDetails extends StatelessWidget {
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   return [
                     SliverAppBar(
+                      centerTitle: true,
                       title: Text(
                         joueur.nomJoueur,
+                        style: TextStyle(
+                          fontSize: 17,
+                        ),
                       ),
                       forceElevated: innerBoxIsScrolled,
-                      expandedHeight: 200.0,
+                      expandedHeight: 180.0,
                       pinned: true,
                       actions: [
                         StatefulBuilder(
@@ -90,24 +95,28 @@ class JoueurDetails extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                CircleAvatar(
-                                  child: IconButton(
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    EquipeDetails(
-                                                        id: joueur
-                                                            .idParticipant)));
-                                      },
-                                      icon: Icon(Icons.safety_check)),
+                                SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EquipeDetails(
+                                                      id: joueur
+                                                          .idParticipant)));
+                                    },
+                                    child: EquipeImageLogoWidget(
+                                        url: joueur.imageUrl),
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 20,
                                 ),
                                 SizedBox(
-                                  height: 100,
-                                  width: 100,
+                                  height: 80,
+                                  width: 80,
                                   child: JoueurImageLogoWidget(
                                     url: joueur.imageUrl,
                                     noColor: true,

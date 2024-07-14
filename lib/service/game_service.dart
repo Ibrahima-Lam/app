@@ -1,40 +1,34 @@
 import 'package:app/models/game.dart';
+import 'package:app/models/groupe.dart';
+import 'package:app/models/niveau.dart';
+import 'package:app/models/participant.dart';
+import 'package:app/service/niveau_service.dart';
 
 class GameService {
-  Future<List<Game>> get getData async {
+  Future<List<Game>> getData(
+      List<Participant> participants, List<Groupe> groupes) async {
     await Future.delayed(const Duration(seconds: 1));
+    List<Niveau> niveaux = await NiveauService.getNiveaux();
+
     return games
-        .map((e) => Game.fromJson(e))
+        .map((e) {
+          Participant home = participants
+              .singleWhere((element) => element.idParticipant == e['idHome']);
+          Participant away = participants
+              .singleWhere((element) => element.idParticipant == e['idAway']);
+          Niveau niveau = niveaux.singleWhere(
+            (element) => element.codeNiveau == e['codeNiveau'],
+            orElse: () => Niveau(
+                codeNiveau: '', nomNiveau: '', typeNiveau: '', ordreNiveau: ''),
+          );
+          Groupe groupe = groupes.singleWhere(
+              (element) => e['idGroupe'].toString() == element.idGroupe);
+          return Game.fromJson(e,
+              home: home, away: away, niveau: niveau, groupe: groupe);
+        })
         .toList()
         .where((element) => element.dateGame != null)
         .toList();
-  }
-
-  Future<Game> getGame(String id) async {
-    return (await getData).where((element) => element.idGame == id).toList()[0];
-  }
-
-  Future<List<Game>> getGamesBy(
-      {String? idGroupe,
-      String? codeNiveau,
-      String? codeEdition,
-      String? dateGame}) async {
-    List<Game> liste = await getData;
-    if (idGroupe != null) {
-      liste = liste.where((element) => element.idGroupe == idGroupe).toList();
-    }
-    if (codeNiveau != null) {
-      liste =
-          liste.where((element) => element.codeNiveau == codeNiveau).toList();
-    }
-    if (codeEdition != null) {
-      liste =
-          liste.where((element) => element.codeEdition == codeEdition).toList();
-    }
-    if (dateGame != null) {
-      liste = liste.where((element) => element.dateGame == dateGame).toList();
-    }
-    return liste;
   }
 }
 
@@ -572,7 +566,7 @@ const games = [
     "idGame": 67,
     "idHome": "15",
     "idAway": "13",
-    "dateGame": "2024-07-11",
+    "dateGame": "2024-07-13",
     "stadeGame": "Stade de Thidé",
     "heureGame": "16:00",
     "idGroupe": 5,

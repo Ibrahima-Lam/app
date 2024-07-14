@@ -10,6 +10,10 @@ class ParticipantProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future initParticipants() async {
+    participants = await ParticipantService.getData();
+  }
+
   Future<List<Participant>> getParticipants() async {
     if (participants.length == 0) {
       await setParticipants();

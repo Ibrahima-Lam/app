@@ -26,7 +26,7 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
     with TickerProviderStateMixin {
   late Competition competition;
   List<String> tabs = [];
-
+  bool favori = false;
   List<String> tabBarString(CompetitionType competitionType) {
     return [
       'Fiche',
@@ -124,8 +124,10 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
             );
           }
 
-          return Consumer<CompetitionProvider>(builder: (context, val, child) {
-            competition = val.collection.getElementAt(widget.id);
+          return Consumer<CompetitionProvider>(
+              builder: (context, competitionProvider, child) {
+            competition =
+                competitionProvider.collection.getElementAt(widget.id);
             tabs = tabBarString(competition.type.type);
             return DefaultTabController(
               length: tabs.length,
@@ -134,13 +136,28 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
                   headerSliverBuilder: (context, innerBoxIsScrolled) {
                     return [
                       SliverAppBar(
-                        title: Text(competition.nomCompetition),
+                        title: Text(
+                          competition.nomCompetition,
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        centerTitle: true,
                         pinned: true,
-                        expandedHeight: 250,
+                        expandedHeight: 200,
                         leading: IconButton(
                           icon: const Icon(Icons.navigate_before),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
+                        actions: [
+                          StatefulBuilder(
+                            builder: (context, setState) => IconButton(
+                              onPressed: () {
+                                setState(() => favori = !favori);
+                              },
+                              icon: Icon(
+                                  favori ? Icons.star : Icons.star_outline),
+                            ),
+                          ),
+                        ],
                         flexibleSpace: FlexibleSpaceBar(
                           background: Container(
                             padding: const EdgeInsets.symmetric(vertical: 10),
@@ -148,7 +165,7 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const SizedBox(
-                                  height: 20,
+                                  height: 30,
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -158,17 +175,17 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
                                       child: Icon(Icons.local_grocery_store),
                                     ),
                                     const SizedBox(
-                                      width: 10,
+                                      width: 15,
                                     ),
                                     Container(
-                                      width: 90,
-                                      height: 90,
+                                      width: 80,
+                                      height: 80,
                                       child: CompetitionImageLogoWidget(
                                         url: competition.imageUrl ?? '',
                                       ),
                                     ),
                                     const SizedBox(
-                                      width: 10,
+                                      width: 15,
                                     ),
                                     CircleAvatar(
                                       radius: 25,
@@ -176,17 +193,6 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
                                           Icons.assignment_turned_in_rounded),
                                     ),
                                   ],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  'Edition ${competition.anneeEdition!}',
-                                  style: const TextStyle(
-                                      color: Colors.blue,
-                                      backgroundColor: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),

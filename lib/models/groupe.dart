@@ -1,28 +1,27 @@
+import 'package:app/models/phase.dart';
+
 class Groupe {
   String idGroupe;
   String? nomGroupe;
   String? codeEdition;
   String? codePhase;
-  String? nomPhase;
-  String? typePhase;
+  Phase? phase;
 
-  Groupe({
-    required this.idGroupe,
-    this.nomGroupe,
-    this.codeEdition,
-    this.codePhase,
-    this.nomPhase,
-    this.typePhase,
-  });
+  Groupe(
+      {required this.idGroupe,
+      this.nomGroupe,
+      this.codeEdition,
+      this.codePhase,
+      this.phase});
 
-  factory Groupe.fromJson(Map<String, dynamic> json) {
+  factory Groupe.fromJson(Map<String, dynamic> json, Phase phase) {
     return Groupe(
-        idGroupe: json["idGroupe"].toString(),
-        nomGroupe: json["nomGroupe"],
-        codePhase: json["codePhase"],
-        codeEdition: json["codeEdition"],
-        nomPhase: json["nomPhase"],
-        typePhase: json["typePhase"]);
+      idGroupe: json["idGroupe"].toString(),
+      nomGroupe: json["nomGroupe"],
+      codePhase: json["codePhase"],
+      codeEdition: json["codeEdition"],
+      phase: phase,
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -31,8 +30,6 @@ class Groupe {
       "nomGroupe": nomGroupe,
       "codePhase": codePhase,
       "codeEdition": codeEdition,
-      "nomPhase": nomPhase,
-      "typePhase": typePhase
     };
   }
 }

@@ -63,25 +63,36 @@ class ClassementWiget extends StatelessWidget {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    Container(
-                      width: MediaQuery.sizeOf(context).width,
-                      color: Colors.white,
-                      child: ToggleButtons(
-                        fillColor: Theme.of(context).primaryColor,
-                        color: Theme.of(context).primaryColor,
-                        selectedColor: Colors.white,
-                        onPressed: (index) {
-                          setState(
-                            () {
-                              selected = index;
-                            },
-                          );
-                        },
-                        children: [
-                          Text('Tous'),
-                          Text('Moins'),
-                        ],
-                        isSelected: isSelected,
+                    Card(
+                      margin: EdgeInsets.symmetric(horizontal: 4),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(3)),
+                      child: Container(
+                        width: MediaQuery.sizeOf(context).width,
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            gradient: LinearGradient(colors: [
+                              Colors.white,
+                              Color.fromARGB(255, 215, 238, 215),
+                              Colors.white,
+                            ])),
+                        child: ToggleButtons(
+                          fillColor: Theme.of(context).primaryColor,
+                          color: Theme.of(context).primaryColor,
+                          selectedColor: Colors.white,
+                          onPressed: (index) {
+                            setState(
+                              () {
+                                selected = index;
+                              },
+                            );
+                          },
+                          children: [
+                            Text('Tous'),
+                            Text('Moins'),
+                          ],
+                          isSelected: isSelected,
+                        ),
                       ),
                     ),
                     Card(

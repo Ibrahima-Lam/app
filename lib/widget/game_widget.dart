@@ -2,8 +2,11 @@ import 'package:app/controllers/competition/date.dart';
 import 'package:app/core/enums/game_etat_enum.dart';
 import 'package:app/core/enums/show_niveau_enum.dart';
 import 'package:app/core/extension/string_extension.dart';
+import 'package:app/models/event.dart';
 import 'package:app/pages/game/game_details.dart';
 import 'package:app/models/game.dart';
+import 'package:app/providers/game_event_list_provider.dart';
+import 'package:app/widget/game/card_and_num_widget.dart';
 import 'package:app/widget/logos/equipe_logo_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -19,30 +22,30 @@ class GameWidget extends StatelessWidget {
       this.showNiveauEnum = ShowNiveauEnum.niveaux,
       this.showEtat = true});
 
-  GameEtat get _etat => game.etat.etat;
+  GameEtat get etat => game.etat.etat;
 
-  Color get _colorEtat {
-    return switch (_etat) {
+  Color get colorEtat {
+    return switch (etat) {
       GameEtat.direct || GameEtat.pause => Colors.green,
-      GameEtat.reporte => Colors.red,
+      GameEtat.reporte || GameEtat.annule || GameEtat.arrete => Colors.red,
       _ => Colors.grey
     };
   }
 
-  Color get _colorScore {
-    return switch (_etat) {
+  Color get colorScore {
+    return switch (etat) {
       GameEtat.direct || GameEtat.pause => Colors.green,
-      GameEtat.reporte => Colors.red,
+      GameEtat.reporte || GameEtat.annule || GameEtat.arrete => Colors.red,
       _ => Colors.black
     };
   }
 
+//  todo
   String get _niveauText {
     return switch (showNiveauEnum) {
-      ShowNiveauEnum.niveaux => game.nomNiveau!,
-      ShowNiveauEnum.competition => game.nomCompetition,
-      ShowNiveauEnum.both => '${game.nomCompetition} ${game.nomNiveau}',
-      ShowNiveauEnum.none => '',
+      ShowNiveauEnum.niveaux => game.niveau.nomNiveau,
+      ShowNiveauEnum.both => '${game.niveau.nomNiveau}',
+      ShowNiveauEnum.none || _ => '',
     };
   }
 
@@ -50,7 +53,7 @@ class GameWidget extends StatelessWidget {
     return TextStyle(
       fontSize: 15,
       fontWeight: FontWeight.w400,
-      color: _colorScore,
+      color: colorScore,
     );
   }
 
@@ -58,7 +61,7 @@ class GameWidget extends StatelessWidget {
     return TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.bold,
-        backgroundColor: _colorEtat,
+        backgroundColor: colorEtat,
         color: Colors.white);
   }
 
@@ -85,7 +88,7 @@ class GameWidget extends StatelessWidget {
                 ConstrainedBox(
                   constraints: const BoxConstraints(minWidth: 50),
                   child: Text(
-                    game.isPlayed && showEtat && _etat != GameEtat.avant
+                    game.isPlayed && showEtat && etat != GameEtat.avant
                         ? game.etat.text.substring(0, 3).toUpperCase()
                         : '',
                     style: _styleEtat,
@@ -111,7 +114,7 @@ class GameWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
-                  child: textTeam(game.home!, game.isHomeVictoire),
+                  child: textTeam(game.home.nomEquipe, game.isHomeVictoire),
                 ),
                 Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -119,7 +122,8 @@ class GameWidget extends StatelessWidget {
                       game.scoreText,
                       style: _styleScore,
                     )),
-                Expanded(child: textTeam(game.away!, game.isAwayVictoire)),
+                Expanded(
+                    child: textTeam(game.away.nomEquipe, game.isAwayVictoire)),
               ],
             ),
             const SizedBox(
@@ -130,7 +134,7 @@ class GameWidget extends StatelessWidget {
               children: [
                 const SizedBox(),
                 Text(
-                  showDate && _etat != GameEtat.reporte
+                  showDate && etat != GameEtat.reporte
                       ? DateController.frDate(game.dateGame!, abbr: true)
                       : '',
                   textAlign: TextAlign.center,
@@ -159,40 +163,25 @@ class GameWidget extends StatelessWidget {
   }
 }
 
-class GameFullWidget extends StatelessWidget {
-  final Game game;
-  final bool showDate;
-  final bool showEtat;
+class GameFullWidget extends GameLessWidget {
   final double? verticalMargin;
   final double? horizontalMargin;
   final double? elevation;
 
   const GameFullWidget({
     super.key,
-    required this.game,
-    this.showDate = true,
-    this.showEtat = true,
     this.elevation,
     this.verticalMargin,
     this.horizontalMargin,
+    required super.game,
+    super.showDate = true,
+    super.showEtat = true,
+    required super.gameEventListProvider,
   });
-  GameEtat get _etat => game.etat.etat;
 
-  Color get _colorEtat {
-    return switch (_etat) {
-      GameEtat.direct || GameEtat.pause => Colors.green,
-      GameEtat.reporte => Colors.red,
-      _ => Colors.grey
-    };
-  }
-
-  Color get _colorScore {
-    return switch (_etat) {
-      GameEtat.direct || GameEtat.pause => Colors.green,
-      GameEtat.reporte => Colors.red,
-      _ => Colors.black
-    };
-  }
+  final double _size = 60;
+  final double _fontSize = 14;
+  final double _space = 8;
 
   @override
   Widget build(BuildContext context) {
@@ -203,6 +192,7 @@ class GameFullWidget extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
       shadowColor: Colors.grey,
       child: Container(
+        height: 120,
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,
@@ -214,106 +204,62 @@ class GameFullWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
-                child: equipeWidget(game.home!, game.homeImage ?? ''),
-              ),
-              Container(
-                constraints: BoxConstraints(minHeight: 100),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text((game.nomNiveau ?? '').capitalize()),
-                    Text(
-                      game.scoreText,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: _colorScore,
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        if (showDate)
-                          Text(
-                            DateController.frDate(game.dateGame, abbr: true),
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        if (game.isPlayed &&
-                            showEtat &&
-                            _etat != GameEtat.avant)
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 3.0),
-                            color: _colorEtat,
-                            child: Text(
-                              game.etat.text.substring(0, 3).toUpperCase(),
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 10),
-                            ),
-                          )
-                      ],
-                    )
-                  ],
+                child: GameEquipeWidget(
+                  name: game.home.nomEquipe,
+                  red: homeRed,
+                  imageUrl: game.home.imageUrl ?? '',
+                  size: _size,
+                  espace: _space,
+                  fontSize: _fontSize,
                 ),
               ),
-              Expanded(child: equipeWidget(game.away!, game.awayImage ?? '')),
+              GameScoreWiget(
+                game: game,
+                showDate: showDate,
+                showEtat: showEtat,
+                colorScore: colorScore,
+                etat: etat,
+                colorEtat: colorEtat,
+                fontSize: 18,
+              ),
+              Expanded(
+                  child: GameEquipeWidget(
+                name: game.away.nomEquipe,
+                red: awayRed,
+                imageUrl: game.away.imageUrl ?? '',
+                size: _size,
+                espace: _space,
+                fontSize: _fontSize,
+              )),
             ],
           ),
         ),
       ),
     );
   }
-
-  Widget equipeWidget(String name, String imageUrl) => Column(
-        children: [
-          SizedBox(
-            height: 60,
-            width: 60,
-            child: EquipeImageLogoWidget(
-              url: imageUrl,
-            ),
-          ),
-          SizedBox(
-            height: 8.0,
-          ),
-          Text(
-            name,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 14,
-            ),
-          ),
-        ],
-      );
 }
 
-class GameLessWidget extends StatelessWidget {
-  final Game game;
-  final bool showDate;
-  final bool showEtat;
+class GameLessWidget extends GameWidget {
+  final GameEventListProvider gameEventListProvider;
 
-  const GameLessWidget(
-      {super.key,
-      required this.game,
-      this.showDate = true,
-      this.showEtat = true});
-  GameEtat get _etat => game.etat.etat;
+  const GameLessWidget({
+    super.key,
+    required super.game,
+    super.showDate = true,
+    super.showEtat = true,
+    required this.gameEventListProvider,
+  });
 
-  Color get _colorEtat {
-    return switch (_etat) {
-      GameEtat.direct || GameEtat.pause => Colors.green,
-      GameEtat.reporte => Colors.red,
-      _ => Colors.grey
-    };
-  }
-
-  Color get _colorScore {
-    return switch (_etat) {
-      GameEtat.direct || GameEtat.pause => Colors.green,
-      GameEtat.reporte => Colors.red,
-      _ => Colors.black
-    };
-  }
+  int get homeRed => gameEventListProvider
+      .getEquipeGameEvent(idGame: game.idGame, idParticipant: game.idHome)
+      .whereType<CardEvent>()
+      .where((element) => element.isRed)
+      .length;
+  int get awayRed => gameEventListProvider
+      .getEquipeGameEvent(idGame: game.idGame, idParticipant: game.idAway)
+      .whereType<CardEvent>()
+      .where((element) => element.isRed)
+      .length;
 
   @override
   Widget build(BuildContext context) {
@@ -323,7 +269,7 @@ class GameLessWidget extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
       shadowColor: Colors.grey,
       child: Container(
-        height: 80,
+        height: 85,
         padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,
@@ -335,76 +281,159 @@ class GameLessWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
-                child: equipeWidget(game.home!, game.homeImage ?? ''),
+                child: GameEquipeWidget(
+                    name: game.home.nomEquipe,
+                    red: homeRed,
+                    imageUrl: game.home.imageUrl ?? ''),
               ),
-              Container(
-                height: MediaQuery.sizeOf(context).height,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text((game.nomNiveau ?? '').capitalize()),
-                    Text(
-                      game.scoreText,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: _colorScore,
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        if (showDate)
-                          Text(
-                            DateController.frDate(game.dateGame, abbr: true),
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        if (game.isPlayed &&
-                            showEtat &&
-                            _etat != GameEtat.avant)
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 3.0),
-                            color: _colorEtat,
-                            child: Text(
-                              game.etat.text.substring(0, 3).toUpperCase(),
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 10),
-                            ),
-                          )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Expanded(child: equipeWidget(game.away!, game.awayImage ?? '')),
+              GameScoreWiget(
+                  game: game,
+                  showDate: showDate,
+                  showEtat: showEtat,
+                  colorScore: colorScore,
+                  etat: etat,
+                  colorEtat: colorEtat),
+              Expanded(
+                  child: GameEquipeWidget(
+                      name: game.away.nomEquipe,
+                      red: awayRed,
+                      imageUrl: game.away.imageUrl ?? '')),
             ],
           ),
         ),
       ),
     );
   }
+}
 
-  Widget equipeWidget(String name, String imageUrl) => Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+class GameScoreWiget extends StatelessWidget {
+  final Game game;
+  final bool showDate;
+  final bool showEtat;
+  final Color? colorScore;
+  final Color? colorEtat;
+  final GameEtat etat;
+  final double? fontSize;
+  const GameScoreWiget({
+    super.key,
+    required this.game,
+    required this.showDate,
+    required this.showEtat,
+    required this.colorScore,
+    required this.etat,
+    required this.colorEtat,
+    this.fontSize,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.sizeOf(context).height,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            height: 40,
-            width: 40,
-            child: EquipeImageLogoWidget(
-              url: imageUrl,
-            ),
-          ),
-          SizedBox(
-            height: 2,
-          ),
           Text(
-            name,
-            textAlign: TextAlign.center,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            (game.niveau.nomNiveau).capitalize(),
+            style: const TextStyle(
               fontSize: 14,
             ),
           ),
+          Text(
+            game.scoreText,
+            style: TextStyle(
+              fontSize: fontSize ?? 16,
+              fontWeight: FontWeight.bold,
+              color: colorScore,
+            ),
+          ),
+          ConstrainedBox(
+            constraints: const BoxConstraints(
+              minHeight: 30,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (showDate)
+                  Text(
+                    DateController.frDate(game.dateGame, abbr: true),
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                if (game.isPlayed && showEtat && etat != GameEtat.avant)
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 3.0),
+                    color: colorEtat,
+                    child: Text(
+                      game.etat.text.substring(0, 3).toUpperCase(),
+                      style: TextStyle(color: Colors.white, fontSize: 10),
+                    ),
+                  )
+              ],
+            ),
+          )
         ],
-      );
+      ),
+    );
+  }
+}
+
+class GameEquipeWidget extends StatelessWidget {
+  final String name;
+  final String imageUrl;
+  final int? red;
+  final double? size;
+  final double? fontSize;
+  final double? espace;
+  const GameEquipeWidget({
+    super.key,
+    required this.name,
+    required this.red,
+    required this.imageUrl,
+    this.size = 40,
+    this.espace = 5,
+    this.fontSize = 14,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Stack(
+          alignment: Alignment.topRight,
+          children: [
+            SizedBox(
+              height: size,
+              width: size,
+              child: EquipeImageLogoWidget(
+                url: imageUrl,
+              ),
+            ),
+            if (red != null && (red ?? 0) > 0)
+              CardAndNumberWidget(
+                nombre: red ?? 0,
+                yellow: false,
+                showOneNumber: false,
+                textColor: Colors.white,
+                height: 14,
+                width: 10,
+                fontSize: 10,
+              )
+          ],
+        ),
+        SizedBox(
+          height: espace,
+        ),
+        Text(
+          name,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: fontSize,
+          ),
+        ),
+      ],
+    );
+  }
 }

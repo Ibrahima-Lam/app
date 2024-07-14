@@ -6,15 +6,23 @@ class EquipeListTileWidget extends StatelessWidget {
   final String title;
   final String? subtitle;
   final String id;
+  final bool border;
   const EquipeListTileWidget(
-      {super.key, required this.id, required this.title, this.subtitle});
+      {super.key,
+      required this.id,
+      required this.title,
+      this.subtitle,
+      this.border = true});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: ListTile(
-        shape: RoundedRectangleBorder(
-            side: BorderSide(width: 0.5, color: Colors.grey.withOpacity(0.8))),
+        shape: border
+            ? RoundedRectangleBorder(
+                side:
+                    BorderSide(width: 0.5, color: Colors.grey.withOpacity(0.8)))
+            : null,
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(

@@ -10,6 +10,7 @@ import 'package:app/pages/game/game_details.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
+import 'package:app/widget/game_widget.dart';
 import 'package:app/widget/logos/circular_logo_widget.dart';
 import 'package:app/widget/logos/equipe_logo_widget.dart';
 import 'package:app/widget/fiches_widget.dart';
@@ -256,7 +257,8 @@ class InformationEquipeWidget extends StatelessWidget {
                             const SizedBox(
                               width: 10.0,
                             ),
-                            Text(participant.nomCompetition ?? ''),
+                            // todo
+                            Text(''),
                           ],
                         ),
                         Row(
@@ -266,9 +268,7 @@ class InformationEquipeWidget extends StatelessWidget {
                             const SizedBox(
                               width: 10.0,
                             ),
-                            Text(participant.localiteEquipe ??
-                                participant.localiteCompetition ??
-                                ''),
+                            Text(participant.localiteEquipe ?? ''),
                           ],
                         ),
                       ],
@@ -369,15 +369,16 @@ class EquipeFichePreviousGameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameProvider>(builder: (context, val, child) {
+    return Consumer<GameProvider>(builder: (context, gameProvider, child) {
       Game? game;
       try {
-        game = val.played.lastWhere((element) =>
+        game = gameProvider.played.lastWhere((element) =>
             element.idHome == idParticipant || element.idAway == idParticipant);
       } catch (e) {}
       return game == null
           ? const SizedBox()
-          : FicheGameWidget(
+          : GameFullWidget(
+              gameEventListProvider: gameProvider.gameEventListProvider,
               game: game,
             );
     });
@@ -390,15 +391,16 @@ class EquipeFicheNextGameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameProvider>(builder: (context, val, child) {
+    return Consumer<GameProvider>(builder: (context, gameProvider, child) {
       Game? game;
       try {
-        game = val.noPlayed.firstWhere((element) =>
+        game = gameProvider.noPlayed.firstWhere((element) =>
             element.idHome == idParticipant || element.idAway == idParticipant);
       } catch (e) {}
       return game == null
           ? const SizedBox()
-          : FicheGameWidget(
+          : GameFullWidget(
+              gameEventListProvider: gameProvider.gameEventListProvider,
               game: game,
             );
     });
@@ -428,14 +430,15 @@ class FicheGameWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
-                  child: equipeWidget(game.home!, game.homeImage ?? ''),
+                  child: equipeWidget(
+                      game.home.nomEquipe, game.home.imageUrl ?? ''),
                 ),
                 Container(
                   constraints: BoxConstraints(minHeight: 100),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(game.nomNiveau ?? ''),
+                      Text(game.niveau.nomNiveau),
                       Text(
                         game.scoreText,
                         style: TextStyle(
@@ -450,7 +453,9 @@ class FicheGameWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                Expanded(child: equipeWidget(game.away!, game.awayImage ?? '')),
+                Expanded(
+                    child: equipeWidget(
+                        game.away.nomEquipe, game.away.imageUrl ?? '')),
               ],
             ),
           ),

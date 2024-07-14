@@ -1,27 +1,24 @@
 import 'dart:async';
 
 import 'package:app/collection/competition_collection.dart';
-import 'package:app/controllers/competition/date.dart';
 import 'package:app/core/class/abbreviable.dart';
 import 'package:app/core/enums/game_etat_enum.dart';
 import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/competition.dart';
 import 'package:app/models/game.dart';
-import 'package:app/models/gameEvent.dart';
 import 'package:app/pages/competition/competition_details.dart';
-import 'package:app/pages/equipe/equipe_details.dart';
 import 'package:app/pages/game/widget_details/composition_widget.dart';
 import 'package:app/pages/game/widget_details/evenement_widget.dart';
 import 'package:app/pages/game/widget_details/statistique_widget.dart';
 import 'package:app/providers/paramettre_provider.dart';
-import 'package:app/providers/statistique_provider.dart';
 import 'package:app/widget/classement/classement_widget.dart';
 import 'package:app/pages/game/widget_details/journee_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/widget/game/game_bottom_navbar_edit_widget.dart';
+import 'package:app/widget/game/game_details_column_widget.dart';
+import 'package:app/widget/game/game_details_score_column_widget.dart';
 import 'package:app/widget/modals/custom_delegate_search.dart';
-import 'package:app/widget/logos/equipe_logo_widget.dart';
 import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +34,7 @@ class GameDetails extends StatefulWidget {
 
 class _GameDetailsState extends State<GameDetails> with Abbreviable {
   late Game game;
-  late Competition competition;
+  late Competition? competition;
   late final ScrollController _scrollController;
   final ValueNotifier<bool> _isExpended = ValueNotifier(true);
   bool checkUser = false;
@@ -46,17 +43,17 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
     GameProvider gameProvider = await context.read<GameProvider>()
       ..getGames();
     game = gameProvider.getElementAt(widget.id);
-    String? codeEdition = game.codeEdition;
+    String? codeEdition = game.groupe.codeEdition;
     CompetitionCollection _competitionColletion =
         await context.read<CompetitionProvider>().getCompetitions();
-    competition = _competitionColletion.getElementAt(codeEdition);
+    competition = _competitionColletion.getElementAt(codeEdition ?? "");
     return true;
   }
 
   (List<String>, int) tabBarString(GameEtat gameEtat,
       {bool composition = false, bool classement = false}) {
     int initial = 0;
-    if (gameEtat case GameEtat.pause || GameEtat.direct || GameEtat.termine) {
+    if (gameEtat case (GameEtat.pause || GameEtat.direct || GameEtat.termine)) {
       initial = composition && classement
           ? 3
           : composition
@@ -99,7 +96,7 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
           break;
         case 'CLA':
           widgets.add(ClassementWiget(
-            title: 'Groupe ${game.nomGroupe}',
+            title: 'Groupe ${game.groupe.nomGroupe}',
             idGroupe: game.idGroupe,
             targets: [game.idHome, game.idAway],
           ));
@@ -178,9 +175,11 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
             );
           }
           var (tabs, initial) = tabBarString(game.etat.etat,
-              composition: true, classement: game.codePhase == 'grp');
+              composition: true,
+              classement: game.niveau.typeNiveau == 'groupe' ||
+                  game.niveau.typeNiveau == 'championnat');
           return Consumer<ParamettreProvider>(builder: (context, val, _) {
-            checkUser = val.checkUser(competition.codeEdition);
+            checkUser = val.checkUser(competition?.codeEdition ?? '');
             return DefaultTabController(
               initialIndex: initial,
               length: tabs.length,
@@ -190,7 +189,7 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
                   headerSliverBuilder: (context, innerBoxIsScrolled) => [
                     SliverAppBar(
                       pinned: true,
-                      expandedHeight: 280,
+                      expandedHeight: 250,
                       leading: IconButton(
                         icon: const Icon(Icons.navigate_before),
                         onPressed: () => Navigator.of(context).pop(),
@@ -212,43 +211,43 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
                               opacity: _isExpended.value ? 0.0 : 1.0,
                               duration: Duration(milliseconds: 300),
                               child: Text(
-                                '${abbr(game.home!)} ${game.scoreText} ${abbr(game.away.toString())}',
-                                style: const TextStyle(fontSize: 17),
+                                '${abbr(game.home.nomEquipe)} ${game.scoreText} ${abbr(game.away.nomEquipe.toString())}',
+                                style: const TextStyle(fontSize: 15),
                               ),
                             );
                           }),
                       flexibleSpace: FlexibleSpaceBar(
-                        background: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Center(
+                        background: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 20),
+                              Center(
                                 child: TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            CompetitionDetails(
-                                                id: game.codeEdition),
-                                      ),
-                                    );
-                                  },
+                                  onPressed: competition != null
+                                      ? () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CompetitionDetails(
+                                                      id: competition!
+                                                          .codeEdition),
+                                            ),
+                                          );
+                                        }
+                                      : null,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        '${competition.nomCompetition}. ',
+                                        '${competition?.nomCompetition ?? ''}. ',
                                         style: const TextStyle(
                                             fontSize: 17,
                                             color: Colors.white,
                                             fontWeight: FontWeight.normal),
                                       ),
                                       Text(
-                                        '${game.nomNiveau!.capitalize()}',
+                                        '${game.niveau.nomNiveau.capitalize()}',
                                         style: const TextStyle(
                                             fontSize: 15,
                                             color: Colors.white,
@@ -258,39 +257,41 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(),
-                            Consumer<GameProvider>(
-                              builder: (context, value, child) {
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ColumnWidget(
-                                      text: game.home!,
-                                      id: game.idHome,
-                                      isHome: true,
-                                      game: game,
-                                    ),
-                                    ColumnScoreWidget(
-                                      game: game,
-                                      timer: game.score?.timer,
-                                    ),
-                                    ColumnWidget(
-                                      text: game.away!,
-                                      id: game.idAway,
-                                      isHome: false,
-                                      game: game,
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                            SizedBox(
-                              height: 20,
-                            )
-                          ],
+                              SizedBox(),
+                              Consumer<GameProvider>(
+                                builder: (context, value, child) {
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: GameDetailsColumnWidget(
+                                          text: game.home.nomEquipe,
+                                          id: game.idHome,
+                                          isHome: true,
+                                          game: game,
+                                        ),
+                                      ),
+                                      GameDetailsScoreColumnWidget(
+                                        game: game,
+                                        timer: game.score?.timer,
+                                      ),
+                                      Expanded(
+                                        child: GameDetailsColumnWidget(
+                                          text: game.away.nomEquipe,
+                                          id: game.idAway,
+                                          isHome: false,
+                                          game: game,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       bottom: TabBarWidget.build(
@@ -313,341 +314,5 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
             );
           });
         });
-  }
-}
-
-class ColumnScoreWidget extends StatelessWidget {
-  final Game game;
-  final TimerEvent? timer;
-  const ColumnScoreWidget({super.key, required this.game, this.timer});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 135,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          SizedBox(),
-          TextScore(
-            '${game.scoreText}',
-          ),
-          Column(
-            children: [
-              Text(
-                DateController.abbrDate(game.dateGame, year: true),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    fontStyle: FontStyle.italic),
-              ),
-              EtatWidget(
-                etat: game.etat,
-                timer: timer,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ignore: must_be_immutable
-class EtatWidget extends StatefulWidget {
-  GameEtatClass etat;
-  final TimerEvent? timer;
-  EtatWidget({super.key, required this.etat, this.timer});
-
-  @override
-  State<EtatWidget> createState() => _EtatWidgetState();
-}
-
-class _EtatWidgetState extends State<EtatWidget> {
-  double _opacity = 1.0;
-
-  Color get _colorEtat {
-    return switch (widget.etat.etat) {
-      GameEtat.direct || GameEtat.pause => Colors.green,
-      GameEtat.reporte || GameEtat.annule || GameEtat.arrete => Colors.red,
-      _ => Colors.grey
-    };
-  }
-
-  Stream<String> timeStream() async* {
-    if (widget.timer?.start == null) return;
-    int start = DateTimeRange(
-                start: DateTime.parse(widget.timer!.start!),
-                end: DateTime.now())
-            .duration
-            .inSeconds +
-        ((widget.timer?.initial ?? 0) + (widget.timer!.retard ?? 0) + 1) * 60;
-    int duration =
-        (widget.timer?.duration ?? 0 + (widget.timer?.initial ?? 0)) * 60;
-    int extra = (widget.timer?.extra ?? 0) * 60;
-    String except = duration != (45 * 60) && duration != (90 * 60)
-        ? ' |${duration ~/ 60}'
-        : '';
-    for (int i = start; i <= duration + extra; i++) {
-      if (i <= duration)
-        yield '${i ~/ 60}\'$except';
-      else
-        yield '${duration ~/ 60} + ${extra ~/ 60}\'${except}';
-
-      _opacity = i.isOdd ? 0.0 : 1.0;
-      await Future.delayed(Duration(seconds: 1));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.etat.etat == GameEtat.avant
-        ? const SizedBox(
-            height: 30,
-          )
-        : Container(
-            constraints: BoxConstraints(minWidth: 80),
-            padding: EdgeInsets.all(2.0),
-            margin: EdgeInsets.all(5.0),
-            color: Colors.white,
-            child: widget.etat.etat != GameEtat.direct
-                ? textWidget(widget.etat.text)
-                : StreamBuilder(
-                    stream: widget.timer != null &&
-                            widget.etat.etat == GameEtat.direct
-                        ? timeStream()
-                        : null,
-                    builder: (context, snapshot) {
-                      String text = widget.etat.text;
-                      if (snapshot.hasData) {
-                        text = '${snapshot.data}';
-                      }
-                      if (snapshot.connectionState == ConnectionState.done ||
-                          snapshot.connectionState == ConnectionState.waiting ||
-                          !snapshot.hasData ||
-                          snapshot.hasError) {
-                        _opacity = 1.0;
-                        text = widget.etat.text;
-                      }
-                      return AnimatedOpacity(
-                        opacity: _opacity,
-                        duration: Duration(microseconds: 800),
-                        child: textWidget(text),
-                      );
-                    }),
-          );
-  }
-
-  Widget textWidget(String text) {
-    return Text(
-      text,
-      textAlign: TextAlign.center,
-      style: TextStyle(
-          color: _colorEtat, fontSize: 13, fontWeight: FontWeight.w400),
-    );
-  }
-}
-
-// ignore: must_be_immutable
-class TextScore extends StatelessWidget {
-  final String text;
-  TextScore(this.text, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-        color: Colors.white,
-      ),
-    );
-  }
-}
-
-class ColumnWidget extends StatelessWidget {
-  final String text;
-  final String id;
-  final bool isHome;
-  final Game game;
-  const ColumnWidget(
-      {super.key,
-      required this.text,
-      required this.id,
-      required this.isHome,
-      required this.game});
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<StatistiqueProvider>(builder: (context, val, child) {
-      GameEvent gameEvent = val.getGameCardAndPossession(game);
-
-      int _yellow = (isHome
-          ? gameEvent.homeEvent.yellowCard
-          : gameEvent.awayEvent.yellowCard);
-      int _red =
-          (isHome ? gameEvent.homeEvent.redCard : gameEvent.awayEvent.redCard);
-      int _valuePourcent = (isHome
-              ? gameEvent.homeEvent.pourcent
-              : gameEvent.awayEvent.pourcent)!
-          .toInt();
-      double value = _valuePourcent / 100;
-
-      return Container(
-        constraints: BoxConstraints(minWidth: 120),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Container(
-              child: isHome
-                  ? CardAndStatWidget(
-                      red: _red, yellow: _yellow, pourcent: _valuePourcent)
-                  : null,
-            ),
-            Container(
-              height: 100,
-              constraints: BoxConstraints(maxWidth: 115),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  GestureDetector(
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => EquipeDetails(id: id))),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            child: EquipeImageLogoWidget(
-                              noColor: true,
-                              url: isHome
-                                  ? (game.homeImage ?? '')
-                                  : (game.awayImage ?? ''),
-                            ),
-                          ),
-                          Builder(
-                            builder: (context) {
-                              if (value >= 1) {
-                                value = 0;
-                              }
-                              final Color color = (value >= 0.5
-                                  ? const Color.fromARGB(255, 5, 148, 10)
-                                  : const Color.fromARGB(255, 215, 21, 7));
-                              return CircularProgressIndicator(
-                                backgroundColor:
-                                    isHome ? (color) : Colors.white,
-                                value: isHome ? 1 - value : value,
-                                strokeAlign: 10,
-                                strokeWidth: 2,
-                                valueColor: isHome
-                                    ? AlwaysStoppedAnimation(Colors.white)
-                                    : AlwaysStoppedAnimation(color),
-                              );
-                            },
-                          )
-                        ],
-                      )),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    text,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              child: !isHome
-                  ? CardAndStatWidget(
-                      red: _red, yellow: _yellow, pourcent: _valuePourcent)
-                  : null,
-            )
-          ],
-        ),
-      );
-    });
-  }
-}
-
-class CardAndStatWidget extends StatelessWidget {
-  final int red;
-  final int yellow;
-  final int? pourcent;
-  const CardAndStatWidget(
-      {super.key, this.red = 0, this.yellow = 0, this.pourcent});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 120,
-      constraints: BoxConstraints(minWidth: 30),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (yellow > 0)
-                CardWidget(
-                  nombre: yellow,
-                  yellow: true,
-                ),
-              SizedBox(
-                width: 2,
-              ),
-              if (red > 0)
-                CardWidget(
-                  nombre: red,
-                  yellow: false,
-                ),
-            ],
-          ),
-          Text(
-            pourcent != null && (pourcent ?? 0) > 0 && (pourcent ?? 0) < 100
-                ? '$pourcent%'
-                : '',
-            style: TextStyle(color: Colors.white),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class CardWidget extends StatelessWidget {
-  final int nombre;
-  final bool yellow;
-  const CardWidget({super.key, this.nombre = 0, this.yellow = true});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 18,
-      width: 13,
-      color: yellow
-          ? const Color.fromARGB(255, 255, 230, 6)
-          : const Color.fromARGB(255, 213, 20, 6),
-      child: nombre >= 1
-          ? Text(
-              nombre.toString(),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-              ),
-            )
-          : null,
-    );
   }
 }

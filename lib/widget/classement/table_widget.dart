@@ -51,11 +51,12 @@ class TableWidget extends StatelessWidget {
               .map((e) => DataRow(
                       color: targets != null && targets!.contains(e.id)
                           ? WidgetStatePropertyAll(
-                              const Color.fromARGB(255, 213, 254, 254))
+                              Color.fromARGB(255, 240, 249, 241))
                           : null,
                       cells: [
                         DataCell(
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Container(
                                   margin: const EdgeInsets.only(left: 5),
@@ -91,7 +92,9 @@ class TableWidget extends StatelessWidget {
                                     builder: (context) =>
                                         EquipeDetails(id: e.id))),
                             Container(
-                              constraints: const BoxConstraints(minWidth: 100),
+                              padding: EdgeInsets.symmetric(horizontal: 5),
+                              constraints: const BoxConstraints(
+                                  minWidth: 100, minHeight: 60),
                               child: Row(
                                 children: [
                                   Container(

@@ -132,7 +132,7 @@ class _GamePageState extends State<GamePage>
 
               if (snapshot.hasError) {
                 return const Center(
-                  child: Text('Erreur!'),
+                  child: Text('erreur!'),
                 );
               }
 
@@ -186,7 +186,7 @@ class TopIconsWidget extends StatelessWidget {
               (element) =>
                   element.dateGame!.compareTo(dateGame) <= 0 &&
                   lastComps.elementAtOrNull(0)?.codeEdition ==
-                      element.codeEdition,
+                      element.groupe.codeEdition,
             )
             .take(2)
             .toList(),
@@ -195,21 +195,21 @@ class TopIconsWidget extends StatelessWidget {
               (element) =>
                   element.dateGame!.compareTo(dateGame) <= 0 &&
                   lastComps.elementAtOrNull(1)?.codeEdition ==
-                      element.codeEdition,
+                      element.groupe.codeEdition,
             )
             .take(2)
             .toList(),
       ];
   List<Competition> get comps => competitions
-      .where(
-          (element) => games.any((e) => e.codeEdition == element.codeEdition))
+      .where((element) =>
+          games.any((e) => e.groupe.codeEdition == element.codeEdition))
       .toList();
   List<Competition> get lastComps => [
         ...comps,
         ...competitions
             .where((element) =>
                 gameProvider.played.reversed
-                    .any((e) => e.codeEdition == element.codeEdition) &&
+                    .any((e) => e.groupe.codeEdition == element.codeEdition) &&
                 !comps.any(
                   (elmt) => element.codeEdition == elmt.codeEdition,
                 ))
@@ -227,7 +227,7 @@ class TopIconsWidget extends StatelessWidget {
             .toList();
 
         yield CircularLogoWidget(
-          path: element.homeImage ?? '',
+          path: element.home.imageUrl ?? '',
           categorie: Categorie.equipe,
           id: element.idHome,
           tap: true,
@@ -244,7 +244,7 @@ class TopIconsWidget extends StatelessWidget {
             id: p.idJoueur));
 
         yield CircularLogoWidget(
-          path: element.awayImage ?? '',
+          path: element.away.imageUrl ?? '',
           categorie: Categorie.equipe,
           id: element.idAway,
           tap: true,
@@ -332,12 +332,13 @@ class _CompetitionGamesWidgetState extends State<CompetitionGamesWidget> {
             );
           }
           if (snapshot.hasError) {
-            return const Center(
-              child: Text('Erreur'),
+            return Center(
+              child: Text(snapshot.error.toString()),
             );
           }
-          return Consumer<GameProvider>(builder: (context, value, child) {
-            return value
+          return Consumer<GameProvider>(
+              builder: (context, gamePrevider, child) {
+            return gamePrevider
                     .getGamesBy(dateGame: widget.date, playing: widget.playing)
                     .isEmpty
                 ? Center(
@@ -350,14 +351,15 @@ class _CompetitionGamesWidgetState extends State<CompetitionGamesWidget> {
                           children: [
                             TopIconsWidget(
                               playing: widget.playing,
-                              gameProvider: value,
+                              gameProvider: gamePrevider,
                               dateGame: widget.date,
                               competitions: widget.competitions,
                             ),
                             for (Competition competition in widget.competitions)
                               Builder(
                                 builder: (context) {
-                                  final List<Game> gamelist = value.getGamesBy(
+                                  final List<Game> gamelist =
+                                      gamePrevider.getGamesBy(
                                     dateGame: widget.date,
                                     codeEdition: competition.codeEdition,
                                   );
@@ -470,6 +472,8 @@ class _CompetitionGamesWidgetState extends State<CompetitionGamesWidget> {
                                       ),
                                       for (final g in gamelist)
                                         GameLessWidget(
+                                          gameEventListProvider: gamePrevider
+                                              .gameEventListProvider,
                                           game: g,
                                           showDate: false,
                                         ),

@@ -84,10 +84,10 @@ class CustomDelegateSearch extends SearchDelegate {
           q.add(element.libelleEquipe!);
         }
         if (element is Game) {
-          q.add(element.home!);
-          q.add(filterFC(element.home!));
-          q.add(element.away!);
-          q.add(filterFC(element.away!));
+          q.add(element.home.nomEquipe);
+          q.add(filterFC(element.home.nomEquipe));
+          q.add(element.away.nomEquipe);
+          q.add(filterFC(element.away.nomEquipe));
         }
         if (element is Joueur) {
           q.add(element.nomJoueur);

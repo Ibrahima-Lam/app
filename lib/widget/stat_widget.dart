@@ -15,7 +15,7 @@ class StatWidget extends StatelessWidget {
       this.checkUser = false});
 
   final TextStyle style = const TextStyle(
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: FontWeight.w500,
   );
   bool get isPossession => statistique.codeStatistique == 'possession';
@@ -34,87 +34,92 @@ class StatWidget extends StatelessWidget {
                 context.read<StatistiqueProvider>().setStat(statistique);
             }
           : null,
-      child: Container(
-        padding: EdgeInsets.all(10.0),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: const Border(
-              top: BorderSide(width: 0.5, color: Colors.grey),
-              bottom: BorderSide(width: 0.5, color: Colors.grey)),
-        ),
-        child: Column(
-          children: [
-            Container(
-              constraints: BoxConstraints(minHeight: 40),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: TextContentWiget(
-                    content:
-                        '${statistique.homeStatistique.toInt().toString()}${isPossession ? '%' : ''}',
-                    color: statistique.homeStatistique >=
-                            statistique.awayStatistique
-                        ? Colors.blueAccent
-                        : null,
-                  )),
-                  Center(
-                    child: Text(
-                      statistique.nomStatistique,
-                      style: style,
+      child: Card(
+        margin: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+        shadowColor: Colors.white,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Column(
+            children: [
+              Container(
+                constraints: BoxConstraints(minHeight: 40),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                        child: TextContentWiget(
+                      content:
+                          '${statistique.homeStatistique.toInt().toString()}${isPossession ? '%' : ''}',
+                      color: statistique.homeStatistique >=
+                              statistique.awayStatistique
+                          ? Color.fromARGB(255, 146, 183, 248)
+                          : null,
+                    )),
+                    Center(
+                      child: Text(
+                        statistique.nomStatistique,
+                        style: style,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                      child: TextContentWiget(
-                    content:
-                        '${statistique.awayStatistique.toInt().toString()}${isPossession ? '%' : ''}',
-                    color: statistique.homeStatistique <=
-                            statistique.awayStatistique
-                        ? Colors.greenAccent
-                        : null,
-                  )),
-                ],
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: LinearProgressIndicator(
-                      backgroundColor: one ? Colors.greenAccent : null,
-                      color: Colors.blueAccent,
-                      value: statistique.homeStatistique +
-                                  statistique.awayStatistique <=
-                              0
-                          ? 0
-                          : statistique.homeStatistique /
-                              (statistique.homeStatistique +
-                                  statistique.awayStatistique),
-                    ),
-                  ),
+                    Expanded(
+                        child: TextContentWiget(
+                      content:
+                          '${statistique.awayStatistique.toInt().toString()}${isPossession ? '%' : ''}',
+                      color: statistique.homeStatistique <=
+                              statistique.awayStatistique
+                          ? const Color.fromARGB(255, 194, 244, 220)
+                          : null,
+                    )),
+                  ],
                 ),
-                if (!one)
+              ),
+              Row(
+                children: [
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(5.0),
-                      child: RotatedBox(
-                        quarterTurns: 2,
-                        child: LinearProgressIndicator(
-                          color: Colors.greenAccent,
-                          value: statistique.homeStatistique +
-                                      statistique.awayStatistique <=
-                                  0
-                              ? 0
-                              : statistique.awayStatistique /
-                                  (statistique.homeStatistique +
-                                      statistique.awayStatistique),
-                        ),
+                      child: LinearProgressIndicator(
+                        borderRadius: BorderRadius.circular(2),
+                        backgroundColor: one ? Colors.greenAccent : null,
+                        color: Colors.blueAccent,
+                        value: statistique.homeStatistique +
+                                    statistique.awayStatistique <=
+                                0
+                            ? 0
+                            : statistique.homeStatistique /
+                                (statistique.homeStatistique +
+                                    statistique.awayStatistique),
                       ),
                     ),
                   ),
-              ],
-            )
-          ],
+                  if (!one)
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: RotatedBox(
+                          quarterTurns: 2,
+                          child: LinearProgressIndicator(
+                            borderRadius: BorderRadius.circular(2),
+                            color: Colors.greenAccent,
+                            value: statistique.homeStatistique +
+                                        statistique.awayStatistique <=
+                                    0
+                                ? 0
+                                : statistique.awayStatistique /
+                                    (statistique.homeStatistique +
+                                        statistique.awayStatistique),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

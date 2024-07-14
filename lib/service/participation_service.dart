@@ -1,16 +1,18 @@
+import 'package:app/models/groupe.dart';
+import 'package:app/models/participant.dart';
 import 'package:app/models/participation.dart';
 
 class ParticipationService {
-  Future<List<Participation>> getData() async {
+  static Future<List<Participation>> getData(
+      List<Participant> participants, List<Groupe> groupes) async {
     await Future.delayed(const Duration(seconds: 1));
-    return participations.map((e) => Participation.fromJson(e)).toList();
-  }
-
-  Future<Participation> getParticipation(
-      {required String idParticipant}) async {
-    return (await getData())
-        .where((element) => element.idParticipant.toString() == idParticipant)
-        .toList()[0];
+    return participations.map((e) {
+      Participant participant = participants.singleWhere(
+          (element) => element.idParticipant == e['idParticipant'].toString());
+      Groupe groupe = groupes.singleWhere(
+          (element) => e['idGroupe'].toString() == element.idGroupe);
+      return Participation.fromJson(e, participant, groupe);
+    }).toList();
   }
 }
 

@@ -50,7 +50,13 @@ class ArbitreDetails extends StatelessWidget {
                       print(innerBoxIsScrolled);
                       return [
                         SliverAppBar(
-                          title: Text(arbitre.nomArbitre),
+                          centerTitle: true,
+                          title: Text(
+                            arbitre.nomArbitre,
+                            style: TextStyle(
+                              fontSize: 17,
+                            ),
+                          ),
                           actions: [
                             Padding(
                               padding: const EdgeInsets.all(10.0),
@@ -66,7 +72,7 @@ class ArbitreDetails extends StatelessWidget {
                               ),
                             ),
                           ],
-                          expandedHeight: 200,
+                          expandedHeight: 180,
                           pinned: true,
                           flexibleSpace: FlexibleSpaceBar(
                             background: Container(
@@ -95,8 +101,8 @@ class ArbitreDetails extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 20),
                                       SizedBox(
-                                        height: 90,
-                                        width: 90,
+                                        height: 80,
+                                        width: 80,
                                         child: ArbitreImageLogoWidget(
                                           noColor: true,
                                           url: arbitre.imageUrl,

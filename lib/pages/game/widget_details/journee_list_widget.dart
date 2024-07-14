@@ -27,8 +27,9 @@ class JourneeWidget extends StatelessWidget {
             );
           }
 
-          return Consumer<GameProvider>(builder: (context, val, child) {
-            final List<Game> games = val.getGamesBy(
+          return Consumer<GameProvider>(
+              builder: (context, gameProvider, child) {
+            final List<Game> games = gameProvider.getGamesBy(
                 idGroupe: game.idGroupe, codeNiveau: game.codeNiveau);
             return Container(
               padding: EdgeInsets.symmetric(vertical: 5),
@@ -37,9 +38,11 @@ class JourneeWidget extends StatelessWidget {
                   children: [
                     for (Game game in games)
                       GameFullWidget(
+                        gameEventListProvider:
+                            gameProvider.gameEventListProvider,
                         game: game,
                         verticalMargin: 1,
-                        elevation: 0,
+                        elevation: 1,
                       ),
                   ],
                 ),

@@ -4,7 +4,6 @@ import 'package:app/core/extension/string_extension.dart';
 import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/joueur.dart';
 import 'package:app/models/performance.dart';
-import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/widget/fiches_widget.dart';
 import 'package:app/widget/game_widget.dart';
@@ -50,24 +49,26 @@ class LastPerformanceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 5.0),
-      child: Card(
-        child: Consumer2<GameProvider, GameEventListProvider>(
-            builder: (context, matchs, events, child) {
-          GamePerformances? gamePerformance =
-              JoueurController.getJoueurPerformance(joueur,
-                      games: matchs.games, events: events.events)
-                  .lastOrNull;
-          return gamePerformance == null
-              ? const SizedBox()
-              : Column(
-                  children: [
-                    ...gamePerformance.performances
-                        .map((e) => FichePerformanceWidget(performance: e)),
-                    GameFullWidget(game: gamePerformance.game),
-                  ],
-                );
-        }),
-      ),
+      child: Consumer<GameProvider>(builder: (context, gameProvider, child) {
+        GamePerformances? gamePerformance =
+            JoueurController.getJoueurPerformance(joueur,
+                    games: gameProvider.games,
+                    events: gameProvider.gameEventListProvider.events)
+                .lastOrNull;
+        return gamePerformance == null
+            ? const SizedBox()
+            : Column(
+                children: [
+                  ...gamePerformance.performances
+                      .map((e) => FichePerformanceWidget(performance: e)),
+                  GameFullWidget(
+                    gameEventListProvider: gameProvider.gameEventListProvider,
+                    game: gamePerformance.game,
+                    verticalMargin: 0.5,
+                  ),
+                ],
+              );
+      }),
     );
   }
 }
@@ -78,28 +79,30 @@ class FichePerformanceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.sizeOf(context).width,
-      padding: const EdgeInsets.all(5.0),
-      decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.black, width: 0.5))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            performance.title.capitalize(),
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-          Row(
-            children: List.generate(
-                performance.nombre,
-                (index) => Icon(performance.type == PerformanceType.but
-                    ? Icons.sports_soccer
-                    : Icons.arrow_forward)),
-          )
-        ],
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+      child: Container(
+        height: 50,
+        width: MediaQuery.sizeOf(context).width,
+        padding: const EdgeInsets.all(5.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              performance.title.capitalize(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            Row(
+              children: List.generate(
+                  performance.nombre,
+                  (index) => Icon(performance.type == PerformanceType.but
+                      ? Icons.sports_soccer
+                      : Icons.arrow_forward)),
+            )
+          ],
+        ),
       ),
     );
   }

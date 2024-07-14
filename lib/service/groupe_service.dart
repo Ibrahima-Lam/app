@@ -1,8 +1,15 @@
 import 'package:app/models/groupe.dart';
+import 'package:app/models/phase.dart';
+import 'package:app/service/phase_service.dart';
 
 class GroupeService {
   static Future<List<Groupe>> getData() async {
-    return groupes.map((e) => Groupe.fromJson(e)).toList();
+    List<Phase> phases = await PhaseService.getData();
+    return groupes.map((e) {
+      Phase phase =
+          phases.singleWhere((elmt) => elmt.codePhase == e['codePhase']);
+      return Groupe.fromJson(e, phase);
+    }).toList();
   }
 }
 

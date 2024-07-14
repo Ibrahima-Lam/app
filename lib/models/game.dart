@@ -1,33 +1,29 @@
 import 'package:app/core/enums/game_etat_enum.dart';
+import 'package:app/models/groupe.dart';
+import 'package:app/models/niveau.dart';
+import 'package:app/models/participant.dart';
 import 'package:app/models/scores/score.dart';
 import 'package:app/models/searchable.dart';
 
 class Game implements Searchable {
   String idGame;
   String idHome;
-  String? homeImage;
-  String? awayImage;
+
   String idAway;
   String? dateGame;
   String? stadeGame;
   String? heureGame;
   String? idGroupe;
-  String? home;
-  String? away;
 
-  String? nomGroupe;
-  String codeEdition;
-  String? anneeEdition;
-  String? codePhase;
+  Participant home;
+  Participant away;
+
   String? codeNiveau;
-  String? nomNiveau;
-  String? nomPhase;
-  String? typePhase;
-  int? homeScorePenalty;
-  int? awayScorePenalty;
+
   GameEtatClass etat;
-  String nomCompetition;
   Score? score;
+  Niveau niveau;
+  Groupe groupe;
 
   Game({
     required this.idGame,
@@ -37,26 +33,22 @@ class Game implements Searchable {
     this.stadeGame,
     this.heureGame,
     this.idGroupe,
-    this.home,
-    this.away,
-    this.homeImage,
-    this.awayImage,
-    this.nomGroupe,
-    required this.codeEdition,
-    this.anneeEdition,
-    this.codePhase,
     this.codeNiveau,
-    this.nomNiveau,
-    this.nomPhase,
-    this.typePhase,
     this.etat = const GameEtatClass('termine'),
-    this.nomCompetition = '',
     this.score,
+    required this.groupe,
+    required this.home,
+    required this.away,
+    required this.niveau,
   });
 
   final String versus = 'VS';
 
-  factory Game.fromJson(Map<String, dynamic> json) {
+  factory Game.fromJson(Map<String, dynamic> json,
+      {required Participant home,
+      required Participant away,
+      required Niveau niveau,
+      required Groupe groupe}) {
     return Game(
       idGame: json["idGame"].toString(),
       idHome: json["idHome"],
@@ -65,16 +57,11 @@ class Game implements Searchable {
       stadeGame: json["stadeGame"],
       heureGame: json["heureGame"],
       idGroupe: json["idGroupe"].toString(),
-      home: json["home"],
-      away: json["away"],
-      nomGroupe: json["nomGroupe"],
-      codeEdition: json["codeEdition"],
-      anneeEdition: json["anneeEdition"],
-      codePhase: json["codePhase"],
       codeNiveau: json["codeNiveau"],
-      nomNiveau: json["nomNiveau"],
-      nomPhase: json["nomPhase"],
-      typePhase: json["typePhase"],
+      home: home,
+      away: away,
+      niveau: niveau,
+      groupe: groupe,
     );
   }
 
@@ -111,16 +98,7 @@ class Game implements Searchable {
       "idGroupe": idGroupe,
       "home": home,
       "away": away,
-      "nomGroupe": nomGroupe,
-      "codeEdition": codeEdition,
-      "anneeEdition": anneeEdition,
-      "codePhase": codePhase,
       "codeNiveau": codeNiveau,
-      "nomNiveau": nomNiveau,
-      "nomPhase": nomPhase,
-      "typePhase": typePhase,
-      "homeScorePenalty": homeScorePenalty,
-      "awayScorePenalty": awayScorePenalty,
     };
   }
 }

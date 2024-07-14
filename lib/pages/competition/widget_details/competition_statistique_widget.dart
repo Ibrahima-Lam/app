@@ -38,7 +38,7 @@ class CompetitionStatistiqueWidget extends StatelessWidget {
             final List<EventStatistique> jaunes = [];
             final List<EventStatistique> rouges = [];
             for (var participant in participantProvider.participants
-                .where((element) => element.idEdition == idEdition)
+                .where((element) => element.codeEdition == idEdition)
                 .toList()) {
               final List<Event> evs = events
                   .where((element) =>

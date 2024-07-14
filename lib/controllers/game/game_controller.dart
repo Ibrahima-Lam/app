@@ -27,8 +27,9 @@ class GameController {
           games.where((element) => element.codeNiveau == codeNiveau).toList();
     }
     if (codeEdition != null) {
-      games =
-          games.where((element) => element.codeEdition == codeEdition).toList();
+      games = games
+          .where((element) => element.groupe.codeEdition == codeEdition)
+          .toList();
     }
     if (dateGame != null) {
       games = games.where((element) => element.dateGame == dateGame).toList();

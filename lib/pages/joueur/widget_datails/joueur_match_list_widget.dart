@@ -32,26 +32,34 @@ class JoueurMatchListWidget extends StatelessWidget {
           );
         }
         return Consumer2<GameProvider, CompositionProvider>(
-          builder: (context, matchs, compos, child) {
+          builder: (context, gameProvider, compositionProvider, child) {
             List<Game> games = JoueurController.getJoueurConvocation(idJoueur,
-                compositions: compos.compositionCollection.compositions
+                compositions: compositionProvider
+                    .compositionCollection.compositions
                     .whereType<JoueurComposition>()
                     .toList(),
-                games: matchs.games);
+                games: gameProvider.games);
 
-            return Card(
-              child: games.isEmpty
-                  ? Center(
-                      child:
-                          Text('Pas de composition disponible pour ce joueur!'),
-                    )
-                  : SingleChildScrollView(
-                      child: Column(
-                        children:
-                            games.map((e) => GameFullWidget(game: e)).toList(),
-                      ),
+            return games.isEmpty
+                ? Center(
+                    child:
+                        Text('Pas de composition disponible pour ce joueur!'),
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 5),
+                        ...games
+                            .map((e) => GameFullWidget(
+                                  gameEventListProvider:
+                                      gameProvider.gameEventListProvider,
+                                  game: e,
+                                  verticalMargin: 0,
+                                ))
+                            .toList()
+                      ],
                     ),
-            );
+                  );
           },
         );
       },

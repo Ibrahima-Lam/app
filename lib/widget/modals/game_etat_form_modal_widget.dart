@@ -35,13 +35,15 @@ class _GameTimerFormModalWidgetState extends State<GameTimerFormModalWidget> {
             extra: 0,
             etat: 'direct');
     initialController =
-        TextEditingController(text: timerEvent.initial.toString());
+        TextEditingController(text: (timerEvent.initial).toString());
     durationController =
-        TextEditingController(text: timerEvent.duration.toString());
+        TextEditingController(text: (timerEvent.duration ?? '').toString());
     retardController =
-        TextEditingController(text: timerEvent.retard.toString());
-    extraController = TextEditingController(text: timerEvent.extra.toString());
-    etatController = TextEditingController(text: timerEvent.etat.toString());
+        TextEditingController(text: (timerEvent.retard ?? '').toString());
+    extraController =
+        TextEditingController(text: (timerEvent.extra ?? '').toString());
+    etatController =
+        TextEditingController(text: (timerEvent.etat ?? '').toString());
     super.initState();
   }
 
@@ -275,7 +277,7 @@ class EtatDropDownMenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownMenu(
-        initialSelection: 'avant',
+        initialSelection: etatController.text,
         controller: etatController,
         dropdownMenuEntries: values
             .map((e) => DropdownMenuEntry(value: e, label: e.capitalize()))

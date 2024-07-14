@@ -29,7 +29,7 @@ class CompetitionCoachListWidget extends StatelessWidget {
           return Consumer2<CoachProvider, ParticipantProvider>(
               builder: (context, coac, part, child) {
             List<String> participants = part.participants
-                .where((element) => element.idEdition == idEdition)
+                .where((element) => element.codeEdition == idEdition)
                 .map((e) => e.idParticipant)
                 .toList();
             List<Coach> coaches = coac.coachs

@@ -108,7 +108,7 @@ class CompositionWidget extends StatelessWidget {
                           top: 0,
                           left: 0,
                           child: CoachAndTeamWidget(
-                              equipe: game.home ?? '',
+                              equipe: game.home.nomEquipe,
                               composition:
                                   compositionSousCollection.homeCoatch),
                         ),
@@ -116,7 +116,7 @@ class CompositionWidget extends StatelessWidget {
                           bottom: 0,
                           right: 0,
                           child: CoachAndTeamWidget(
-                              equipe: game.away ?? '',
+                              equipe: game.away.nomEquipe,
                               composition:
                                   compositionSousCollection.awayCoatch),
                         ),

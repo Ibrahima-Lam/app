@@ -67,7 +67,7 @@ class SomeTeamWidget extends StatelessWidget {
           return Consumer<ParticipantProvider>(
               builder: (context, value, child) {
             List<Participant> participants = value.participants
-                .where((element) => element.idEdition == idEdition)
+                .where((element) => element.codeEdition == idEdition)
                 .toList();
             return participants.isEmpty
                 ? const SizedBox()
@@ -237,16 +237,18 @@ class CompetitionFichePreviousGameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameProvider>(builder: (context, val, child) {
+    return Consumer<GameProvider>(builder: (context, gameProvider, child) {
       Game? game;
       try {
-        game = val.played.lastWhere((element) =>
-            element.codeEdition == idEdition || element.idAway == idEdition);
+        game = gameProvider.played.lastWhere((element) =>
+            element.groupe.codeEdition == idEdition ||
+            element.idAway == idEdition);
       } catch (e) {}
       return game == null
           ? const SizedBox()
           : GameFullWidget(
               game: game,
+              gameEventListProvider: gameProvider.gameEventListProvider,
             );
     });
   }
@@ -258,16 +260,17 @@ class CompetitionFicheNextGameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameProvider>(builder: (context, val, child) {
+    return Consumer<GameProvider>(builder: (context, gameProvider, child) {
       Game? game;
       try {
-        game = val.noPlayed
-            .firstWhere((element) => element.codeEdition == idEdition);
+        game = gameProvider.noPlayed
+            .firstWhere((element) => element.groupe.codeEdition == idEdition);
       } catch (e) {}
       return game == null
           ? const SizedBox()
           : GameFullWidget(
               game: game,
+              gameEventListProvider: gameProvider.gameEventListProvider,
             );
     });
   }

@@ -24,8 +24,9 @@ class GameListWidget extends StatelessWidget {
           );
         }
         return Consumer<GameProvider>(
-          builder: (context, value, child) {
-            List<Game> games = value.getGamesBy(idParticipant: idParticipant);
+          builder: (context, gameProvider, child) {
+            List<Game> games =
+                gameProvider.getGamesBy(idParticipant: idParticipant);
             return games.isEmpty
                 ? const Center(
                     child: Text('Pas de match disponible pour cette equipe!'),
@@ -35,7 +36,11 @@ class GameListWidget extends StatelessWidget {
                     child: Column(
                       children: games
                           .map((e) => GameFullWidget(
-                              game: e, verticalMargin: 1, elevation: 0))
+                              gameEventListProvider:
+                                  gameProvider.gameEventListProvider,
+                              game: e,
+                              verticalMargin: 1,
+                              elevation: 1))
                           .toList(),
                     ),
                   );

@@ -1,5 +1,3 @@
-import 'package:app/collection/groupe_collection.dart';
-import 'package:app/collection/participation_collection.dart';
 import 'package:app/core/enums/competition_phase_enum.dart';
 import 'package:app/core/enums/competition_type.dart';
 import 'package:app/models/competition.dart';
@@ -10,6 +8,7 @@ import 'package:app/providers/groupe_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/providers/participation_provider.dart';
 import 'package:app/widget/equipe/equipe_widget.dart';
+import 'package:app/widget/section_title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,12 +33,13 @@ class ParticipationWidget extends StatelessWidget {
   List<Participation> participations = [];
 
   Future<bool> _getData(BuildContext context) async {
-    GroupeCollection groupeCollection =
-        await context.read<GroupeProvider>().getGroupes();
-    groupes = groupeCollection.getGroupesBy(
+    GroupeProvider groupeProvider = await context.read<GroupeProvider>()
+      ..getGroupes();
+    groupes = groupeProvider.getGroupesBy(
         edition: competition.codeEdition, phase: CompetitionPhase.groupe);
-    ParticipationCollection participationCollection =
-        await context.read<ParticipationProvider>().getParticipations();
+    ParticipationProvider participationCollection =
+        await context.read<ParticipationProvider>()
+          ..getParticipations();
     participations = participationCollection.phaseGroupe;
     return true;
   }
@@ -70,31 +70,31 @@ class ParticipationWidget extends StatelessWidget {
           child: Column(
             children: [
               for (Groupe groupe in groupes)
-                Card(
-                  child: Builder(builder: (context) {
-                    final List<Participation> parts = participations
-                        .where((element) => element.idGroupe == groupe.idGroupe)
-                        .toList();
-                    return Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(5.0),
-                          height: 40,
-                          child: Text(
-                            'Groupe ${groupe.nomGroupe}',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
+                Builder(builder: (context) {
+                  final List<Participation> parts = participations
+                      .where((element) => element.idGroupe == groupe.idGroupe)
+                      .toList();
+                  return Column(
+                    children: [
+                      Card(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 1),
+                          child: SectionTitleWidget(
+                              title: 'Groupe ${groupe.nomGroupe}')),
+                      for (Participation part in parts)
+                        Card(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 4, vertical: 1),
+                          child: EquipeListTileWidget(
+                            border: false,
+                            title: (part.participant.nomEquipe),
+                            id: part.idParticipant.toString(),
                           ),
                         ),
-                        for (Participation part in parts)
-                          EquipeListTileWidget(
-                            title: (part.nomEquipe!),
-                            id: part.idParticipant.toString(),
-                          )
-                      ],
-                    );
-                  }),
-                )
+                      const SizedBox(height: 10.0),
+                    ],
+                  );
+                })
             ],
           ),
         );
@@ -132,17 +132,20 @@ class ParticipantWidget extends StatelessWidget {
               child: Text('Pas d\'équipe!'),
             );
           }
-          return Card(
-              child: SingleChildScrollView(
+          return SingleChildScrollView(
             child: Column(
               children: [
                 for (Participant participant in participants)
-                  EquipeListTileWidget(
-                      id: participant.idParticipant,
-                      title: participant.nomEquipe)
+                  Card(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                    child: EquipeListTileWidget(
+                        id: participant.idParticipant,
+                        title: participant.nomEquipe),
+                  )
               ],
             ),
-          ));
+          );
         });
   }
 }

@@ -49,41 +49,42 @@ class MatchsWidget extends StatelessWidget {
                   final List<Widget> matchsWidget = [
                     GestureDetector(
                       onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: const BoxDecoration(
-                            gradient: LinearGradient(colors: [
-                          Color.fromARGB(255, 215, 238, 215),
-                          Color(0xFFF5F5F5)
-                        ])),
-                        child: Text(
-                          niveau.nomNiveau!.capitalize(),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                      child: Card(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 1, horizontal: 4),
+                        shadowColor: Colors.grey,
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                              gradient: LinearGradient(colors: [
+                            Color.fromARGB(255, 215, 238, 215),
+                            Color(0xFFF5F5F5)
+                          ])),
+                          child: Text(
+                            niveau.nomNiveau.capitalize(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
                         ),
                       ),
                     )
                   ];
-                  matchsWidget
-                      .addAll(matchs.map((match) => GameWidget(game: match)));
+                  matchsWidget.addAll(matchs.map((match) => GameLessWidget(
+                        game: match,
+                        gameEventListProvider:
+                            gameProvider.gameEventListProvider,
+                      )));
                   return Container(
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Card(
-                      elevation: 2,
-                      color: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Column(
-                          children: matchsWidget,
-                        ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Column(
+                        children: matchsWidget,
                       ),
                     ),
                   );

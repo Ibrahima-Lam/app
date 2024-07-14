@@ -4,43 +4,68 @@ import 'package:app/core/extension/list_extension.dart';
 import 'package:app/models/game.dart';
 import 'package:app/models/gameEvent.dart';
 import 'package:app/models/scores/score.dart';
+import 'package:app/providers/game_event_list_provider.dart';
+import 'package:app/providers/groupe_provider.dart';
+import 'package:app/providers/participant_provider.dart';
 
 import 'package:app/service/game_service.dart';
 import 'package:app/service/score_service.dart';
 import 'package:flutter/material.dart';
 
+typedef GameList = List<Game>;
+
 class GameProvider extends ChangeNotifier {
-  List<Game> _games;
+  GameList _games;
   List<Score> _scores;
 
+  GameEventListProvider gameEventListProvider;
+  ParticipantProvider participantProvider;
+  GroupeProvider groupeProvider;
+
   GameProvider(
-      [this._games = const [], this._scores = const []]); /* {
+    this._games,
+    this._scores, {
+    required this.participantProvider,
+    required this.gameEventListProvider,
+    required this.groupeProvider,
+  }); /* {
     _
   } */
   List<Score> get scores => _scores;
   void set scores(List<Score> val) => _scores = val;
 
-  List<Game> get games => _games;
-  void set games(List<Game> val) {
+  GameList get games => _games;
+  void set games(GameList val) {
     _games = val.map((element) {
       Score? score =
           scores.singleWhereOrNull((e) => e.idGame == element.idGame);
       if (score != null) element.score = score;
       return element;
     }).toList();
+    _games.sort(
+      (a, b) {
+        if ((a.dateGame ?? '').compareTo(b.dateGame ?? '') != 0)
+          return (a.dateGame ?? '').compareTo(b.dateGame ?? '');
+        return (a.heureGame ?? '').compareTo(b.heureGame ?? '');
+      },
+    );
 
     notifyListeners();
   }
 
   Future setGames() async {
-    games = await GameService().getData;
+    games = await GameService()
+        .getData(participantProvider.participants, groupeProvider.groupes);
   }
 
   Future setScores() async {
     scores = await ScoreService.getData();
   }
 
-  Future<List<Game>> getGames() async {
+  Future<GameList> getGames() async {
+    if (groupeProvider.groupes.isEmpty) await groupeProvider.initGroupes();
+    if (participantProvider.participants.isEmpty)
+      await participantProvider.initParticipants();
     if (scores.isEmpty) setScores();
     if (games.isEmpty) await setGames();
     return games;
@@ -177,14 +202,14 @@ class GameProvider extends ChangeNotifier {
     }).toList();
   }
 
-  List<Game> get phaseGroupe =>
-      games.where((element) => element.codePhase == 'grp').toList();
-  List<Game> get phaseEliminatoire =>
-      games.where((element) => element.codePhase != 'grp').toList();
-  List<Game> get played => games.where((element) => element.isPlayed).toList();
-  List<Game> get noPlayed =>
+  GameList get phaseGroupe =>
+      games.where((element) => element.niveau.codeNiveau == 'grp').toList();
+  GameList get phaseEliminatoire =>
+      games.where((element) => element.niveau.codeNiveau != 'grp').toList();
+  GameList get played => games.where((element) => element.isPlayed).toList();
+  GameList get noPlayed =>
       games.where((element) => !(element.isPlayed)).toList();
-  List<Game> get playing => games
+  GameList get playing => games
       .where((element) =>
           element.etat.etat == GameEtat.direct ||
           element.etat.etat == GameEtat.pause)
@@ -203,7 +228,7 @@ class GameProvider extends ChangeNotifier {
     bool? played,
     bool? noPlayed,
   }) {
-    List<Game> gamesData = GameController().filterGamesBy(
+    GameList gamesData = GameController().filterGamesBy(
       games,
       idGroupe: idGroupe,
       codeNiveau: codeNiveau,
@@ -216,7 +241,7 @@ class GameProvider extends ChangeNotifier {
     games = gamesData;
   }
 
-  List<Game> getGamesBy({
+  GameList getGamesBy({
     String? idGroupe,
     String? idParticipant,
     String? codeNiveau,
@@ -226,7 +251,7 @@ class GameProvider extends ChangeNotifier {
     bool? played,
     bool? noPlayed,
   }) {
-    List<Game> gamesData = GameController().filterGamesBy(
+    GameList gamesData = GameController().filterGamesBy(
       games,
       idGroupe: idGroupe,
       idParticipant: idParticipant,

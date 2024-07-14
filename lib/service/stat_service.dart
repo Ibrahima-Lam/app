@@ -1,5 +1,3 @@
-import 'package:app/collection/groupe_collection.dart';
-import 'package:app/collection/participation_collection.dart';
 import 'package:app/controllers/classement/classeur.dart';
 import 'package:app/core/enums/competition_phase_enum.dart';
 import 'package:app/models/game.dart';
@@ -17,34 +15,27 @@ class StatService {
   const StatService({required this.context});
 
   Future<List<Stat>> getStatByEquipe({required String idParticipant}) async {
-    final GameProvider gameProvider = await context.read<GameProvider>()
-      ..getGames();
-
-    final ParticipationCollection participationCollection =
-        await context.read<ParticipationProvider>().getParticipations();
-    final Participation? participation = participationCollection
+    final ParticipationProvider participationProvider =
+        context.read<ParticipationProvider>();
+    await participationProvider.getParticipations();
+    final Participation? participation = participationProvider
         .getParticipationsById(idParticipant: idParticipant);
     if (participation == null) return [];
 
     final String idGroupe = participation.idGroupe;
-    final List<Participation> teams =
-        participationCollection.getParticipationsBy(
-      groupe: idGroupe,
-    );
-    final List<Game> matchs =
-        gameProvider.getGamesBy(idGroupe: idGroupe, played: true);
-    final List<Stat> stats = Classeur(games: matchs, equipes: teams).classer();
-    return stats;
+
+    return await getStatByGroupe(idGroupe: idGroupe);
   }
 
   Future<List<Stat>> getStatByGroupe({required String idGroupe}) async {
-    final GameProvider gameProvider = await context.read<GameProvider>()
-      ..getGames();
+    final GameProvider gameProvider = context.read<GameProvider>();
+    await gameProvider.getGames();
 
-    final ParticipationCollection participationCollection =
-        await context.read<ParticipationProvider>().getParticipations();
+    final ParticipationProvider participationProvider =
+        context.read<ParticipationProvider>();
+    await participationProvider.getParticipations();
     final List<Participation> teams =
-        participationCollection.getParticipationsBy(groupe: idGroupe);
+        participationProvider.getParticipationsBy(groupe: idGroupe);
     final List<Game> matchs =
         gameProvider.getGamesBy(idGroupe: idGroupe, played: true);
     final List<Stat> stats = Classeur(games: matchs, equipes: teams).classer();
@@ -53,22 +44,16 @@ class StatService {
 
   Future<Map<String, List<Stat>>> getStatByEdition(
       {required String codeEdition}) async {
-    final GameProvider gameProvider = await context.read<GameProvider>()
-      ..getGames();
-
-    final ParticipationCollection participationCollection =
-        await context.read<ParticipationProvider>().getParticipations();
-    final GroupeCollection groupeCollection =
-        await context.read<GroupeProvider>().getGroupes();
-    final List<Groupe> groupes = groupeCollection.getGroupesBy(
+    final ParticipationProvider participationProvider =
+        context.read<ParticipationProvider>();
+    await participationProvider.getParticipations();
+    final GroupeProvider groupeProvider = await context.read<GroupeProvider>()
+      ..getGroupes();
+    final List<Groupe> groupes = groupeProvider.getGroupesBy(
         edition: codeEdition, phase: CompetitionPhase.groupe);
     final Map<String, List<Stat>> stats = {};
     for (Groupe groupe in groupes) {
-      final List<Participation> teams =
-          participationCollection.getParticipationsBy(groupe: groupe.idGroupe);
-      final List<Game> matchs =
-          gameProvider.getGamesBy(idGroupe: groupe.idGroupe, played: true);
-      final List<Stat> stat = Classeur(games: matchs, equipes: teams).classer();
+      List<Stat> stat = await getStatByGroupe(idGroupe: groupe.idGroupe);
       stats[groupe.nomGroupe!] = stat;
     }
     return stats;

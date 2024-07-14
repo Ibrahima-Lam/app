@@ -9,9 +9,10 @@ class NiveauController {
     for (Game e in games) {
       if (!liste.contains(e.codeNiveau)) {
         liste.add(e.codeNiveau!);
-        niveaux.add(Niveau(codeNiveau: e.codeNiveau, nomNiveau: e.nomNiveau));
+        niveaux.add(e.niveau);
       }
     }
+    niveaux.sort((a, b) => a.ordreNiveau.compareTo(b.ordreNiveau));
     return niveaux;
   }
 }

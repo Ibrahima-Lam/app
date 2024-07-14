@@ -149,7 +149,9 @@ class GameBottomNavbarEditWidget extends StatelessWidget {
             icon: Icon(Icons.calendar_month), label: 'Date'),
         BottomNavigationBarItem(
             icon: Icon(Icons.access_time_rounded), label: 'Heure'),
-        BottomNavigationBarItem(icon: Icon(Icons.play_arrow), label: 'Etat'),
+        BottomNavigationBarItem(
+            icon: Icon(game.isPlaying ? Icons.pause : Icons.play_arrow),
+            label: 'Etat'),
         BottomNavigationBarItem(icon: Icon(Icons.timer), label: 'Chrono'),
         BottomNavigationBarItem(
             icon: Icon(Icons.sports_soccer), label: 'Score'),

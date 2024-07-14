@@ -7,10 +7,10 @@ class GameEventListProvider extends ChangeNotifier {
   List<Event> _events;
 
   GameEventListProvider(this._events) {
-    EventService().getData().then((value) {
+    /*  EventService().getData().then((value) {
       _events = value;
       notifyListeners();
-    });
+    }); */
   }
 
   List<Event> get events => _events;
@@ -36,6 +36,14 @@ class GameEventListProvider extends ChangeNotifier {
     return _events
         .where((element) =>
             element.idJoueur == idJoueur && element.idGame == idGame)
+        .toList();
+  }
+
+  List<Event> getEquipeGameEvent(
+      {required String idGame, required String idParticipant}) {
+    return _events
+        .where((element) =>
+            element.idParticipant == idParticipant && element.idGame == idGame)
         .toList();
   }
 

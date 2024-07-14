@@ -25,14 +25,15 @@ class ArbitreGameListWidget extends StatelessWidget {
           }
 
           return Consumer2<CompositionProvider, GameProvider>(
-              builder: (context, compos, games, child) {
-            List<ArbitreComposition> compositions = compos.compositionCollection
+              builder: (context, compositionProvider, gameProvider, child) {
+            List<ArbitreComposition> compositions = compositionProvider
+                .compositionCollection
                 .getArbitres()
                 .where((element) => element.idArbitre == idArbitre)
                 .toList();
             List<String> ids = compositions.map((e) => e.idGame).toList();
 
-            List<Game> maths = games.games
+            List<Game> maths = gameProvider.games
                 .where((element) => ids.contains(element.idGame))
                 .toList();
 
@@ -42,11 +43,14 @@ class ArbitreGameListWidget extends StatelessWidget {
                         Text('Pas de composition disponible pour cet arbitre!'),
                   )
                 : SingleChildScrollView(
-                    child: Card(
-                      child: Column(
-                        children:
-                            maths.map((e) => GameFullWidget(game: e)).toList(),
-                      ),
+                    child: Column(
+                      children: maths
+                          .map((e) => GameFullWidget(
+                                game: e,
+                                gameEventListProvider:
+                                    gameProvider.gameEventListProvider,
+                              ))
+                          .toList(),
                     ),
                   );
           });

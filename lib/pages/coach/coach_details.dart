@@ -57,14 +57,20 @@ class CoachDetails extends StatelessWidget {
                       print(innerBoxIsScrolled);
                       return [
                         SliverAppBar(
-                          title: Text(coach.nomCoach),
+                          centerTitle: true,
+                          title: Text(
+                            coach.nomCoach,
+                            style: TextStyle(
+                              fontSize: 17,
+                            ),
+                          ),
                           actions: [
                             Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: Icon(Icons.person_2_rounded),
                             ),
                           ],
-                          expandedHeight: 200,
+                          expandedHeight: 180,
                           pinned: true,
                           flexibleSpace: FlexibleSpaceBar(
                             background: Container(
@@ -93,8 +99,8 @@ class CoachDetails extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 20),
                                       SizedBox(
-                                        height: 90,
-                                        width: 90,
+                                        height: 80,
+                                        width: 80,
                                         child: CoachImageLogoWidget(
                                           noColor: true,
                                           url: coach.imageUrl,
