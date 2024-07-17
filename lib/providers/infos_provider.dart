@@ -33,7 +33,8 @@ class InfosProvider extends ChangeNotifier {
     return listes;
   } */
 
-  List<Infos> getInfosBy({required CategorieParams categorie}) {
+  List<Infos> getInfosBy({required CategorieParams? categorie}) {
+    if (categorie == null) return [];
     if (categorie.isNull) return [];
     List<Infos> listes = infos;
     if (categorie.idEdition != null)

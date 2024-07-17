@@ -107,4 +107,73 @@ class JoueurController {
           type: EventType.rouge),
     ];
   }
+
+  static List<GameEventsStatistique> getJoueurEventsStatistique(Joueur joueur,
+      {required List<Event> events, required List<Game> games}) {
+    List<GameEventsStatistique> statistiques = [];
+    events =
+        events.where((element) => element.idJoueur == joueur.idJoueur).toList();
+    List<Event> jaunes = events
+        .whereType<CardEvent>()
+        .where((element) => !element.isRed)
+        .toList();
+    List<String> idj = jaunes.map((e) => e.idGame).toSet().toList();
+    for (var id in idj) {
+      int nbr = events
+          .whereType<CardEvent>()
+          .where((element) => !element.isRed && element.idGame == id)
+          .toList()
+          .length;
+      ;
+      Game game = games.singleWhere((element) => element.idGame == id);
+      statistiques.add(GameEventsStatistique(
+          nom: joueur.nomJoueur,
+          nombre: nbr,
+          id: joueur.idJoueur,
+          game: game,
+          type: EventType.jaune));
+    }
+
+    List<Event> rouges = events
+        .whereType<CardEvent>()
+        .where((element) => element.isRed)
+        .toList();
+    List<String> idr = rouges.map((e) => e.idGame).toSet().toList();
+    for (var id in idr) {
+      int nbr = events
+          .whereType<CardEvent>()
+          .where((element) => element.isRed && element.idGame == id)
+          .toList()
+          .length;
+
+      Game game = games.singleWhere((element) => element.idGame == id);
+      statistiques.add(GameEventsStatistique(
+          nom: joueur.nomJoueur,
+          nombre: nbr,
+          id: joueur.idJoueur,
+          game: game,
+          type: EventType.rouge));
+    }
+    List<Event> buts = events
+        .whereType<GoalEvent>()
+        .where((element) => element.propre)
+        .toList();
+    List<String> idb = buts.map((e) => e.idGame).toSet().toList();
+    for (var id in idb) {
+      int nbr = events
+          .whereType<GoalEvent>()
+          .where((element) => element.propre && element.idGame == id)
+          .toList()
+          .length;
+
+      Game game = games.singleWhere((element) => element.idGame == id);
+      statistiques.add(GameEventsStatistique(
+          nom: joueur.nomJoueur,
+          nombre: nbr,
+          id: joueur.idJoueur,
+          game: game,
+          type: EventType.but));
+    }
+    return statistiques;
+  }
 }

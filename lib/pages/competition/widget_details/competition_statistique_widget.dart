@@ -6,7 +6,7 @@ import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/logos/joueur_logo_widget.dart';
-import 'package:app/widget/section_title_widget.dart';
+import 'package:app/widget/app/section_title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

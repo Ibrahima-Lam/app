@@ -1,5 +1,5 @@
 import 'package:app/models/sponsor.dart';
-import 'package:app/widget/sponsor_widget.dart';
+import 'package:app/widget/sponsor/sponsor_widget.dart';
 import 'package:flutter/material.dart';
 
 class SponsorListWidget extends StatelessWidget {

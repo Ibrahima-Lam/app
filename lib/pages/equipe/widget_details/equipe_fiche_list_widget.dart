@@ -10,10 +10,10 @@ import 'package:app/pages/game/game_details.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/game_widget.dart';
+import 'package:app/widget/game/game_widget.dart';
 import 'package:app/widget/logos/circular_logo_widget.dart';
 import 'package:app/widget/logos/equipe_logo_widget.dart';
-import 'package:app/widget/fiches_widget.dart';
+import 'package:app/widget/fiche/fiches_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -333,7 +333,8 @@ class SomePlayerWidget extends StatelessWidget {
     return Consumer2<JoueurProvider, GameEventListProvider>(
         builder: (context, joueurProvider, eventProvider, child) {
       return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
+        margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
+        padding: const EdgeInsets.symmetric(vertical: 5),
         color: Colors.white,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -349,12 +350,12 @@ class SomePlayerWidget extends StatelessWidget {
               children: [
                 ...elements,
                 ...List.generate(
-                    (5 - elements.length).positiveOrZero,
+                    (8 - elements.length).positiveOrZero,
                     (index) => CircularLogoWidget(
                           path: '',
                           categorie: Categorie.joueur,
                         )),
-              ].take(5).toList(),
+              ].take(8).toList(),
             );
           }),
         ),

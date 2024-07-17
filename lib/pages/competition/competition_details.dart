@@ -1,4 +1,6 @@
+import 'package:app/core/enums/categorie_enum.dart';
 import 'package:app/core/enums/competition_type.dart';
+import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/competition.dart';
 import 'package:app/pages/competition/widget_details/arbitre_list_widget.dart';
 import 'package:app/pages/competition/widget_details/classement_list_widget.dart';
@@ -7,6 +9,7 @@ import 'package:app/pages/competition/widget_details/competition_fiche_list_widg
 import 'package:app/pages/competition/widget_details/competition_statistique_widget.dart';
 import 'package:app/pages/competition/widget_details/equipe_list_widget.dart';
 import 'package:app/pages/competition/widget_details/games_list_widget.dart';
+import 'package:app/widget/app/favori_icon_widget.dart';
 import 'package:app/widget/logos/competition_logo_image.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
@@ -55,7 +58,10 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
           ));
           break;
         case 'INF':
-          widgets.add(InfosListWiget());
+          widgets.add(InfosListWiget(
+            categorieParams:
+                CategorieParams(idEdition: competition.codeEdition),
+          ));
           break;
         case 'EQU':
           widgets.add(
@@ -142,21 +148,15 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
                         ),
                         centerTitle: true,
                         pinned: true,
-                        expandedHeight: 200,
+                        expandedHeight: 180,
                         leading: IconButton(
                           icon: const Icon(Icons.navigate_before),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                         actions: [
-                          StatefulBuilder(
-                            builder: (context, setState) => IconButton(
-                              onPressed: () {
-                                setState(() => favori = !favori);
-                              },
-                              icon: Icon(
-                                  favori ? Icons.star : Icons.star_outline),
-                            ),
-                          ),
+                          FavoriIconWidget(
+                              id: competition.codeEdition,
+                              categorie: Categorie.competition)
                         ],
                         flexibleSpace: FlexibleSpaceBar(
                           background: Container(
@@ -165,7 +165,7 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const SizedBox(
-                                  height: 30,
+                                  height: 35,
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,

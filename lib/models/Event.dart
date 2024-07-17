@@ -1,4 +1,5 @@
 import 'package:app/core/enums/event_type_enum.dart';
+import 'package:app/models/game.dart';
 
 abstract class Event {
   String type;
@@ -186,4 +187,21 @@ class EventStatistique {
       required this.id,
       this.type,
       this.imageUrl});
+}
+
+class GameEventsStatistique {
+  String id;
+  String? imageUrl;
+  String nom;
+  Game game;
+  int nombre;
+  EventType? type;
+  GameEventsStatistique({
+    required this.nom,
+    required this.nombre,
+    required this.id,
+    this.type,
+    this.imageUrl,
+    required this.game,
+  });
 }

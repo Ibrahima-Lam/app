@@ -1,3 +1,5 @@
+import 'package:app/core/enums/enums.dart';
+
 class Stat {
   int num;
   String id;
@@ -14,6 +16,8 @@ class Stat {
   String? date;
   String res;
   bool playing;
+  int? position;
+  ClassementType? level;
   Stat({
     this.num = 0,
     required this.id,
@@ -30,6 +34,8 @@ class Stat {
     this.date,
     this.playing = false,
     this.imageUrl,
+    this.position,
+    this.level,
   });
   Map<String, dynamic> toJson() {
     return {

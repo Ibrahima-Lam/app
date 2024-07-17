@@ -9,8 +9,8 @@ import 'package:app/providers/game_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/logos/circular_logo_widget.dart';
 import 'package:app/widget/logos/competition_logo_image.dart';
-import 'package:app/widget/fiches_widget.dart';
-import 'package:app/widget/game_widget.dart';
+import 'package:app/widget/fiche/fiches_widget.dart';
+import 'package:app/widget/game/game_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -74,6 +74,8 @@ class SomeTeamWidget extends StatelessWidget {
                 : Container(
                     margin: const EdgeInsets.symmetric(
                         horizontal: 5.0, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 0, vertical: 5.0),
                     color: Colors.white,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,

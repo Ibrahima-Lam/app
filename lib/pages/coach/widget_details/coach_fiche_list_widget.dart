@@ -4,7 +4,7 @@ import 'package:app/models/participant.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/logos/coach_logo_widget.dart';
 import 'package:app/widget/logos/equipe_logo_widget.dart';
-import 'package:app/widget/fiches_widget.dart';
+import 'package:app/widget/fiche/fiches_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

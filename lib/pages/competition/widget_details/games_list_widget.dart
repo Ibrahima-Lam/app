@@ -4,7 +4,7 @@ import 'package:app/models/competition.dart';
 import 'package:app/models/game.dart';
 import 'package:app/models/niveau.dart';
 import 'package:app/providers/game_provider.dart';
-import 'package:app/widget/game_widget.dart';
+import 'package:app/widget/game/game_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

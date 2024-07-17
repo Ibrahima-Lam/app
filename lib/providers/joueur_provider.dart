@@ -1,14 +1,21 @@
 import 'package:app/models/joueur.dart';
+import 'package:app/providers/participant_provider.dart';
 import 'package:app/service/joueur_service.dart';
 import 'package:flutter/material.dart';
 
 class JoueurProvider extends ChangeNotifier {
-  List<Joueur> _joueurs = [];
-
+  List<Joueur> _joueurs;
+  ParticipantProvider participantProvider;
+  JoueurProvider(
+    this._joueurs, {
+    required this.participantProvider,
+  });
   List<Joueur> get joueurs => _joueurs;
 
   Future<void> setJoueurs() async {
-    _joueurs = await JoueurService().getData();
+    if (participantProvider.participants.isEmpty)
+      await participantProvider.getParticipants();
+    _joueurs = await JoueurService().getData(participantProvider.participants);
     notifyListeners();
   }
 

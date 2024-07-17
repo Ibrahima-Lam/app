@@ -5,7 +5,7 @@ import 'package:app/models/game.dart';
 import 'package:app/models/statistique.dart';
 import 'package:app/providers/statistique_future_provider.dart';
 import 'package:app/providers/statistique_provider.dart';
-import 'package:app/widget/stat_widget.dart';
+import 'package:app/widget/statistique/stat_widget.dart';
 import 'package:app/widget_pages/statistique_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +47,7 @@ class StatistiqueWidget extends StatelessWidget {
         return SingleChildScrollView(
           child: Column(
             children: [
+              const SizedBox(height: 5),
               ...statistiques.map((e) => StatWidget(
                     checkUser: checkUser,
                     statistique: e,

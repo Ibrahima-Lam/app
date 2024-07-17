@@ -1,21 +1,18 @@
 import 'package:app/collection/competition_collection.dart';
 import 'package:app/controllers/competition/date.dart';
-import 'package:app/core/enums/categorie_enum.dart';
 import 'package:app/models/competition.dart';
-import 'package:app/models/event.dart';
 import 'package:app/models/game.dart';
-import 'package:app/models/joueur.dart';
-import 'package:app/pages/competition/competition_details.dart';
 import 'package:app/providers/competition_provider.dart';
+import 'package:app/providers/favori_provider.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/game_provider.dart';
-import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/logos/circular_logo_widget.dart';
-import 'package:app/widget/logos/competition_logo_image.dart';
+import 'package:app/widget/app/favori_title_widget.dart';
+import 'package:app/widget/app/top_icons_widget.dart';
+import 'package:app/widget/competition/competition_title_widget.dart';
 import 'package:app/widget/modals/custom_delegate_search.dart';
-import 'package:app/widget/game_widget.dart';
+import 'package:app/widget/game/game_widget.dart';
 import 'package:app/widget/skelton/scaffold_widget.dart';
-import 'package:app/widget/sponsor_list_widget.dart';
+import 'package:app/widget/sponsor/sponsor_list_widget.dart';
 import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,10 +30,10 @@ class _GamePageState extends State<GamePage>
   late List<String> tabs;
   bool playing = false;
 
-  TabController? _tabController;
+  late TabController _tabController;
   DateTime initialDate = DateTime.now();
 
-  Future _showCalendar([data]) async {
+  Future _showCalendar() async {
     final int year = DateTime.now().year;
     final DateTime? date = await showDialog(
       context: context,
@@ -47,12 +44,13 @@ class _GamePageState extends State<GamePage>
         cancelText: 'Annuler',
         confirmText: 'Séléctionner',
         helpText: "Séléctionner une date",
-        fieldLabelText: 'Entrer un date',
+        fieldLabelText: 'Entrer une date',
       ),
     );
+    playing = false;
     initialDate = date ?? DateTime.now();
-    _setTabs(date);
-    _tabController!.index = 7;
+    _setTabs(initialDate);
+    _tabController.animateTo(7);
   }
 
   Future _showSearch() async {
@@ -62,10 +60,16 @@ class _GamePageState extends State<GamePage>
     );
   }
 
-  void _setTabs(DateTime? date) {
+  void _setTabs(DateTime date, [bool one = false]) {
+    if (one) {
+      setState(() {
+        tabs = [date.toString().substring(0, 10)];
+      });
+      return;
+    }
     List<String> newdates = [];
     for (var i = -7; i <= 7; i++) {
-      String dt = date!.add(Duration(days: i)).toString().substring(0, 10);
+      String dt = date.add(Duration(days: i)).toString().substring(0, 10);
       newdates.add(dt);
     }
     setState(() {
@@ -85,11 +89,12 @@ class _GamePageState extends State<GamePage>
       animationDuration: const Duration(milliseconds: 200),
     );
 
-    _tabController!.addListener(() {
-      if ((_tabController!.index == 0 ||
-              _tabController!.index == tabs.length - 1) &&
-          !_tabController!.indexIsChanging) {
-        initialDate = _tabController!.index == 0
+    _tabController.addListener(() {
+      if ((_tabController.index == 0 ||
+              _tabController.index == tabs.length - 1) &&
+          !_tabController.indexIsChanging &&
+          !playing) {
+        initialDate = _tabController.index == 0
             ? DateTime.parse(tabs[0])
             : DateTime.parse(tabs[tabs.length - 1]);
         _showCalendar();
@@ -98,16 +103,22 @@ class _GamePageState extends State<GamePage>
   }
 
   bool _setPlaying() {
-    setState(() {
-      playing = !playing;
-    });
+    playing = !playing;
+
+    if (!playing) {
+      _setTabs(DateTime.now());
+      _tabController.animateTo(tabs.length ~/ 2);
+    } else {
+      _tabController.index = 0;
+      _setTabs(DateTime.now(), true);
+    }
     return playing;
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      initialIndex: 2,
+      initialIndex: playing ? 0 : 7,
       length: tabs.length,
       child: ScaffoldWidget(
         playing: playing,
@@ -115,12 +126,21 @@ class _GamePageState extends State<GamePage>
         onPressedSearch: _showSearch,
         onPressedCalendar: _showCalendar,
         onPressedStream: _setPlaying,
-        bottom: TabBarWidget.build(controller: _tabController, tabs: [
-          for (final tab in DateController.frDates(tabs))
-            Tab(
-              text: tab,
-            )
-        ]),
+        bottom: TabBarWidget.build(
+            tabAlignment: playing ? TabAlignment.center : null,
+            controller: _tabController,
+            tabs: playing
+                ? [
+                    Tab(
+                      text: 'En Direct',
+                    )
+                  ]
+                : [
+                    for (final tab in DateController.frDates(tabs))
+                      Tab(
+                        text: tab,
+                      )
+                  ]),
         body: FutureBuilder<CompetitionCollection>(
             future: context.read<CompetitionProvider>().getCompetitions(),
             builder: (context, snapshot) {
@@ -159,147 +179,13 @@ class _GamePageState extends State<GamePage>
   @override
   void dispose() {
     super.dispose();
-    _tabController!.dispose();
-  }
-}
-
-// --------------------------------------Top Icons------------------------------------------
-class TopIconsWidget extends StatelessWidget {
-  final List<Competition> competitions;
-  final String dateGame;
-  final GameProvider gameProvider;
-  final bool playing;
-  const TopIconsWidget(
-      {super.key,
-      required this.competitions,
-      required this.dateGame,
-      required this.gameProvider,
-      required this.playing});
-  List<Game> get games => gameProvider
-      .getGamesBy(playing: playing, dateGame: dateGame)
-      .reversed
-      .toList();
-
-  List<Game> get lastGames => [
-        ...gameProvider.games.reversed
-            .where(
-              (element) =>
-                  element.dateGame!.compareTo(dateGame) <= 0 &&
-                  lastComps.elementAtOrNull(0)?.codeEdition ==
-                      element.groupe.codeEdition,
-            )
-            .take(2)
-            .toList(),
-        ...gameProvider.games.reversed
-            .where(
-              (element) =>
-                  element.dateGame!.compareTo(dateGame) <= 0 &&
-                  lastComps.elementAtOrNull(1)?.codeEdition ==
-                      element.groupe.codeEdition,
-            )
-            .take(2)
-            .toList(),
-      ];
-  List<Competition> get comps => competitions
-      .where((element) =>
-          games.any((e) => e.groupe.codeEdition == element.codeEdition))
-      .toList();
-  List<Competition> get lastComps => [
-        ...comps,
-        ...competitions
-            .where((element) =>
-                gameProvider.played.reversed
-                    .any((e) => e.groupe.codeEdition == element.codeEdition) &&
-                !comps.any(
-                  (elmt) => element.codeEdition == elmt.codeEdition,
-                ))
-            .toList()
-      ].take(2).toList();
-
-  List<Widget> getWidtgetsByGames(List<Game> games,
-      JoueurProvider joueurProvider, GameEventListProvider eventProvider) {
-    games.sort((a, b) => (a.dateGame ?? '').compareTo(b.dateGame ?? ''));
-    return [
-      ...games.expand((element) sync* {
-        List<GoalEvent> goals = eventProvider.events
-            .whereType<GoalEvent>()
-            .where((element) => games.any((e) => element.idGame == e.idGame))
-            .toList();
-
-        yield CircularLogoWidget(
-          path: element.home.imageUrl ?? '',
-          categorie: Categorie.equipe,
-          id: element.idHome,
-          tap: true,
-        );
-        List<Joueur> homePlayers = joueurProvider.joueurs
-            .where((pl) => pl.idParticipant == element.idHome)
-            .where(
-                (element) => goals.any((e) => element.idJoueur == e.idJoueur))
-            .toList();
-        yield* homePlayers.map((p) => CircularLogoWidget(
-            path: p.imageUrl ?? '',
-            categorie: Categorie.joueur,
-            tap: true,
-            id: p.idJoueur));
-
-        yield CircularLogoWidget(
-          path: element.away.imageUrl ?? '',
-          categorie: Categorie.equipe,
-          id: element.idAway,
-          tap: true,
-        );
-        List<Joueur> awayPlayers = joueurProvider.joueurs
-            .where((pl) => pl.idParticipant == element.idAway)
-            .where(
-                (element) => goals.any((e) => element.idJoueur == e.idJoueur))
-            .toList();
-        yield* awayPlayers.map((p) => CircularLogoWidget(
-            path: p.imageUrl ?? '',
-            categorie: Categorie.joueur,
-            tap: true,
-            id: p.idJoueur));
-      }),
-    ];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer2<JoueurProvider, GameEventListProvider>(
-        builder: (context, joueurProvider, eventProvider, _) {
-      return Container(
-        padding: EdgeInsets.symmetric(vertical: 5),
-        width: MediaQuery.sizeOf(context).height,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Builder(builder: (context) {
-            List<Widget> elements = [
-              ...lastComps.map((e) {
-                return CircularLogoWidget(
-                  path: e.imageUrl ?? '',
-                  categorie: Categorie.competition,
-                  id: e.codeEdition,
-                  tap: true,
-                );
-              }),
-              ...getWidtgetsByGames(lastGames, joueurProvider, eventProvider),
-            ].take(20).toList().reversed.toList();
-
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: elements,
-            );
-          }),
-        ),
-      );
-    });
+    _tabController.dispose();
   }
 }
 
 // -----------------------------------WIDGET----------------------------------------------
 
-class CompetitionGamesWidget extends StatefulWidget {
+class CompetitionGamesWidget extends StatelessWidget {
   final String date;
   final bool playing;
   final List<Competition> competitions;
@@ -309,17 +195,29 @@ class CompetitionGamesWidget extends StatefulWidget {
       required this.competitions,
       required this.playing});
 
-  @override
-  State<CompetitionGamesWidget> createState() => _CompetitionGamesWidgetState();
-}
-
-class _CompetitionGamesWidgetState extends State<CompetitionGamesWidget> {
   final String _message = 'Pas de Match Pour cette date!';
+  List<Game> getTodayGames(GameProvider gameProvider) =>
+      gameProvider.getGamesBy(dateGame: date, playing: playing);
 
-  @override
-  void initState() {
-    super.initState();
+  List<Game> getFavoriteGames(
+      GameProvider gameProvider, FavoriProvider favoriProvider) {
+    List<Game> games = getTodayGames(gameProvider);
+    games = games
+        .where((element) =>
+            favoriProvider.competitions
+                .any((elmt) => elmt == element.groupe.codeEdition) ||
+            favoriProvider.equipes.any(
+                (elmt) => elmt == element.idHome || elmt == element.idAway))
+        .toList();
+    return games;
   }
+
+  List<Game> getCompetitionGames(
+          Competition competition, List<Game> games) =>
+      games
+          .where((element) =>
+              element.groupe.codeEdition == competition.codeEdition)
+          .toList();
 
   @override
   Widget build(BuildContext context) {
@@ -336,10 +234,10 @@ class _CompetitionGamesWidgetState extends State<CompetitionGamesWidget> {
               child: Text(snapshot.error.toString()),
             );
           }
-          return Consumer<GameProvider>(
-              builder: (context, gamePrevider, child) {
-            return gamePrevider
-                    .getGamesBy(dateGame: widget.date, playing: widget.playing)
+          return Consumer2<GameProvider, FavoriProvider>(
+              builder: (context, gameProvider, favoriProvider, child) {
+            return gameProvider
+                    .getGamesBy(dateGame: date, playing: playing)
                     .isEmpty
                 ? Center(
                     child: Text(_message),
@@ -350,140 +248,23 @@ class _CompetitionGamesWidgetState extends State<CompetitionGamesWidget> {
                         Column(
                           children: [
                             TopIconsWidget(
-                              playing: widget.playing,
-                              gameProvider: gamePrevider,
-                              dateGame: widget.date,
-                              competitions: widget.competitions,
+                              playing: playing,
+                              gameProvider: gameProvider,
+                              dateGame: date,
+                              competitions: competitions,
                             ),
-                            for (Competition competition in widget.competitions)
-                              Builder(
-                                builder: (context) {
-                                  final List<Game> gamelist =
-                                      gamePrevider.getGamesBy(
-                                    dateGame: widget.date,
-                                    codeEdition: competition.codeEdition,
-                                  );
-                                  if (gamelist.isEmpty) {
-                                    return SizedBox();
-                                  }
-                                  return Column(
-                                    children: [
-                                      GestureDetector(
-                                        behavior: HitTestBehavior.translucent,
-                                        onTap: () => Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    CompetitionDetails(
-                                                      id: competition
-                                                          .codeEdition,
-                                                    ))),
-                                        child: Card(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(4.0)),
-                                          shadowColor: Colors.grey,
-                                          elevation: 2,
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal: 3, vertical: 1),
-                                          child: Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                .width,
-                                            height: 50,
-                                            padding: const EdgeInsets.all(5),
-                                            decoration: BoxDecoration(
-                                                border: Border.symmetric(
-                                                  vertical: BorderSide(
-                                                    width: 0.5,
-                                                    color: Colors.grey,
-                                                  ),
-                                                  horizontal: BorderSide(
-                                                    width: 0.5,
-                                                    color: Colors.grey,
-                                                  ),
-                                                ),
-                                                gradient:
-                                                    LinearGradient(colors: [
-                                                  Color.fromARGB(
-                                                      255, 215, 238, 215),
-                                                  Colors.white,
-                                                  Color.fromARGB(
-                                                      255, 215, 238, 215),
-                                                ]),
-                                                borderRadius:
-                                                    BorderRadius.circular(4.0)),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Expanded(
-                                                  child: Row(
-                                                    children: [
-                                                      SizedBox(
-                                                          width: 40,
-                                                          height: 40,
-                                                          child: CompetitionImageLogoWidget(
-                                                              url: competition
-                                                                  .imageUrl)),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Container(
-                                                        child: Text(
-                                                          competition
-                                                              .nomCompetition,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 60,
-                                                  child: PopupMenuButton(
-                                                    color: Colors.white,
-                                                    surfaceTintColor:
-                                                        Colors.white,
-                                                    itemBuilder: (context) => [
-                                                      PopupMenuItem(
-                                                          child:
-                                                              Icon(Icons.star)),
-                                                      PopupMenuItem(
-                                                          child: Icon(Icons
-                                                              .notifications)),
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      for (final g in gamelist)
-                                        GameLessWidget(
-                                          gameEventListProvider: gamePrevider
-                                              .gameEventListProvider,
-                                          game: g,
-                                          showDate: false,
-                                        ),
-                                      const SizedBox(
-                                        height: 5.0,
-                                      )
-                                    ],
-                                  );
-                                },
-                              ),
+                            FavorisSectionWidget(
+                                gameProvider: gameProvider,
+                                favoriProvider: favoriProvider,
+                                date: date,
+                                competitions: competitions,
+                                playing: playing),
+                            NonFavorisSectionWidget(
+                                gameProvider: gameProvider,
+                                favoriProvider: favoriProvider,
+                                date: date,
+                                competitions: competitions,
+                                playing: playing),
                             SponsorListWidget(),
                           ],
                         ),
@@ -492,5 +273,105 @@ class _CompetitionGamesWidgetState extends State<CompetitionGamesWidget> {
                   );
           });
         });
+  }
+}
+
+class FavorisSectionWidget extends CompetitionGamesWidget {
+  final GameProvider gameProvider;
+  final FavoriProvider favoriProvider;
+
+  const FavorisSectionWidget(
+      {super.key,
+      required this.gameProvider,
+      required this.favoriProvider,
+      required super.date,
+      required super.competitions,
+      required super.playing});
+
+  @override
+  Widget build(BuildContext context) {
+    List<Game> games = getFavoriteGames(gameProvider, favoriProvider);
+    if (games.isEmpty) return const SizedBox();
+    List<Competition> comps = competitions
+        .where((element) =>
+            games.any((elmt) => elmt.groupe.codeEdition == element.codeEdition))
+        .toList();
+    return Column(
+      children: [
+        FavoriTitleWidget(),
+        for (Competition competition in comps)
+          CompetitionSectionWidget(
+              competition: competition,
+              games: getCompetitionGames(competition, games),
+              gameEventListProvider: gameProvider.gameEventListProvider),
+      ],
+    );
+  }
+}
+
+class NonFavorisSectionWidget extends CompetitionGamesWidget {
+  final GameProvider gameProvider;
+  final FavoriProvider favoriProvider;
+
+  const NonFavorisSectionWidget(
+      {super.key,
+      required this.gameProvider,
+      required this.favoriProvider,
+      required super.date,
+      required super.competitions,
+      required super.playing});
+
+  @override
+  Widget build(BuildContext context) {
+    List<Game> favoris = getFavoriteGames(gameProvider, favoriProvider);
+    List<Game> games = getTodayGames(gameProvider)
+        .where(
+            (element) => favoris.every((elmt) => elmt.idGame != element.idGame))
+        .toList();
+    if (games.isEmpty) return const SizedBox();
+    List<Competition> comps = competitions
+        .where((element) =>
+            games.any((elmt) => elmt.groupe.codeEdition == element.codeEdition))
+        .toList();
+    return Column(
+      children: [
+        if (favoris.isNotEmpty) const SizedBox(height: 10),
+        if (favoris.isNotEmpty) FavoriTitleWidget(nonFavori: true),
+        for (Competition competition in comps)
+          CompetitionSectionWidget(
+              competition: competition,
+              games: getCompetitionGames(competition, games),
+              gameEventListProvider: gameProvider.gameEventListProvider)
+      ],
+    );
+  }
+}
+
+class CompetitionSectionWidget extends StatelessWidget {
+  final Competition competition;
+  final List<Game> games;
+  final GameEventListProvider gameEventListProvider;
+  const CompetitionSectionWidget(
+      {super.key,
+      required this.competition,
+      required this.games,
+      required this.gameEventListProvider});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CompetitionTitleWidget(competition: competition),
+        for (final g in games)
+          GameLessWidget(
+            gameEventListProvider: gameEventListProvider,
+            game: g,
+            showDate: false,
+          ),
+        const SizedBox(
+          height: 5.0,
+        )
+      ],
+    );
   }
 }

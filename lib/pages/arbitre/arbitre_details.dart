@@ -81,7 +81,7 @@ class ArbitreDetails extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const SizedBox(height: 50),
+                                  const SizedBox(height: 35),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [

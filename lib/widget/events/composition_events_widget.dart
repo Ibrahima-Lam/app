@@ -56,7 +56,7 @@ class CardWidget extends StatelessWidget {
     return Container(
       width: 10,
       height: 15,
-      color: isRed
+      color: !isRed
           ? const Color.fromARGB(255, 255, 230, 6)
           : const Color.fromARGB(255, 213, 20, 6),
     );

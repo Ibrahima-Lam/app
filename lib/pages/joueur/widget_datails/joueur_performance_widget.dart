@@ -5,7 +5,7 @@ import 'package:app/models/joueur.dart';
 import 'package:app/models/performance.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/game_provider.dart';
-import 'package:app/widget/game_widget.dart';
+import 'package:app/widget/game/game_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,10 +29,10 @@ class JoueurPerformanceWidget extends StatelessWidget {
           );
         }
         return Consumer2<GameProvider, GameEventListProvider>(
-          builder: (context, matchs, events, child) {
+          builder: (context, gameProvider, events, child) {
             List<GamePerformances> gamePerformances =
                 JoueurController.getJoueurPerformance(joueur,
-                    games: matchs.games, events: events.events);
+                    games: gameProvider.games, events: events.events);
 
             return gamePerformances.isEmpty
                 ? const Center(
@@ -40,13 +40,16 @@ class JoueurPerformanceWidget extends StatelessWidget {
                         Text('Pas de Performance disponible pour ce joueur!'),
                   )
                 : SingleChildScrollView(
-                    child: Column(
-                      children: gamePerformances
+                    child: Column(children: [
+                      const SizedBox(height: 5),
+                      ...gamePerformances
                           .map((e) => PerformanceSetionWidget(
+                                gameEventListProvider:
+                                    gameProvider.gameEventListProvider,
                                 gamePerformances: e,
                               ))
                           .toList(),
-                    ),
+                    ]),
                   );
           },
         );
@@ -57,20 +60,25 @@ class JoueurPerformanceWidget extends StatelessWidget {
 
 class PerformanceSetionWidget extends StatelessWidget {
   final GamePerformances gamePerformances;
-  const PerformanceSetionWidget({super.key, required this.gamePerformances});
+  final GameEventListProvider gameEventListProvider;
+  const PerformanceSetionWidget(
+      {super.key,
+      required this.gamePerformances,
+      required this.gameEventListProvider});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
-      child: Column(
-        children: [
-          ...gamePerformances.performances
-              .map((e) => PerformanceWidget(performance: e))
-              .toList(),
-          GameWidget(game: gamePerformances.game),
-        ],
-      ),
+    return Column(
+      children: [
+        ...gamePerformances.performances
+            .map((e) => PerformanceWidget(performance: e))
+            .toList(),
+        GameLessWidget(
+          game: gamePerformances.game,
+          gameEventListProvider: gameEventListProvider,
+        ),
+        SizedBox(height: 5),
+      ],
     );
   }
 }
@@ -81,28 +89,30 @@ class PerformanceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.sizeOf(context).width,
-      padding: const EdgeInsets.all(5.0),
-      decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.black, width: 0.5))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            performance.title.capitalize(),
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-          Row(
-            children: List.generate(
-                performance.nombre,
-                (index) => Icon(performance.type == PerformanceType.but
-                    ? Icons.sports_soccer
-                    : Icons.arrow_forward)),
-          )
-        ],
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 1, horizontal: 4),
+      shadowColor: Colors.grey,
+      child: Container(
+        width: MediaQuery.sizeOf(context).width,
+        padding: const EdgeInsets.all(5.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              performance.title.capitalize(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            Row(
+              children: List.generate(
+                  performance.nombre,
+                  (index) => Icon(performance.type == PerformanceType.but
+                      ? Icons.sports_soccer
+                      : Icons.arrow_forward)),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -16,6 +16,9 @@ class GameEventListProvider extends ChangeNotifier {
   List<Event> get events => _events;
 
   void set events(List<Event> val) => _events = val;
+  Future<void> getEvents() async {
+    if (events.isEmpty) events = await EventService().getData();
+  }
 
   Future<List<Event>> getGameEvents({required String idGame}) async {
     if (events.isNotEmpty) return events;

@@ -8,7 +8,7 @@ import 'package:app/providers/groupe_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/providers/participation_provider.dart';
 import 'package:app/widget/equipe/equipe_widget.dart';
-import 'package:app/widget/section_title_widget.dart';
+import 'package:app/widget/app/section_title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,6 +1,6 @@
 import 'package:app/models/arbitres/arbitre.dart';
 import 'package:app/providers/arbitre_provider.dart';
-import 'package:app/widget/arbitre_list_tile_widget.dart';
+import 'package:app/widget/arbitre/arbitre_list_tile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

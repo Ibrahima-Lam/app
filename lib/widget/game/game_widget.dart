@@ -341,10 +341,10 @@ class GameScoreWiget extends StatelessWidget {
           Text(
             game.scoreText,
             style: TextStyle(
-              fontSize: fontSize ?? 16,
-              fontWeight: FontWeight.bold,
-              color: colorScore,
-            ),
+                fontSize: fontSize ?? 16,
+                fontWeight: FontWeight.bold,
+                color: colorScore,
+                decoration: game.noDated ? TextDecoration.lineThrough : null),
           ),
           ConstrainedBox(
             constraints: const BoxConstraints(
@@ -359,7 +359,7 @@ class GameScoreWiget extends StatelessWidget {
                     DateController.frDate(game.dateGame, abbr: true),
                     style: const TextStyle(fontSize: 12),
                   ),
-                if (game.isPlayed && showEtat && etat != GameEtat.avant)
+                if (showEtat && etat != GameEtat.avant)
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 3.0),
                     color: colorEtat,

@@ -22,6 +22,7 @@ class Performance {
         3 => 'triplé',
         4 => 'quadruplé',
         5 => 'quintuplé',
+        6 => 'sextuplé',
         int() => '${nombre} buts marqués',
       };
     }

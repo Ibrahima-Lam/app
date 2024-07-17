@@ -8,7 +8,7 @@ import 'package:app/providers/composition_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/widget/modals/composition_bottom_sheet_widget.dart';
 import 'package:app/widget/modals/confirm_dialog_widget.dart';
-import 'package:app/widget/section_title_widget.dart';
+import 'package:app/widget/app/section_title_widget.dart';
 import 'package:app/widget/logos/substitut_logo_widget.dart';
 import 'package:app/widget_pages/composition_form.dart';
 import 'package:flutter/material.dart';

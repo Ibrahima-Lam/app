@@ -1,15 +1,16 @@
 extension ListExtension<T> on List {
   T? singleWhereOrNull<T>(
-    bool Function(T e) f, {
+    bool Function(T element) text, {
     T Function()? orElse,
+    T Function()? orElseOrElse,
   }) {
     try {
       return this.singleWhere(
-        (a) => f(a),
+        (a) => text(a),
         orElse: orElse != null ? () => orElse() : null,
       );
     } catch (e) {
-      return null;
+      return orElseOrElse != null ? orElseOrElse() : null;
     }
   }
 }

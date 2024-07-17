@@ -2,9 +2,9 @@ import 'package:app/models/coachs/coach.dart';
 import 'package:app/models/joueur.dart';
 import 'package:app/providers/coach_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/coach_list_tile_widget.dart';
-import 'package:app/widget/joueur_widget.dart';
-import 'package:app/widget/section_title_widget.dart';
+import 'package:app/widget/coach/coach_list_tile_widget.dart';
+import 'package:app/widget/joueur/joueur_widget.dart';
+import 'package:app/widget/app/section_title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:app/core/enums/game_etat_enum.dart';
 import 'package:app/core/extension/string_extension.dart';
 import 'package:app/models/gameEvent.dart';
 import 'package:app/widget/form/elevated_button_widget.dart';
@@ -280,7 +281,8 @@ class EtatDropDownMenuWidget extends StatelessWidget {
         initialSelection: etatController.text,
         controller: etatController,
         dropdownMenuEntries: values
-            .map((e) => DropdownMenuEntry(value: e, label: e.capitalize()))
+            .map((e) => DropdownMenuEntry(
+                value: e, label: GameEtatClass(e).text.capitalize()))
             .toList());
   }
 }

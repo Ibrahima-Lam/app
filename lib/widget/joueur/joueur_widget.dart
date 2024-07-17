@@ -28,7 +28,7 @@ class JoueurListTileWidget extends StatelessWidget {
           width: 60,
           child: JoueurImageLogoWidget(url: joueur.imageUrl)),
       title: Text(joueur.nomJoueur),
-      subtitle: showEquipe ? Text(joueur.nomEquipe) : null,
+      subtitle: showEquipe ? Text(joueur.participant.nomEquipe) : null,
     );
   }
 }

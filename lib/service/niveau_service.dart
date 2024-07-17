@@ -1,10 +1,11 @@
-import 'dart:async';
-
 import 'package:app/models/niveau.dart';
 
 class NiveauService {
-  static FutureOr<List<Niveau>> getNiveaux() async =>
-      niveaux.map((e) => Niveau.fromJson(e)).toList();
+  static Future<List<Niveau>> getNiveaux() async =>
+      niveaux.map((e) => Niveau.fromJson(e)).toList()
+        ..sort(
+          (a, b) => a.ordreNiveau.compareTo(b.ordreNiveau),
+        );
 }
 
 const List<Map<String, dynamic>> niveaux = [
@@ -12,109 +13,145 @@ const List<Map<String, dynamic>> niveaux = [
     "codeNiveau": "tr1",
     "nomNiveau": "tour 1",
     "typeNiveau": "groupe",
-    "ordreNiveau": "a1tr1"
+    "ordreNiveau": "a01tr1"
   },
   {
     "codeNiveau": "tr2",
     "nomNiveau": "tour 2",
     "typeNiveau": "groupe",
-    "ordreNiveau": "a2tr2"
+    "ordreNiveau": "a02tr2"
   },
   {
     "codeNiveau": "tr3",
     "nomNiveau": "tour 3",
     "typeNiveau": "groupe",
-    "ordreNiveau": "a3tr3"
+    "ordreNiveau": "a03tr3"
   },
   {
     "codeNiveau": "tr4",
     "nomNiveau": "tour 4",
     "typeNiveau": "groupe",
-    "ordreNiveau": "a4tr4"
+    "ordreNiveau": "a04tr4"
+  },
+  {
+    "codeNiveau": "tr5",
+    "nomNiveau": "tour 5",
+    "typeNiveau": "groupe",
+    "ordreNiveau": "a05tr5"
+  },
+  {
+    "codeNiveau": "tr6",
+    "nomNiveau": "tour 6",
+    "typeNiveau": "groupe",
+    "ordreNiveau": "a06tr6"
+  },
+  {
+    "codeNiveau": "tr7",
+    "nomNiveau": "tour 7",
+    "typeNiveau": "groupe",
+    "ordreNiveau": "a07tr7"
+  },
+  {
+    "codeNiveau": "tr8",
+    "nomNiveau": "tour 8",
+    "typeNiveau": "groupe",
+    "ordreNiveau": "a08tr8"
   },
   {
     "codeNiveau": "tr",
     "nomNiveau": "match de Groupe",
     "typeNiveau": "groupe",
-    "ordreNiveau": "atr"
+    "ordreNiveau": "a0tr"
+  },
+  {
+    "codeNiveau": "sf",
+    "nomNiveau": "Seizieme de Final",
+    "typeNiveau": "elimination",
+    "ordreNiveau": "b02sf"
+  },
+  {
+    "codeNiveau": "hf",
+    "nomNiveau": "Huitieme de Final",
+    "typeNiveau": "elimination",
+    "ordreNiveau": "b03hf"
   },
   {
     "codeNiveau": "qf",
     "nomNiveau": "Quart de Final",
     "typeNiveau": "elimination",
-    "ordreNiveau": "b4qf"
+    "ordreNiveau": "b04qf"
   },
   {
     "codeNiveau": "df",
     "nomNiveau": "Demi-finale",
     "typeNiveau": "elimination",
-    "ordreNiveau": "b5df"
+    "ordreNiveau": "b05df"
   },
   {
     "codeNiveau": "fn",
     "nomNiveau": "Finale",
     "typeNiveau": "elimination",
-    "ordreNiveau": "b7fn"
+    "ordreNiveau": "b07fn"
   },
   {
     "codeNiveau": "pf",
     "nomNiveau": "Troisiéme place",
     "typeNiveau": "elimination",
-    "ordreNiveau": "b6pf"
+    "ordreNiveau": "b06pf"
   },
   {
-    "codeNiveau": "jrn1",
+    "codeNiveau": "jrn01",
     "nomNiveau": "Journ\u00e9e 1",
     "typeNiveau": "championnat",
-    "ordreNiveau": "c1jrn1"
+    "ordreNiveau": "c01jrn01"
   },
   {
-    "codeNiveau": "jrn2",
+    "codeNiveau": "jrn02",
     "nomNiveau": "Journ\u00e9e 2",
     "typeNiveau": "championnat",
-    "ordreNiveau": "c2jrn2"
+    "ordreNiveau": "c02jrn02"
   },
   {
-    "codeNiveau": "jrn3",
+    "codeNiveau": "jrn03",
     "nomNiveau": "Journ\u00e9e 3",
     "typeNiveau": "championnat",
-    "ordreNiveau": "c3jrn3"
+    "ordreNiveau": "c03jrn03"
   },
   {
-    "codeNiveau": "jrn4",
+    "codeNiveau": "jrn04",
     "nomNiveau": "Journ\u00e9e 4",
     "typeNiveau": "championnat",
-    "ordreNiveau": "c4jrn4"
+    "ordreNiveau": "c04jrn04"
   },
   {
-    "codeNiveau": "jrn5",
+    "codeNiveau": "jrn05",
     "nomNiveau": "Journ\u00e9e 5",
     "typeNiveau": "championnat",
-    "ordreNiveau": "c5jrn5"
+    "ordreNiveau": "c05jrn05"
   },
   {
-    "codeNiveau": "jrn6",
+    "codeNiveau": "jrn06",
     "nomNiveau": "Journ\u00e9e 6",
     "typeNiveau": "championnat",
-    "ordreNiveau": "c6jrn6"
+    "ordreNiveau": "c06jrn06"
   },
   {
-    "codeNiveau": "jrn7",
+    "codeNiveau": "jrn07",
     "nomNiveau": "Journ\u00e9e 7",
     "typeNiveau": "championnat",
-    "ordreNiveau": "c7jrn7"
+    "ordreNiveau": "c07jrn07"
   },
   {
-    "codeNiveau": "jrn8",
+    "codeNiveau": "jrn08",
     "nomNiveau": "Journ\u00e9e 8",
     "typeNiveau": "championnat",
-    "ordreNiveau": "c8jrn8"
+    "ordreNiveau": "c08jrn08"
   },
   {
-    "codeNiveau": "jrn9",
+    "codeNiveau": "jrn09",
     "nomNiveau": "Journ\u00e9e 9",
     "typeNiveau": "championnat",
-    "ordreNiveau": "c9jrn9"
+    "ordreNiveau": "c09jrn09"
   },
   {
     "codeNiveau": "jrn10",

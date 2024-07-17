@@ -33,7 +33,7 @@ class CircularLogoWidget extends StatelessWidget {
     return Container(
       height: s.height,
       width: s.width,
-      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+      margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8),
       decoration: const BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,

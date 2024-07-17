@@ -6,7 +6,7 @@ import 'package:app/models/event.dart';
 import 'package:app/models/game.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/widget/events/event_widget.dart';
-import 'package:app/widget/section_title_widget.dart';
+import 'package:app/widget/app/section_title_widget.dart';
 import 'package:app/widget_pages/event_list_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:app/collection/competition_collection.dart';
+import 'package:app/core/enums/categorie_enum.dart';
 import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/competition.dart';
 import 'package:app/models/participant.dart';
@@ -11,6 +12,7 @@ import 'package:app/pages/equipe/widget_details/joueur_delegate_search_widget.da
 import 'package:app/pages/equipe/widget_details/effectif_widget.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/participant_provider.dart';
+import 'package:app/widget/app/favori_icon_widget.dart';
 import 'package:app/widget/classement/classement_widget.dart';
 import 'package:app/pages/equipe/widget_details/equipe_statistiques_widget.dart';
 import 'package:app/widget/logos/competition_logo_image.dart';
@@ -23,7 +25,10 @@ import 'package:provider/provider.dart';
 class EquipeDetails extends StatelessWidget {
   final String id;
   EquipeDetails({super.key, required this.id});
-  bool favori = false;
+
+  late final Participant participant;
+  late final Competition competition;
+
   static String CLASSEMENT = 'Classement';
   final Set<String> tabs = {
     'Fiche',
@@ -36,8 +41,10 @@ class EquipeDetails extends StatelessWidget {
 
   Map<String, Widget> get tabBarViewWidgets => {
         'match': GameListWidget(idParticipant: id),
-        'classement':
-            ClassementWiget.equipe(title: '', idParticipant: id, idTarget: id),
+        'classement': ClassementWiget.equipe(
+            idParticipant: id,
+            codeEdition: participant.codeEdition,
+            isTarget: true),
         'effectif': EffectifWidget(idParticipant: id),
         'infos': InfosListWiget(
           categorieParams: CategorieParams(idParticipant: id),
@@ -45,10 +52,6 @@ class EquipeDetails extends StatelessWidget {
         'statistique': EquipeStatistiquesWidget(idParticipant: id),
         'fiche': EquipeFicheListWidget(participant: participant),
       };
-
-  late final Participant participant;
-
-  late final Competition competition;
 
   Future<bool> _getEquipe(BuildContext context) async {
     participant = await context.read<ParticipantProvider>().getParticipant(id);
@@ -88,7 +91,7 @@ class EquipeDetails extends StatelessWidget {
                         SliverAppBar(
                           centerTitle: true,
                           pinned: true,
-                          expandedHeight: 200,
+                          expandedHeight: 180,
                           leading: IconButton(
                             onPressed: () {
                               Navigator.pop(context);
@@ -102,15 +105,8 @@ class EquipeDetails extends StatelessWidget {
                             ),
                           ),
                           actions: [
-                            StatefulBuilder(
-                              builder: (context, setState) => IconButton(
-                                onPressed: () {
-                                  setState(() => favori = !favori);
-                                },
-                                icon: Icon(
-                                    favori ? Icons.star : Icons.star_outline),
-                              ),
-                            ),
+                            FavoriIconWidget(
+                                id: id, categorie: Categorie.equipe),
                             IconButton(
                                 onPressed: () {
                                   showSearch(
@@ -127,7 +123,7 @@ class EquipeDetails extends StatelessWidget {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const SizedBox(height: 30),
+                                  const SizedBox(height: 35),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [

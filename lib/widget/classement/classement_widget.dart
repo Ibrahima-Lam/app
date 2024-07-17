@@ -1,38 +1,46 @@
+import 'package:app/models/participation.dart';
 import 'package:app/models/stat.dart';
-import 'package:app/providers/game_provider.dart';
+import 'package:app/providers/groupe_provider.dart';
+import 'package:app/providers/participation_provider.dart';
 import 'package:app/service/stat_service.dart';
+import 'package:app/widget/app/section_title_widget.dart';
+import 'package:app/widget/classement/classement_toggle_botton_widget.dart';
 import 'package:app/widget/classement/table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ClassementWiget extends StatelessWidget {
-  final String title;
+  final String? title;
+  final String codeEdition;
   final String? idGroupe;
   final String? idParticipant;
   final List<String>? targets;
   const ClassementWiget(
       {super.key,
-      required this.title,
+      this.title,
       this.idGroupe,
       this.idParticipant,
-      this.targets});
+      this.targets,
+      required this.codeEdition});
   factory ClassementWiget.equipe(
-          {required String title,
+          {String? title,
           required String idParticipant,
-          required String idTarget}) =>
+          required String codeEdition,
+          bool isTarget = false}) =>
       ClassementWiget(
         title: title,
         idParticipant: idParticipant,
-        targets: [idTarget],
+        codeEdition: codeEdition,
+        targets: [if (isTarget) idParticipant],
       );
 
   Future<List<Stat>> _getStat(BuildContext context) async {
     List<Stat> stats = [];
     if (idGroupe != null) {
-      stats = await StatService(context: context)
+      stats = await StatService(context: context, codeEdition: codeEdition)
           .getStatByGroupe(idGroupe: idGroupe!);
     } else if (idParticipant != null) {
-      stats = await StatService(context: context)
+      stats = await StatService(context: context, codeEdition: codeEdition)
           .getStatByEquipe(idParticipant: idParticipant!);
     }
     return stats;
@@ -40,61 +48,37 @@ class ClassementWiget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameProvider>(builder: (context, val, child) {
-      return FutureBuilder(
-          future: _getStat(context),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text('Erreur!'),
-              );
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+    return FutureBuilder(
+        future: _getStat(context),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('Erreur!'),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-            final List<Stat> stat = snapshot.data!;
-            int selected = 0;
+          final List<Stat> stat = snapshot.data!;
+          int selected = 0;
+          return Consumer2<ParticipationProvider, GroupeProvider>(
+              builder: (context, participationProvider, groupeProvider, child) {
+            final Participation? participation =
+                participationProvider.getParticipationByGroupeOrEquipe(
+                    idParticipant: idParticipant, idGroupe: idGroupe);
+
             return StatefulBuilder(builder: (context, setState) {
-              final List<bool> isSelected = [false, false];
-              isSelected[selected] = true;
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    Card(
-                      margin: EdgeInsets.symmetric(horizontal: 4),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3)),
-                      child: Container(
-                        width: MediaQuery.sizeOf(context).width,
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            gradient: LinearGradient(colors: [
-                              Colors.white,
-                              Color.fromARGB(255, 215, 238, 215),
-                              Colors.white,
-                            ])),
-                        child: ToggleButtons(
-                          fillColor: Theme.of(context).primaryColor,
-                          color: Theme.of(context).primaryColor,
-                          selectedColor: Colors.white,
-                          onPressed: (index) {
-                            setState(
-                              () {
-                                selected = index;
-                              },
-                            );
-                          },
-                          children: [
-                            Text('Tous'),
-                            Text('Moins'),
-                          ],
-                          isSelected: isSelected,
-                        ),
-                      ),
-                    ),
+                    ClassementToggleBottonWidget(
+                        onSelected: (index) {
+                          setState(() => selected = index);
+                        },
+                        selected: selected),
                     Card(
                       shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.zero),
@@ -103,12 +87,11 @@ class ClassementWiget extends StatelessWidget {
                         width: MediaQuery.sizeOf(context).width,
                         child: Column(
                           children: [
-                            Text(
-                              '$title',
-                              style: const TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
+                            SectionTitleWidget(
+                                title: title ??
+                                    'Groupe ${participation?.groupe.nomGroupe ?? ''}'),
                             TableWidget(
+                              success: 0,
                               targets: targets,
                               stats: stat,
                               expand: selected == 0,
@@ -122,6 +105,6 @@ class ClassementWiget extends StatelessWidget {
               );
             });
           });
-    });
+        });
   }
 }

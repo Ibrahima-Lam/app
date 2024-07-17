@@ -64,6 +64,11 @@ class Game implements Searchable {
       groupe: groupe,
     );
   }
+  bool get noDated {
+    if (etat.etat case (GameEtat.annule || GameEtat.arrete || GameEtat.reporte))
+      return true;
+    return false;
+  }
 
   bool get isPlayed => score?.homeScore != null && score?.awayScore != null;
   bool get isNotPlayed => !isPlayed;

@@ -6,6 +6,7 @@ import 'package:app/providers/arbitre_provider.dart';
 import 'package:app/providers/coach_provider.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/composition_provider.dart';
+import 'package:app/providers/favori_provider.dart';
 import 'package:app/providers/infos_provider.dart';
 import 'package:app/providers/paramettre_provider.dart';
 import 'package:app/providers/user_provider.dart';
@@ -33,6 +34,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+          create: (context) => FavoriProvider()
+            ..getCompetitions()
+            ..getEquipes()
+            ..getJoueurs(),
+          lazy: false,
+        ),
         ChangeNotifierProvider(create: (context) => CompetitionProvider()),
         ChangeNotifierProvider(create: (context) => ParticipantProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
@@ -42,10 +50,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             lazy: false, create: (context) => GroupeProvider()),
         ChangeNotifierProvider(create: (context) => CompositionProvider()),
-        ChangeNotifierProvider(create: (context) => JoueurProvider()),
         ChangeNotifierProvider<GameEventListProvider>(
           lazy: false,
-          create: (context) => GameEventListProvider([]),
+          create: (context) => GameEventListProvider([])..getEvents(),
         ),
         ChangeNotifierProxyProvider3<ParticipantProvider, GameEventListProvider,
                 GroupeProvider, GameProvider>(
@@ -90,44 +97,57 @@ class MyApp extends StatelessWidget {
                 ParamettreProvider(userProvider: context.read<UserProvider>()),
             update: (context, value, previous) =>
                 ParamettreProvider(userProvider: value)),
+        ChangeNotifierProxyProvider<ParticipantProvider, JoueurProvider>(
+            lazy: false,
+            create: (context) => JoueurProvider([],
+                participantProvider: context.read<ParticipantProvider>()),
+            update: (context, value, previous) => JoueurProvider(
+                previous?.joueurs ?? [],
+                participantProvider: value)),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          textTheme: TextTheme(),
-
-          progressIndicatorTheme: ProgressIndicatorThemeData(
-            color: color,
-          ),
-          outlinedButtonTheme: OutlinedButtonThemeData(
-              style: ButtonStyle(
-            foregroundColor: WidgetStatePropertyAll(color),
-          )),
-          primaryColor: color,
-          floatingActionButtonTheme: FloatingActionButtonThemeData(
-              backgroundColor: color, foregroundColor: Colors.white),
-          appBarTheme: AppBarTheme(
-            backgroundColor: color,
-            foregroundColor: Colors.white,
-          ),
-          // Color(0xFFEDE7F6) Color.fromARGB(255, 232, 232, 232)
-          scaffoldBackgroundColor: Color.fromARGB(255, 232, 232, 232),
-          cardTheme: CardTheme(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4.0)),
-            color: Colors.white,
-            surfaceTintColor: Colors.white,
-            shadowColor: Colors.blue,
-            elevation: 1,
-          ),
-          drawerTheme: DrawerThemeData(
-            backgroundColor: Colors.white,
-            surfaceTintColor: Colors.white,
-          ),
-          navigationBarTheme: NavigationBarThemeData(
-            overlayColor: WidgetStatePropertyAll(color),
-          ),
-        ),
+            textTheme: TextTheme(),
+            progressIndicatorTheme: ProgressIndicatorThemeData(
+              color: color,
+            ),
+            outlinedButtonTheme: OutlinedButtonThemeData(
+                style: ButtonStyle(
+              foregroundColor: WidgetStatePropertyAll(color),
+            )),
+            textButtonTheme: TextButtonThemeData(
+                style: ButtonStyle(
+              foregroundColor: WidgetStatePropertyAll(color),
+            )),
+            primaryColor: color,
+            floatingActionButtonTheme: FloatingActionButtonThemeData(
+                backgroundColor: color, foregroundColor: Colors.white),
+            appBarTheme: AppBarTheme(
+              backgroundColor: color,
+              foregroundColor: Colors.white,
+            ),
+            // Color(0xFFEDE7F6) Color.fromARGB(255, 232, 232, 232)
+            scaffoldBackgroundColor: Color.fromARGB(255, 232, 232, 232),
+            cardTheme: CardTheme(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4.0)),
+              color: Colors.white,
+              surfaceTintColor: Colors.white,
+              shadowColor: Colors.blue,
+              elevation: 1,
+            ),
+            drawerTheme: DrawerThemeData(
+              backgroundColor: Colors.white,
+              surfaceTintColor: Colors.white,
+            ),
+            navigationBarTheme: NavigationBarThemeData(
+              overlayColor: WidgetStatePropertyAll(color),
+            ),
+            popupMenuTheme: PopupMenuThemeData(
+              surfaceTintColor: Colors.white,
+              color: Colors.white,
+            )),
         home: GlobalPage(),
       ),
     );

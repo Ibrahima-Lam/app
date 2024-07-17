@@ -3,7 +3,7 @@
 import 'package:app/collection/composition_collection.dart';
 import 'package:app/models/composition.dart';
 import 'package:app/providers/composition_provider.dart';
-import 'package:app/widget/coach_and_team_widget.dart';
+import 'package:app/widget/coach/coach_and_team_widget.dart';
 import 'package:app/widget/modals/composition_bottom_sheet_widget.dart';
 import 'package:app/widget/composition/composition_element_widget.dart';
 import 'package:app/widget_pages/arbitre_form.dart';

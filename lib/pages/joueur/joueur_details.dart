@@ -1,3 +1,4 @@
+import 'package:app/core/enums/categorie_enum.dart';
 import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/joueur.dart';
 import 'package:app/pages/equipe/equipe_details.dart';
@@ -6,6 +7,7 @@ import 'package:app/pages/joueur/widget_datails/joueur_match_list_widget.dart';
 import 'package:app/pages/joueur/widget_datails/joueur_performance_widget.dart';
 import 'package:app/pages/joueur/widget_datails/joueur_statistique_widget.dart';
 import 'package:app/providers/joueur_provider.dart';
+import 'package:app/widget/app/favori_icon_widget.dart';
 import 'package:app/widget/logos/equipe_logo_widget.dart';
 import 'package:app/widget/logos/joueur_logo_widget.dart';
 import 'package:app/widget/skelton/tab_bar_widget.dart';
@@ -72,17 +74,8 @@ class JoueurDetails extends StatelessWidget {
                       expandedHeight: 180.0,
                       pinned: true,
                       actions: [
-                        StatefulBuilder(
-                          builder: (context, setState) {
-                            return IconButton(
-                              onPressed: () {
-                                setState(() => favori = !favori);
-                              },
-                              icon:
-                                  Icon(favori ? Icons.star : Icons.star_border),
-                            );
-                          },
-                        )
+                        FavoriIconWidget(
+                            id: joueur.idJoueur, categorie: Categorie.joueur)
                       ],
                       flexibleSpace: FlexibleSpaceBar(
                           background: Center(
@@ -90,7 +83,7 @@ class JoueurDetails extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const SizedBox(
-                              height: 50,
+                              height: 35,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,

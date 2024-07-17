@@ -1,4 +1,5 @@
 import 'package:app/core/enums/competition_phase_enum.dart';
+import 'package:app/core/extension/list_extension.dart';
 import 'package:app/models/participation.dart';
 import 'package:app/providers/groupe_provider.dart';
 import 'package:app/providers/participant_provider.dart';
@@ -88,5 +89,13 @@ class ParticipationProvider extends ChangeNotifier {
     } catch (e) {
       return null;
     }
+  }
+
+  Participation? getParticipationByGroupeOrEquipe(
+      {required String? idParticipant, required String? idGroupe}) {
+    return _participations.singleWhereOrNull((element) =>
+        (element.idParticipant == idParticipant ||
+            element.groupe.idGroupe == idGroupe) &&
+        element.groupe.codePhase == 'grp');
   }
 }

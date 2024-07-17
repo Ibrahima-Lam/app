@@ -10,7 +10,7 @@ import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/history_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/providers/participant_provider.dart';
-import 'package:app/widget/game_widget.dart';
+import 'package:app/widget/game/game_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

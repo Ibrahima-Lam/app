@@ -7,7 +7,7 @@ import 'package:app/pages/game/widget_details/composition_setter.dart';
 import 'package:app/pages/joueur/joueur_details.dart';
 import 'package:app/providers/composition_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/coach_and_team_widget.dart';
+import 'package:app/widget/coach/coach_and_team_widget.dart';
 import 'package:app/widget/composition/composition_element_widget.dart';
 import 'package:app/widget_pages/arbitre_widget.dart';
 import 'package:app/widget_pages/substitut_list_widget.dart';
@@ -58,25 +58,6 @@ class CompositionWidget extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  if (checkUser)
-                    Card(
-                      child: Center(
-                        child: OutlinedButton(
-                            onPressed: () async {
-                              await Navigator.of(context)
-                                  .push(MaterialPageRoute(
-                                      builder: (context) => CompositionSetter(
-                                            compositionSousCollection:
-                                                compositionSousCollection,
-                                          )));
-
-                              context
-                                  .read<CompositionProvider>()
-                                  .notifyListeners();
-                            },
-                            child: Text('Paramettre de Composition')),
-                      ),
-                    ),
                   Card(
                     child: Stack(
                       alignment: Alignment.center,
@@ -132,9 +113,29 @@ class CompositionWidget extends StatelessWidget {
                   ArbitreWidget(
                     compositionSousCollection: compositionSousCollection,
                   ),
-                  const SizedBox(
-                    height: 20,
-                  )
+                  if (checkUser)
+                    Card(
+                      child: Center(
+                        child: TextButton(
+                            style: ButtonStyle(
+                              foregroundColor:
+                                  WidgetStatePropertyAll(Colors.blue),
+                            ),
+                            onPressed: () async {
+                              await Navigator.of(context)
+                                  .push(MaterialPageRoute(
+                                      builder: (context) => CompositionSetter(
+                                            compositionSousCollection:
+                                                compositionSousCollection,
+                                          )));
+
+                              context
+                                  .read<CompositionProvider>()
+                                  .notifyListeners();
+                            },
+                            child: Text('Paramettre de Composition')),
+                      ),
+                    ),
                 ],
               ),
             );

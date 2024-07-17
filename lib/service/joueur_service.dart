@@ -1,21 +1,15 @@
 import 'package:app/models/joueur.dart';
+import 'package:app/models/participant.dart';
 
 class JoueurService {
-  Future<List<Joueur>> getData() async {
+  Future<List<Joueur>> getData(List<Participant> participants) async {
     await Future.delayed(Duration(seconds: 1));
-    return joueurs.map((e) => Joueur.fromJson(e)).toList();
-  }
 
-  Future<List<Joueur>> getJoueursBy({
-    String? idParticipant,
-  }) async {
-    List<Joueur> joueurs = await getData();
-    if (idParticipant != null) {
-      joueurs = joueurs
-          .where((element) => element.idParticipant == idParticipant)
-          .toList();
-    }
-    return joueurs;
+    return joueurs.map((e) {
+      Participant participant = participants.singleWhere(
+          (element) => element.idParticipant == e['idParticipant'].toString());
+      return Joueur.fromJson(e, participant);
+    }).toList();
   }
 }
 
@@ -35,7 +29,11 @@ final List<Map<String, dynamic>> joueurs = [
     "nomEdition": "Tournoi Pélle Thialgou Edition 2023",
     "codeCompetition": "thialgou",
     "nomCompetition": "Tournoi Pellé Thialgou Edition 2023",
-    "localiteCompetition": "Thialgou"
+    "localiteCompetition": "Thialgou",
+    "vitesse": 10.0,
+    "poids": 54.0,
+    "taille": 1.65,
+    "dateNaissance": '2007-02-01',
   },
   {
     "idJoueur": 66,

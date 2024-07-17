@@ -4,6 +4,7 @@ class TabBarWidget {
   static PreferredSizeWidget build({
     TabController? controller,
     required List<Widget> tabs,
+    TabAlignment? tabAlignment,
     Function(int)? onTap,
   }) {
     return TabBar(
@@ -22,7 +23,7 @@ class TabBarWidget {
         fontWeight: FontWeight.bold,
         color: Colors.white,
       ),
-      tabAlignment: TabAlignment.start,
+      tabAlignment: tabAlignment ?? TabAlignment.start,
       tabs: tabs,
     );
   }

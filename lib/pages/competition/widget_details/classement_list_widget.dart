@@ -1,6 +1,8 @@
 import 'package:app/models/stat.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/service/stat_service.dart';
+import 'package:app/widget/app/section_title_widget.dart';
+import 'package:app/widget/classement/classement_toggle_botton_widget.dart';
 import 'package:app/widget/classement/table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,8 +12,10 @@ class ClassementListWidget extends StatelessWidget {
   const ClassementListWidget({super.key, required this.codeEdition});
 
   Future<Map<String, List<Stat>>> _getStat(BuildContext context) async {
-    return await StatService(context: context)
-        .getStatByEdition(codeEdition: codeEdition);
+    return await StatService(
+      context: context,
+      codeEdition: codeEdition,
+    ).getStatByEdition(codeEdition: codeEdition);
   }
 
   @override
@@ -26,11 +30,11 @@ class ClassementListWidget extends StatelessWidget {
             );
           }
           if (snapshot.hasError) {
-            return const Center(
-              child: Text('Erreur!'),
+            return Center(
+              child: Text(snapshot.error.toString()),
             );
           }
-          final Map<String, List<Stat>> statistiques = snapshot.data!;
+          final Map<String, List<Stat>> statistiques = snapshot.data ?? {};
           if (statistiques.isEmpty) {
             return const Center(
               child: Text('Pas de Données!'),
@@ -38,55 +42,32 @@ class ClassementListWidget extends StatelessWidget {
           }
           int selected = 0;
           return StatefulBuilder(builder: (context, setState) {
-            final List<bool> isSelected = [false, false];
-            isSelected[selected] = true;
-            List<Widget> statsWidgets = [
-              Container(
-                width: MediaQuery.sizeOf(context).width,
-                color: Colors.white,
-                child: ToggleButtons(
-                  fillColor: Theme.of(context).primaryColor,
-                  color: Theme.of(context).primaryColor,
-                  selectedColor: Colors.white,
-                  onPressed: (index) {
-                    setState(
-                      () {
-                        selected = index;
-                      },
-                    );
+            return SingleChildScrollView(
+                child: Column(children: [
+              ClassementToggleBottonWidget(
+                  onSelected: (index) {
+                    setState(() => selected = index);
                   },
-                  children: [
-                    Text('Tous'),
-                    Text('Moins'),
-                  ],
-                  isSelected: isSelected,
-                ),
-              )
-            ];
-            statistiques.forEach((key, value) {
-              statsWidgets.add(Card(
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero),
-                color: Colors.white,
-                child: SizedBox(
-                  width: MediaQuery.sizeOf(context).width,
-                  child: Column(
-                    children: [
-                      Text(
-                        'Groupe $key',
-                        style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      TableWidget(
-                        stats: value,
-                        expand: selected == 0,
-                      )
-                    ],
+                  selected: selected),
+              for (var stat in statistiques.entries)
+                Card(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero),
+                  color: Colors.white,
+                  child: SizedBox(
+                    width: MediaQuery.sizeOf(context).width,
+                    child: Column(
+                      children: [
+                        SectionTitleWidget(title: 'Groupe ${stat.key}'),
+                        TableWidget(
+                          stats: stat.value,
+                          expand: selected == 0,
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ));
-            });
-            return SingleChildScrollView(child: Column(children: statsWidgets));
+            ]));
           });
         },
       );

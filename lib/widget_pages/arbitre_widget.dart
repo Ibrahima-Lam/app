@@ -1,7 +1,7 @@
 import 'package:app/collection/composition_collection.dart';
 import 'package:app/core/constants/arbitre/kArbitre.dart';
 import 'package:app/models/composition.dart';
-import 'package:app/widget/section_title_widget.dart';
+import 'package:app/widget/app/section_title_widget.dart';
 import 'package:flutter/material.dart';
 
 class ArbitreWidget extends StatefulWidget {

@@ -3,7 +3,7 @@ import 'package:app/models/composition.dart';
 import 'package:app/models/game.dart';
 import 'package:app/providers/composition_provider.dart';
 import 'package:app/providers/game_provider.dart';
-import 'package:app/widget/game_widget.dart';
+import 'package:app/widget/app/person_game_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -45,20 +45,9 @@ class JoueurMatchListWidget extends StatelessWidget {
                     child:
                         Text('Pas de composition disponible pour ce joueur!'),
                   )
-                : SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 5),
-                        ...games
-                            .map((e) => GameFullWidget(
-                                  gameEventListProvider:
-                                      gameProvider.gameEventListProvider,
-                                  game: e,
-                                  verticalMargin: 0,
-                                ))
-                            .toList()
-                      ],
-                    ),
+                : PersonGameListWidget(
+                    games: games,
+                    gameEventListProvider: gameProvider.gameEventListProvider,
                   );
           },
         );
