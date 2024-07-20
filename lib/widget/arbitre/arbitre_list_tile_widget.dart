@@ -5,13 +5,18 @@ import 'package:flutter/material.dart';
 
 class ArbitreListTileWidget extends StatelessWidget {
   final Arbitre arbitre;
+  final Function(Arbitre arbitre)? onTap;
 
-  const ArbitreListTileWidget({super.key, required this.arbitre});
+  const ArbitreListTileWidget({super.key, required this.arbitre, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
+        if (onTap != null) {
+          onTap!(arbitre);
+          return;
+        }
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ArbitreDetails(id: arbitre.idArbitre)));
       },

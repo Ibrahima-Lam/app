@@ -174,6 +174,9 @@ class JoueurController {
           game: game,
           type: EventType.but));
     }
-    return statistiques;
+    return statistiques
+      ..sort(
+        (a, b) => (b.game.dateGame ?? '').compareTo(a.game.dateGame ?? ''),
+      );
   }
 }

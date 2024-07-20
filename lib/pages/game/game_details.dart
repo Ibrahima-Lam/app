@@ -11,7 +11,7 @@ import 'package:app/models/niveau.dart';
 import 'package:app/pages/competition/competition_details.dart';
 import 'package:app/pages/game/widget_details/composition_widget.dart';
 import 'package:app/pages/game/widget_details/evenement_widget.dart';
-import 'package:app/pages/game/widget_details/statistique_widget.dart';
+import 'package:app/pages/game/widget_details/statistique_list_widget.dart';
 import 'package:app/providers/paramettre_provider.dart';
 import 'package:app/widget/classement/classement_widget.dart';
 import 'package:app/pages/game/widget_details/journee_list_widget.dart';
@@ -100,6 +100,7 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
           break;
         case 'CLA':
           widgets.add(ClassementWiget(
+            key: ValueKey('comp'),
             codeEdition: game.groupe.codeEdition,
             title: 'Groupe ${game.groupe.nomGroupe}',
             idGroupe: game.idGroupe,
@@ -108,17 +109,20 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
           break;
         case 'COM':
           widgets.add(CompositionWidget(
+            key: ValueKey('class'),
             checkUser: checkUser,
             game: game,
           ));
           break;
         case 'EVE':
           widgets.add(EvenementWidget(
+            key: ValueKey('eve'),
             checkUser: checkUser,
             game: game,
           ));
         case 'STA':
-          widgets.add(StatistiqueWidget(
+          widgets.add(StatistiqueListWidget(
+            key: ValueKey('stat'),
             checkUser: checkUser,
             game: game,
           ));

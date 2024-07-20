@@ -25,6 +25,13 @@ class CompositionProvider extends ChangeNotifier {
     setCollection();
   }
 
+  Future<bool> removeComposition(String id) async {
+    compositionCollection.compositions
+        .removeWhere((element) => element.idComposition == id);
+    notifyListeners();
+    return true;
+  }
+
   Future<void> setJoueurComposition(JoueurComposition composition,
       {required String idGame,
       required String idParticipant,

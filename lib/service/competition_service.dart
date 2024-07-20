@@ -3,6 +3,7 @@ import 'package:app/models/competition.dart';
 class CompetitionService {
   Future<List<Competition>> get getData async {
     await Future.delayed(const Duration(seconds: 1));
+
     return competitions.map((e) => Competition.fromJson(e)).toList();
   }
 

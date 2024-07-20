@@ -200,8 +200,9 @@ class InformationJoueurWidget extends StatelessWidget {
 
 class JoueurMoreinfosWidget extends StatelessWidget {
   final Joueur joueur;
-  const JoueurMoreinfosWidget({super.key, required this.joueur});
-
+  JoueurMoreinfosWidget({super.key, required this.joueur});
+  final ScrollController scrollController =
+      ScrollController(initialScrollOffset: 50);
   @override
   Widget build(BuildContext context) {
     return Consumer<GameProvider>(builder: (context, gameProvider, child) {
@@ -230,6 +231,7 @@ class JoueurMoreinfosWidget extends StatelessWidget {
           width: MediaQuery.sizeOf(context).width,
           height: 90,
           child: SingleChildScrollView(
+            controller: scrollController,
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
@@ -320,7 +322,7 @@ class JoueurMoreinfosColumnWidget extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 14,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
             ),
           ),
           Text(

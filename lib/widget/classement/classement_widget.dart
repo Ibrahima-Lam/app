@@ -1,5 +1,6 @@
 import 'package:app/models/participation.dart';
 import 'package:app/models/stat.dart';
+import 'package:app/providers/game_provider.dart';
 import 'package:app/providers/groupe_provider.dart';
 import 'package:app/providers/participation_provider.dart';
 import 'package:app/service/stat_service.dart';
@@ -48,63 +49,65 @@ class ClassementWiget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _getStat(context),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text('Erreur!'),
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+    return Consumer<GameProvider>(builder: (context, gameProvider, _) {
+      return FutureBuilder(
+          future: _getStat(context),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text('Erreur!'),
+              );
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-          final List<Stat> stat = snapshot.data!;
-          int selected = 0;
-          return Consumer2<ParticipationProvider, GroupeProvider>(
-              builder: (context, participationProvider, groupeProvider, child) {
-            final Participation? participation =
-                participationProvider.getParticipationByGroupeOrEquipe(
-                    idParticipant: idParticipant, idGroupe: idGroupe);
+            final List<Stat> stat = snapshot.data!;
+            int selected = 0;
+            return Consumer2<ParticipationProvider, GroupeProvider>(builder:
+                (context, participationProvider, groupeProvider, child) {
+              final Participation? participation =
+                  participationProvider.getParticipationByGroupeOrEquipe(
+                      idParticipant: idParticipant, idGroupe: idGroupe);
 
-            return StatefulBuilder(builder: (context, setState) {
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ClassementToggleBottonWidget(
-                        onSelected: (index) {
-                          setState(() => selected = index);
-                        },
-                        selected: selected),
-                    Card(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero),
-                      color: Colors.white,
-                      child: SizedBox(
-                        width: MediaQuery.sizeOf(context).width,
-                        child: Column(
-                          children: [
-                            SectionTitleWidget(
-                                title: title ??
-                                    'Groupe ${participation?.groupe.nomGroupe ?? ''}'),
-                            TableWidget(
-                              success: 0,
-                              targets: targets,
-                              stats: stat,
-                              expand: selected == 0,
-                            )
-                          ],
+              return StatefulBuilder(builder: (context, setState) {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ClassementToggleBottonWidget(
+                          onSelected: (index) {
+                            setState(() => selected = index);
+                          },
+                          selected: selected),
+                      Card(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero),
+                        color: Colors.white,
+                        child: SizedBox(
+                          width: MediaQuery.sizeOf(context).width,
+                          child: Column(
+                            children: [
+                              SectionTitleWidget(
+                                  title: title ??
+                                      'Groupe ${participation?.groupe.nomGroupe ?? ''}'),
+                              TableWidget(
+                                success: 0,
+                                targets: targets,
+                                stats: stat,
+                                expand: selected == 0,
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
+                    ],
+                  ),
+                );
+              });
             });
           });
-        });
+    });
   }
 }

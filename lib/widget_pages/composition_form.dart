@@ -47,6 +47,7 @@ class _CompositionFormState extends State<CompositionForm> {
                     if (joueur != null) {
                       nomController.text = joueur.nomJoueur;
                       widget.composition.idJoueur = joueur.idJoueur;
+                      widget.composition.imageUrl = joueur.imageUrl;
                     }
                   },
                   icon: Icon(Icons.list)),

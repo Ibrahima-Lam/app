@@ -6,6 +6,8 @@ import 'package:app/pages/competition/competition_page.dart';
 import 'package:app/pages/game/game_search.dart';
 import 'package:app/pages/joueur/joueur_page.dart';
 import 'package:app/pages/skelton/login_page.dart';
+import 'package:app/pages/skelton/paramettre_page.dart';
+import 'package:app/providers/app_paramettre_provider.dart';
 import 'package:app/providers/user_provider.dart';
 import 'package:app/widget/events/composition_events_widget.dart';
 import 'package:app/widget/modals/confirm_dialog_widget.dart';
@@ -20,7 +22,8 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserProvider>(builder: (context, val, child) {
+    return Consumer2<UserProvider, AppParamettreProvider>(
+        builder: (context, val, paramettre, child) {
       User? user = val.user;
       return Drawer(
         elevation: 20,
@@ -36,15 +39,16 @@ class DrawerWidget extends StatelessWidget {
                 children: [
                   PersonWidget(radius: 30),
                   const SizedBox(height: 10),
-                  Text(
-                    user?.name ?? 'Pas d\'utilisateur',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: color,
+                  if (paramettre.appParamettre.showUserName)
+                    Text(
+                      user?.name ?? 'Pas d\'utilisateur',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: color,
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -54,7 +58,7 @@ class DrawerWidget extends StatelessWidget {
                   Icons.house,
                   size: size,
                 ),
-                title: 'Competitions',
+                title: 'Compétitions',
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.of(context).push(MaterialPageRoute(
@@ -149,6 +153,19 @@ class DrawerWidget extends StatelessWidget {
             listTileWidget(
               icon: Icon(
                 color: color,
+                Icons.settings,
+                size: size,
+              ),
+              title: 'Paramettre',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ParamettrePage()));
+              },
+            ),
+            listTileWidget(
+              icon: Icon(
+                color: color,
                 Icons.info,
                 size: size,
               ),
@@ -188,7 +205,7 @@ class DrawerWidget extends StatelessWidget {
   Widget listTileWidget(
       {required String title, Icon? icon, Function()? onTap}) {
     return ListTile(
-      minTileHeight: 52,
+      minTileHeight: 48,
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
       minVerticalPadding: 0,
       horizontalTitleGap: 10,

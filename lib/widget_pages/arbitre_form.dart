@@ -1,12 +1,16 @@
+import 'package:app/models/arbitres/arbitre.dart';
 import 'package:app/models/composition.dart';
 import 'package:app/widget/form/dropdown_menu_widget.dart';
 import 'package:app/widget/form/elevated_button_widget.dart';
 import 'package:app/widget/form/text_field_widget.dart';
+import 'package:app/widget/modals/bottom_modal_arbitre_list_widget.dart';
 import 'package:flutter/material.dart';
 
 class ArbitreFormWidget extends StatefulWidget {
+  final String idEdition;
   final ArbitreComposition composition;
-  const ArbitreFormWidget({super.key, required this.composition});
+  const ArbitreFormWidget(
+      {super.key, required this.composition, required this.idEdition});
 
   @override
   State<ArbitreFormWidget> createState() => _ArbitreFormWidgetState();
@@ -21,6 +25,19 @@ class _ArbitreFormWidgetState extends State<ArbitreFormWidget> {
     super.initState();
   }
 
+  void _onPressed() async {
+    final Arbitre? arbitre = await showModalBottomSheet(
+        context: context,
+        builder: (context) =>
+            BottomModalArbitreListWidget(idEdition: widget.idEdition));
+    if (arbitre is Arbitre) {
+      widget.composition.idArbitre = arbitre.idArbitre;
+      widget.composition.nom = arbitre.nomArbitre;
+      nomEditingController.text = arbitre.nomArbitre;
+      widget.composition.imageUrl = arbitre.imageUrl;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +48,8 @@ class _ArbitreFormWidgetState extends State<ArbitreFormWidget> {
         child: Column(
           children: [
             TextFieldWidget(
+                prefixIcon:
+                    IconButton(onPressed: _onPressed, icon: Icon(Icons.list)),
                 textEditingController: nomEditingController,
                 hintText: 'Entrer le nom'),
             const SizedBox(

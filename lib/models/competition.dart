@@ -1,7 +1,8 @@
+import 'package:app/core/class/populaire.dart';
 import 'package:app/core/enums/competition_type.dart';
 import 'package:app/models/searchable.dart';
 
-class Competition implements Searchable {
+class Competition implements Searchable, Populaire {
   String codeCompetition;
   String nomCompetition;
   String? localiteCompetition;
@@ -19,6 +20,7 @@ class Competition implements Searchable {
     this.anneeEdition,
     this.type = const CompetitionTypeClass('coupe'),
     this.imageUrl,
+    this.rating,
   });
 
   bool get hasClassement {
@@ -35,6 +37,7 @@ class Competition implements Searchable {
       codeEdition: json['codeEdition'],
       nomEdition: json['nomEdition'],
       anneeEdition: json['anneeEdition'],
+      rating: json['rating'],
     );
   }
 
@@ -46,6 +49,10 @@ class Competition implements Searchable {
       'codeEdition': codeEdition,
       'nomEdition': nomEdition,
       'anneeEdition': anneeEdition,
+      'rating': rating,
     };
   }
+
+  @override
+  num? rating;
 }

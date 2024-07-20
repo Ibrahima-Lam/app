@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 
 import 'package:app/collection/composition_collection.dart';
+import 'package:app/core/enums/enums.dart';
 import 'package:app/models/composition.dart';
 import 'package:app/models/game.dart';
 import 'package:app/pages/game/widget_details/composition_setter.dart';
@@ -9,7 +10,7 @@ import 'package:app/providers/composition_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/widget/coach/coach_and_team_widget.dart';
 import 'package:app/widget/composition/composition_element_widget.dart';
-import 'package:app/widget_pages/arbitre_widget.dart';
+import 'package:app/widget_pages/arbitre_list_widget.dart';
 import 'package:app/widget_pages/substitut_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,30 @@ class CompositionWidget extends StatelessWidget {
   final Game game;
   final bool checkUser;
   CompositionWidget({super.key, required this.game, required this.checkUser});
+
   late CompositionSousCollection compositionSousCollection;
+
+  void _setCompositionSouscollection(
+      CompositionCollection compositionCollection) {
+    compositionSousCollection = CompositionSousCollection(
+      game: game,
+      homeInside: compositionCollection.getTitulaire(
+          idGame: game.idGame, idParticipant: game.idHome),
+      awayInside: compositionCollection.getTitulaire(
+          idGame: game.idGame, idParticipant: game.idAway),
+      homeOutside: compositionCollection.getRempl(
+          create: false, idGame: game.idGame, idParticipant: game.idHome),
+      awayOutside: compositionCollection.getRempl(
+          create: false, idGame: game.idGame, idParticipant: game.idAway),
+      arbitres: compositionCollection.getArbitresBygame(
+          idGame: game.idGame, create: false),
+      homeCoatch: compositionCollection.getCoach(
+          idGame: game.idGame, idParticipant: game.idHome),
+      awayCoatch: compositionCollection.getCoach(
+          idGame: game.idGame, idParticipant: game.idAway),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -35,26 +59,11 @@ class CompositionWidget extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-
           final CompositionCollection compositionCollection = snapshot.data!;
-          compositionSousCollection = CompositionSousCollection(
-            game: game,
-            homeInside: compositionCollection.getTitulaire(
-                idGame: game.idGame, idParticipant: game.idHome),
-            awayInside: compositionCollection.getTitulaire(
-                idGame: game.idGame, idParticipant: game.idAway),
-            homeOutside: compositionCollection.getRempl(
-                create: false, idGame: game.idGame, idParticipant: game.idHome),
-            awayOutside: compositionCollection.getRempl(
-                create: false, idGame: game.idGame, idParticipant: game.idAway),
-            arbitres: compositionCollection.getArbitresBygame(
-                idGame: game.idGame, create: false),
-            homeCoatch: compositionCollection.getCoach(
-                idGame: game.idGame, idParticipant: game.idHome),
-            awayCoatch: compositionCollection.getCoach(
-                idGame: game.idGame, idParticipant: game.idAway),
-          );
-          return Consumer<CompositionProvider>(builder: (context, val, child) {
+          _setCompositionSouscollection(compositionCollection);
+
+          return Consumer<CompositionProvider>(
+              builder: (context, compositionProvider, child) {
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -108,9 +117,11 @@ class CompositionWidget extends StatelessWidget {
                     height: 20,
                   ),
                   SubstitutListWidget(
+                    compostitionWidgetType: CompostitionWidgetType.home,
                     compositionSousCollection: compositionSousCollection,
                   ),
-                  ArbitreWidget(
+                  ArbitreListWidget(
+                    compostitionWidgetType: CompostitionWidgetType.home,
                     compositionSousCollection: compositionSousCollection,
                   ),
                   if (checkUser)
@@ -128,10 +139,6 @@ class CompositionWidget extends StatelessWidget {
                                             compositionSousCollection:
                                                 compositionSousCollection,
                                           )));
-
-                              context
-                                  .read<CompositionProvider>()
-                                  .notifyListeners();
                             },
                             child: Text('Paramettre de Composition')),
                       ),

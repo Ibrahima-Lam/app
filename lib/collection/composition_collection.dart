@@ -197,21 +197,61 @@ class CompositionSousCollection {
     required this.arbitres,
     required this.game,
   });
+  bool cancelChange(JoueurComposition composition, bool isHome) {
+    if (isHome) {
+      print(1);
+      int index = homeOutside
+          .indexWhere((element) => element.idJoueur == composition.idJoueur);
+      if (index >= 0) {
+        if (homeOutside[index].sortant != null) {
+          String? id = homeOutside[index].sortant?.idJoueur;
+          homeOutside[index].sortant = null;
+          if (id != null) {
+            print(2);
+            int i = homeInside.indexWhere((element) => element.idJoueur == id);
+            print(i);
+            if (i >= 0) homeInside[i].entrant = null;
+          }
+        }
+      }
+    } else {
+      int index = awayOutside
+          .indexWhere((element) => element.idJoueur == composition.idJoueur);
+      if (index >= 0) {
+        if (awayOutside[index].sortant != null) {
+          String? id = awayOutside[index].sortant?.idJoueur;
+          awayOutside[index].sortant = null;
+          if (id != null) {
+            int i = awayInside.indexWhere((element) => element.idJoueur == id);
+            if (i >= 0) awayInside[i].entrant = null;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  bool removeArbitreComposition(String id) {
+    arbitres.removeWhere((element) => element.idComposition == id);
+    return true;
+  }
+
+  bool removeRemplComposition(String id, bool isHome) {
+    if (isHome)
+      homeOutside.removeWhere((element) => element.idComposition == id);
+    if (!isHome)
+      awayOutside.removeWhere((element) => element.idComposition == id);
+    return true;
+  }
 
   void changeHome(JoueurComposition sortant, JoueurComposition entrant) {
     final int sortantIndex = homeInside
         .indexWhere((element) => element.idJoueur == sortant.idJoueur);
     final int entrantIndex = homeOutside
         .indexWhere((element) => element.idJoueur == entrant.idJoueur);
-    /* final JoueurComposition s = sortant.copyWith(
-      tempsSortant: 0,
-    );
-    final JoueurComposition e = entrant.copyWith(
-      tempsEntrants: 0,
-    ); */
 
-    homeInside[sortantIndex].entrant = entrant;
-    homeOutside[entrantIndex].sortant = sortant;
+    homeInside[sortantIndex].entrant = entrant.copyWith();
+    homeOutside[entrantIndex].sortant = sortant.copyWith();
   }
 
   void changeAway(JoueurComposition sortant, JoueurComposition entrant) {
@@ -219,14 +259,9 @@ class CompositionSousCollection {
         .indexWhere((element) => element.idJoueur == sortant.idJoueur);
     final int entrantIndex = awayOutside
         .indexWhere((element) => element.idJoueur == entrant.idJoueur);
-    /*  final JoueurComposition s = sortant.copyWith(
-      tempsSortant: 0,
-    );
-    final JoueurComposition e = entrant.copyWith(
-      tempsEntrants: 0,
-    ); */
-    awayInside[sortantIndex].entrant = entrant;
-    awayOutside[entrantIndex].sortant = sortant;
+
+    awayInside[sortantIndex].entrant = entrant.copyWith();
+    awayOutside[entrantIndex].sortant = sortant.copyWith();
   }
 
   void homeTo433() {

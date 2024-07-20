@@ -5,16 +5,23 @@ import 'package:app/models/game.dart';
 import 'package:app/models/statistique.dart';
 import 'package:app/providers/statistique_future_provider.dart';
 import 'package:app/providers/statistique_provider.dart';
-import 'package:app/widget/statistique/stat_widget.dart';
+import 'package:app/widget/modals/confirm_dialog_widget.dart';
+import 'package:app/widget/statistique/statistique_tile_widget.dart';
 import 'package:app/widget_pages/statistique_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class StatistiqueWidget extends StatelessWidget {
+class StatistiqueListWidget extends StatefulWidget {
   final Game game;
   final bool checkUser;
-  StatistiqueWidget({super.key, required this.game, required this.checkUser});
+  StatistiqueListWidget(
+      {super.key, required this.game, required this.checkUser});
 
+  @override
+  State<StatistiqueListWidget> createState() => _StatistiqueListWidgetState();
+}
+
+class _StatistiqueListWidgetState extends State<StatistiqueListWidget> {
   void _addStat(BuildContext context, List<Statistique> stats) async {
     final (String, String)? entry = await showModalBottomSheet(
       context: context,
@@ -23,8 +30,8 @@ class StatistiqueWidget extends StatelessWidget {
     if (entry == null) return;
 
     final Statistique statistique = kRedStatistique.copyWith(
-        idStatistique: 'S${game.idGame}C${entry.$1.substring(0, 2)}',
-        idGame: game.idGame,
+        idStatistique: 'S${widget.game.idGame}C${entry.$1.substring(0, 2)}',
+        idGame: widget.game.idGame,
         codeStatistique: entry.$1,
         nomStatistique: entry.$2);
     final bool? isSubmited = await Navigator.of(context).push(
@@ -38,32 +45,67 @@ class StatistiqueWidget extends StatelessWidget {
       context.read<StatistiqueFutureProvider>().addStat(statistique);
   }
 
+  void _onDelete(BuildContext context, Statistique statistique) async {
+    final bool? confirm = await showDialog(
+      context: context,
+      builder: (context) {
+        return ConfirmDialogWidget(
+          title: "Suppression",
+          content: 'Voulez vous supprimer ce statistique ?',
+        );
+      },
+    );
+    if (confirm == true) {
+      final bool res = await context
+          .read<StatistiqueProvider>()
+          .removeStatistique(statistique.idStatistique);
+
+      String message = res ? 'Supprimé' : 'Echec de suppression!';
+      await ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: const Duration(milliseconds: 200),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<StatistiqueProvider>(
       builder: (context, value, child) {
-        List<Statistique> statistiques = value.getGameStatistiques(game);
+        List<Statistique> statistiques = value.getGameStatistiques(widget.game);
 
         return SingleChildScrollView(
           child: Column(
             children: [
               const SizedBox(height: 5),
-              ...statistiques.map((e) => StatWidget(
-                    checkUser: checkUser,
+              ...statistiques.map((e) => StatistiqueTileWidget(
+                    onDelete: (statistique) => _onDelete(context, statistique),
+                    checkUser: widget.checkUser,
                     statistique: e,
                     one: ['possession'].contains(e.codeStatistique),
                   )),
-              if (checkUser)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    OutlinedButton(
-                        onPressed: () {
-                          _addStat(context, statistiques);
-                        },
-                        child: Text('Ajouter')),
-                  ],
+              if (widget.checkUser)
+                Card(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                          style: ButtonStyle(
+                              foregroundColor:
+                                  WidgetStatePropertyAll(Colors.blue)),
+                          onPressed: () {
+                            _addStat(context, statistiques);
+                          },
+                          child: Text('Ajouter un Statistique')),
+                    ],
+                  ),
                 ),
+              if (statistiques.isEmpty)
+                const Center(
+                  child: Text('Pas de statistique disponible pour ce match !'),
+                )
             ],
           ),
         );
@@ -94,6 +136,8 @@ class _StatistiqueModalWidgetState extends State<StatistiqueModalWidget>
     'tir-cadre': 'Tirs Cadrés',
     'faute': 'Fautes',
     'hors-jeu': 'Hors Jeu',
+    'passe': 'Passes',
+    'passe-reussi': 'Passes Reussis',
   };
 
   List<String> get keys => entries.keys
@@ -103,10 +147,10 @@ class _StatistiqueModalWidgetState extends State<StatistiqueModalWidget>
 
   @override
   Widget build(BuildContext context) {
-    return BottomSheet(
-      animationController: BottomSheet.createAnimationController(this),
-      onClosing: () {},
-      builder: (context) {
+    return DraggableScrollableSheet(
+      minChildSize: 0.9,
+      initialChildSize: 0.9,
+      builder: (context, scrollController) {
         return Container(
           padding: const EdgeInsets.only(top: 20),
           constraints: const BoxConstraints(minHeight: 600),

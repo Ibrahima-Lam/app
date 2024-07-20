@@ -1,8 +1,10 @@
+import 'package:app/models/coachs/coach.dart';
 import 'package:app/models/composition.dart';
 import 'package:app/widget/events/composition_events_widget.dart';
 import 'package:app/widget/form/dropdown_menu_widget.dart';
 import 'package:app/widget/form/elevated_button_widget.dart';
 import 'package:app/widget/form/text_field_widget.dart';
+import 'package:app/widget/modals/bottom_modal_coach_list_widget.dart';
 import 'package:flutter/material.dart';
 
 class CoachFormWidget extends StatefulWidget {
@@ -22,6 +24,19 @@ class _CoachFormWidgetState extends State<CoachFormWidget> {
     super.initState();
   }
 
+  void _onPressed() async {
+    final Coach? arbitre = await showModalBottomSheet(
+        context: context,
+        builder: (context) => BottomModalSheetCoachListWidget(
+            idParticipant: widget.composition.idParticipant));
+    if (arbitre is Coach) {
+      widget.composition.idCoach = arbitre.idCoach;
+      widget.composition.nom = arbitre.nomCoach;
+      nomEditingController.text = arbitre.nomCoach;
+      widget.composition.imageUrl = arbitre.imageUrl;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +47,8 @@ class _CoachFormWidgetState extends State<CoachFormWidget> {
         child: Column(
           children: [
             TextFieldWidget(
+                prefixIcon:
+                    IconButton(onPressed: _onPressed, icon: Icon(Icons.list)),
                 textEditingController: nomEditingController,
                 hintText: 'Entrer le nom'),
             const SizedBox(

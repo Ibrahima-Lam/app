@@ -5,13 +5,18 @@ import 'package:flutter/material.dart';
 
 class CoachListTileWidget extends StatelessWidget {
   final Coach coach;
-
-  const CoachListTileWidget({super.key, required this.coach});
+  final Function(Coach coach)? onTap;
+  const CoachListTileWidget({super.key, required this.coach, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
+        if (onTap != null) {
+          onTap!(coach);
+          return;
+        }
+
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => CoachDetails(id: coach.idCoach)));
       },

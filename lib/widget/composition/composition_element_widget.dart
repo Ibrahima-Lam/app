@@ -71,14 +71,16 @@ class CompositionElementWidget extends StatelessWidget {
         Container(
           constraints: BoxConstraints(maxWidth: 80, minWidth: 40),
           padding: EdgeInsets.all(1),
-          color: Colors.white,
           child: Text(
             composition.nom,
             textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
                 height: 0,
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
+                backgroundColor: Colors.white,
                 color: isHome ? Colors.blue : Colors.black),
           ),
         ),

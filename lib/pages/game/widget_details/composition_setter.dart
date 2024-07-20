@@ -1,13 +1,13 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 
 import 'package:app/collection/composition_collection.dart';
+import 'package:app/core/enums/enums.dart';
 import 'package:app/models/composition.dart';
 import 'package:app/providers/composition_provider.dart';
 import 'package:app/widget/coach/coach_and_team_widget.dart';
 import 'package:app/widget/modals/composition_bottom_sheet_widget.dart';
 import 'package:app/widget/composition/composition_element_widget.dart';
-import 'package:app/widget_pages/arbitre_form.dart';
-import 'package:app/widget_pages/arbitre_widget.dart';
+import 'package:app/widget_pages/arbitre_list_widget.dart';
 import 'package:app/widget_pages/coach_form.dart';
 import 'package:app/widget_pages/event_form.dart';
 import 'package:app/widget_pages/substitut_list_widget.dart';
@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 // ignore: must_be_immutable
 class CompositionSetter extends StatelessWidget {
   final CompositionSousCollection compositionSousCollection;
+
   CompositionSetter({super.key, required this.compositionSousCollection});
 
   @override
@@ -138,23 +139,12 @@ class _CompositionSetterWidgetState extends State<CompositionSetterWidget> {
             height: 20,
           ),
           SubstitutListWidget(
-            onTap: (p0) async {
-              await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => EventFormWidget(
-                        composition: p0,
-                      )));
-            },
-            onLongPress: (p0) {},
-            onDoubleTap: (p0) {},
+            update: () => setState(() {}),
+            compostitionWidgetType: CompostitionWidgetType.setting,
             compositionSousCollection: widget.compositionSousCollection,
           ),
-          ArbitreWidget(
-              onDoubleTap: (p0) async {
-                await Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ArbitreFormWidget(
-                          composition: p0,
-                        )));
-              },
+          ArbitreListWidget(
+              compostitionWidgetType: CompostitionWidgetType.setting,
               compositionSousCollection: widget.compositionSousCollection),
         ],
       );

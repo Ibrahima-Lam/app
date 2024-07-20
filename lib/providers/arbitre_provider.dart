@@ -23,4 +23,9 @@ class ArbitreProvider extends ChangeNotifier {
       return null;
     }
   }
+
+  Future<bool> checkArbitre(String id) async {
+    if (arbitres.isEmpty) await getData();
+    return arbitres.any((element) => element.idArbitre == id);
+  }
 }

@@ -65,7 +65,7 @@ class TableWidget extends StatelessWidget {
               .map((e) => DataRow(
                       color: targets != null && targets!.contains(e.id)
                           ? WidgetStatePropertyAll(
-                              Color.fromARGB(255, 240, 249, 241))
+                              Color.fromARGB(255, 255, 240, 253))
                           : null,
                       cells: [
                         DataCell(NumeroWdget(

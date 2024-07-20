@@ -10,18 +10,21 @@ class CompositionBottomSheetWidget extends StatelessWidget {
     return DraggableScrollableSheet(
       initialChildSize: 0.9,
       builder: (context, scrollController) {
-        return ListView.builder(
-          itemCount: compositions.length,
-          itemBuilder: (context, index) {
-            JoueurComposition compos = compositions[index];
-            return ListTile(
-              onTap: () {
-                Navigator.pop(context, compos);
-              },
-              title: Text(compos.nom),
-            );
-          },
-        );
+        return compositions.isEmpty
+            ? const Center(
+                child: Text('Pas de remplaçant disponible pour cette équipe!'))
+            : ListView.builder(
+                itemCount: compositions.length,
+                itemBuilder: (context, index) {
+                  JoueurComposition compos = compositions[index];
+                  return ListTile(
+                    onTap: () {
+                      Navigator.pop(context, compos);
+                    },
+                    title: Text(compos.nom),
+                  );
+                },
+              );
       },
     );
   }

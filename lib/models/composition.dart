@@ -2,11 +2,13 @@ abstract class Composition {
   String idComposition;
   String idGame;
   String nom;
+  String? imageUrl;
 
   Composition({
     required this.idGame,
     required this.nom,
     required this.idComposition,
+    this.imageUrl,
   });
 }
 
@@ -18,13 +20,15 @@ class ArbitreComposition extends Composition {
       required this.idArbitre,
       required super.idGame,
       required super.nom,
-      required super.idComposition});
+      required super.idComposition,
+      super.imageUrl});
   ArbitreComposition copyWith({
     String? nom,
     String? idGame,
     String? role,
     String? idComposition,
     String? idArbitre,
+    String? imageUrl,
   }) =>
       ArbitreComposition(
         idComposition: idComposition ?? this.idComposition,
@@ -32,6 +36,7 @@ class ArbitreComposition extends Composition {
         nom: nom ?? this.nom,
         idGame: idGame ?? this.idGame,
         role: role ?? this.role,
+        imageUrl: imageUrl ?? this.imageUrl,
       );
 }
 
@@ -45,7 +50,8 @@ abstract class EquipeComposition extends Composition {
       required super.idGame,
       required this.jaune,
       required this.rouge,
-      required super.idComposition});
+      required super.idComposition,
+      super.imageUrl});
 }
 
 class StaffComposition extends EquipeComposition {
@@ -55,7 +61,8 @@ class StaffComposition extends EquipeComposition {
       required super.idGame,
       required super.jaune,
       required super.rouge,
-      required super.idComposition});
+      required super.idComposition,
+      super.imageUrl});
 }
 
 class CoachComposition extends StaffComposition {
@@ -67,7 +74,8 @@ class CoachComposition extends StaffComposition {
       required super.idGame,
       required super.jaune,
       required super.rouge,
-      required super.idComposition});
+      required super.idComposition,
+      super.imageUrl});
   CoachComposition copyWith({
     String? nom,
     String? idGame,
@@ -76,6 +84,7 @@ class CoachComposition extends StaffComposition {
     int? jaune,
     int? rouge,
     String? idComposition,
+    String? imageUrl,
   }) =>
       CoachComposition(
         idCoach: idCoach ?? this.idCoach,
@@ -85,6 +94,7 @@ class CoachComposition extends StaffComposition {
         jaune: jaune ?? this.jaune,
         rouge: rouge ?? this.rouge,
         idComposition: idComposition ?? this.idComposition,
+        imageUrl: imageUrl ?? this.imageUrl,
       );
 }
 
@@ -99,7 +109,7 @@ class JoueurComposition extends EquipeComposition {
   int? tempsEntrants;
   int? tempsSortant;
   int but;
-  String? imageUrl;
+
   bool isCapitaine;
 
   JoueurComposition({
@@ -120,7 +130,7 @@ class JoueurComposition extends EquipeComposition {
     super.jaune = 0,
     super.rouge = 0,
     required super.idComposition,
-    this.imageUrl,
+    super.imageUrl,
   });
 
   JoueurComposition copyWith(

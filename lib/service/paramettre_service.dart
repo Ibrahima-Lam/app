@@ -8,11 +8,13 @@ class ParamettreService {
       Paramettre(
         idParamettre: 'p1',
         idEdition: 'thialgou2023',
+        qualifs: 4,
         users: ['ibrahimaaboulam@gmail.com', 'root@gmail.com'],
       ),
       Paramettre(
         idParamettre: 'p2',
         idEdition: 'district2023',
+        qualifs: 16,
         users: ['amadoulam@gmail.com', 'root@gmail.com'],
       ),
     ];

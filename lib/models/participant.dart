@@ -1,6 +1,7 @@
+import 'package:app/core/class/populaire.dart';
 import 'package:app/models/searchable.dart';
 
-class Participant implements Searchable {
+class Participant implements Searchable, Populaire {
   String idParticipant;
   String? idEquipe;
   String nomEquipe;
@@ -16,6 +17,7 @@ class Participant implements Searchable {
     this.localiteEquipe,
     required this.codeEdition,
     this.imageUrl,
+    this.rating,
   });
 
   factory Participant.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,10 @@ class Participant implements Searchable {
       libelleEquipe: json["libelleEquipe"],
       localiteEquipe: json["localiteEquipe"],
       codeEdition: json["codeEdition"],
+      rating: json["rating"],
     );
   }
+
+  @override
+  num? rating;
 }

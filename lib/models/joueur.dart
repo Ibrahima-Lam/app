@@ -1,8 +1,9 @@
+import 'package:app/core/class/populaire.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/models/searchable.dart';
 import 'package:flutter/material.dart';
 
-class Joueur implements Searchable {
+class Joueur implements Searchable, Populaire {
   String idJoueur;
   String nomJoueur;
   String idParticipant;
@@ -27,6 +28,7 @@ class Joueur implements Searchable {
     this.taille,
     this.vitesse,
     this.pseudo,
+    this.rating,
   });
   int? get age {
     if (dateNaissance != null) {
@@ -53,6 +55,10 @@ class Joueur implements Searchable {
         taille: json['taille'],
         dateNaissance: json['dateNaissance'],
         pseudo: json['pseudo'],
+        rating: json['rating'],
         participant: participant);
   }
+
+  @override
+  num? rating;
 }

@@ -2,6 +2,7 @@
 
 import 'package:app/collection/composition_collection.dart';
 import 'package:app/core/constants/strategie/rempl.dart';
+import 'package:app/core/enums/enums.dart';
 import 'package:app/models/composition.dart';
 import 'package:app/pages/joueur/joueur_details.dart';
 import 'package:app/providers/composition_provider.dart';
@@ -11,7 +12,9 @@ import 'package:app/widget/modals/confirm_dialog_widget.dart';
 import 'package:app/widget/app/section_title_widget.dart';
 import 'package:app/widget/logos/substitut_logo_widget.dart';
 import 'package:app/widget_pages/composition_form.dart';
+import 'package:app/widget_pages/event_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
@@ -19,14 +22,20 @@ class SubstitutListTile extends StatelessWidget {
   final bool isHome;
   final JoueurComposition composition;
   final Function(JoueurComposition)? onDoubleTap;
-  final Function(String)? onTap;
+  final Function(JoueurComposition) onDelete;
+  final Function(JoueurComposition) onCancelChange;
+  final CompostitionWidgetType compostitionWidgetType;
+  final Function(JoueurComposition)? onTap;
   final Function(JoueurComposition)? onLongPress;
-  SubstitutListTile(
+  const SubstitutListTile(
       {super.key,
       required this.isHome,
       required this.composition,
       this.onDoubleTap,
       this.onTap,
+      required this.onDelete,
+      required this.onCancelChange,
+      required this.compostitionWidgetType,
       this.onLongPress});
 
   @override
@@ -43,43 +52,73 @@ class SubstitutListTile extends StatelessWidget {
                 onDoubleTap!(comp);
               }
             },
-      child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 10),
-        horizontalTitleGap: 5.0,
-        onTap: onTap == null
-            ? null
-            : () {
-                onTap!(composition.idJoueur);
-              },
-        onLongPress: onLongPress == null
-            ? null
-            : () {
-                onLongPress!(composition);
-              },
-        leading: isHome ? null : SubstitutLogoWidget(composition: composition),
-        title: Text(
-          composition.nom,
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 13),
+      child: Slidable(
+        key: ValueKey(composition.idComposition),
+        enabled: compostitionWidgetType == CompostitionWidgetType.setting,
+        startActionPane: ActionPane(
+          motion: DrawerMotion(),
+          extentRatio: 0.5,
+          children: [
+            SlidableAction(
+              onPressed: (context) => onDelete(composition),
+              icon: Icons.delete,
+              foregroundColor: Colors.red,
+            ),
+          ],
         ),
-        subtitle: composition.sortant == null
-            ? const Text('')
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+        endActionPane: composition.sortant != null
+            ? ActionPane(
+                motion: DrawerMotion(),
+                extentRatio: 0.5,
                 children: [
-                  const Icon(Icons.subdirectory_arrow_left,
-                      color: Colors.red, size: 15),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    composition.sortant!.nom,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 12),
+                  SlidableAction(
+                    onPressed: (context) => onCancelChange(composition),
+                    icon: Icons.clear,
+                    foregroundColor: Colors.orange,
                   ),
                 ],
-              ),
-        trailing: isHome ? SubstitutLogoWidget(composition: composition) : null,
+              )
+            : null,
+        child: ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+          horizontalTitleGap: 5.0,
+          onTap: onTap == null
+              ? null
+              : () {
+                  onTap!(composition);
+                },
+          onLongPress: onLongPress == null
+              ? null
+              : () {
+                  onLongPress!(composition);
+                },
+          leading:
+              isHome ? null : SubstitutLogoWidget(composition: composition),
+          title: Text(
+            composition.nom,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 13),
+          ),
+          subtitle: composition.sortant == null
+              ? const Text('')
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.subdirectory_arrow_left,
+                        color: Colors.red, size: 15),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Text(
+                      composition.sortant!.nom,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ],
+                ),
+          trailing:
+              isHome ? SubstitutLogoWidget(composition: composition) : null,
+        ),
       ),
     );
   }
@@ -88,16 +127,15 @@ class SubstitutListTile extends StatelessWidget {
 // ignore: must_be_immutable
 class SubstitutListWidget extends StatefulWidget {
   final CompositionSousCollection compositionSousCollection;
-  final Function(JoueurComposition)? onTap;
-  final Function(JoueurComposition)? onDoubleTap;
-  final Function(JoueurComposition)? onLongPress;
+  final Function()? update;
+
+  final CompostitionWidgetType compostitionWidgetType;
 
   SubstitutListWidget({
     super.key,
     required this.compositionSousCollection,
-    this.onTap,
-    this.onDoubleTap,
-    this.onLongPress,
+    required this.compostitionWidgetType,
+    this.update,
   });
 
   @override
@@ -116,11 +154,21 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
     super.initState();
   }
 
-  void _onTap(String id) async {
-    final bool check = await context.read<JoueurProvider>().checkId(id);
+  void _onTap(JoueurComposition composition) async {
+    if (widget.compostitionWidgetType == CompostitionWidgetType.setting) {
+      await Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => EventFormWidget(
+                composition: composition,
+              )));
+
+      return;
+    }
+
+    final bool check =
+        await context.read<JoueurProvider>().checkId(composition.idJoueur);
     if (check) {
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => JoueurDetails(idJoueur: id)));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => JoueurDetails(idJoueur: composition.idJoueur)));
     }
   }
 
@@ -138,8 +186,8 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
         context: context,
         builder: (context) {
           return ConfirmDialogWidget(
-            title: "Confimation du changement",
-            content: 'Voulez vous effectuer cet Changement ?',
+            title: "Changement",
+            content: 'Voulez vous effectuer ce Changement ?',
           );
         },
       );
@@ -151,10 +199,51 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
         widget.compositionSousCollection.changeHome(compos, composition);
       else
         widget.compositionSousCollection.changeAway(compos, composition);
-
-      // ignore: invalid_use_of_protected_member
-      context.read<CompositionProvider>().notifyListeners();
+      widget.update!();
     }
+  }
+
+  void _onDelete(
+      BuildContext context, JoueurComposition composition, bool isHome) async {
+    final bool? confirm = await showDialog(
+      context: context,
+      builder: (context) => ConfirmDialogWidget(
+        title: 'Suppression',
+        content: 'Voulez vous supprimer cette élément ?',
+      ),
+    );
+    if (confirm == true) {
+      final bool res = await context
+          .read<CompositionProvider>()
+          .removeComposition(composition.idComposition);
+      if (res) {
+        widget.compositionSousCollection.cancelChange(composition, isHome);
+        widget.compositionSousCollection
+            .removeRemplComposition(composition.idComposition, isHome);
+        widget.update!();
+      }
+      String message = res ? 'Supprimé' : 'Echec de suppression!';
+      await ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: const Duration(milliseconds: 200),
+        ),
+      );
+    }
+  }
+
+  void _onCancelChange(
+      BuildContext context, JoueurComposition composition, bool isHome) async {
+    final bool? confirm = await showDialog(
+      context: context,
+      builder: (context) => ConfirmDialogWidget(
+        title: 'Annulation',
+        content: 'Voulez vous annuler ce changement ?',
+      ),
+    );
+    if (confirm == true)
+      widget.compositionSousCollection.cancelChange(composition, isHome);
+    widget.update!();
   }
 
   @override
@@ -200,20 +289,21 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
                     child: Column(children: [
                       for (JoueurComposition home in homes)
                         SubstitutListTile(
+                          compostitionWidgetType: widget.compostitionWidgetType,
+                          onDelete: (p0) => _onDelete(context, home, true),
+                          onCancelChange: (h) =>
+                              _onCancelChange(context, h, true),
                           isHome: true,
-                          onTap: widget.onTap == null
-                              ? _onTap
-                              : (p0) async {
-                                  await widget.onTap!(home);
-                                  setState(() {});
-                                },
-                          onDoubleTap: widget.onDoubleTap == null
+                          onTap: (e) => _onTap(home),
+                          onDoubleTap: widget.compostitionWidgetType ==
+                                  CompostitionWidgetType.home
                               ? null
                               : (JoueurComposition comp) {
                                   home = comp;
                                   setState(() {});
                                 },
-                          onLongPress: widget.onLongPress == null
+                          onLongPress: widget.compostitionWidgetType ==
+                                  CompostitionWidgetType.home
                               ? null
                               : (composition) {
                                   _onLongPress(
@@ -230,20 +320,21 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
                     child: Column(children: [
                       for (JoueurComposition away in aways)
                         SubstitutListTile(
+                          compostitionWidgetType: widget.compostitionWidgetType,
+                          onDelete: (p0) => _onDelete(context, away, false),
+                          onCancelChange: (a) =>
+                              _onCancelChange(context, a, false),
                           isHome: false,
-                          onTap: widget.onTap == null
-                              ? _onTap
-                              : (p0) async {
-                                  await widget.onTap!(away);
-                                  setState(() {});
-                                },
-                          onDoubleTap: widget.onDoubleTap == null
+                          onTap: (p) => _onTap(away),
+                          onDoubleTap: widget.compostitionWidgetType ==
+                                  CompostitionWidgetType.home
                               ? null
                               : (JoueurComposition comp) {
                                   away = comp;
                                   setState(() {});
                                 },
-                          onLongPress: widget.onLongPress == null
+                          onLongPress: widget.compostitionWidgetType ==
+                                  CompostitionWidgetType.home
                               ? null
                               : (composition) {
                                   _onLongPress(
@@ -257,7 +348,7 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
                     ]),
                   ),
                 ]),
-          if (widget.onDoubleTap != null)
+          if (widget.compostitionWidgetType == CompostitionWidgetType.setting)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

@@ -9,3 +9,5 @@ enum ClassementType {
   defaults,
   danger
 }
+
+enum CompostitionWidgetType { home, setting }

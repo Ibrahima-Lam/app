@@ -33,6 +33,7 @@ final List<Map<String, dynamic>> joueurs = [
     "vitesse": 10.0,
     "poids": 54.0,
     "taille": 1.65,
+    "rating": 1,
     "dateNaissance": '2007-02-01',
   },
   {

@@ -23,13 +23,20 @@ class StatistiqueProvider extends ChangeNotifier {
   }
 
   List<Statistique> getGameStatistiques(Game game) {
-    // Todo ajouter la condition de idGame
-    List<Statistique> stats = statistiques.where((element) => true).toList();
+    List<Statistique> stats =
+        statistiques.where((element) => element.idGame == game.idGame).toList();
     var jauneStat = gameEventListProvider.getYellowCardStat(game);
     var rougeStat = gameEventListProvider.getRedCardStat(game);
     if (stats.any((element) => element.codeStatistique.contains('jaune')) &&
         jauneStat != (0, 0)) {
       stats.removeWhere((element) => element.codeStatistique.contains('jaune'));
+    }
+
+    if (stats.any((element) => element.codeStatistique.contains('rouge')) &&
+        rougeStat != (0, 0)) {
+      stats.removeWhere((element) => element.codeStatistique.contains('rouge'));
+    }
+    if (jauneStat != (0, 0)) {
       stats.add(Statistique(
           idStatistique: 'GCJ${game.idGame}',
           codeStatistique: 'jaune',
@@ -38,10 +45,7 @@ class StatistiqueProvider extends ChangeNotifier {
           awayStatistique: jauneStat.$2.toDouble(),
           idGame: game.idGame));
     }
-
-    if (stats.any((element) => element.codeStatistique.contains('rouge')) &&
-        rougeStat != (0, 0)) {
-      stats.removeWhere((element) => element.codeStatistique.contains('rouge'));
+    if (rougeStat != (0, 0)) {
       stats.add(Statistique(
           idStatistique: 'GCR${game.idGame}',
           codeStatistique: 'rouge',
@@ -77,6 +81,13 @@ class StatistiqueProvider extends ChangeNotifier {
           redCard: red.awayStatistique.toInt(),
           yellowCard: yellow.awayStatistique.toInt()),
     );
+  }
+
+  Future<bool> removeStatistique(String idStatistique) async {
+    statistiques
+        .removeWhere((element) => element.idStatistique == idStatistique);
+    notifyListeners();
+    return true;
   }
 
   Future<void> setStatistiques(Statistique stat,
