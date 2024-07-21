@@ -257,14 +257,15 @@ class _GlobalPageState extends State<GlobalPage> {
         },
       ),
       bottomNavigationBar: NavigationBar(
-        elevation: 5,
+        elevation: 10,
+        overlayColor: WidgetStatePropertyAll(Colors.grey),
         shadowColor: color,
         indicatorColor: const Color(0xFFF5F5F5),
         destinations: destinations,
         animationDuration: const Duration(milliseconds: 200),
         selectedIndex: currentIndex,
         height: 65,
-        surfaceTintColor: Colors.white,
+        surfaceTintColor: Color(0xFFF5F5F5),
         backgroundColor: Colors.white,
         onDestinationSelected: (value) {
           setState(() {

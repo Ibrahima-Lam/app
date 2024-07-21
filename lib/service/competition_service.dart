@@ -4,7 +4,8 @@ class CompetitionService {
   Future<List<Competition>> get getData async {
     await Future.delayed(const Duration(seconds: 1));
 
-    return competitions.map((e) => Competition.fromJson(e)).toList();
+    return competitions.map((e) => Competition.fromJson(e)).toList()
+      ..sort((a, b) => ((b.rating ?? 0) - (a.rating ?? 0)).toInt());
   }
 
   Future<Competition> getCompetition(String id) async {
@@ -23,7 +24,8 @@ List<Map<String, dynamic>> competitions = [
     "nomEdition": "Tournoi district de Boghé Edition 2023",
     "codeCompetition": "district",
     "nomCompetition": "Tournoi district de Boghé",
-    "localiteCompetition": "Boghé"
+    "localiteCompetition": "Boghé",
+    "rating": 2,
   },
   {
     "codeEdition": "thialgou2023",
@@ -31,7 +33,8 @@ List<Map<String, dynamic>> competitions = [
     "nomEdition": "Tournoi Pélle Thialgou Edition 2023",
     "codeCompetition": "thialgou",
     "nomCompetition": "Tournoi Pellé Thialgou Edition 2023",
-    "localiteCompetition": "Thialgou"
+    "localiteCompetition": "Thialgou",
+    "rating": 3.5,
   },
   {
     "codeEdition": "aka2024",
@@ -39,7 +42,8 @@ List<Map<String, dynamic>> competitions = [
     "nomEdition": "Ligue Fouta Edition 2024",
     "codeCompetition": "aka",
     "nomCompetition": "Ligue Fouta",
-    "localiteCompetition": "Nouakchott"
+    "localiteCompetition": "Nouakchott",
+    "rating": 2,
   },
   {
     "codeEdition": "can2024",
@@ -47,6 +51,6 @@ List<Map<String, dynamic>> competitions = [
     "nomEdition": "Coupe d'Afrique des Nations  2023",
     "codeCompetition": "can",
     "nomCompetition": "Coupe d'afrique des Nations",
-    "localiteCompetition": "africa"
+    "localiteCompetition": "africa",
   }
 ];

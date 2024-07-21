@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 
 class FavoriTitleWidget extends StatelessWidget {
   final bool nonFavori;
-  const FavoriTitleWidget({
-    super.key,
-    this.nonFavori = false,
-  });
+  final EdgeInsetsGeometry? margin;
+  final String? title;
+  final Widget? icon;
+  const FavoriTitleWidget(
+      {super.key, this.nonFavori = false, this.margin, this.icon, this.title});
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3.0)),
       shadowColor: Colors.grey,
       elevation: 2,
-      margin: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+      margin: margin ?? EdgeInsets.symmetric(horizontal: 3, vertical: 1),
       child: Container(
         width: MediaQuery.sizeOf(context).width,
         height: 35,
@@ -33,16 +34,20 @@ class FavoriTitleWidget extends StatelessWidget {
             Expanded(
               child: Row(
                 children: [
-                  SizedBox(
-                      width: 35,
-                      height: 35,
-                      child: Icon(nonFavori ? Icons.star_border : Icons.star)),
+                  if (icon != null)
+                    icon!
+                  else
+                    SizedBox(
+                        width: 35,
+                        height: 35,
+                        child:
+                            Icon(nonFavori ? Icons.star_border : Icons.star)),
                   SizedBox(
                     width: 10,
                   ),
                   Container(
                     child: Text(
-                      nonFavori ? 'Autre' : "Favori",
+                      title ?? (nonFavori ? 'Autres' : "Favoris"),
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

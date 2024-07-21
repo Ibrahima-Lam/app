@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 final Color color = const Color(0xFF263238);
-final double size = 30;
+final double size = 28;
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({super.key});
