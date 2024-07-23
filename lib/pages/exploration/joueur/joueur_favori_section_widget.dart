@@ -24,7 +24,7 @@ class JoueurFavoriSectionWidget extends StatelessWidget {
         List<Joueur> joueurs = joueurProvider.joueurs
             .where((element) =>
                 element.idParticipant == participant.idParticipant &&
-                favoriProvider.equipes.any(
+                favoriProvider.joueurs.any(
                   (e) => e == element.idJoueur,
                 ))
             .toList();

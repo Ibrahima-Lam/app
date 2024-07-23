@@ -69,7 +69,10 @@ class JoueurController {
       ]));
     }
 
-    return performances;
+    return performances
+      ..sort(
+        (a, b) => (b.game.dateGame ?? '').compareTo(a.game.dateGame ?? ''),
+      );
   }
 
   static List<EventStatistique> getJoueurStatistique(Joueur joueur,

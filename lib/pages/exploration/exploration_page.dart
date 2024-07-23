@@ -65,6 +65,14 @@ class ExplorationPage extends StatelessWidget {
                               },
                             );
                           },
+                          onDoubleBack: () {
+                            setState(
+                              () {
+                                participant = null;
+                                competition = null;
+                              },
+                            );
+                          },
                         )
                       : competition != null
                           ? EquipeListSectionWidget(
@@ -78,7 +86,6 @@ class ExplorationPage extends StatelessWidget {
                               },
                               onBack: () => setState(() {
                                 competition = null;
-                                participant = null;
                               }),
                             )
                           : CompetitionListSectionWidget(
@@ -101,11 +108,13 @@ class JoueurListSectionWidget extends StatelessWidget {
   final Competition competition;
   final Participant participant;
   final Function() onBack;
+  final Function() onDoubleBack;
 
   JoueurListSectionWidget(
       {super.key,
       required this.competition,
       required this.onBack,
+      required this.onDoubleBack,
       required this.participant});
   final TextEditingController controller = TextEditingController();
 
@@ -118,7 +127,7 @@ class JoueurListSectionWidget extends StatelessWidget {
             Card(
               margin: EdgeInsets.symmetric(horizontal: 4, vertical: 1),
               child: CompetitionHorizontalTileWidget(
-                  onBack: onBack, competition: competition, back: true),
+                  onBack: onDoubleBack, competition: competition, back: true),
             ),
             Card(
               margin: EdgeInsets.symmetric(horizontal: 4, vertical: 1),

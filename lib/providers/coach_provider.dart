@@ -13,8 +13,7 @@ class CoachProvider extends ChangeNotifier {
 
   Future<List<Coach>> getData() async {
     if (_coachs.isEmpty) {
-      await Future.delayed(Durations.extralong4);
-      coachs = CoachService.getCoachs();
+      coachs = await CoachService.getCoachs();
     }
     return coachs;
   }

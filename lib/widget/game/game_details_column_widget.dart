@@ -37,20 +37,12 @@ class GameDetailsColumnWidget extends StatelessWidget {
 
       return Container(
         constraints: BoxConstraints(minWidth: 120),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
+        child: Stack(
+          alignment: isHome ? Alignment.centerLeft : Alignment.centerRight,
           children: [
             Container(
-              padding: EdgeInsets.only(left: 3),
-              child: isHome
-                  ? CardAndStatWidget(
-                      red: _red, yellow: _yellow, pourcent: _valuePourcent)
-                  : null,
-            ),
-            Container(
               height: 100,
-              width: 100,
+              width: MediaQuery.sizeOf(context).width,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -112,11 +104,13 @@ class GameDetailsColumnWidget extends StatelessWidget {
             Container(
               padding: EdgeInsets.only(
                 right: 3,
+                left: 3,
               ),
-              child: !isHome
-                  ? CardAndStatWidget(
-                      red: _red, yellow: _yellow, pourcent: _valuePourcent)
-                  : null,
+              child: CardAndStatWidget(
+                  isHome: isHome,
+                  red: _red,
+                  yellow: _yellow,
+                  pourcent: _valuePourcent),
             )
           ],
         ),
@@ -129,20 +123,27 @@ class CardAndStatWidget extends StatelessWidget {
   final int red;
   final int yellow;
   final int? pourcent;
+  final bool isHome;
   const CardAndStatWidget(
-      {super.key, this.red = 0, this.yellow = 0, this.pourcent});
+      {super.key,
+      this.red = 0,
+      this.yellow = 0,
+      this.pourcent,
+      required this.isHome});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 120,
-      constraints: BoxConstraints(minWidth: 25),
+      constraints: BoxConstraints(maxWidth: 30),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
+          Flex(
+            direction: Axis.horizontal,
             mainAxisAlignment: MainAxisAlignment.center,
+            textDirection: !isHome ? TextDirection.ltr : TextDirection.rtl,
             children: [
               ConstrainedBox(
                 constraints: BoxConstraints(

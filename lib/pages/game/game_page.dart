@@ -25,12 +25,12 @@ class GamePage extends StatefulWidget {
   State<GamePage> createState() => _GamePageState();
 }
 
-class _GamePageState extends State<GamePage>
-    with SingleTickerProviderStateMixin {
+class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   late List<String> tabs;
   bool playing = false;
 
   late TabController _tabController;
+
   DateTime initialDate = DateTime.now();
 
   Future _showCalendar() async {
@@ -48,7 +48,8 @@ class _GamePageState extends State<GamePage>
       ),
     );
     playing = false;
-    initialDate = date ?? DateTime.now();
+    if (date == null) return;
+    initialDate = date;
     _setTabs(initialDate);
     _tabController.animateTo(7);
   }
@@ -86,7 +87,7 @@ class _GamePageState extends State<GamePage>
       initialIndex: tabs.length ~/ 2,
       length: tabs.length,
       vsync: this,
-      animationDuration: const Duration(milliseconds: 200),
+      animationDuration: const Duration(milliseconds: 400),
     );
 
     _tabController.addListener(() {
@@ -109,7 +110,6 @@ class _GamePageState extends State<GamePage>
       _setTabs(DateTime.now());
       _tabController.animateTo(tabs.length ~/ 2);
     } else {
-      _tabController.index = 0;
       _setTabs(DateTime.now(), true);
     }
     return playing;
@@ -127,8 +127,8 @@ class _GamePageState extends State<GamePage>
         onPressedCalendar: _showCalendar,
         onPressedStream: _setPlaying,
         bottom: TabBarWidget.build(
+            controller: playing ? null : _tabController,
             tabAlignment: playing ? TabAlignment.center : null,
-            controller: _tabController,
             tabs: playing
                 ? [
                     Tab(
@@ -138,6 +138,7 @@ class _GamePageState extends State<GamePage>
                 : [
                     for (final tab in DateController.frDates(tabs))
                       Tab(
+                        height: 40,
                         text: tab,
                       )
                   ]),
@@ -151,8 +152,8 @@ class _GamePageState extends State<GamePage>
               }
 
               if (snapshot.hasError) {
-                return const Center(
-                  child: Text('erreur!'),
+                return Center(
+                  child: Text(snapshot.error.toString()),
                 );
               }
 
@@ -160,7 +161,7 @@ class _GamePageState extends State<GamePage>
                   builder: (context, value, child) {
                 List<Competition> competitions = value.collection.competitions;
                 return TabBarView(
-                  controller: _tabController,
+                  controller: playing ? null : _tabController,
                   children: [
                     for (final tab in tabs)
                       CompetitionGamesWidget(

@@ -1,11 +1,37 @@
 import 'package:app/models/joueur.dart';
 import 'package:app/models/participant.dart';
+import 'package:app/service/local_service.dart';
 
 class JoueurService {
-  Future<List<Joueur>> getData(List<Participant> participants) async {
-    await Future.delayed(Duration(seconds: 1));
+  static LocalService get service => LocalService('joueur.json');
 
-    return joueurs.map((e) {
+  static Future<List<Joueur>?> getLocalData(
+      List<Participant> participants) async {
+    if (await service.fileExists()) {
+      final List? data = (await service.getData());
+      if (data != null)
+        return data
+            .where((element) => participants.any(
+                (e) => e.idParticipant == element['idParticipant'].toString()))
+            .map((e) {
+          Participant participant = participants.singleWhere((element) =>
+              element.idParticipant == e['idParticipant'].toString());
+          return Joueur.fromJson(e, participant);
+        }).toList();
+    }
+    return null;
+  }
+
+  Future<List<Joueur>> getData(List<Participant> participants) async {
+    if (await service.isLoadable())
+      return await getLocalData(participants) ?? [];
+    await Future.delayed(const Duration(seconds: 1));
+    // Todo changer joueur par remote data
+    await service.setData(joueurs);
+    return joueurs
+        .where((element) => participants
+            .any((e) => e.idParticipant == element['idParticipant'].toString()))
+        .map((e) {
       Participant participant = participants.singleWhere(
           (element) => element.idParticipant == e['idParticipant'].toString());
       return Joueur.fromJson(e, participant);

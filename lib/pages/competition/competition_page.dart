@@ -125,8 +125,16 @@ class CompetitionListTileWidget extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 2.0),
         child: CompetitionImageLogoWidget(url: competition.imageUrl),
       ),
-      title: Text(competition.nomCompetition),
-      subtitle: Text(competition.localiteCompetition ?? ''),
+      title: Text(
+        competition.nomCompetition,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
+        style: const TextStyle(fontSize: 15),
+      ),
+      subtitle: Text(competition.localiteCompetition ?? '',
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: const TextStyle(fontSize: 13, color: Colors.grey)),
     );
   }
 }

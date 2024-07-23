@@ -1,15 +1,52 @@
 import 'package:app/models/groupe.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/models/participation.dart';
+import 'package:app/service/local_service.dart';
 
 class ParticipationService {
+  static LocalService get service => LocalService('participation.json');
+
+  static Future<List<Participation>?> getLocalData(
+      List<Participant> participants, List<Groupe> groupes) async {
+    if (await service.fileExists()) {
+      final List? data = (await service.getData());
+      if (data != null)
+        return data
+            .where(
+          (element) =>
+              participants.any((e) =>
+                  e.idParticipant == element['idParticipant'].toString()) &&
+              groupes.any((e) => e.idGroupe == element['idGroupe'].toString()),
+        )
+            .map((e) {
+          final Participant participant = participants.singleWhere((element) =>
+              element.idParticipant == e['idParticipant'].toString());
+          final Groupe groupe = groupes.singleWhere(
+              (element) => e['idGroupe'].toString() == element.idGroupe);
+          return Participation.fromJson(e, participant, groupe);
+        }).toList();
+    }
+    return null;
+  }
+
   static Future<List<Participation>> getData(
       List<Participant> participants, List<Groupe> groupes) async {
+    if (await service.isLoadable())
+      return await getLocalData(participants, groupes) ?? [];
     await Future.delayed(const Duration(seconds: 1));
-    return participations.map((e) {
-      Participant participant = participants.singleWhere(
+    // Todo changer participation par remote data
+    await service.setData(participations);
+    return participations
+        .where(
+      (element) =>
+          participants.any(
+              (e) => e.idParticipant == element['idParticipant'].toString()) &&
+          groupes.any((e) => e.idGroupe == element['idGroupe'].toString()),
+    )
+        .map((e) {
+      final Participant participant = participants.singleWhere(
           (element) => element.idParticipant == e['idParticipant'].toString());
-      Groupe groupe = groupes.singleWhere(
+      final Groupe groupe = groupes.singleWhere(
           (element) => e['idGroupe'].toString() == element.idGroupe);
       return Participation.fromJson(e, participant, groupe);
     }).toList();

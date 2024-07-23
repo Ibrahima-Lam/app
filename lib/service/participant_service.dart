@@ -1,9 +1,28 @@
 import 'package:app/models/participant.dart';
+import 'package:app/service/local_service.dart';
 
 class ParticipantService {
+  static LocalService get service => LocalService('participant.json');
+
+  static int _sorter(Participant a, Participant b) =>
+      ((b.rating ?? 0) - (a.rating ?? 0)).toInt();
+
+  static Future<List<Participant>?> getLocalData() async {
+    if (await service.fileExists()) {
+      final List? data = (await service.getData());
+      if (data != null)
+        return data.map((e) => Participant.fromJson(e)).toList()..sort(_sorter);
+    }
+    return null;
+  }
+
   static Future<List<Participant>> getData() async {
+    if (await service.isLoadable()) return await getLocalData() ?? [];
     await Future.delayed(const Duration(seconds: 1));
-    return participants.map((e) => Participant.fromJson(e)).toList();
+    // Todo changer participant par remote data
+    await service.setData(participants);
+    return participants.map((e) => Participant.fromJson(e)).toList()
+      ..sort(_sorter);
   }
 
   static Future<Participant> getPartcipant(

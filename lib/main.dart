@@ -49,7 +49,9 @@ class MyApp extends StatelessWidget {
                 AppParamettreProvider(appParamettre: AppParamettre())
                   ..getData()),
         ChangeNotifierProvider(create: (context) => CompetitionProvider()),
-        ChangeNotifierProvider(create: (context) => ParticipantProvider()),
+        ChangeNotifierProvider(
+            lazy: false,
+            create: (context) => ParticipantProvider()..initParticipants()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => InfosProvider()),
         ChangeNotifierProvider(create: (context) => CoachProvider()),

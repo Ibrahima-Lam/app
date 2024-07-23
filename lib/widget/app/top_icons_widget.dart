@@ -111,34 +111,39 @@ class TopIconsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<JoueurProvider, GameEventListProvider>(
-        builder: (context, joueurProvider, eventProvider, _) {
-      return Container(
-        padding: EdgeInsets.symmetric(vertical: 5),
-        width: MediaQuery.sizeOf(context).height,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Builder(builder: (context) {
-            List<Widget> elements = [
-              ...lastComps.map((e) {
-                return CircularLogoWidget(
-                  path: e.imageUrl ?? '',
-                  categorie: Categorie.competition,
-                  id: e.codeEdition,
-                  tap: true,
-                );
-              }),
-              ...getWidtgetsByGames(lastGames, joueurProvider, eventProvider),
-            ].take(20).toList().reversed.toList();
+    return FutureBuilder(
+        future: context.read<JoueurProvider>().getJoueurs(),
+        builder: (context, snapshot) {
+          return Consumer2<JoueurProvider, GameEventListProvider>(
+              builder: (context, joueurProvider, eventProvider, _) {
+            return Container(
+              padding: EdgeInsets.symmetric(vertical: 5),
+              width: MediaQuery.sizeOf(context).height,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Builder(builder: (context) {
+                  List<Widget> elements = [
+                    ...lastComps.map((e) {
+                      return CircularLogoWidget(
+                        path: e.imageUrl ?? '',
+                        categorie: Categorie.competition,
+                        id: e.codeEdition,
+                        tap: true,
+                      );
+                    }),
+                    ...getWidtgetsByGames(
+                        lastGames, joueurProvider, eventProvider),
+                  ].take(20).toList().reversed.toList();
 
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: elements,
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: elements,
+                  );
+                }),
+              ),
             );
-          }),
-        ),
-      );
-    });
+          });
+        });
   }
 }

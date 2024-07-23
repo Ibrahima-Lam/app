@@ -19,7 +19,8 @@ class SearchFieldWidget extends StatelessWidget {
         child: TextField(
           controller: controller,
           decoration: InputDecoration(
-            prefixIcon: Icon(Icons.search),
+            contentPadding: const EdgeInsets.all(5),
+            prefixIcon: const Icon(Icons.search),
             suffixIcon: ListenableBuilder(
                 listenable: controller,
                 builder: (context, _) {

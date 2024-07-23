@@ -39,6 +39,7 @@ class CompetitionTitleWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
                         width: 40,
@@ -63,17 +64,21 @@ class CompetitionTitleWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
+              Container(
+                height: MediaQuery.sizeOf(context).height,
                 width: 60,
-                child: PopupMenuButton(
-                  color: Colors.white,
-                  surfaceTintColor: Colors.white,
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                        child: FavoriIconWidget(
-                            id: competition.codeEdition,
-                            categorie: Categorie.competition)),
-                  ],
+                child: Center(
+                  child: PopupMenuButton(
+                    padding: EdgeInsets.all(5),
+                    color: Colors.white,
+                    surfaceTintColor: Colors.white,
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                          child: FavoriIconWidget(
+                              id: competition.codeEdition,
+                              categorie: Categorie.competition)),
+                    ],
+                  ),
                 ),
               )
             ],

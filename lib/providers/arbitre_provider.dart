@@ -10,8 +10,7 @@ class ArbitreProvider extends ChangeNotifier {
 
   Future<List<Arbitre>> getData() async {
     if (_arbitres.isEmpty) {
-      await Future.delayed(Durations.extralong4);
-      arbitres = ArbitreService.getArbitres();
+      arbitres = await ArbitreService.getArbitres();
     }
     return arbitres;
   }

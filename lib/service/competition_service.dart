@@ -1,19 +1,30 @@
 import 'package:app/models/competition.dart';
+import 'package:app/service/local_service.dart';
 
 class CompetitionService {
-  Future<List<Competition>> get getData async {
-    await Future.delayed(const Duration(seconds: 1));
+  static const file = 'competition.json';
+  final LocalService service;
 
-    return competitions.map((e) => Competition.fromJson(e)).toList()
-      ..sort((a, b) => ((b.rating ?? 0) - (a.rating ?? 0)).toInt());
+  const CompetitionService([this.service = const LocalService(file)]);
+
+  int _sorter(Competition a, Competition b) =>
+      ((b.rating ?? 0) - (a.rating ?? 0)).toInt();
+
+  Future<List<Competition>?> getLocalData() async {
+    if (await service.fileExists()) {
+      final List? data = (await service.getData());
+      if (data != null)
+        return data.map((e) => Competition.fromJson(e)).toList()..sort(_sorter);
+    }
+    return null;
   }
 
-  Future<Competition> getCompetition(String id) async {
-    return (await getData)
-        .where(
-          (element) => element.codeEdition == id,
-        )
-        .toList()[0];
+  Future<List<Competition>> getData() async {
+    if (await service.isLoadable()) return await getLocalData() ?? [];
+    await Future.delayed(const Duration(seconds: 1));
+    await service.setData(competitions);
+    return competitions.map((e) => Competition.fromJson(e)).toList()
+      ..sort(_sorter);
   }
 }
 

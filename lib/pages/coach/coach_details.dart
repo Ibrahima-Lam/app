@@ -16,9 +16,13 @@ import 'package:provider/provider.dart';
 class CoachDetails extends StatelessWidget {
   final String id;
   CoachDetails({super.key, required this.id});
+
   late final Coach coach;
+
   late final Participant participant;
+
   final Set<String> tabs = {'Fiche', 'Matchs', 'Infos'};
+
   Map<String, Widget> get tabBarViewWidget => {
         'fiche': CoachFicheListWidget(coach: coach),
         'matchs': CoachGameListWidget(idCoach: id),

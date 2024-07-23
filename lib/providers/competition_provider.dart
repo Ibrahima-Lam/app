@@ -15,7 +15,7 @@ class CompetitionProvider extends ChangeNotifier {
 
   Future<CompetitionCollection> getCompetitions() async {
     if (_competitionCollection.isEmpty) {
-      competitions = await CompetitionService().getData;
+      competitions = await CompetitionService().getData();
     }
     return _competitionCollection;
   }

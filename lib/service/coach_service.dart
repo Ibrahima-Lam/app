@@ -1,7 +1,22 @@
 import 'package:app/models/coachs/coach.dart';
+import 'package:app/service/local_service.dart';
 
 class CoachService {
-  static List<Coach> getCoachs() {
+  static LocalService get service => LocalService('coach.json');
+
+  static Future<List<Coach>?> getLocalData() async {
+    if (await service.fileExists()) {
+      final List? data = (await service.getData());
+      if (data != null) return data.map((e) => Coach.fromJson(e)).toList();
+    }
+    return null;
+  }
+
+  static Future<List<Coach>> getCoachs() async {
+    if (await service.isLoadable()) return await getLocalData() ?? [];
+    await Future.delayed(const Duration(seconds: 1));
+    // Todo changer coaches par remote data
+    await service.setData(coachs);
     return coachs.map((e) => Coach.fromJson(e)).toList();
   }
 }

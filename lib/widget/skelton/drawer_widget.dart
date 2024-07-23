@@ -36,6 +36,8 @@ class DrawerWidget extends StatelessWidget {
               margin: EdgeInsets.all(0),
               duration: Duration(milliseconds: 200),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   PersonWidget(radius: 30),
                   const SizedBox(height: 10),

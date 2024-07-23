@@ -1,7 +1,22 @@
 import 'package:app/models/arbitres/arbitre.dart';
+import 'package:app/service/local_service.dart';
 
 class ArbitreService {
-  static List<Arbitre> getArbitres() {
+  static LocalService get service => LocalService('arbitre.json');
+
+  static Future<List<Arbitre>?> getLocalData() async {
+    if (await service.fileExists()) {
+      final List? data = (await service.getData());
+      if (data != null) return data.map((e) => Arbitre.fromJson(e)).toList();
+    }
+    return null;
+  }
+
+  static Future<List<Arbitre>> getArbitres() async {
+    if (await service.isLoadable()) return await getLocalData() ?? [];
+    await Future.delayed(const Duration(seconds: 1));
+    // Todo changer arbitres par remote data
+    await service.setData(arbitres);
     return arbitres.map((e) => Arbitre.fromJson(e)).toList();
   }
 }

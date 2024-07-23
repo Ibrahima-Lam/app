@@ -11,24 +11,27 @@ class GameService {
     List<Niveau> niveaux = await NiveauService.getNiveaux();
 
     return games
+        .where(
+      (element) =>
+          participants.any((e) => e.idParticipant == element['idHome']) &&
+          participants.any((e) => e.idParticipant == element['idAway']) &&
+          groupes.any((e) => e.idGroupe == element['idGroupe'].toString()),
+    )
         .map((e) {
-          Participant home = participants
-              .singleWhere((element) => element.idParticipant == e['idHome']);
-          Participant away = participants
-              .singleWhere((element) => element.idParticipant == e['idAway']);
-          Niveau niveau = niveaux.singleWhere(
-            (element) => element.codeNiveau == e['codeNiveau'],
-            orElse: () => Niveau(
-                codeNiveau: '', nomNiveau: '', typeNiveau: '', ordreNiveau: ''),
-          );
-          Groupe groupe = groupes.singleWhere(
-              (element) => e['idGroupe'].toString() == element.idGroupe);
-          return Game.fromJson(e,
-              home: home, away: away, niveau: niveau, groupe: groupe);
-        })
-        .toList()
-        .where((element) => element.dateGame != null)
-        .toList();
+      Participant home = participants
+          .singleWhere((element) => element.idParticipant == e['idHome']);
+      Participant away = participants
+          .singleWhere((element) => element.idParticipant == e['idAway']);
+      Niveau niveau = niveaux.singleWhere(
+        (element) => element.codeNiveau == e['codeNiveau'],
+        orElse: () => Niveau(
+            codeNiveau: '', nomNiveau: '', typeNiveau: '', ordreNiveau: ''),
+      );
+      Groupe groupe = groupes.singleWhere(
+          (element) => e['idGroupe'].toString() == element.idGroupe);
+      return Game.fromJson(e,
+          home: home, away: away, niveau: niveau, groupe: groupe);
+    }).toList();
   }
 }
 
@@ -566,7 +569,7 @@ const games = [
     "idGame": 67,
     "idHome": "15",
     "idAway": "13",
-    "dateGame": "2024-07-21",
+    "dateGame": "2024-07-22",
     "stadeGame": "Stade de Thidé",
     "heureGame": "16:00",
     "idGroupe": 5,
