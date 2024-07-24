@@ -37,6 +37,8 @@ class Competition implements Searchable, Populaire {
       codeEdition: json['codeEdition'],
       nomEdition: json['nomEdition'],
       anneeEdition: json['anneeEdition'],
+      type: CompetitionTypeClass(json['type'] ?? 'coupe'),
+      imageUrl: json['imageUrl'],
       rating: json['rating'],
     );
   }
@@ -50,6 +52,8 @@ class Competition implements Searchable, Populaire {
       'nomEdition': nomEdition,
       'anneeEdition': anneeEdition,
       'rating': rating,
+      'imageUrl': imageUrl,
+      'type': type.text,
     };
   }
 

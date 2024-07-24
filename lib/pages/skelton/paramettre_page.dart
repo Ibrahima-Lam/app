@@ -1,7 +1,9 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:app/models/app_paramettre.dart';
+import 'package:app/pages/forms/competition_form.dart';
 import 'package:app/providers/app_paramettre_provider.dart';
+import 'package:app/providers/paramettre_provider.dart';
 import 'package:app/service/app_paramettre_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,9 +19,14 @@ class ParamettrePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool checkRootUser =
+        context.read<ParamettreProvider>().checkRootUser();
     return Scaffold(
       appBar: AppBar(
         title: Text('Paramettre'),
+        actions: [
+          if (checkRootUser) ParamettreMenuWidget(),
+        ],
       ),
       body: FutureBuilder(
           future: AppParamettreService().getData(),
@@ -67,6 +74,25 @@ class ParamettrePage extends StatelessWidget {
               );
             });
           }),
+    );
+  }
+}
+
+class ParamettreMenuWidget extends StatelessWidget {
+  const ParamettreMenuWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          child: Text('Ajouter une compétition'),
+          onTap: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => CompetitionForm()));
+          },
+        ),
+      ],
     );
   }
 }

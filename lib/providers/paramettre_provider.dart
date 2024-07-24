@@ -29,6 +29,13 @@ class ParamettreProvider extends ChangeNotifier {
     return paramettre.users.contains(userProvider.user!.email);
   }
 
+  bool checkRootUser() {
+    if (userProvider.user == null) return false;
+    if (userProvider.user?.email == 'root@gmail.com' ||
+        userProvider.user?.email == 'ibrahimaaboulam@gmail.com') return true;
+    return false;
+  }
+
   Future<List<Paramettre>> getData() async {
     paramettres = await ParamettreService.getData();
 

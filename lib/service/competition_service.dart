@@ -19,12 +19,49 @@ class CompetitionService {
     return null;
   }
 
-  Future<List<Competition>> getData() async {
-    if (await service.isLoadable()) return await getLocalData() ?? [];
+  Future<List<Competition>> getData({bool remote = false}) async {
+    if (await service.isLoadable() && !remote)
+      return await getLocalData() ?? [];
+    final List<Competition> data = await getRemoteData();
+    if (data.isEmpty && await service.hasData())
+      return await getLocalData() ?? [];
+    return data;
+  }
+
+  Future<List<Competition>> getRemoteData() async {
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+      if (competitions.isNotEmpty) await service.setData(competitions);
+      return competitions.map((e) => Competition.fromJson(e)).toList()
+        ..sort(_sorter);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<bool> addCompetition(Competition competition) async {
+    await Future.delayed(const Duration(seconds: 2));
+    competitions.add(competition.toJson());
+    return true;
+  }
+
+  Future<bool> removeCompetition(String codeEdition) async {
     await Future.delayed(const Duration(seconds: 1));
-    await service.setData(competitions);
-    return competitions.map((e) => Competition.fromJson(e)).toList()
-      ..sort(_sorter);
+    competitions
+        .removeWhere((element) => element['codeEdition'] == codeEdition);
+    return true;
+  }
+
+  Future<bool> editCompetition(
+      String codeEdition, Competition competition) async {
+    await Future.delayed(const Duration(seconds: 1));
+    int index = competitions
+        .lastIndexWhere((element) => element['codeEdition'] == codeEdition);
+    if (index >= 0) {
+      competitions[index] = competition.toJson();
+      return true;
+    }
+    return false;
   }
 }
 

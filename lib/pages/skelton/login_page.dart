@@ -68,8 +68,10 @@ class _LoginPageState extends State<LoginPage> {
                             obscureText = !obscureText;
                           });
                         },
-                        icon: Icon(Icons.remove_red_eye),
-                        color: !obscureText ? null : Colors.blue),
+                        icon: Icon(!obscureText
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        color: obscureText ? null : Colors.blue),
                     textEditingController: passwordController,
                     hintText: 'Entrer votre mot de pass'),
                 Row(

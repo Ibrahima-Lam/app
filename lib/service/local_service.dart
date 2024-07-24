@@ -54,14 +54,22 @@ class LocalService {
     return (await _getLocaleFile()).create();
   }
 
-  Future<bool> isLoadable([int max = 24]) async {
+  Future<bool> hasData() async {
     try {
       if (!await fileExists()) return false;
-      DateTime? time = await lastModified();
-      if (time == null) return false;
       if (await getData() == null) return false;
       if ((await getData())?.isEmpty ?? true) return false;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
+  Future<bool> isLoadable([int max = 24]) async {
+    try {
+      if (!await hasData()) return false;
+      DateTime? time = await lastModified();
+      if (time == null) return false;
       int duration =
           DateTimeRange(start: time, end: DateTime.now()).duration.inHours;
       print(duration);

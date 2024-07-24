@@ -13,10 +13,30 @@ class CompetitionProvider extends ChangeNotifier {
 
   CompetitionCollection get collection => _competitionCollection;
 
-  Future<CompetitionCollection> getCompetitions() async {
+  Future<CompetitionCollection> getCompetitions({bool remote = false}) async {
     if (_competitionCollection.isEmpty) {
-      competitions = await CompetitionService().getData();
+      competitions = await CompetitionService().getData(remote: remote);
     }
     return _competitionCollection;
+  }
+
+  Future<bool> addCompetition(Competition competition) async {
+    bool res = await CompetitionService().addCompetition(competition);
+    if (res) competitions = await CompetitionService().getData(remote: true);
+    return res;
+  }
+
+  Future<bool> removeCompetition(String codeEdition) async {
+    bool res = await CompetitionService().removeCompetition(codeEdition);
+    if (res) competitions = await CompetitionService().getData(remote: true);
+    return res;
+  }
+
+  Future<bool> editCompetition(
+      String codeEdition, Competition competition) async {
+    bool res =
+        await CompetitionService().editCompetition(codeEdition, competition);
+    if (res) competitions = await CompetitionService().getData(remote: true);
+    return res;
   }
 }
