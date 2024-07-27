@@ -17,16 +17,39 @@ class ParticipationProvider extends ChangeNotifier {
     required this.groupeProvider,
   });
 
-  Future<List<Participation>> getParticipations() async {
+  Future<List<Participation>> getParticipations({bool remote = false}) async {
     if (participantProvider.participants.isEmpty)
-      await participantProvider.getParticipants();
+      await participantProvider.getParticipants(remote: remote);
 
-    if (groupeProvider.groupes.isEmpty) await groupeProvider.getGroupes();
-    if (participations.isEmpty)
+    if (groupeProvider.groupes.isEmpty)
+      await groupeProvider.getGroupes(remote: remote);
+    if (participations.isEmpty || remote)
       participations = await ParticipationService.getData(
-          participantProvider.participants, groupeProvider.groupes);
+          participantProvider.participants, groupeProvider.groupes,
+          remote: remote);
 
     return participations;
+  }
+
+  Future<bool> addParticipation(Participation participation) async {
+    final bool res = await ParticipationService.addParticipation(participation);
+    if (res) await getParticipations(remote: true);
+    return res;
+  }
+
+  Future<bool> removeParticipation(String idParticipation) async {
+    final bool res =
+        await ParticipationService.removeParticipation(idParticipation);
+    if (res) await getParticipations(remote: true);
+    return res;
+  }
+
+  Future<bool> editParticipation(
+      String idParticipation, Participation participant) async {
+    final bool res = await ParticipationService.editParticipation(
+        idParticipation, participant);
+    if (res) await getParticipations(remote: true);
+    return res;
   }
 
   bool get isEmpty => _participations.isEmpty;

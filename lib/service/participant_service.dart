@@ -16,20 +16,54 @@ class ParticipantService {
     return null;
   }
 
-  static Future<List<Participant>> getData() async {
-    if (await service.isLoadable()) return await getLocalData() ?? [];
-    await Future.delayed(const Duration(seconds: 1));
-    // Todo changer participant par remote data
-    await service.setData(participants);
-    return participants.map((e) => Participant.fromJson(e)).toList()
-      ..sort(_sorter);
+  static Future<List<Participant>> getData({bool remote = false}) async {
+    if (await service.isLoadable() && !remote)
+      return await getLocalData() ?? [];
+    final List<Participant> data = await getRemoteData();
+    if (data.isEmpty && await service.hasData())
+      return await getLocalData() ?? [];
+    return data;
   }
 
-  static Future<Participant> getPartcipant(
-      {required String idParticipant}) async {
-    return (await getData())
-        .where((element) => element.idParticipant == idParticipant)
-        .toList()[0];
+  static Future<List<Participant>> getRemoteData() async {
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+      if (participants.isNotEmpty) await service.setData(participants);
+      return participants.map((e) => Participant.fromJson(e)).toList()
+        ..sort(_sorter);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<bool> addParticipant(Participant participant) async {
+    if (participants.any((element) =>
+        element['nomEquipe'] == participant.nomEquipe &&
+        element['codeEdition'] == participant.codeEdition)) return false;
+    participants.add(participant.toJson());
+    return true;
+  }
+
+  static Future<bool> editParticipant(
+      String idParticipant, Participant participant) async {
+    if (participants
+        .any((element) => element['idParticipant'] == idParticipant)) {
+      int index = participants
+          .indexWhere((element) => element['idParticipant'] == idParticipant);
+      if (index >= 0) participants[index] = participant.toJson();
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> removeParticipant(String idParticipant) async {
+    if (participants
+        .any((element) => element['idParticipant'] == idParticipant)) {
+      participants
+          .removeWhere((element) => element['idParticipant'] == idParticipant);
+      return true;
+    }
+    return true;
   }
 }
 

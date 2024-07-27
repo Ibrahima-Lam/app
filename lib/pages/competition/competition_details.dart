@@ -6,9 +6,16 @@ import 'package:app/pages/competition/widget_details/arbitre_list_widget.dart';
 import 'package:app/pages/competition/widget_details/classement_list_widget.dart';
 import 'package:app/pages/competition/widget_details/competition_coach_list_widget.dart';
 import 'package:app/pages/competition/widget_details/competition_fiche_list_widget.dart';
+import 'package:app/pages/competition/widget_details/competition_forms_widget.dart';
+import 'package:app/pages/competition/widget_details/competition_groupe_list_widget.dart';
+import 'package:app/pages/competition/widget_details/competition_paramettre_list_widget.dart';
+import 'package:app/pages/competition/widget_details/competition_participant_widget.dart';
+import 'package:app/pages/competition/widget_details/competition_participation_list_widget.dart';
 import 'package:app/pages/competition/widget_details/competition_statistique_widget.dart';
 import 'package:app/pages/competition/widget_details/equipe_list_widget.dart';
 import 'package:app/pages/competition/widget_details/games_list_widget.dart';
+import 'package:app/pages/forms/game_form.dart';
+import 'package:app/providers/paramettre_provider.dart';
 import 'package:app/widget/app/favori_icon_widget.dart';
 import 'package:app/widget/logos/competition_logo_image.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
@@ -30,7 +37,7 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
   late Competition competition;
   List<String> tabs = [];
   bool favori = false;
-  List<String> tabBarString(CompetitionType competitionType) {
+  List<String> tabBarString(CompetitionType competitionType, bool checkUser) {
     return [
       'Fiche',
       'Match',
@@ -41,7 +48,12 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
       'Statistique',
       'Equipes',
       'Entraineurs',
-      'Arbitres'
+      'Arbitres',
+      if (checkUser) 'Paramettre',
+      if (checkUser) 'Formulaire',
+      if (checkUser) 'Groupe',
+      if (checkUser) 'Team',
+      if (checkUser) 'Regroupement',
     ];
   }
 
@@ -98,6 +110,41 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
             ),
           );
           break;
+        case 'PAR':
+          widgets.add(
+            CompetitionParamettreListWidget(
+              codeEdition: competition.codeEdition,
+            ),
+          );
+          break;
+        case 'FOR':
+          widgets.add(
+            CompetitionFormsWidget(
+              codeEdition: competition.codeEdition,
+            ),
+          );
+          break;
+        case 'GRO':
+          widgets.add(
+            CompetitionGroupeListWidget(
+              codeEdition: competition.codeEdition,
+            ),
+          );
+          break;
+        case 'TEA':
+          widgets.add(
+            CompetitionParticipantWidget(
+              codeEdition: competition.codeEdition,
+            ),
+          );
+          break;
+        case 'REG':
+          widgets.add(
+            CompetitionParticipationListWidget(
+              codeEdition: competition.codeEdition,
+            ),
+          );
+          break;
         default:
           widgets.add(const Center(
             child: Text('Page vide!'),
@@ -130,13 +177,15 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
             );
           }
 
-          return Consumer<CompetitionProvider>(
-              builder: (context, competitionProvider, child) {
+          return Consumer2<CompetitionProvider, ParamettreProvider>(builder:
+              (context, competitionProvider, paramettreProvider, child) {
+            final bool checkUser = paramettreProvider.checkRootUser();
             competition =
                 competitionProvider.collection.getElementAt(widget.id);
-            tabs = tabBarString(competition.type.type);
+            tabs = tabBarString(competition.type.type, checkUser);
             return DefaultTabController(
               length: tabs.length,
+              initialIndex: tabs.length - 1,
               child: Scaffold(
                 body: NestedScrollView(
                   headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -211,6 +260,16 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
                     children: tabBarViewChildren(tabs),
                   ),
                 ),
+                floatingActionButton: checkUser
+                    ? FloatingActionButton(
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  GameForm(codeEdition: widget.id)));
+                        },
+                        child: Icon(Icons.add),
+                      )
+                    : null,
               ),
             );
           });

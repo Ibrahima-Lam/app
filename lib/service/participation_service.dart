@@ -5,38 +5,9 @@ import 'package:app/service/local_service.dart';
 
 class ParticipationService {
   static LocalService get service => LocalService('participation.json');
-
-  static Future<List<Participation>?> getLocalData(
-      List<Participant> participants, List<Groupe> groupes) async {
-    if (await service.fileExists()) {
-      final List? data = (await service.getData());
-      if (data != null)
-        return data
-            .where(
-          (element) =>
-              participants.any((e) =>
-                  e.idParticipant == element['idParticipant'].toString()) &&
-              groupes.any((e) => e.idGroupe == element['idGroupe'].toString()),
-        )
-            .map((e) {
-          final Participant participant = participants.singleWhere((element) =>
-              element.idParticipant == e['idParticipant'].toString());
-          final Groupe groupe = groupes.singleWhere(
-              (element) => e['idGroupe'].toString() == element.idGroupe);
-          return Participation.fromJson(e, participant, groupe);
-        }).toList();
-    }
-    return null;
-  }
-
-  static Future<List<Participation>> getData(
-      List<Participant> participants, List<Groupe> groupes) async {
-    if (await service.isLoadable())
-      return await getLocalData(participants, groupes) ?? [];
-    await Future.delayed(const Duration(seconds: 1));
-    // Todo changer participation par remote data
-    await service.setData(participations);
-    return participations
+  static List<Participation> _toParticipation(
+      List data, List<Participant> participants, List<Groupe> groupes) {
+    return data
         .where(
       (element) =>
           participants.any(
@@ -50,6 +21,68 @@ class ParticipationService {
           (element) => e['idGroupe'].toString() == element.idGroupe);
       return Participation.fromJson(e, participant, groupe);
     }).toList();
+  }
+
+  static Future<List<Participation>?> getLocalData(
+      List<Participant> participants, List<Groupe> groupes) async {
+    if (await service.fileExists()) {
+      final List? data = (await service.getData());
+      if (data != null) return _toParticipation(data, participants, groupes);
+    }
+    return null;
+  }
+
+  static Future<List<Participation>> getData(
+      List<Participant> participants, List<Groupe> groupes,
+      {bool remote = false}) async {
+    if (await service.isLoadable() && !remote)
+      return await getLocalData(participants, groupes) ?? [];
+    final List<Participation> data = await getRemoteData(participants, groupes);
+    if (data.isEmpty && await service.hasData())
+      return await getLocalData(participants, groupes) ?? [];
+    return data;
+  }
+
+  static Future<List<Participation>> getRemoteData(
+      List<Participant> participants, List<Groupe> groupes) async {
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+      if (participations.isNotEmpty) await service.setData(participations);
+      return _toParticipation(participations, participants, groupes);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<bool> addParticipation(Participation partcipation) async {
+    if (participations.any((element) =>
+        element['idGroupe'].toString() == partcipation.idGroupe &&
+        element['codeEdition'].toString() == partcipation.idParticipant))
+      return false;
+    participations.add(partcipation.toJson());
+    return true;
+  }
+
+  static Future<bool> editParticipation(
+      String idParticipation, Participation participant) async {
+    if (participations.any((element) =>
+        element['idParticipation'].toString() == idParticipation)) {
+      int index = participations.indexWhere((element) =>
+          element['idParticipation'].toString() == idParticipation);
+      if (index >= 0) participations[index] = participant.toJson();
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> removeParticipation(String idParticipation) async {
+    if (participations.any((element) =>
+        element['idParticipation'].toString() == idParticipation)) {
+      participations.removeWhere((element) =>
+          element['idParticipation'].toString() == idParticipation);
+      return true;
+    }
+    return false;
   }
 }
 

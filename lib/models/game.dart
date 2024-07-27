@@ -101,8 +101,6 @@ class Game implements Searchable {
       "stadeGame": stadeGame,
       "heureGame": heureGame,
       "idGroupe": idGroupe,
-      "home": home,
-      "away": away,
       "codeNiveau": codeNiveau,
     };
   }

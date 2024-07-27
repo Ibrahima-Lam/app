@@ -6,28 +6,8 @@ import 'package:app/service/phase_service.dart';
 class GroupeService {
   static LocalService get service => LocalService('groupe.json');
 
-  static Future<List<Groupe>?> getLocalData() async {
-    if (await service.fileExists()) {
-      final List? data = (await service.getData());
-      List<Phase> phases = await PhaseService.getData();
-      if (data != null)
-        return data
-            .where((element) => phases
-                .any((e) => e.codePhase == element['codePhase'].toString()))
-            .map((e) {
-          final Phase phase =
-              phases.singleWhere((elmt) => elmt.codePhase == e['codePhase']);
-          return Groupe.fromJson(e, phase);
-        }).toList();
-    }
-    return null;
-  }
-
-  static Future<List<Groupe>> getData() async {
-    if (await service.isLoadable()) return await getLocalData() ?? [];
+  static Future<List<Groupe>> _toGroupes(List groupes) async {
     final List<Phase> phases = await PhaseService.getData();
-    await service.setData(groupes);
-    // Todo
     return groupes
         .where((element) =>
             phases.any((e) => e.codePhase == element['codePhase'].toString()))
@@ -36,6 +16,59 @@ class GroupeService {
           phases.singleWhere((elmt) => elmt.codePhase == e['codePhase']);
       return Groupe.fromJson(e, phase);
     }).toList();
+  }
+
+  static Future<List<Groupe>?> getLocalData() async {
+    if (await service.fileExists()) {
+      final List? data = (await service.getData());
+      if (data != null) return _toGroupes(data);
+    }
+    return null;
+  }
+
+  static Future<List<Groupe>> getData({bool remote = false}) async {
+    if (await service.isLoadable() && !remote)
+      return await getLocalData() ?? [];
+    final List<Groupe> data = await getRemoteData();
+    if (data.isEmpty && await service.hasData())
+      return await getLocalData() ?? [];
+    return data;
+  }
+
+  static Future<List<Groupe>> getRemoteData() async {
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+      if (groupes.isNotEmpty) await service.setData(groupes);
+      return _toGroupes(groupes);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<bool> addGroupe(Groupe groupe) async {
+    if (groupes.any((element) =>
+        element['nomGroupe'] == groupe.nomGroupe &&
+        element['codeEdition'] == groupe.codeEdition)) return false;
+    groupes.add(groupe.toJson());
+    return true;
+  }
+
+  static Future<bool> editGroupe(String idGroupe, Groupe groupe) async {
+    if (groupes.any((element) => element['idGroupe'] == idGroupe)) {
+      int index =
+          groupes.indexWhere((element) => element['idGroupe'] == idGroupe);
+      if (index >= 0) groupes[index] = groupe.toJson();
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> removeGroupe(String idGroupe) async {
+    if (groupes.any((element) => element['idGroupe'] == idGroupe)) {
+      groupes.removeWhere((element) => element['idGroupe'] == idGroupe);
+      return true;
+    }
+    return true;
   }
 }
 

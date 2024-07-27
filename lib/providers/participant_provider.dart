@@ -5,20 +5,40 @@ import 'package:flutter/material.dart';
 class ParticipantProvider extends ChangeNotifier {
   List<Participant> participants = [];
 
-  Future setParticipants() async {
-    participants = await ParticipantService.getData();
+  Future setParticipants({bool remote = false}) async {
+    participants = await ParticipantService.getData(remote: remote);
     notifyListeners();
   }
 
-  Future initParticipants() async {
-    participants = await ParticipantService.getData();
+  Future initParticipants({bool remote = false}) async {
+    participants = await ParticipantService.getData(remote: remote);
   }
 
-  Future<List<Participant>> getParticipants() async {
-    if (participants.length == 0) {
-      await setParticipants();
+  Future<List<Participant>> getParticipants({bool remote = false}) async {
+    if (participants.length == 0 || remote) {
+      await setParticipants(remote: remote);
     }
     return participants;
+  }
+
+  Future<bool> addParticipant(Participant participant) async {
+    final bool res = await ParticipantService.addParticipant(participant);
+    if (res) await getParticipants(remote: true);
+    return res;
+  }
+
+  Future<bool> removeParticipant(String idParticipant) async {
+    final bool res = await ParticipantService.removeParticipant(idParticipant);
+    if (res) await getParticipants(remote: true);
+    return res;
+  }
+
+  Future<bool> editParticipant(
+      String idParticipant, Participant participant) async {
+    final bool res =
+        await ParticipantService.editParticipant(idParticipant, participant);
+    if (res) await getParticipants(remote: true);
+    return res;
   }
 
   Future<Participant> getParticipant(String id) async {

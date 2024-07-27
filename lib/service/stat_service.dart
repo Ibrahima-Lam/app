@@ -30,10 +30,10 @@ class StatService {
     Paramettre? paramettre = paramettreProvider.paramettres
         .singleWhereOrNull((element) => element.idEdition == codeEdition);
     if (paramettre != null) {
-      if (paramettre.qualifs != null) return paramettre.qualifs!;
+      if (paramettre.success != null && (paramettre.success ?? 0) > 0)
+        return paramettre.success!;
     }
     List<int> elements = [0, 2, 4, 8, 16, 32, 64];
-    print(parts);
     if (elements.contains(parts ~/ 2)) parts ~/ 2;
     for (int i = 1; i < elements.length; i++) {
       int element = elements[i];

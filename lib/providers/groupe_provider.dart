@@ -8,9 +8,9 @@ class GroupeProvider extends ChangeNotifier {
 
   GroupeProvider([this._groupes = const []]);
 
-  Future<List<Groupe>> getGroupes() async {
-    if (groupes.isEmpty) {
-      groupes = (await GroupeService.getData());
+  Future<List<Groupe>> getGroupes({bool remote = false}) async {
+    if (groupes.isEmpty || remote) {
+      groupes = (await GroupeService.getData(remote: remote));
       notifyListeners();
     }
     return groupes;
@@ -21,6 +21,24 @@ class GroupeProvider extends ChangeNotifier {
       groupes = (await GroupeService.getData());
     }
     return groupes;
+  }
+
+  Future<bool> addGroupe(Groupe groupe) async {
+    final bool res = await GroupeService.addGroupe(groupe);
+    if (res) await getGroupes(remote: true);
+    return res;
+  }
+
+  Future<bool> removeGroupe(String idGroupe) async {
+    final bool res = await GroupeService.removeGroupe(idGroupe);
+    if (res) await getGroupes(remote: true);
+    return res;
+  }
+
+  Future<bool> editGroupe(String idGroupe, Groupe groupe) async {
+    final bool res = await GroupeService.editGroupe(idGroupe, groupe);
+    if (res) await getGroupes(remote: true);
+    return res;
   }
 
   List<Groupe> get groupes => _groupes;

@@ -3,6 +3,7 @@ import 'package:app/models/competition.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/widget/form/dropdown_menu_app_form_widget.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
+import 'package:app/widget/form/slider_rating_form_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -109,7 +110,7 @@ class _CompetitionFormState extends State<CompetitionForm> {
                     controller: anneeController,
                     hintText: 'Entrer l\'année de l\'édition'),
                 const SizedBox(height: 5.0),
-                SliderWidget(controller: ratingController),
+                SliderRatingFormWidget(controller: ratingController),
                 const SizedBox(height: 5.0),
                 DropdownMenuAppFormWidget(
                   controller: typeController,
@@ -128,46 +129,6 @@ class _CompetitionFormState extends State<CompetitionForm> {
                 ),
               ],
             )),
-      ),
-    );
-  }
-}
-
-class SliderWidget extends StatefulWidget {
-  final TextEditingController controller;
-  const SliderWidget({super.key, required this.controller});
-
-  @override
-  State<SliderWidget> createState() => _SliderWidgetState();
-}
-
-class _SliderWidgetState extends State<SliderWidget> {
-  @override
-  Widget build(BuildContext context) {
-    double value = double.parse(widget.controller.text) / 5;
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Rating ${widget.controller.text}',
-              textAlign: TextAlign.center,
-            ),
-            Slider(
-                activeColor: Colors.blue,
-                label: widget.controller.text,
-                value: value,
-                onChanged: (val) {
-                  setState(() {
-                    widget.controller.text =
-                        ((val * 50).roundToDouble() / 10).toString();
-                  });
-                }),
-          ],
-        ),
       ),
     );
   }

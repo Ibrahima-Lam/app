@@ -6,6 +6,7 @@ import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/paramettre_provider.dart';
 import 'package:app/widget/logos/competition_logo_image.dart';
 import 'package:app/widget/form/text_search_field_widget.dart';
+import 'package:app/widget/modals/confirm_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -24,9 +25,18 @@ class _CompetitionPageState extends State<CompetitionPage> {
   late final TextEditingController textEditingController;
 
   _onDelete(Competition competition) async {
-    await context
-        .read<CompetitionProvider>()
-        .removeCompetition(competition.codeEdition);
+    final bool? confirm = await showDialog(
+      context: context,
+      builder: (context) {
+        return ConfirmDialogWidget(
+            title: 'Suppression',
+            content: 'Voulez vous supprimer cet element ?');
+      },
+    );
+    if (confirm == true)
+      await context
+          .read<CompetitionProvider>()
+          .removeCompetition(competition.codeEdition);
   }
 
   _onEdit(Competition competition) {

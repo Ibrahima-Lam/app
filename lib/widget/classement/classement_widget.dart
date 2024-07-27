@@ -93,7 +93,6 @@ class ClassementWiget extends StatelessWidget {
                                   title: title ??
                                       'Groupe ${participation?.groupe.nomGroupe ?? ''}'),
                               TableWidget(
-                                success: 0,
                                 targets: targets,
                                 stats: stat,
                                 expand: selected == 0,

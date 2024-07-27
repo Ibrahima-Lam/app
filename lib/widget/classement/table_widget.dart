@@ -8,19 +8,13 @@ class TableWidget extends StatelessWidget {
   final List<Stat> stats;
   final bool expand;
   final List<String>? targets;
-  final int success;
-  final int primary;
-  final int warning;
-  final int danger;
-  TableWidget(
-      {super.key,
-      required this.stats,
-      this.expand = true,
-      this.targets,
-      this.success = 0,
-      this.danger = 0,
-      this.primary = 0,
-      this.warning = 0});
+
+  TableWidget({
+    super.key,
+    required this.stats,
+    this.expand = true,
+    this.targets,
+  });
   List<String> get cols => [
         'N.',
         'Equipe',
@@ -68,13 +62,10 @@ class TableWidget extends StatelessWidget {
                               Color.fromARGB(255, 255, 240, 253))
                           : null,
                       cells: [
-                        DataCell(NumeroWdget(
-                            stat: e,
-                            length: stats.length,
-                            success: success,
-                            danger: danger,
-                            primary: primary,
-                            warning: warning)),
+                        DataCell(NumeroWidget(
+                          stat: e,
+                          length: stats.length,
+                        )),
                         DataCell(
                           NomWidget(stat: e),
                         ),
@@ -170,21 +161,16 @@ class NomWidget extends StatelessWidget {
   }
 }
 
-class NumeroWdget extends StatelessWidget {
+class NumeroWidget extends StatelessWidget {
   final Stat stat;
+  @Deprecated('no used')
   final int length;
-  final int success;
-  final int danger;
-  final int primary;
-  final int warning;
-  const NumeroWdget(
-      {super.key,
-      required this.stat,
-      required this.length,
-      required this.success,
-      required this.danger,
-      required this.primary,
-      required this.warning});
+
+  const NumeroWidget({
+    super.key,
+    required this.stat,
+    required this.length,
+  });
   Color? indexColor(Stat stat) {
     if (stat.level == ClassementType.success) return Colors.green;
     if (stat.level == ClassementType.primary) return Colors.blue;

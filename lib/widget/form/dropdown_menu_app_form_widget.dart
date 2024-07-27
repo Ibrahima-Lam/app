@@ -5,8 +5,13 @@ class DropdownMenuAppFormWidget extends StatelessWidget {
   final TextEditingController? controller;
   final Map<String, dynamic> entries;
   final String title;
+  final Function(dynamic)? onSelected;
   const DropdownMenuAppFormWidget(
-      {super.key, this.controller, required this.entries, required this.title});
+      {super.key,
+      this.controller,
+      required this.entries,
+      required this.title,
+      this.onSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -15,20 +20,26 @@ class DropdownMenuAppFormWidget extends StatelessWidget {
       child: Container(
         width: MediaQuery.sizeOf(context).width,
         child: DropdownMenu(
+            onSelected: (value) {
+              if (value != null && controller != null)
+                controller!.text = value.toString();
+              if (onSelected != null) onSelected!(value);
+            },
             menuStyle: MenuStyle(
                 shape: WidgetStatePropertyAll(
                     RoundedRectangleBorder(side: BorderSide.none)),
                 backgroundColor: WidgetStatePropertyAll(Colors.white)),
             width: MediaQuery.sizeOf(context).width * .98,
             label: Text(title),
+            menuHeight: 300,
             enableSearch: true,
-            controller: controller,
             initialSelection: controller?.text,
-            dropdownMenuEntries: [
-              for (String key in entries.keys)
-                DropdownMenuEntry(
-                    value: entries[key] ?? key, label: key.capitalize())
-            ]),
+            dropdownMenuEntries: entries.entries.map((e) {
+              return DropdownMenuEntry(
+                value: e.value,
+                label: e.key.capitalize(),
+              );
+            }).toList()),
       ),
     );
   }

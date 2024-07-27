@@ -1,3 +1,4 @@
+import 'package:app/core/extension/list_extension.dart';
 import 'package:app/models/paramettre.dart';
 import 'package:app/providers/user_provider.dart';
 import 'package:app/service/paramettre_service.dart';
@@ -8,13 +9,18 @@ class ParamettreProvider extends ChangeNotifier {
 
   List<Paramettre> _paramettres = [];
   ParamettreProvider({required this.userProvider}) {
-    getData();
+    initData();
   }
 
   List<Paramettre> get paramettres => _paramettres;
   void set paramettres(List<Paramettre> val) {
     _paramettres = val;
     notifyListeners();
+  }
+
+  Paramettre? getCompetitionParamettre(String idEdition) {
+    return paramettres
+        .singleWhereOrNull((element) => element.idEdition == idEdition);
   }
 
   bool checkUser(String idEdition) {
@@ -36,9 +42,33 @@ class ParamettreProvider extends ChangeNotifier {
     return false;
   }
 
-  Future<List<Paramettre>> getData() async {
-    paramettres = await ParamettreService.getData();
+  Future<List<Paramettre>> getData({bool remote = false}) async {
+    paramettres = await ParamettreService.getData(remote: remote);
 
     return paramettres;
+  }
+
+  Future<List<Paramettre>> initData({bool remote = false}) async {
+    _paramettres = await ParamettreService.getData(remote: remote);
+
+    return paramettres;
+  }
+
+  Future<bool> updateParamettre(String idEdition, Paramettre paramettre) async {
+    final bool res = await ParamettreService.updateData(idEdition, paramettre);
+    if (res) await getData(remote: true);
+    return res;
+  }
+
+  Future<bool> addParamettre(Paramettre paramettre) async {
+    final bool res = await ParamettreService.addData(paramettre);
+    if (res) await getData(remote: true);
+    return res;
+  }
+
+  Future<bool> deleteParamettre(String idEdition) async {
+    final bool res = await ParamettreService.removeData(idEdition);
+    if (res) await getData(remote: true);
+    return res;
   }
 }

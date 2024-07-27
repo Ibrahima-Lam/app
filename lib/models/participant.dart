@@ -9,6 +9,9 @@ class Participant implements Searchable, Populaire {
   String? localiteEquipe;
   String codeEdition;
   String? imageUrl;
+
+  @override
+  num? rating;
   Participant({
     required this.idParticipant,
     this.idEquipe,
@@ -29,9 +32,17 @@ class Participant implements Searchable, Populaire {
       localiteEquipe: json["localiteEquipe"],
       codeEdition: json["codeEdition"],
       rating: json["rating"],
+      imageUrl: json["imageUrl"],
     );
   }
-
-  @override
-  num? rating;
+  Map<String, dynamic> toJson() => {
+        'idParticipant': idParticipant,
+        'idEquipe': idEquipe,
+        'nomEquipe': nomEquipe,
+        'libelleEquipe': libelleEquipe,
+        'localiteEquipe': localiteEquipe,
+        'codeEdition': codeEdition,
+        'rating': rating,
+        'imageUrl': imageUrl,
+      };
 }

@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:app/collection/competition_collection.dart';
 import 'package:app/core/class/abbreviable.dart';
 import 'package:app/core/enums/enums.dart';
-import 'package:app/core/enums/game_etat_enum.dart';
 import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/competition.dart';
 import 'package:app/models/game.dart';
 import 'package:app/models/niveau.dart';
+import 'package:app/models/paramettre.dart';
 import 'package:app/pages/competition/competition_details.dart';
 import 'package:app/pages/game/widget_details/composition_widget.dart';
 import 'package:app/pages/game/widget_details/evenement_widget.dart';
@@ -54,97 +54,70 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
     return true;
   }
 
-  (List<String>, int) tabBarString(GameEtat gameEtat,
-      {bool composition = false, bool classement = false}) {
-    int initial = 0;
-    if (gameEtat case (GameEtat.pause || GameEtat.direct || GameEtat.termine)) {
-      initial = composition && classement
-          ? 3
-          : composition
-              ? 3
-              : 2;
-      return (
-        [
-          'Journée',
-          'Infos',
-          if (classement) 'Classement',
-          if (composition) 'Composition',
-          'Evenement',
-          'Statistique',
-        ],
-        initial
-      );
-    }
-    initial = composition && classement
-        ? 3
-        : composition
-            ? 2
-            : 1;
-    return (
-      [
-        'Journée',
-        'Infos',
-        if (classement) 'Classement',
-        if (composition) 'Composition'
-      ],
-      initial
-    );
+  int tabBarIndex(List<String> tabs) {
+    if (tabs.contains('statistique'))
+      return tabs.indexWhere((element) => element == 'statistique');
+    if (tabs.contains('evenement'))
+      return tabs.indexWhere((element) => element == 'evenement');
+    return 0;
   }
 
-  List<Widget> tabBarViewChildren(List<String> tabs, bool checkUser) {
-    List<Widget> widgets = [];
-    for (String tab in tabs) {
-      switch (tab.toUpperCase().substring(0, 3)) {
-        case 'JOU':
-          widgets.add(JourneeWidget(game: game));
-          break;
-        case 'CLA':
-          widgets.add(ClassementWiget(
-            key: ValueKey('comp'),
-            codeEdition: game.groupe.codeEdition,
-            title: 'Groupe ${game.groupe.nomGroupe}',
-            idGroupe: game.idGroupe,
-            targets: [game.idHome, game.idAway],
-          ));
-          break;
-        case 'COM':
-          widgets.add(CompositionWidget(
-            key: ValueKey('class'),
-            checkUser: checkUser,
-            game: game,
-          ));
-          break;
-        case 'EVE':
-          widgets.add(EvenementWidget(
-            key: ValueKey('eve'),
-            checkUser: checkUser,
-            game: game,
-          ));
-        case 'STA':
-          widgets.add(StatistiqueListWidget(
-            key: ValueKey('stat'),
-            checkUser: checkUser,
-            game: game,
-          ));
-          break;
-        case 'INF':
-          widgets.add(InfosListWiget(
-            categorieParams: CategorieParams(
-              idGame: game.idGame,
-              idParticipant: game.idHome,
-              idParticipant2: game.idAway,
-            ),
-          ));
-          break;
-
-        default:
-          widgets.add(const Center(
-            child: Text('Page vide!'),
-          ));
-      }
-    }
-    return widgets;
+  Set<String> tabBarString(
+      {bool composition = false,
+      bool classement = false,
+      bool statistique = false,
+      bool evenement = false}) {
+    return {
+      'journee',
+      'infos',
+      if (classement) 'classement',
+      if (composition) 'composition',
+      if (evenement) 'evenement',
+      if (statistique) 'statistique',
+    };
   }
+
+  Map<String, String> get tabBarLabel => {
+        'journee': 'Journée',
+        'infos': 'Infos',
+        'classement': 'Classement',
+        'composition': 'Composition',
+        'evenement': 'Evènement',
+        'statistique': 'Statistique',
+      };
+
+  Map<String, Widget> get tabBarViewChildren => {
+        'journee': JourneeWidget(game: game),
+        'infos': InfosListWiget(
+          categorieParams: CategorieParams(
+            idGame: game.idGame,
+            idParticipant: game.idHome,
+            idParticipant2: game.idAway,
+          ),
+        ),
+        'classement': ClassementWiget(
+          key: ValueKey('comp'),
+          codeEdition: game.groupe.codeEdition,
+          title: 'Groupe ${game.groupe.nomGroupe}',
+          idGroupe: game.idGroupe,
+          targets: [game.idHome, game.idAway],
+        ),
+        'composition': CompositionWidget(
+          key: ValueKey('class'),
+          checkUser: checkUser,
+          game: game,
+        ),
+        'evenement': EvenementWidget(
+          key: ValueKey('eve'),
+          checkUser: checkUser,
+          game: game,
+        ),
+        'statistique': StatistiqueListWidget(
+          key: ValueKey('stat'),
+          checkUser: checkUser,
+          game: game,
+        ),
+      };
 
   @override
   void initState() {
@@ -183,12 +156,24 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
               ),
             );
           }
-          var (tabs, initial) = tabBarString(game.etat.etat,
-              composition: true,
+
+          return Consumer<ParamettreProvider>(
+              builder: (context, paramettreProvider, _) {
+            checkUser =
+                paramettreProvider.checkUser(competition?.codeEdition ?? '');
+            final Paramettre? paramettre = paramettreProvider
+                .getCompetitionParamettre(game.groupe.codeEdition);
+            Set<String> tabs = tabBarString(
+              composition: (paramettre?.showComposition ?? false),
               classement: game.niveau.typeNiveau == 'groupe' ||
-                  game.niveau.typeNiveau == 'championnat');
-          return Consumer<ParamettreProvider>(builder: (context, val, _) {
-            checkUser = val.checkUser(competition?.codeEdition ?? '');
+                  game.niveau.typeNiveau == 'championnat',
+              evenement:
+                  game.etat.started && (paramettre?.showEvenement ?? true),
+              statistique:
+                  game.etat.started && (paramettre?.showStatistique ?? true),
+            );
+            int initial = tabBarIndex(tabs.toList());
+
             return DefaultTabController(
               initialIndex: initial,
               length: tabs.length,
@@ -307,14 +292,20 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
                         tabs: [
                           for (final tab in tabs)
                             Tab(
-                              text: tab,
+                              text: tabBarLabel[tab] ?? '',
                             )
                         ],
                       ),
                     ),
                   ],
                   body: TabBarView(
-                    children: tabBarViewChildren(tabs, checkUser),
+                    children: [
+                      for (final tab in tabs)
+                        tabBarViewChildren[tab] ??
+                            const Center(
+                              child: Text('Page vide'),
+                            )
+                    ],
                   ),
                 ),
                 floatingActionButton: checkUser
