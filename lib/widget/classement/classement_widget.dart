@@ -64,7 +64,7 @@ class ClassementWiget extends StatelessWidget {
               );
             }
 
-            final List<Stat> stat = snapshot.data!;
+            final List<Stat> stat = snapshot.data ?? [];
             int selected = 0;
             return Consumer2<ParticipationProvider, GroupeProvider>(builder:
                 (context, participationProvider, groupeProvider, child) {

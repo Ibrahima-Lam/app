@@ -39,7 +39,7 @@ class TopIconsWidget extends StatelessWidget {
         ...gameProvider.games.reversed
             .where(
               (element) =>
-                  element.dateGame!.compareTo(dateGame) <= 0 &&
+                  (element.dateGame ?? '').compareTo(dateGame) <= 0 &&
                   lastComps.elementAtOrNull(1)?.codeEdition ==
                       element.groupe.codeEdition,
             )

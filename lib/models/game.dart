@@ -70,7 +70,8 @@ class Game implements Searchable {
     return false;
   }
 
-  bool get isPlayed => score?.homeScore != null && score?.awayScore != null;
+  bool get isPlayed =>
+      score?.homeScore != null && score?.awayScore != null && dateGame != null;
   bool get isNotPlayed => !isPlayed;
   bool get isPlaying =>
       etat.etat == GameEtat.direct || etat.etat == GameEtat.pause;

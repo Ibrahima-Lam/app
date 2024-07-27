@@ -123,7 +123,7 @@ class ClasseurController extends ClasseurControllerRipository {
             game.idHome == a.id && game.idAway == b.id ||
             game.idAway == a.id && game.idHome == b.id)
         .toList();
-    assert(matchs.length <= 2);
+    if (matchs.length > 2) return 0;
     int homebut = 0;
     int awaybut = 0;
     if (matchs.length == 2) {

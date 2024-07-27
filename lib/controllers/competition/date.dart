@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 class DateController {
+  static String get dateCollapsed => DateTime.now()
+      .toString()
+      .replaceAll(' ', '')
+      .replaceAll(':', '')
+      .replaceAll('-', '')
+      .substring(0, 14);
   /**
    * retourne une liste de date ou les temps
    */

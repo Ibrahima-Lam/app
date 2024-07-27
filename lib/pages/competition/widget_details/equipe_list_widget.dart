@@ -86,6 +86,7 @@ class ParticipationWidget extends StatelessWidget {
                           margin: const EdgeInsets.symmetric(
                               horizontal: 4, vertical: 1),
                           child: EquipeListTileWidget(
+                            url: part.participant.imageUrl,
                             border: false,
                             title: (part.participant.nomEquipe),
                             id: part.idParticipant.toString(),
@@ -140,6 +141,7 @@ class ParticipantWidget extends StatelessWidget {
                     margin:
                         const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                     child: EquipeListTileWidget(
+                        url: participant.imageUrl,
                         id: participant.idParticipant,
                         title: participant.nomEquipe),
                   )

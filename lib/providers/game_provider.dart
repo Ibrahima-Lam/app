@@ -54,22 +54,42 @@ class GameProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future setGames() async {
-    games = await GameService()
-        .getData(participantProvider.participants, groupeProvider.groupes);
+  Future setGames({bool remote = false}) async {
+    games = await GameService().getData(
+        participantProvider.participants, groupeProvider.groupes,
+        remote: remote);
   }
 
   Future setScores() async {
     scores = await ScoreService.getData();
   }
 
-  Future<GameList> getGames() async {
-    if (groupeProvider.groupes.isEmpty) await groupeProvider.initGroupes();
-    if (participantProvider.participants.isEmpty)
+  Future<GameList> getGames({bool remote = false}) async {
+    if (groupeProvider.groupes.isEmpty || remote)
+      await groupeProvider.initGroupes();
+    if (participantProvider.participants.isEmpty || remote)
       await participantProvider.initParticipants();
-    if (scores.isEmpty) setScores();
-    if (games.isEmpty) await setGames();
+    if (scores.isEmpty || remote) setScores();
+    if (games.isEmpty || remote) await setGames(remote: remote);
     return games;
+  }
+
+  Future<bool> addGame(Game game) async {
+    bool res = await GameService().addGame(game);
+    if (res) await getGames(remote: true);
+    return res;
+  }
+
+  Future<bool> removeGame(String idGame) async {
+    bool res = await GameService().removeGame(idGame);
+    if (res) await getGames(remote: true);
+    return res;
+  }
+
+  Future<bool> editGame(String idGame, Game game) async {
+    bool res = await GameService().editGame(idGame, game);
+    if (res) await getGames(remote: true);
+    return res;
   }
 
   Future changeScore(

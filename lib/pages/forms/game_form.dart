@@ -1,8 +1,12 @@
+import 'package:app/controllers/competition/date.dart';
+import 'package:app/controllers/game/game_controller.dart';
 import 'package:app/core/extension/int_extension.dart';
+import 'package:app/core/extension/list_extension.dart';
 import 'package:app/models/game.dart';
 import 'package:app/models/groupe.dart';
 import 'package:app/models/niveau.dart';
 import 'package:app/models/participation.dart';
+import 'package:app/providers/game_provider.dart';
 import 'package:app/providers/groupe_provider.dart';
 import 'package:app/providers/participation_provider.dart';
 import 'package:app/service/niveau_service.dart';
@@ -51,10 +55,12 @@ class GameForm extends StatelessWidget {
                 .toList();
 
             return GameFormListWidget(
-                game: game,
-                groupes: groupes,
-                niveaux: niveaux,
-                participations: participations);
+              game: game,
+              groupes: groupes,
+              niveaux: niveaux,
+              participations: participations,
+              codeEdition: codeEdition,
+            );
           }),
     );
   }
@@ -65,13 +71,15 @@ class GameFormListWidget extends StatefulWidget {
   final List<Participation> participations;
   final List<Groupe> groupes;
   final Game? game;
+  final String codeEdition;
 
   const GameFormListWidget(
       {super.key,
       required this.groupes,
       required this.niveaux,
       required this.participations,
-      this.game});
+      this.game,
+      required this.codeEdition});
 
   @override
   State<GameFormListWidget> createState() => _GameFormListWidgetState();
@@ -105,9 +113,32 @@ class _GameFormListWidgetState extends State<GameFormListWidget> {
   }
 
   _onSubmit() async {
+    print(0);
+    if ([homeController.text, awayController.text, groupeController.text]
+        .hasOneEmpty) return;
+    print(1);
+    Game? game = GameController.toGame(
+        idGame: widget.game != null
+            ? widget.game!.idGame
+            : 'G' + DateController.dateCollapsed,
+        idHome: homeController.text,
+        idAway: awayController.text,
+        idGroupe: groupeController.text,
+        codeNiveau: niveauController.text,
+        dateGame: dateController.text,
+        heureGame: heureController.text,
+        stadeGame: stadeController.text,
+        participants: widget.participations.map((e) => e.participant).toList(),
+        niveaux: widget.niveaux,
+        groupes: widget.groupes);
+    print(2);
+    if (game == null) return;
+    print(3);
     setIsloading(true);
-    await Future.delayed(Durations.extralong4);
+    final bool res = await context.read<GameProvider>().addGame(game);
+
     setIsloading(false);
+    if (res) Navigator.pop(context);
   }
 
   @override

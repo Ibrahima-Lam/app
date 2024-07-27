@@ -14,3 +14,12 @@ extension ListExtension<T> on List {
     }
   }
 }
+
+extension ListStringExtension on List<String> {
+  bool get hasOneEmpty {
+    for (var element in this) {
+      if (element.isEmpty) return true;
+    }
+    return false;
+  }
+}

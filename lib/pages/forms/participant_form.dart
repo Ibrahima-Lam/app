@@ -1,3 +1,4 @@
+import 'package:app/controllers/competition/date.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
@@ -32,27 +33,15 @@ class _ParticipantFormState extends State<ParticipantForm> {
 
   void _onSubmit() async {
     final Participant participant = Participant(
-        idParticipant: widget.codeEdition +
-            DateTime.now()
-                .toString()
-                .replaceAll(' ', '')
-                .replaceAll(':', '')
-                .replaceAll('-', '')
-                .substring(0, 14),
-        idEquipe: widget.codeEdition +
-            DateTime.now()
-                .toString()
-                .replaceAll(' ', '')
-                .replaceAll(':', '')
-                .replaceAll('-', '')
-                .substring(0, 14),
+        idParticipant: 'P' + DateController.dateCollapsed,
+        idEquipe: 'E' + DateController.dateCollapsed,
         nomEquipe: nomController.text,
         codeEdition: widget.codeEdition,
         imageUrl: urlController.text,
         libelleEquipe: libelleController.text,
         localiteEquipe: localiteController.text,
         rating: double.parse(ratingController.text));
-    print(participant.idParticipant);
+
     setIsloading(true);
     final bool res = widget.participant != null
         ? await context
@@ -81,7 +70,7 @@ class _ParticipantFormState extends State<ParticipantForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(' Formulaire d\'équipe'),
+        title: Text('Formulaire d\'équipe'),
       ),
       body: SingleChildScrollView(
         child: Column(

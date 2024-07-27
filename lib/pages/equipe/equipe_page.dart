@@ -90,6 +90,7 @@ class _EquipePageState extends State<EquipePage> {
                                     itemCount: participants.length,
                                     itemBuilder: (context, index) =>
                                         EquipeListTileWidget(
+                                      url: participants[index].imageUrl,
                                       id: participants[index].idParticipant,
                                       title: participants[index].nomEquipe,
                                       subtitle: getCompetition(

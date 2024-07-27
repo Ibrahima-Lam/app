@@ -5,7 +5,11 @@ class NiveauController {
   static List<Niveau> getGamesNiveau(List<Game> games) {
     List<String> liste = [];
     List<Niveau> niveaux = [];
-    games.sort((a, b) => a.dateGame!.compareTo(b.dateGame!));
+    games.sort((Game a, Game b) {
+      if ((a.dateGame ?? '').compareTo(b.dateGame ?? '') != 0)
+        return (a.dateGame ?? '').compareTo(b.dateGame ?? '');
+      return (a.heureGame ?? '').compareTo(b.heureGame ?? '');
+    });
     for (Game e in games) {
       if (!liste.contains(e.codeNiveau)) {
         liste.add(e.codeNiveau!);

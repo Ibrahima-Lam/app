@@ -23,26 +23,36 @@ class EquipeImageLogoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: url ?? '',
-      errorWidget: (context, url, error) => ''.isEmpty
-          ? Container(
-              constraints: BoxConstraints(maxHeight: 80, maxWidth: 80),
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: AssetImage('images/photo.jpg'),
-                      fit: BoxFit.cover)),
-            )
-          : CircleAvatar(
-              backgroundColor:
-                  noColor ? null : backgroundColor ?? Color(0xFFDCDCDC),
-              radius: radius ?? 25,
-              child: Icon(
-                color: noColor ? null : color ?? Colors.white,
-                Icons.people,
-                size: size ?? 30,
-              )),
+    return Container(
+      height: 50,
+      width: 50,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        shape: BoxShape.circle,
+      ),
+      child: CachedNetworkImage(
+        width: MediaQuery.of(context).size.width,
+        fit: BoxFit.cover,
+        imageUrl: url ?? '',
+        errorWidget: (context, url, error) => ''.isEmpty
+            ? Container(
+                constraints: BoxConstraints(maxHeight: 80, maxWidth: 80),
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                        image: AssetImage('images/photo.jpg'),
+                        fit: BoxFit.cover)),
+              )
+            : CircleAvatar(
+                backgroundColor:
+                    noColor ? null : backgroundColor ?? Color(0xFFDCDCDC),
+                radius: radius ?? 25,
+                child: Icon(
+                  color: noColor ? null : color ?? Colors.white,
+                  Icons.people,
+                  size: size ?? 30,
+                )),
+      ),
     );
   }
 }

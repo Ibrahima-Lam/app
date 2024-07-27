@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class EquipeListTileWidget extends StatelessWidget {
   final String title;
+  final String? url;
   final String? subtitle;
   final String id;
   final bool border;
@@ -12,7 +13,8 @@ class EquipeListTileWidget extends StatelessWidget {
       required this.id,
       required this.title,
       this.subtitle,
-      this.border = true});
+      this.border = true,
+      required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +33,13 @@ class EquipeListTileWidget extends StatelessWidget {
           );
         },
         leading: Container(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-          height: 60,
-          width: 60,
-          child: EquipeImageLogoWidget(),
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 0),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+          ),
+          height: 50,
+          width: 50,
+          child: EquipeImageLogoWidget(url: url),
         ),
         title: Text(title),
         subtitle: subtitle != null ? Text(subtitle!) : null,

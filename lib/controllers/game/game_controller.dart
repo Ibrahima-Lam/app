@@ -1,4 +1,7 @@
 import 'package:app/models/game.dart';
+import 'package:app/models/groupe.dart';
+import 'package:app/models/niveau.dart';
+import 'package:app/models/participant.dart';
 
 class GameController {
   List<Game> filterGamesBy(
@@ -44,5 +47,46 @@ class GameController {
       games = games.where((element) => element.isNotPlayed).toList();
     }
     return games;
+  }
+
+  static Game? toGame(
+      {required String idGame,
+      required String idHome,
+      required String idAway,
+      required String idGroupe,
+      required String codeNiveau,
+      String? dateGame,
+      String? heureGame,
+      String? stadeGame,
+      required List<Niveau> niveaux,
+      required List<Groupe> groupes,
+      required List<Participant> participants}) {
+    if ((!participants.any((e) => e.idParticipant == idHome) &&
+        participants.any((e) => e.idParticipant == idAway) &&
+        groupes.any((e) => e.idGroupe == idGroupe))) return null;
+    Participant home =
+        participants.lastWhere((element) => element.idParticipant == idHome);
+    Participant away =
+        participants.lastWhere((element) => element.idParticipant == idAway);
+    Niveau niveau = niveaux.singleWhere(
+      (element) => element.codeNiveau == codeNiveau,
+      orElse: () => Niveau(
+          codeNiveau: '', nomNiveau: '', typeNiveau: '', ordreNiveau: ''),
+    );
+    Groupe groupe =
+        groupes.singleWhere((element) => idGroupe == element.idGroupe);
+    return Game(
+        idGame: idGame,
+        idHome: idHome,
+        idAway: idAway,
+        idGroupe: idGroupe,
+        codeNiveau: codeNiveau,
+        dateGame: dateGame,
+        heureGame: heureGame,
+        stadeGame: stadeGame,
+        groupe: groupe,
+        home: home,
+        away: away,
+        niveau: niveau);
   }
 }
