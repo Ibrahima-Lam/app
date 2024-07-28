@@ -22,19 +22,18 @@ class _GameTimerFormModalWidgetState extends State<GameTimerFormModalWidget> {
   late final TextEditingController initialController;
   late final TextEditingController retardController;
   late final TextEditingController extraController;
-  late final TextEditingController etatController;
   DateTime? date;
   TimeOfDay? time;
   @override
   void initState() {
     timerEvent = widget.timer?.copyWith() ??
         TimerEvent(
-            start: DateTime.now().toString(),
-            duration: 0,
-            initial: 0,
-            retard: 0,
-            extra: 0,
-            etat: 'direct');
+          start: DateTime.now().toString(),
+          duration: 0,
+          initial: 0,
+          retard: 0,
+          extra: 0,
+        );
     initialController =
         TextEditingController(text: (timerEvent.initial).toString());
     durationController =
@@ -43,8 +42,7 @@ class _GameTimerFormModalWidgetState extends State<GameTimerFormModalWidget> {
         TextEditingController(text: (timerEvent.retard ?? '').toString());
     extraController =
         TextEditingController(text: (timerEvent.extra ?? '').toString());
-    etatController =
-        TextEditingController(text: (timerEvent.etat ?? '').toString());
+
     super.initState();
   }
 
@@ -164,28 +162,15 @@ class _GameTimerFormModalWidgetState extends State<GameTimerFormModalWidget> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Expanded(child: Text('Etat')),
-                  SizedBox(
-                    width: 150,
-                    height: 100,
-                    child:
-                        EtatDropDownMenuWidget(etatController: etatController),
-                  ),
-                ],
-              ),
-            ),
             ElevatedButtonWidget(
               onPressed: () {
                 timerEvent.initial = int.parse(initialController.text);
                 timerEvent.duration = int.parse(durationController.text);
-                timerEvent.retard = int.parse(retardController.text);
-                timerEvent.extra = int.parse(extraController.text);
-                timerEvent.etat = etatController.text;
+                timerEvent.retard = int.parse(retardController.text.isEmpty
+                    ? '0'
+                    : retardController.text);
+                timerEvent.extra = int.parse(
+                    extraController.text.isEmpty ? '0' : extraController.text);
                 Navigator.pop(context, timerEvent);
               },
             )

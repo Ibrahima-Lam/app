@@ -1,3 +1,5 @@
+import 'package:app/core/enums/game_etat_enum.dart';
+import 'package:app/models/gameEvent.dart';
 import 'package:app/models/scores/score.dart';
 
 import 'package:app/service/score_service.dart';
@@ -19,22 +21,53 @@ class ScoreProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<Score>> getData() async {
-    if (scores.isEmpty) {
-      scores = await ScoreService.getData();
+  Future<List<Score>> getData({bool remote = false}) async {
+    if (scores.isEmpty || remote) {
+      scores = await ScoreService.getData(remote: remote);
     }
-
     return scores;
   }
 
-  Future changeScore(
-      {required String idGame, required int? hs, required int? as}) async {
-    scores = scores.map((e) {
-      if (e.idGame == idGame) {
-        e.homeScore = hs;
-        e.awayScore = as;
-      }
-      return e;
-    }).toList();
+  Future<List<Score>> initScores() async {
+    _scores = await ScoreService.getData();
+    return scores;
+  }
+
+  Future<bool> addScore(Score score) async {
+    final bool result = await ScoreService.addScore(score);
+    if (result) await getData(remote: true);
+    return result;
+  }
+
+  Future<bool> changeEtat(
+      {required String idGame, required GameEtatClass etat}) async {
+    final bool result = await ScoreService.changeEtat(idGame, etat);
+    if (result) await getData(remote: true);
+    return result;
+  }
+
+  Future<bool> editScore(String idGame, Score score) async {
+    final bool result = await ScoreService.editScore(idGame, score);
+    if (result) await getData(remote: true);
+    return result;
+  }
+
+  Future<bool> editScorePenalty(String idGame, Score score) async {
+    final bool result = await ScoreService.editScorePenalty(idGame, score);
+    if (result) await getData(remote: true);
+    return result;
+  }
+
+  Future<bool> deleteScore(String idGame) async {
+    final bool result = await ScoreService.deleteScore(idGame);
+    if (result) await getData(remote: true);
+    return result;
+  }
+
+  Future<bool> changeTimer(
+      {required String idGame, required TimerEvent? timer}) async {
+    final bool result = await ScoreService.changeTimer(idGame, timer);
+    if (result) await getData(remote: true);
+    return result;
   }
 }

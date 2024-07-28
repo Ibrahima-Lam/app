@@ -1,18 +1,103 @@
+import 'package:app/core/enums/game_etat_enum.dart';
+import 'package:app/models/gameEvent.dart';
 import 'package:app/models/scores/score.dart';
+import 'package:app/service/local_service.dart';
 import 'package:flutter/material.dart';
 
 class ScoreService {
-  static Future<List<Score>> getData() async {
-    await Future.delayed(Durations.extralong4);
-    return scores.map((e) => Score.fromJson(e)).toList();
+  static LocalService get service => LocalService('score.json');
+
+  static Future<List<Score>?> getLocalData() async {
+    if (await service.fileExists()) {
+      final List? data = (await service.getData());
+      if (data != null) return data.map((e) => Score.fromJson(e)).toList();
+    }
+    return null;
   }
 
-  static Stream<Score> getScores() async* {
-    List<Score> scores = await Future.delayed(Durations.extralong4);
-    for (var score in scores) {
-      yield score;
+  static Future<List<Score>> getData({bool remote = false}) async {
+    final List<Score> data = await getRemoteData();
+    if (data.isEmpty && await service.hasData())
+      return await getLocalData() ?? [];
+    return data;
+  }
+
+  static Future<List<Score>> getRemoteData() async {
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+      if (scores.isNotEmpty) await service.setData(scores);
+      return scores.map((e) => Score.fromJson(e)).toList();
+    } catch (e) {
+      return [];
     }
-    ;
+  }
+
+  static Future<bool> addScore(Score score) async {
+    await Future.delayed(Durations.extralong4);
+    if (scores.any((element) => element['idGame'].toString() == score.idGame))
+      return false;
+    scores.add(score.toJson());
+    return true;
+  }
+
+  static Future<bool> editScore(String idGame, Score score) async {
+    await Future.delayed(Durations.extralong4);
+    final index =
+        scores.indexWhere((element) => element['idGame'].toString() == idGame);
+    if (index == -1) {
+      scores.add(score.toJson());
+    } else {
+      scores[index] = {...scores[index], ...score.toJson()};
+    }
+    return true;
+  }
+
+  static Future<bool> changeEtat(String idGame, GameEtatClass etat) async {
+    await Future.delayed(Durations.extralong4);
+    final index =
+        scores.indexWhere((element) => element['idGame'].toString() == idGame);
+    if (index == -1) {
+      scores.add({'idGame': idGame, 'etat': etat.text});
+    } else {
+      scores[index] = {
+        ...scores[index],
+        ...{'etat': etat.text}
+      };
+    }
+    return true;
+  }
+
+  static Future<bool> editScorePenalty(String idGame, Score score) async {
+    await Future.delayed(Durations.extralong4);
+    final index =
+        scores.indexWhere((element) => element['idGame'].toString() == idGame);
+    if (index == -1) {
+      scores.add(score.toJson());
+    } else {
+      scores[index] = {...scores[index], ...score.toJson()};
+    }
+    return true;
+  }
+
+  static Future<bool> deleteScore(String idGame) async {
+    await Future.delayed(Durations.extralong4);
+    final index =
+        scores.indexWhere((element) => element['idGame'].toString() == idGame);
+    if (index == -1) return false;
+    scores.removeAt(index);
+    return true;
+  }
+
+  static Future<bool> changeTimer(String idGame, TimerEvent? timer) async {
+    await Future.delayed(Durations.extralong4);
+    final index =
+        scores.indexWhere((element) => element['idGame'].toString() == idGame);
+    if (index == -1) {
+      scores.add(Score(idGame: idGame, timer: timer).toJson());
+    } else {
+      scores[index] = {...scores[index], ...timer?.toJson() ?? {}};
+    }
+    return true;
   }
 }
 

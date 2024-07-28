@@ -1,21 +1,56 @@
 import 'package:app/models/event.dart';
+import 'package:app/service/local_service.dart';
 
 class SanctionService {
-  static Future<List<CardEvent>> get getData async {
-    await Future.delayed(const Duration(seconds: 1));
+  static LocalService get service => LocalService('sanction.json');
 
-    List<CardEvent> cards =
-        sanctions.map((e) => CardEvent.fromJson(e)).toList();
-    cards.sort(
-      (a, b) {
-        return (a.idGame).compareTo(b.idGame) != 0
-            ? (a.idGame).compareTo(b.idGame)
-            : (a.minute ?? '').compareTo(b.minute ?? '') != 0
-                ? (a.minute ?? '').compareTo(b.minute ?? '')
-                : (a.idEvent).compareTo(b.idEvent);
-      },
-    );
-    return cards;
+  static Future<List<CardEvent>?> getLocalData() async {
+    if (await service.fileExists()) {
+      final List? data = (await service.getData());
+      if (data != null) return data.map((e) => CardEvent.fromJson(e)).toList();
+    }
+    return null;
+  }
+
+  static Future<List<CardEvent>> getData({bool remote = false}) async {
+    if (await service.isLoadable() && !remote)
+      return await getLocalData() ?? [];
+    final List<CardEvent> data = await getRemoteData();
+    if (data.isEmpty && await service.hasData())
+      return await getLocalData() ?? [];
+    return data;
+  }
+
+  static Future<List<CardEvent>> getRemoteData() async {
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+      if (sanctions.isNotEmpty) await service.setData(sanctions);
+      return sanctions.map((e) => CardEvent.fromJson(e)).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<bool> addCardEvent(CardEvent arbitre) async {
+    sanctions.add(arbitre.toJson());
+    return true;
+  }
+
+  static Future<bool> editCardEvent(String idBut, CardEvent arbitre) async {
+    if (sanctions.any((element) => element['idBut'] == idBut)) {
+      int index = sanctions.indexWhere((element) => element['idBut'] == idBut);
+      if (index >= 0) sanctions[index] = arbitre.toJson();
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> deleteCardEvent(String idBut) async {
+    if (sanctions.any((element) => element['idBut'] == idBut)) {
+      sanctions.removeWhere((element) => element['idBut'] == idBut);
+      return true;
+    }
+    return true;
   }
 }
 

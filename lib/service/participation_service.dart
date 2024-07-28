@@ -57,7 +57,7 @@ class ParticipationService {
   static Future<bool> addParticipation(Participation partcipation) async {
     if (participations.any((element) =>
         element['idGroupe'].toString() == partcipation.idGroupe &&
-        element['codeEdition'].toString() == partcipation.idParticipant))
+        element['idParticipant'].toString() == partcipation.idParticipant))
       return false;
     participations.add(partcipation.toJson());
     return true;

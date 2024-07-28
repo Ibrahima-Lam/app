@@ -60,9 +60,7 @@ final class Classeur extends ClasseurRipository {
     final List<Participation> parts = getGroupeParticipation(idGroupe);
     final List<Game> matchs =
         games.where((element) => element.idGroupe == idGroupe).toList();
-    if (matchs.isEmpty) {
-      return [];
-    }
+
     return ClasseurController(
       equipes: parts,
       games: matchs,

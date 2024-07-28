@@ -5,37 +5,67 @@ import 'package:app/service/local_service.dart';
 class JoueurService {
   static LocalService get service => LocalService('joueur.json');
 
+  static List<Joueur> _toJoueurs(List data, List<Participant> participants) {
+    return data
+        .where((element) => participants
+            .any((e) => e.idParticipant == element['idParticipant'].toString()))
+        .map((e) => Joueur.fromJson(
+            e,
+            participants.singleWhere((element) =>
+                element.idParticipant == e['idParticipant'].toString())))
+        .toList();
+  }
+
   static Future<List<Joueur>?> getLocalData(
       List<Participant> participants) async {
     if (await service.fileExists()) {
       final List? data = (await service.getData());
-      if (data != null)
-        return data
-            .where((element) => participants.any(
-                (e) => e.idParticipant == element['idParticipant'].toString()))
-            .map((e) {
-          Participant participant = participants.singleWhere((element) =>
-              element.idParticipant == e['idParticipant'].toString());
-          return Joueur.fromJson(e, participant);
-        }).toList();
+      if (data != null) return _toJoueurs(data, participants);
     }
     return null;
   }
 
-  Future<List<Joueur>> getData(List<Participant> participants) async {
-    if (await service.isLoadable())
+  static Future<List<Joueur>> getData(List<Participant> participants,
+      {bool remote = false}) async {
+    if (await service.isLoadable() && !remote)
       return await getLocalData(participants) ?? [];
-    await Future.delayed(const Duration(seconds: 1));
-    // Todo changer joueur par remote data
-    await service.setData(joueurs);
-    return joueurs
-        .where((element) => participants
-            .any((e) => e.idParticipant == element['idParticipant'].toString()))
-        .map((e) {
-      Participant participant = participants.singleWhere(
-          (element) => element.idParticipant == e['idParticipant'].toString());
-      return Joueur.fromJson(e, participant);
-    }).toList();
+    final List<Joueur> data = await getRemoteData(participants);
+    if (data.isEmpty && await service.hasData())
+      return await getLocalData(participants) ?? [];
+    return data;
+  }
+
+  static Future<List<Joueur>> getRemoteData(
+      List<Participant> participants) async {
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+      if (joueurs.isNotEmpty) await service.setData(joueurs);
+      return _toJoueurs(joueurs, participants);
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<bool> addJoueur(Joueur joueur) async {
+    if (joueurs
+        .any((element) => element['idJoueur'].toString() == joueur.idJoueur)) {
+      return false;
+    }
+    joueurs.add(joueur.toJson());
+    return true;
+  }
+
+  static Future<bool> deleteJoueur(String idJoueur) async {
+    joueurs
+        .removeWhere((element) => element['idJoueur'].toString() == idJoueur);
+    return true;
+  }
+
+  static Future<bool> editJoueur(String idJoueur, Joueur joueur) async {
+    joueurs
+        .removeWhere((element) => element['idJoueur'].toString() == idJoueur);
+    joueurs.add(joueur.toJson());
+    return true;
   }
 }
 

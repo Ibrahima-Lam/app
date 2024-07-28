@@ -12,12 +12,48 @@ class CoachService {
     return null;
   }
 
-  static Future<List<Coach>> getCoachs() async {
-    if (await service.isLoadable()) return await getLocalData() ?? [];
-    await Future.delayed(const Duration(seconds: 1));
-    // Todo changer coaches par remote data
-    await service.setData(coachs);
-    return coachs.map((e) => Coach.fromJson(e)).toList();
+  static Future<List<Coach>> getData({bool remote = false}) async {
+    if (await service.isLoadable() && !remote)
+      return await getLocalData() ?? [];
+    final List<Coach> data = await getRemoteData();
+    if (data.isEmpty && await service.hasData())
+      return await getLocalData() ?? [];
+    return data;
+  }
+
+  static Future<List<Coach>> getRemoteData() async {
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+      if (coachs.isNotEmpty) await service.setData(coachs);
+      return coachs.map((e) => Coach.fromJson(e)).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<bool> addCoach(Coach coach) async {
+    if (coachs.any((element) =>
+        element['idParticipant'] == coach.idParticipant &&
+        element['nomCoach'] == coach.nomCoach)) return false;
+    coachs.add(coach.toJson());
+    return true;
+  }
+
+  static Future<bool> editCoach(String idCoach, Coach coach) async {
+    if (coachs.any((element) => element['idCoach'] == idCoach)) {
+      int index = coachs.indexWhere((element) => element['idCoach'] == idCoach);
+      if (index >= 0) coachs[index] = coach.toJson();
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> deleteCoach(String idCoach) async {
+    if (coachs.any((element) => element['idCoach'] == idCoach)) {
+      coachs.removeWhere((element) => element['idCoach'] == idCoach);
+      return true;
+    }
+    return true;
   }
 }
 

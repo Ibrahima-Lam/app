@@ -55,6 +55,14 @@ class GoalEvent extends Event {
       imageUrl: '',
     );
   }
+  Map<String, dynamic> toJson() => {
+        'idJoueur': idJoueur,
+        'nomJoueur': nom,
+        'idParticipant': idParticipant,
+        'idGame': idGame,
+        'idBut': idEvent,
+        'minute': minute,
+      };
 
   GoalEvent copyWith({
     String? type,
@@ -110,6 +118,14 @@ class CardEvent extends Event {
       imageUrl: '',
     );
   }
+  Map<String, dynamic> toJson() => {
+        'idJoueur': idJoueur,
+        'nomJoueur': nom,
+        'idParticipant': idParticipant,
+        'idGame': idGame,
+        'idSanctionner': idEvent,
+        'minute': minute,
+      };
 
   CardEvent copyWith({
     String? type,
@@ -173,6 +189,14 @@ class RemplEvent extends Event {
         nomTarget: nomTarget ?? this.nomTarget,
         imageUrl: '',
       );
+  Map<String, dynamic> toJson() => {
+        'idJoueur': idJoueur,
+        'nomJoueur': nom,
+        'idParticipant': idParticipant,
+        'idGame': idGame,
+        'idChangement': idEvent,
+        'minute': minute,
+      };
 }
 
 class EventStatistique {
@@ -204,4 +228,12 @@ class GameEventsStatistique {
     this.imageUrl,
     required this.game,
   });
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'nom': nom,
+        'nombre': nombre,
+        'type': type,
+        'imageUrl': imageUrl,
+        'game': game.toJson(),
+      };
 }

@@ -12,12 +12,49 @@ class ArbitreService {
     return null;
   }
 
-  static Future<List<Arbitre>> getArbitres() async {
-    if (await service.isLoadable()) return await getLocalData() ?? [];
-    await Future.delayed(const Duration(seconds: 1));
-    // Todo changer arbitres par remote data
-    await service.setData(arbitres);
-    return arbitres.map((e) => Arbitre.fromJson(e)).toList();
+  static Future<List<Arbitre>> getData({bool remote = false}) async {
+    if (await service.isLoadable() && !remote)
+      return await getLocalData() ?? [];
+    final List<Arbitre> data = await getRemoteData();
+    if (data.isEmpty && await service.hasData())
+      return await getLocalData() ?? [];
+    return data;
+  }
+
+  static Future<List<Arbitre>> getRemoteData() async {
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+      if (arbitres.isNotEmpty) await service.setData(arbitres);
+      return arbitres.map((e) => Arbitre.fromJson(e)).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<bool> addArbitre(Arbitre arbitre) async {
+    if (arbitres.any((element) =>
+        element['idEdition'] == arbitre.idEdition &&
+        element['nomArbitre'] == arbitre.nomArbitre)) return false;
+    arbitres.add(arbitre.toJson());
+    return true;
+  }
+
+  static Future<bool> editArbitre(String idArbitre, Arbitre arbitre) async {
+    if (arbitres.any((element) => element['idArbitre'] == idArbitre)) {
+      int index =
+          arbitres.indexWhere((element) => element['idArbitre'] == idArbitre);
+      if (index >= 0) arbitres[index] = arbitre.toJson();
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> deleteArbitre(String idArbitre) async {
+    if (arbitres.any((element) => element['idArbitre'] == idArbitre)) {
+      arbitres.removeWhere((element) => element['idArbitre'] == idArbitre);
+      return true;
+    }
+    return false;
   }
 }
 

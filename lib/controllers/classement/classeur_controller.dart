@@ -107,17 +107,25 @@ class ClasseurController extends ClasseurControllerRipository {
           continue;
         }
         if (key == "id" || key == "be") {
-          if (key == 'id')
-            a.toJson()[key].toString().compareTo(b.toJson()[key].toString());
-          return a.toJson()[key] - b.toJson()[key];
+          if (a.toJson()[key] is int && b.toJson()[key] is int) {
+            return a.toJson()[key] - b.toJson()[key];
+          }
+          return a
+              .toJson()[key]
+              .toString()
+              .compareTo(b.toJson()[key].toString());
         }
-        return b.toJson()[key] - a.toJson()[key];
+        if (a.toJson()[key] is int && b.toJson()[key] is int) {
+          return b.toJson()[key] - a.toJson()[key];
+        }
+        return b.toJson()[key].toString().compareTo(a.toJson()[key].toString());
       }
     }
     return 0;
   }
 
   int confrontation(Stat a, Stat b) {
+    if (games.isEmpty) return 0;
     List<Game> matchs = games
         .where((game) =>
             game.idHome == a.id && game.idAway == b.id ||
@@ -187,17 +195,34 @@ class ClasseurController extends ClasseurControllerRipository {
         ));
       }
     }
-    elements.sort((a, b) => a.date!.compareTo(b.date!));
+    elements.sort((a, b) => (a.date ?? '').compareTo(b.date ?? ''));
     return elements;
   }
 
   List<Stat> teamStat(List<Stat> stats) {
     List<Stat> data = [];
     for (Participation equipe in equipes) {
-      Stat stat = stats
+      List<Stat> statistique = stats
           .where((statElement) =>
               statElement.id == equipe.idParticipant.toString())
-          .toList()
+          .toList();
+      if (statistique.isEmpty) {
+        data.add(Stat(
+          id: equipe.idParticipant,
+          nom: equipe.participant.nomEquipe,
+          bm: 0,
+          be: 0,
+          diff: 0,
+          nm: 0,
+          nv: 0,
+          nn: 0,
+          nd: 0,
+          res: '',
+          imageUrl: equipe.participant.imageUrl,
+        ));
+        continue;
+      }
+      Stat stat = statistique
           .map((e) {
             e.pts = e.diff > 0
                 ? 3

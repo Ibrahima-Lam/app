@@ -35,7 +35,6 @@ class TimerEvent {
   int? extra;
   int? initial;
   int? retard;
-  String? etat;
 
   TimerEvent({
     required this.start,
@@ -43,7 +42,6 @@ class TimerEvent {
     this.extra = 0,
     this.initial = 0,
     this.retard = 0,
-    this.etat,
   });
   TimerEvent copyWith(
           {String? start,
@@ -65,7 +63,6 @@ class TimerEvent {
         extra: json['extra'],
         retard: json['retard'],
         initial: json['initial'],
-        etat: json['etat'],
       );
   Map<String, dynamic> toJson() => {
         'start': start,
@@ -73,6 +70,5 @@ class TimerEvent {
         'extra': extra,
         'retard': retard,
         'initial': initial,
-        'etat': etat,
       };
 }

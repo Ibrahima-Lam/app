@@ -9,11 +9,14 @@ class CoachProvider extends ChangeNotifier {
       .where((element) => element.role.toUpperCase() == "COACH")
       .toList();
   List<Coach> get entraineurs => _coachs;
-  void set coachs(List<Coach> val) => _coachs = val;
+  void set coachs(List<Coach> val) {
+    _coachs = val;
+    notifyListeners();
+  }
 
-  Future<List<Coach>> getData() async {
-    if (_coachs.isEmpty) {
-      coachs = await CoachService.getCoachs();
+  Future<List<Coach>> getData({bool remote = false}) async {
+    if (_coachs.isEmpty || remote) {
+      coachs = await CoachService.getData();
     }
     return coachs;
   }
@@ -33,5 +36,23 @@ class CoachProvider extends ChangeNotifier {
     } catch (e) {
       return null;
     }
+  }
+
+  Future<bool> addCoach(Coach coach) async {
+    final bool result = await CoachService.addCoach(coach);
+    if (result) await getData(remote: true);
+    return result;
+  }
+
+  Future<bool> editCoach(String idCoach, Coach coach) async {
+    final bool result = await CoachService.editCoach(idCoach, coach);
+    if (result) await getData(remote: true);
+    return result;
+  }
+
+  Future<bool> deleteCoach(String idCoach) async {
+    final bool result = await CoachService.deleteCoach(idCoach);
+    if (result) await getData(remote: true);
+    return result;
   }
 }

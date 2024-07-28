@@ -1,3 +1,4 @@
+import 'package:app/core/enums/game_etat_enum.dart';
 import 'package:app/models/gameEvent.dart';
 
 class Score {
@@ -7,6 +8,7 @@ class Score {
   int? homeScorePenalty;
   int? awayScorePenalty;
   TimerEvent? timer;
+  GameEtatClass? etat;
   Score({
     required this.idGame,
     this.homeScore,
@@ -14,15 +16,43 @@ class Score {
     this.homeScorePenalty,
     this.awayScorePenalty,
     this.timer,
+    this.etat,
   });
+  bool get isPenalty => homeScorePenalty != null && awayScorePenalty != null;
+  bool get isScore => homeScore != null && awayScore != null;
+  bool get isNull =>
+      homeScore == null &&
+      awayScore == null &&
+      homeScorePenalty == null &&
+      awayScorePenalty == null;
+
+  Score copyWith({
+    String? idGame,
+    int? homeScore,
+    int? awayScore,
+    int? homeScorePenalty,
+    int? awayScorePenalty,
+    TimerEvent? timer,
+    GameEtatClass? etat,
+  }) =>
+      Score(
+        idGame: idGame ?? this.idGame,
+        homeScore: homeScore ?? this.homeScore,
+        awayScore: awayScore ?? this.awayScore,
+        homeScorePenalty: homeScorePenalty ?? this.homeScorePenalty,
+        awayScorePenalty: awayScorePenalty ?? this.awayScorePenalty,
+        timer: timer ?? this.timer,
+        etat: etat ?? this.etat,
+      );
+
   factory Score.fromJson(Map<String, dynamic> json) => Score(
       idGame: json['idGame'].toString(),
       homeScore: json['homeScore'],
       awayScore: json['awayScore'],
       homeScorePenalty: json['homeScorePenalty'],
       awayScorePenalty: json['awayScorePenalty'],
+      etat: json['etat'] == null ? null : GameEtatClass(json['etat']),
       timer: TimerEvent.fromJson({
-        "etat": json['etat'],
         "start": json['start'],
         "duration": json['duration'],
         "extra": json['extra'],
@@ -36,6 +66,7 @@ class Score {
         "awayScore": awayScore,
         "homeScorePenalty": homeScorePenalty,
         "awayScorePenalty": awayScorePenalty,
-        "timer": timer!.toJson()
+        "etat": etat?.text,
+        ...timer?.toJson() ?? {},
       };
 }

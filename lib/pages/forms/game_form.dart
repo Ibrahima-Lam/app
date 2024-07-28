@@ -113,10 +113,10 @@ class _GameFormListWidgetState extends State<GameFormListWidget> {
   }
 
   _onSubmit() async {
-    print(0);
     if ([homeController.text, awayController.text, groupeController.text]
         .hasOneEmpty) return;
-    print(1);
+    if (homeController.text == awayController.text) return;
+
     Game? game = GameController.toGame(
         idGame: widget.game != null
             ? widget.game!.idGame
@@ -131,11 +131,13 @@ class _GameFormListWidgetState extends State<GameFormListWidget> {
         participants: widget.participations.map((e) => e.participant).toList(),
         niveaux: widget.niveaux,
         groupes: widget.groupes);
-    print(2);
+
     if (game == null) return;
-    print(3);
+
     setIsloading(true);
-    final bool res = await context.read<GameProvider>().addGame(game);
+    final bool res = widget.game != null
+        ? await context.read<GameProvider>().editGame(widget.game!.idGame, game)
+        : await context.read<GameProvider>().addGame(game);
 
     setIsloading(false);
     if (res) Navigator.pop(context);

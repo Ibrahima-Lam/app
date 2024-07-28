@@ -2,6 +2,7 @@ import 'package:app/core/enums/enums.dart';
 import 'package:app/core/extension/int_extension.dart';
 import 'package:app/models/game.dart';
 import 'package:app/models/gameEvent.dart';
+import 'package:app/models/scores/score.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/widget/modals/confirm_dialog_widget.dart';
 import 'package:app/widget/modals/game_etat_form_modal_widget.dart';
@@ -94,12 +95,13 @@ class GameBottomNavbarEditWidget extends StatelessWidget {
   }
 
   void _changeScore(BuildContext context) async {
-    (int, int)? values = await showModalBottomSheet(
+    final values = await showModalBottomSheet(
         context: context,
         builder: (context) => ScoreFormModalWidget(
-            homeScore: game.score?.homeScore,
-            awayScore: game.score?.awayScore));
-    if (values != null) {
+            idGame: game.idGame,
+            score: game.score ?? Score(idGame: game.idGame),
+            isPenalty: game.niveau.typeNiveau == 'elimination'));
+    if (values is Score) {
       bool confirm = await showDialog(
           context: context,
           builder: (context) => ConfirmDialogWidget(
@@ -109,8 +111,8 @@ class GameBottomNavbarEditWidget extends StatelessWidget {
       if (confirm)
         context
             .read<GameProvider>()
-            .changeScore(idGame: game.idGame, hs: values.$1, as: values.$2);
-    } else if (game.score?.homeScore != null && game.score?.awayScore != null) {
+            .changeScore(idGame: game.idGame, score: values);
+    } else if (values == false) {
       bool confirm = await showDialog(
           context: context,
           builder: (context) => ConfirmDialogWidget(
@@ -120,7 +122,7 @@ class GameBottomNavbarEditWidget extends StatelessWidget {
       if (confirm) {
         context
             .read<GameProvider>()
-            .changeScore(idGame: game.idGame, hs: null, as: null);
+            .changeScore(idGame: game.idGame, score: null);
       }
     }
   }

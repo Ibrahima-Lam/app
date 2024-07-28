@@ -72,6 +72,7 @@ class SomeTeamWidget extends StatelessWidget {
             return participants.isEmpty
                 ? const SizedBox()
                 : Container(
+                    width: MediaQuery.sizeOf(context).width,
                     margin: const EdgeInsets.symmetric(
                         horizontal: 5.0, vertical: 10),
                     padding: const EdgeInsets.symmetric(

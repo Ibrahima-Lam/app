@@ -185,7 +185,7 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
             tabs = tabBarString(competition.type.type, checkUser);
             return DefaultTabController(
               length: tabs.length,
-              initialIndex: tabs.length - 1,
+              initialIndex: 0,
               child: Scaffold(
                 body: NestedScrollView(
                   headerSliverBuilder: (context, innerBoxIsScrolled) {

@@ -43,7 +43,9 @@ class GameService {
   }
 
   Future<List<Game>?> getLocalData(
-      List<Participant> participants, List<Groupe> groupes) async {
+    List<Participant> participants,
+    List<Groupe> groupes,
+  ) async {
     if (await service.fileExists()) {
       final List? data = (await service.getData());
       if (data != null) return _toGame(data, participants, groupes);
@@ -633,7 +635,7 @@ List<Map<String, dynamic>> games = [
     "idGame": 67,
     "idHome": "15",
     "idAway": "13",
-    "dateGame": "2024-07-27",
+    "dateGame": "2024-07-28",
     "stadeGame": "Stade de Thidé",
     "heureGame": "16:00",
     "idGroupe": 5,

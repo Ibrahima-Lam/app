@@ -3,54 +3,46 @@ import 'package:app/core/enums/game_etat_enum.dart';
 import 'package:app/core/extension/list_extension.dart';
 import 'package:app/models/game.dart';
 import 'package:app/models/gameEvent.dart';
-import 'package:app/models/niveau.dart';
 import 'package:app/models/scores/score.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/groupe_provider.dart';
 import 'package:app/providers/participant_provider.dart';
+import 'package:app/providers/score_provider.dart';
 
 import 'package:app/service/game_service.dart';
-import 'package:app/service/score_service.dart';
 import 'package:flutter/material.dart';
 
 typedef GameList = List<Game>;
 
 class GameProvider extends ChangeNotifier {
   GameList _games;
-  List<Score> _scores;
 
   GameEventListProvider gameEventListProvider;
   ParticipantProvider participantProvider;
   GroupeProvider groupeProvider;
+  ScoreProvider scoreProvider;
 
   GameProvider(
-    this._games,
-    this._scores, {
+    this._games, {
     required this.participantProvider,
     required this.gameEventListProvider,
     required this.groupeProvider,
-  }); /* {
-    _
-  } */
-  List<Score> get scores => _scores;
-  void set scores(List<Score> val) => _scores = val;
+    required this.scoreProvider,
+  }) {
+    _games = _games.map((e) {
+      e.score = scoreProvider.scores
+          .singleWhereOrNull((element) => element.idGame == e.idGame);
+      return e;
+    }).toList();
+  }
 
   GameList get games => _games;
   void set games(GameList val) {
-    _games = val.map((element) {
-      Score? score =
-          scores.singleWhereOrNull((e) => e.idGame == element.idGame);
-      if (score != null) element.score = score;
-      return element;
+    _games = val.map((e) {
+      e.score = scoreProvider.scores
+          .singleWhereOrNull((element) => element.idGame == e.idGame);
+      return e;
     }).toList();
-    _games.sort(
-      (a, b) {
-        if ((a.dateGame ?? '').compareTo(b.dateGame ?? '') != 0)
-          return (a.dateGame ?? '').compareTo(b.dateGame ?? '');
-        return (a.heureGame ?? '').compareTo(b.heureGame ?? '');
-      },
-    );
-
     notifyListeners();
   }
 
@@ -60,16 +52,12 @@ class GameProvider extends ChangeNotifier {
         remote: remote);
   }
 
-  Future setScores() async {
-    scores = await ScoreService.getData();
-  }
-
   Future<GameList> getGames({bool remote = false}) async {
     if (groupeProvider.groupes.isEmpty || remote)
       await groupeProvider.initGroupes();
     if (participantProvider.participants.isEmpty || remote)
       await participantProvider.initParticipants();
-    if (scores.isEmpty || remote) setScores();
+    if (scoreProvider.scores.isEmpty || remote) await scoreProvider.getData();
     if (games.isEmpty || remote) await setGames(remote: remote);
     return games;
   }
@@ -92,46 +80,15 @@ class GameProvider extends ChangeNotifier {
     return res;
   }
 
-  Future changeScore(
-      {required String idGame, required int? hs, required int? as}) async {
-    Score? score = scores.singleWhereOrNull((e) => e.idGame == idGame);
-    final bool check = score != null;
-    if (!check) {
-      score = Score(idGame: idGame, homeScore: hs, awayScore: as);
-    } else {
-      score.homeScore = hs;
-      score.awayScore = as;
-    }
-    if (!check) {
-      scores.add(score);
-    }
-
-    games = games;
+  Future<bool> changeScore({required String idGame, Score? score}) async {
+    await scoreProvider.editScore(idGame, score ?? Score(idGame: idGame));
+    return true;
   }
 
-  Future changeTimer(
+  Future<bool> changeTimer(
       {required String idGame, required TimerEvent? timer}) async {
-    Score? score = scores.singleWhereOrNull((e) => e.idGame == idGame);
-    final bool check = score != null;
-    if (!check) {
-      score = Score(idGame: idGame, timer: timer);
-    } else {
-      score.timer = timer;
-    }
-    if (!check) {
-      scores.add(score);
-    }
-
-    games = games;
-  }
-
-  Future changeNiveau({required String idGame, required Niveau niveau}) async {
-    games = games.map((e) {
-      if (e.idGame == idGame) {
-        e.niveau = niveau;
-      }
-      return e;
-    }).toList();
+    await scoreProvider.changeTimer(idGame: idGame, timer: timer);
+    return true;
   }
 
   void sortByDate([bool asc = true]) {
@@ -142,12 +99,7 @@ class GameProvider extends ChangeNotifier {
   }
 
   void changeEtat({required String id, required String etat}) async {
-    games = games.map((e) {
-      if (e.idGame == id) {
-        e.etat = GameEtatClass(etat);
-      }
-      return e;
-    }).toList();
+    await scoreProvider.changeEtat(idGame: id, etat: GameEtatClass(etat));
   }
 
   void changeDate({required String id, required String? date}) async {

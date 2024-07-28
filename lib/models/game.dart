@@ -8,19 +8,16 @@ import 'package:app/models/searchable.dart';
 class Game implements Searchable {
   String idGame;
   String idHome;
-
   String idAway;
   String? dateGame;
   String? stadeGame;
   String? heureGame;
   String? idGroupe;
-
   Participant home;
   Participant away;
 
   String? codeNiveau;
 
-  GameEtatClass etat;
   Score? score;
   Niveau niveau;
   Groupe groupe;
@@ -34,7 +31,6 @@ class Game implements Searchable {
     this.heureGame,
     this.idGroupe,
     this.codeNiveau,
-    this.etat = const GameEtatClass('termine'),
     this.score,
     required this.groupe,
     required this.home,
@@ -44,11 +40,23 @@ class Game implements Searchable {
 
   final String versus = 'VS';
 
+  GameEtatClass get etat {
+    if (score == null) return GameEtatClass('avant');
+    if (score?.etat != null) {
+      return score!.etat!;
+    }
+    if (score?.etat == null && !(score?.isNull ?? true)) {
+      return GameEtatClass('termine');
+    }
+    return GameEtatClass('avant');
+  }
+
   factory Game.fromJson(Map<String, dynamic> json,
       {required Participant home,
       required Participant away,
       required Niveau niveau,
-      required Groupe groupe}) {
+      required Groupe groupe,
+      Score? score}) {
     return Game(
       idGame: json["idGame"].toString(),
       idHome: json["idHome"],
@@ -62,19 +70,21 @@ class Game implements Searchable {
       away: away,
       niveau: niveau,
       groupe: groupe,
+      score: score,
     );
   }
   bool get noDated {
-    if (etat.etat case (GameEtat.annule || GameEtat.arrete || GameEtat.reporte))
+    if (score?.etat?.etat
+        case (GameEtat.annule || GameEtat.arrete || GameEtat.reporte))
       return true;
     return false;
   }
 
-  bool get isPlayed =>
-      score?.homeScore != null && score?.awayScore != null && dateGame != null;
+  bool get isPlayed => score?.homeScore != null && score?.awayScore != null;
   bool get isNotPlayed => !isPlayed;
   bool get isPlaying =>
-      etat.etat == GameEtat.direct || etat.etat == GameEtat.pause;
+      score?.etat?.etat == GameEtat.direct ||
+      score?.etat?.etat == GameEtat.pause;
   bool get hasTiraubut =>
       score?.homeScorePenalty != null && score?.awayScorePenalty != null;
   bool get isHomeVictoire =>
@@ -87,7 +97,7 @@ class Game implements Searchable {
         ? (hasTiraubut
             ? '(${score?.homeScorePenalty})  ${score?.homeScore}-${score?.awayScore}  (${score?.awayScorePenalty})'
             : '${score?.homeScore}-${score?.awayScore}')
-        : heureGame != null
+        : heureGame != null && heureGame!.isNotEmpty
             ? heureGame!
             : versus;
     return scoreText;

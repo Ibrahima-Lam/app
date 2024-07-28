@@ -58,6 +58,21 @@ class Joueur implements Searchable, Populaire {
         rating: json['rating'],
         participant: participant);
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'idJoueur': idJoueur,
+      'nomJoueur': nomJoueur,
+      'idParticipant': idParticipant,
+      'localiteJoueur': localiteJoueur,
+      'imageUrl': imageUrl,
+      'dateNaissance': dateNaissance,
+      'poids': poids,
+      'taille': taille,
+      'vitesse': vitesse,
+      'pseudo': pseudo,
+      'rating': rating,
+    };
+  }
 
   @override
   num? rating;

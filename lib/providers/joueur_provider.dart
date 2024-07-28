@@ -12,16 +12,17 @@ class JoueurProvider extends ChangeNotifier {
   });
   List<Joueur> get joueurs => _joueurs;
 
-  Future<void> setJoueurs() async {
-    if (participantProvider.participants.isEmpty)
+  Future<void> setJoueurs({bool remote = false}) async {
+    if (participantProvider.participants.isEmpty || remote)
       await participantProvider.getParticipants();
-    _joueurs = await JoueurService().getData(participantProvider.participants);
+    _joueurs = await JoueurService.getData(participantProvider.participants,
+        remote: remote);
     notifyListeners();
   }
 
-  Future<List<Joueur>> getJoueurs() async {
-    if (_joueurs.isEmpty) {
-      await setJoueurs();
+  Future<List<Joueur>> getJoueurs({bool remote = false}) async {
+    if (_joueurs.isEmpty || remote) {
+      await setJoueurs(remote: remote);
     }
     return _joueurs;
   }
@@ -53,5 +54,23 @@ class JoueurProvider extends ChangeNotifier {
       await setJoueurs();
     }
     return _joueurs.any((element) => element.idJoueur == id);
+  }
+
+  Future<bool> addJoueur(Joueur joueur) async {
+    final result = await JoueurService.addJoueur(joueur);
+    if (result) await setJoueurs(remote: true);
+    return result;
+  }
+
+  Future<bool> editJoueur(String idJoueur, Joueur joueur) async {
+    final result = await JoueurService.editJoueur(idJoueur, joueur);
+    if (result) await setJoueurs(remote: true);
+    return result;
+  }
+
+  Future<bool> deleteJoueur(String idJoueur) async {
+    final result = await JoueurService.deleteJoueur(idJoueur);
+    if (result) await setJoueurs(remote: true);
+    return result;
   }
 }

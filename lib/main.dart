@@ -11,6 +11,7 @@ import 'package:app/providers/composition_provider.dart';
 import 'package:app/providers/favori_provider.dart';
 import 'package:app/providers/infos_provider.dart';
 import 'package:app/providers/paramettre_provider.dart';
+import 'package:app/providers/score_provider.dart';
 import 'package:app/providers/user_provider.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/game_provider.dart';
@@ -53,6 +54,10 @@ class MyApp extends StatelessWidget {
             lazy: false,
             create: (context) => ParticipantProvider()..initParticipants()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (context) => ScoreProvider([])..initScores(),
+        ),
         ChangeNotifierProvider(create: (context) => InfosProvider()),
         ChangeNotifierProvider(create: (context) => CoachProvider()),
         ChangeNotifierProvider(create: (context) => ArbitreProvider()),
@@ -63,16 +68,18 @@ class MyApp extends StatelessWidget {
           lazy: false,
           create: (context) => GameEventListProvider([])..getEvents(),
         ),
-        ChangeNotifierProxyProvider3<ParticipantProvider, GameEventListProvider,
-                GroupeProvider, GameProvider>(
+        ChangeNotifierProxyProvider4<ParticipantProvider, GameEventListProvider,
+                GroupeProvider, ScoreProvider, GameProvider>(
             lazy: false,
-            create: (context) => GameProvider([], [],
+            create: (context) => GameProvider([],
+                scoreProvider: context.read<ScoreProvider>(),
                 participantProvider: ParticipantProvider(),
                 gameEventListProvider: GameEventListProvider([]),
                 groupeProvider: GroupeProvider([])),
-            update: (context, parts, events, groupes, previous) => GameProvider(
+            update: (context, parts, events, groupes, scores, previous) =>
+                GameProvider(
                   previous?.games ?? [],
-                  previous?.scores ?? [],
+                  scoreProvider: scores,
                   participantProvider: parts,
                   gameEventListProvider: events,
                   groupeProvider: groupes,

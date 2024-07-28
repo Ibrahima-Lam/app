@@ -1,9 +1,56 @@
 import 'package:app/models/event.dart';
+import 'package:app/service/local_service.dart';
 
 class ButService {
-  static Future<List<GoalEvent>> get getData async {
-    await Future.delayed(const Duration(seconds: 1));
-    return buts.map((e) => GoalEvent.fromJson(e)).toList();
+  static LocalService get service => LocalService('but.json');
+
+  static Future<List<GoalEvent>?> getLocalData() async {
+    if (await service.fileExists()) {
+      final List? data = (await service.getData());
+      if (data != null) return data.map((e) => GoalEvent.fromJson(e)).toList();
+    }
+    return null;
+  }
+
+  static Future<List<GoalEvent>> getData({bool remote = false}) async {
+    if (await service.isLoadable() && !remote)
+      return await getLocalData() ?? [];
+    final List<GoalEvent> data = await getRemoteData();
+    if (data.isEmpty && await service.hasData())
+      return await getLocalData() ?? [];
+    return data;
+  }
+
+  static Future<List<GoalEvent>> getRemoteData() async {
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+      if (buts.isNotEmpty) await service.setData(buts);
+      return buts.map((e) => GoalEvent.fromJson(e)).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<bool> addGoalEvent(GoalEvent arbitre) async {
+    buts.add(arbitre.toJson());
+    return true;
+  }
+
+  static Future<bool> editGoalEvent(String idBut, GoalEvent arbitre) async {
+    if (buts.any((element) => element['idBut'] == idBut)) {
+      int index = buts.indexWhere((element) => element['idBut'] == idBut);
+      if (index >= 0) buts[index] = arbitre.toJson();
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> deleteGoalEvent(String idBut) async {
+    if (buts.any((element) => element['idBut'] == idBut)) {
+      buts.removeWhere((element) => element['idBut'] == idBut);
+      return true;
+    }
+    return true;
   }
 }
 

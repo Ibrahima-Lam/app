@@ -21,7 +21,7 @@ class DateController {
  */
   static String frDate(String? dateString,
       {bool abbr = false, bool year = false}) {
-    if (dateString == null) {
+    if (dateString == null || dateString.isEmpty) {
       return 'Date inconnue';
     }
     final String date = DateTime.now().toString().substring(0, 10);
@@ -51,28 +51,32 @@ class DateController {
  */
   static String abbrDate(String? date, {bool year = false}) {
     if (date == null) {
-      return 'Pas de Date';
+      return 'Date inconnue';
     }
+    try {
+      final dt = DateTime.parse(date);
 
-    final dt = DateTime.parse(date);
-    final String abbrday = '${semaine[dt.weekday - 1].substring(0, 3)}.';
+      final String abbrday = '${semaine[dt.weekday - 1].substring(0, 3)}.';
 
-    String abbrmonth =
-        '${mois[dt.month - 1].substring(0, mois[dt.month - 1].length > 4 ? 4 : null)}.';
+      String abbrmonth =
+          '${mois[dt.month - 1].substring(0, mois[dt.month - 1].length > 4 ? 4 : null)}.';
 
-    if (mois[dt.month - 1].length <= 5) {
-      abbrmonth = mois[dt.month - 1];
+      if (mois[dt.month - 1].length <= 5) {
+        abbrmonth = mois[dt.month - 1];
+      }
+
+      return '$abbrday ${dt.day} $abbrmonth ${year ? dt.year : ''}';
+    } catch (e) {
+      return 'Date inconnue';
     }
-
-    return '$abbrday ${dt.day} $abbrmonth ${year ? dt.year : ''}';
   }
 
 /**
  * retourne une date en tout avec ou sans l'année
  */
   static String fullDate(String? date, {bool year = false}) {
-    if (date == null) {
-      return 'Pas de Date';
+    if (date == null || date.isEmpty) {
+      return 'Date inconnue';
     }
     final dt = DateTime.parse(date);
     return '${semaine[dt.weekday - 1]} ${dt.day} ${mois[dt.month - 1]} ${year ? dt.year : ''}';

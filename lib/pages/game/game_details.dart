@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:app/collection/competition_collection.dart';
 import 'package:app/core/class/abbreviable.dart';
-import 'package:app/core/enums/enums.dart';
 import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/competition.dart';
 import 'package:app/models/game.dart';
-import 'package:app/models/niveau.dart';
 import 'package:app/models/paramettre.dart';
 import 'package:app/pages/competition/competition_details.dart';
 import 'package:app/pages/game/widget_details/composition_widget.dart';
@@ -18,10 +16,8 @@ import 'package:app/pages/game/widget_details/journee_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/widget/game/game_bottom_navbar_edit_widget.dart';
-import 'package:app/widget/game/game_bottom_niveau_edit_widget.dart';
 import 'package:app/widget/game/game_details_column_widget.dart';
 import 'package:app/widget/game/game_details_score_column_widget.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
 import 'package:app/widget/modals/custom_delegate_search.dart';
 import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
@@ -308,48 +304,6 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
                     ],
                   ),
                 ),
-                floatingActionButton: checkUser
-                    ? FloatingActionButton(
-                        onPressed: () async {
-                          final res = await showModalBottomSheet(
-                              context: context,
-                              builder: (context) =>
-                                  GameBottomNiveauEditWidget());
-                          if (res is Niveau) {
-                            final bool? confirm = await showDialog(
-                                context: context,
-                                builder: (context) => ConfirmDialogWidget(
-                                      defaut: ConfirmDialogDefault.non,
-                                      title: 'Changer le Niveau',
-                                      content:
-                                          'Voulez vous changer le niveau ?',
-                                    ));
-                            if (confirm == true) {
-                              context.read<GameProvider>().changeNiveau(
-                                  idGame: game.idGame, niveau: res);
-                            }
-                          } else if (res == false) {
-                            final bool? confirm = await showDialog(
-                                context: context,
-                                builder: (context) => ConfirmDialogWidget(
-                                      defaut: ConfirmDialogDefault.non,
-                                      title: 'Supprimer le niveau',
-                                      content:
-                                          'Voulez vous supprimer le niveau ?',
-                                    ));
-                            if (confirm == true) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('pas d\action!'),
-                                  duration: const Duration(milliseconds: 200),
-                                ),
-                              );
-                            }
-                          }
-                        },
-                        child: Icon(Icons.label_important),
-                      )
-                    : null,
                 bottomNavigationBar:
                     checkUser ? GameBottomNavbarEditWidget(game: game) : null,
               ),
