@@ -15,6 +15,7 @@ class Joueur implements Searchable, Populaire {
   String? dateNaissance;
   String? pseudo;
   Participant participant;
+  int? numero;
 
   Joueur({
     required this.idJoueur,
@@ -29,6 +30,7 @@ class Joueur implements Searchable, Populaire {
     this.vitesse,
     this.pseudo,
     this.rating,
+    this.numero,
   });
   int? get age {
     if (dateNaissance != null) {
@@ -56,6 +58,7 @@ class Joueur implements Searchable, Populaire {
         dateNaissance: json['dateNaissance'],
         pseudo: json['pseudo'],
         rating: json['rating'],
+        numero: json['numero'],
         participant: participant);
   }
   Map<String, dynamic> toJson() {
@@ -71,6 +74,7 @@ class Joueur implements Searchable, Populaire {
       'vitesse': vitesse,
       'pseudo': pseudo,
       'rating': rating,
+      'numero': numero,
     };
   }
 

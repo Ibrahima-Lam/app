@@ -13,8 +13,6 @@ class ButService {
   }
 
   static Future<List<GoalEvent>> getData({bool remote = false}) async {
-    if (await service.isLoadable() && !remote)
-      return await getLocalData() ?? [];
     final List<GoalEvent> data = await getRemoteData();
     if (data.isEmpty && await service.hasData())
       return await getLocalData() ?? [];
@@ -31,15 +29,15 @@ class ButService {
     }
   }
 
-  static Future<bool> addGoalEvent(GoalEvent arbitre) async {
-    buts.add(arbitre.toJson());
+  static Future<bool> addGoalEvent(GoalEvent event) async {
+    buts.add(event.toJson());
     return true;
   }
 
-  static Future<bool> editGoalEvent(String idBut, GoalEvent arbitre) async {
+  static Future<bool> editGoalEvent(String idBut, GoalEvent event) async {
     if (buts.any((element) => element['idBut'] == idBut)) {
       int index = buts.indexWhere((element) => element['idBut'] == idBut);
-      if (index >= 0) buts[index] = arbitre.toJson();
+      if (index >= 0) buts[index] = event.toJson();
       return true;
     }
     return false;

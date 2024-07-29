@@ -112,7 +112,7 @@ class _CompetitionFormState extends State<CompetitionForm> {
                 const SizedBox(height: 5.0),
                 SliderRatingFormWidget(controller: ratingController),
                 const SizedBox(height: 5.0),
-                DropdownMenuAppFormWidget(
+                DropDownMenuAppFormWidget(
                   controller: typeController,
                   entries: {
                     'coupe': 'coupe',

@@ -11,18 +11,33 @@ class StatistiqueFutureProvider extends ChangeNotifier {
     });
   }
 
+  Future<void> getData({bool remote = false}) async {
+    _statistiques = await StatistiqueService.getData(remote: remote);
+    notifyListeners();
+  }
+
   List<Statistique> get statistiques => _statistiques;
   void set statistiques(List<Statistique> val) {
     _statistiques = val;
     notifyListeners();
   }
 
-  void addStat(Statistique statistique) {
-    _statistiques.add(statistique);
-    notifyListeners();
+  Future<bool> addStatistique(Statistique stat) async {
+    final result = await StatistiqueService.addStatistique(stat);
+    if (result) await getData(remote: true);
+    return result;
   }
 
-  void setStat(Statistique statistique) {
-    notifyListeners();
+  Future<bool> editStatistique(String idStatistique, Statistique stat) async {
+    final result =
+        await StatistiqueService.editStatistique(idStatistique, stat);
+    if (result) await getData(remote: true);
+    return result;
+  }
+
+  Future<bool> deleteStatistique(String idStatistique) async {
+    final result = await StatistiqueService.deleteStatistique(idStatistique);
+    if (result) await getData(remote: true);
+    return result;
   }
 }

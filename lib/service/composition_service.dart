@@ -1,4 +1,5 @@
 import 'package:app/models/composition.dart';
+import 'package:app/service/local_service.dart';
 import 'package:flutter/material.dart';
 
 class CompositionService {
@@ -34,6 +35,73 @@ class CompositionService {
       },
     );
     compositions.value[index] = composition;
+  }
+
+  static LocalService get service => LocalService('composition.json');
+  static List<Composition> _toComposition(List data) {
+    return data.map((e) {
+      if (e['idJoueur'] != null) {
+        return JoueurComposition.fromJson(e);
+      } else if (e['idCoach'] != null) {
+        return CoachComposition.fromJson(e);
+      } else if (e['idArbitre'] != null) {
+        return ArbitreComposition.fromJson(e);
+      }
+      return StaffComposition.fromJson(e);
+    }).toList();
+  }
+
+  static Future<List<Composition>?> getLocalData() async {
+    if (await service.fileExists()) {
+      final List? data = (await service.getData());
+      if (data != null) return _toComposition(data);
+    }
+    return null;
+  }
+
+  static Future<List<Composition>> getData({bool remote = false}) async {
+    final List<Composition> data = await getRemoteData();
+    if (data.isEmpty && await service.hasData())
+      return await getLocalData() ?? [];
+    return data;
+  }
+
+  static Future<List<Composition>> getRemoteData() async {
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+      if (compositions.value.isNotEmpty)
+        await service.setData(compositions.value);
+      return compositions.value;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<bool> addComposition(Composition stat) async {
+    compositions.value.add(stat);
+    return true;
+  }
+
+  static Future<bool> editComposition(
+      String idComposition, Composition stat) async {
+    if (compositions.value
+        .any((element) => element.idComposition == idComposition)) {
+      int index = compositions.value
+          .indexWhere((element) => element.idComposition == idComposition);
+      if (index >= 0) compositions.value[index] = stat;
+      return true;
+    }
+    return false;
+  }
+
+  static Future<bool> deleteComposition(String idComposition) async {
+    if (compositions.value
+        .any((element) => element.idComposition == idComposition)) {
+      compositions.value
+          .removeWhere((element) => element.idComposition == idComposition);
+      return true;
+    }
+    return true;
   }
 }
 

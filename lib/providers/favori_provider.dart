@@ -51,7 +51,7 @@ class FavoriProvider extends ChangeNotifier {
 
   Future _addFavori(String key, String id) async {
     final List<String>? favoris = await _getFavories(key);
-    print(competitions);
+
     if (favoris != null) {
       if (favoris.contains(id)) return;
       favoris.add(id);

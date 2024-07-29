@@ -156,7 +156,7 @@ class _GameFormListWidgetState extends State<GameFormListWidget> {
       child: Column(
         children: [
           const SizedBox(height: 5.0),
-          DropdownMenuAppFormWidget(
+          DropDownMenuAppFormWidget(
             entries: groupeMap,
             title: 'Groupe',
             controller: groupeController,
@@ -175,12 +175,12 @@ class _GameFormListWidgetState extends State<GameFormListWidget> {
                       value.participant.nomEquipe, value.idParticipant));
               return Column(
                 children: [
-                  DropdownMenuAppFormWidget(
+                  DropDownMenuAppFormWidget(
                     entries: participationMap,
                     title: 'Receveur',
                     controller: homeController,
                   ),
-                  DropdownMenuAppFormWidget(
+                  DropDownMenuAppFormWidget(
                     entries: participationMap,
                     title: 'Reçu',
                     controller: awayController,
@@ -189,7 +189,7 @@ class _GameFormListWidgetState extends State<GameFormListWidget> {
               );
             },
           ),
-          DropdownMenuAppFormWidget(
+          DropDownMenuAppFormWidget(
             entries: niveauMap,
             title: 'Niveau',
             controller: niveauController,

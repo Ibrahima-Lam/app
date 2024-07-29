@@ -40,4 +40,29 @@ class CompositionProvider extends ChangeNotifier {
         idGame: idGame, idParticipant: idParticipant, idJoueur: idJoueur);
     setCollection();
   }
+
+  Future<bool> editComposition(String idComposition, Composition stat) async {
+    final result =
+        await CompositionService.editComposition(idComposition, stat);
+    if (result) {
+      setCollection();
+    }
+    return result;
+  }
+
+  Future<bool> deleteComposition(String idComposition) async {
+    final result = await CompositionService.deleteComposition(idComposition);
+    if (result) {
+      setCollection();
+    }
+    return result;
+  }
+
+  Future<bool> addComposition(Composition competition) async {
+    final result = await CompositionService.addComposition(competition);
+    if (result) {
+      setCollection();
+    }
+    return result;
+  }
 }

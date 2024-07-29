@@ -1,5 +1,5 @@
 import 'package:app/models/statistique.dart';
-import 'package:app/providers/statistique_provider.dart';
+import 'package:app/providers/statistique_future_provider.dart';
 import 'package:app/widget_pages/statistique_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -34,7 +34,9 @@ class StatistiqueTileWidget extends StatelessWidget {
                             statistique: statistique,
                           )));
               if (isSubmited ?? false)
-                context.read<StatistiqueProvider>().setStat(statistique);
+                context
+                    .read<StatistiqueFutureProvider>()
+                    .editStatistique(statistique.idStatistique, statistique);
             }
           : null,
       child: Slidable(

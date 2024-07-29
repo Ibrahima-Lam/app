@@ -37,6 +37,7 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
   late Competition competition;
   List<String> tabs = [];
   bool favori = false;
+  bool checkUser = false;
   List<String> tabBarString(CompetitionType competitionType, bool checkUser) {
     return [
       'Fiche',
@@ -100,6 +101,7 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
           widgets.add(
             ArbitreListWidget(
               idEdition: competition.codeEdition,
+              checkUser: checkUser,
             ),
           );
           break;
@@ -165,8 +167,10 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
         future: context.read<CompetitionProvider>().getCompetitions(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Center(
-              child: Text('erreur!'),
+            return Scaffold(
+              body: Center(
+                child: Text('erreur!'),
+              ),
             );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -179,7 +183,7 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
 
           return Consumer2<CompetitionProvider, ParamettreProvider>(builder:
               (context, competitionProvider, paramettreProvider, child) {
-            final bool checkUser = paramettreProvider.checkRootUser();
+            checkUser = paramettreProvider.checkUser(widget.id);
             competition =
                 competitionProvider.collection.getElementAt(widget.id);
             tabs = tabBarString(competition.type.type, checkUser);

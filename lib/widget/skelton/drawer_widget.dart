@@ -5,6 +5,7 @@ import 'package:app/pages/equipe/equipe_page.dart';
 import 'package:app/pages/competition/competition_page.dart';
 import 'package:app/pages/game/game_search.dart';
 import 'package:app/pages/joueur/joueur_page.dart';
+import 'package:app/pages/skelton/contact_page.dart';
 import 'package:app/pages/skelton/login_page.dart';
 import 'package:app/pages/skelton/paramettre_page.dart';
 import 'package:app/providers/app_paramettre_provider.dart';
@@ -14,7 +15,7 @@ import 'package:app/widget/modals/confirm_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-final Color color = const Color(0xFF263238);
+final Color color = const Color(0xFF1C2834);
 final double size = 28;
 
 class DrawerWidget extends StatelessWidget {
@@ -189,6 +190,12 @@ class DrawerWidget extends StatelessWidget {
                 size: size,
               ),
               title: 'Nous contacter',
+              onTap: () {
+                Navigator.pop(context);
+
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ContactPage()));
+              },
             ),
             listTileWidget(
               icon: Icon(

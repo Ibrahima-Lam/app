@@ -58,7 +58,6 @@ class CoachDetails extends StatelessWidget {
                 length: tabs.length,
                 child: NestedScrollView(
                     headerSliverBuilder: (context, innerBoxIsScrolled) {
-                      print(innerBoxIsScrolled);
                       return [
                         SliverAppBar(
                           centerTitle: true,

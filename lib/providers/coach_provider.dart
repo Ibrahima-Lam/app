@@ -16,7 +16,7 @@ class CoachProvider extends ChangeNotifier {
 
   Future<List<Coach>> getData({bool remote = false}) async {
     if (_coachs.isEmpty || remote) {
-      coachs = await CoachService.getData();
+      coachs = await CoachService.getData(remote: remote);
     }
     return coachs;
   }

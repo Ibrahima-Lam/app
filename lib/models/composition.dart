@@ -1,8 +1,11 @@
+import 'package:app/core/extension/list_extension.dart';
+
 abstract class Composition {
   String idComposition;
   String idGame;
   String nom;
   String? imageUrl;
+  Map<String, dynamic> toJson();
 
   Composition({
     required this.idGame,
@@ -22,6 +25,26 @@ class ArbitreComposition extends Composition {
       required super.nom,
       required super.idComposition,
       super.imageUrl});
+  factory ArbitreComposition.fromJson(Map<String, dynamic> json) =>
+      ArbitreComposition(
+        idGame: json['idGame'],
+        nom: json['nom'],
+        idComposition: json['idComposition'],
+        imageUrl: json['imageUrl'],
+        role: json['role'],
+        idArbitre: json['idArbitre'],
+      );
+  Map<String, dynamic> toJson() {
+    return {
+      'idGame': idGame,
+      'nom': nom,
+      'idComposition': idComposition,
+      'imageUrl': imageUrl,
+      'role': role,
+      'idArbitre': idArbitre,
+    };
+  }
+
   ArbitreComposition copyWith({
     String? nom,
     String? idGame,
@@ -63,6 +86,27 @@ class StaffComposition extends EquipeComposition {
       required super.rouge,
       required super.idComposition,
       super.imageUrl});
+  factory StaffComposition.fromJson(Map<String, dynamic> json) =>
+      StaffComposition(
+        idGame: json['idGame'],
+        idParticipant: json['idParticipant'],
+        nom: json['nom'],
+        idComposition: json['idComposition'],
+        imageUrl: json['imageUrl'],
+        jaune: json['jaune'] ?? 0,
+        rouge: json['rouge'] ?? 0,
+      );
+  Map<String, dynamic> toJson() {
+    return {
+      'idGame': idGame,
+      'idParticipant': idParticipant,
+      'nom': nom,
+      'idComposition': idComposition,
+      'imageUrl': imageUrl,
+      'jaune': jaune,
+      'rouge': rouge,
+    };
+  }
 }
 
 class CoachComposition extends StaffComposition {
@@ -76,6 +120,30 @@ class CoachComposition extends StaffComposition {
       required super.rouge,
       required super.idComposition,
       super.imageUrl});
+  factory CoachComposition.fromJson(Map<String, dynamic> json) =>
+      CoachComposition(
+        idGame: json['idGame'],
+        idParticipant: json['idParticipant'],
+        nom: json['nom'],
+        idComposition: json['idComposition'],
+        imageUrl: json['imageUrl'],
+        idCoach: json['idCoach'],
+        jaune: json['jaune'] ?? 0,
+        rouge: json['rouge'] ?? 0,
+      );
+  Map<String, dynamic> toJson() {
+    return {
+      'idGame': idGame,
+      'idParticipant': idParticipant,
+      'nom': nom,
+      'idComposition': idComposition,
+      'imageUrl': imageUrl,
+      'idCoach': idCoach,
+      'jaune': jaune,
+      'rouge': rouge,
+    };
+  }
+
   CoachComposition copyWith({
     String? nom,
     String? idGame,
@@ -132,6 +200,69 @@ class JoueurComposition extends EquipeComposition {
     required super.idComposition,
     super.imageUrl,
   });
+  factory JoueurComposition.fromJson(Map<String, dynamic> json,
+      {List<Map<String, dynamic>> listeComposition = const []}) {
+    JoueurComposition? entrant;
+    JoueurComposition? sortant;
+    if (json['entrant'] != null) {
+      Map<String, dynamic> e = listeComposition.singleWhereOrNull(
+              (element) => element['idJoueur'] == json['entrant']) ??
+          {};
+      if (e.isNotEmpty) {
+        entrant = JoueurComposition.fromJson(e);
+      }
+    }
+    if (json['sortant'] != null) {
+      Map<String, dynamic> s = listeComposition.singleWhereOrNull(
+              (element) => element['idJoueur'] == json['sortant']) ??
+          {};
+      if (s.isNotEmpty) {
+        sortant = JoueurComposition.fromJson(s);
+      }
+    }
+    return JoueurComposition(
+      idGame: json['idGame'],
+      idParticipant: json['idParticipant'],
+      nom: json['nom'],
+      idComposition: json['idComposition'],
+      imageUrl: json['imageUrl'],
+      idJoueur: json['idJoueur'],
+      numero: json['numero'] ?? 0,
+      isIn: json['isIn'] ?? false,
+      left: json['left'] ?? 0,
+      top: json['top'] ?? 0,
+      isCapitaine: json['isCapitaine'] ?? false,
+      but: json['but'] ?? 0,
+      jaune: json['jaune'] ?? 0,
+      rouge: json['rouge'] ?? 0,
+      tempsEntrants: json['tempsEntrants'] ?? 0,
+      tempsSortant: json['tempsSortant'] ?? 0,
+      entrant: entrant,
+      sortant: sortant,
+    );
+  }
+  toJson() {
+    return {
+      'idGame': idGame,
+      'idParticipant': idParticipant,
+      'nom': nom,
+      'idComposition': idComposition,
+      'imageUrl': imageUrl,
+      'idJoueur': idJoueur,
+      'numero': numero,
+      'isIn': isIn,
+      'left': left,
+      'top': top,
+      'isCapitaine': isCapitaine,
+      'but': but,
+      'jaune': jaune,
+      'rouge': rouge,
+      'tempsEntrants': tempsEntrants,
+      'tempsSortant': tempsSortant,
+      'entrant': entrant?.idJoueur,
+      'sortant': sortant?.idJoueur,
+    };
+  }
 
   JoueurComposition copyWith(
       {String? idJoueur,

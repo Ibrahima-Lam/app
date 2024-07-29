@@ -21,7 +21,6 @@ class AppParamettreService {
       final file = await _getLocaleFile();
       return await file.readAsString();
     } catch (e) {
-      print('erreur');
       return null;
     }
   }

@@ -13,8 +13,6 @@ class SanctionService {
   }
 
   static Future<List<CardEvent>> getData({bool remote = false}) async {
-    if (await service.isLoadable() && !remote)
-      return await getLocalData() ?? [];
     final List<CardEvent> data = await getRemoteData();
     if (data.isEmpty && await service.hasData())
       return await getLocalData() ?? [];

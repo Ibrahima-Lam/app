@@ -1,23 +1,22 @@
+import 'package:app/core/enums/event_type_enum.dart';
 import 'package:app/models/event.dart';
 import 'package:app/models/game.dart';
+import 'package:app/service/but_service.dart';
 import 'package:app/service/event_service.dart';
+import 'package:app/service/sanction_service.dart';
 import 'package:flutter/material.dart';
 
 class GameEventListProvider extends ChangeNotifier {
   List<Event> _events;
 
-  GameEventListProvider(this._events) {
-    /*  EventService().getData().then((value) {
-      _events = value;
-      notifyListeners();
-    }); */
-  }
+  GameEventListProvider(this._events);
 
   List<Event> get events => _events;
 
   void set events(List<Event> val) => _events = val;
-  Future<void> getEvents() async {
-    if (events.isEmpty) events = await EventService().getData();
+  Future<void> getEvents({bool remote = false}) async {
+    if (events.isEmpty || remote)
+      events = await EventService().getData(remote: remote);
   }
 
   Future<List<Event>> getGameEvents({required String idGame}) async {
@@ -79,15 +78,6 @@ class GameEventListProvider extends ChangeNotifier {
     return (home, away);
   }
 
-  void addEvent(Event event) {
-    _events.add(event);
-    notifyListeners();
-  }
-
-  void setEvent(Event event) {
-    notifyListeners();
-  }
-
   List<GoalEvent> getGameGoalsEvents(
       {required String idGame, required String idParticipant}) {
     List<GoalEvent> evenement = events
@@ -118,5 +108,33 @@ class GameEventListProvider extends ChangeNotifier {
         .toList();
 
     return evenement;
+  }
+
+  Future<bool> addEvent(Event event) async {
+    bool result = false;
+    if (event is GoalEvent) result = await ButService.addGoalEvent(event);
+    if (event is CardEvent) result = await SanctionService.addCardEvent(event);
+    if (result) events = await EventService().getData(remote: true);
+    return true;
+  }
+
+  Future<bool> editEvent(String idEvent, Event event) async {
+    bool result = false;
+    if (event is GoalEvent)
+      result = await ButService.editGoalEvent(idEvent, event);
+    if (event is CardEvent)
+      result = await SanctionService.editCardEvent(idEvent, event);
+    if (result) events = await EventService().getData(remote: true);
+    return result;
+  }
+
+  Future<bool> deleteEvent(String idEvent, EventType type) async {
+    bool result = false;
+    if (type == EventType.but)
+      result = await ButService.deleteGoalEvent(idEvent);
+    if (type == EventType.jaune || type == EventType.rouge)
+      result = await SanctionService.deleteCardEvent(idEvent);
+    if (result) events = await EventService().getData(remote: true);
+    return result;
   }
 }

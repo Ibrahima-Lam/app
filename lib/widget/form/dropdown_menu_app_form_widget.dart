@@ -1,12 +1,12 @@
 import 'package:app/core/extension/string_extension.dart';
 import 'package:flutter/material.dart';
 
-class DropdownMenuAppFormWidget extends StatelessWidget {
+class DropDownMenuAppFormWidget extends StatelessWidget {
   final TextEditingController? controller;
   final Map<String, dynamic> entries;
   final String title;
   final Function(dynamic)? onSelected;
-  const DropdownMenuAppFormWidget(
+  const DropDownMenuAppFormWidget(
       {super.key,
       this.controller,
       required this.entries,

@@ -41,6 +41,8 @@ dependencies:
   shared_preferences: ^2.2.3
   freezed_annotation: ^2.4.1
   json_annotation: ^4.9.0
+  google_fonts: ^6.2.1
+  url_launcher: ^6.3.0
  
   
   
@@ -80,7 +82,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/
-  #   - images/a_dot_ham.jpeg
+ 
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -93,7 +96,12 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family: RobotoCondensed
+      fonts:
+        - asset: assets/google_fonts/Roboto_Condensed/static/RobotoCondensed-Regular.ttf
+        - asset: assets/google_fonts/Roboto_Condensed/static/RobotoCondensed-Bold.ttf
+          
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

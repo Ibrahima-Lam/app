@@ -42,7 +42,7 @@ class _StatistiqueListWidgetState extends State<StatistiqueListWidget> {
       ),
     );
     if (isSubmited ?? false)
-      context.read<StatistiqueFutureProvider>().addStat(statistique);
+      context.read<StatistiqueFutureProvider>().addStatistique(statistique);
   }
 
   void _onDelete(BuildContext context, Statistique statistique) async {
@@ -57,8 +57,8 @@ class _StatistiqueListWidgetState extends State<StatistiqueListWidget> {
     );
     if (confirm == true) {
       final bool res = await context
-          .read<StatistiqueProvider>()
-          .removeStatistique(statistique.idStatistique);
+          .read<StatistiqueFutureProvider>()
+          .deleteStatistique(statistique.idStatistique);
 
       String message = res ? 'Supprimé' : 'Echec de suppression!';
       await ScaffoldMessenger.of(context).showSnackBar(

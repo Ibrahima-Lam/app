@@ -16,6 +16,10 @@ class StatistiqueProvider extends ChangeNotifier {
     statistiques = statistiqueFutureProvider.statistiques;
   }
 
+  Future<void> getData() async {
+    statistiques = await StatistiqueService.getData();
+  }
+
   List<Statistique> get statistiques => _statistiques;
   void set statistiques(List<Statistique> val) {
     _statistiques.clear();
@@ -83,22 +87,11 @@ class StatistiqueProvider extends ChangeNotifier {
     );
   }
 
-  Future<bool> removeStatistique(String idStatistique) async {
-    statistiques
-        .removeWhere((element) => element.idStatistique == idStatistique);
-    notifyListeners();
-    return true;
-  }
-
   Future<void> setStatistiques(Statistique stat,
       {required String idGame, required String codeStatistique}) async {
     StatistiqueService.setStat(stat,
         idGame: idGame, codeStatistique: codeStatistique);
 
-    notifyListeners();
-  }
-
-  void setStat(Statistique statistique) {
     notifyListeners();
   }
 }

@@ -199,7 +199,6 @@ class CompositionSousCollection {
   });
   bool cancelChange(JoueurComposition composition, bool isHome) {
     if (isHome) {
-      print(1);
       int index = homeOutside
           .indexWhere((element) => element.idJoueur == composition.idJoueur);
       if (index >= 0) {
@@ -207,9 +206,8 @@ class CompositionSousCollection {
           String? id = homeOutside[index].sortant?.idJoueur;
           homeOutside[index].sortant = null;
           if (id != null) {
-            print(2);
             int i = homeInside.indexWhere((element) => element.idJoueur == id);
-            print(i);
+
             if (i >= 0) homeInside[i].entrant = null;
           }
         }

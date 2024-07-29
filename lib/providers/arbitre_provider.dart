@@ -6,7 +6,10 @@ class ArbitreProvider extends ChangeNotifier {
   var _arbitres = <Arbitre>[];
 
   List<Arbitre> get arbitres => _arbitres;
-  void set arbitres(List<Arbitre> val) => _arbitres = val;
+  void set arbitres(List<Arbitre> val) {
+    _arbitres = val;
+    notifyListeners();
+  }
 
   Future<List<Arbitre>> getData({bool remote = false}) async {
     if (_arbitres.isEmpty || remote) {

@@ -17,6 +17,27 @@ class Statistique {
     this.rang = 0,
   });
 
+  factory Statistique.fromJson(Map<String, dynamic> json) {
+    return Statistique(
+      idStatistique: json['idStatistique'],
+      codeStatistique: json['codeStatistique'],
+      nomStatistique: json['nomStatistique'],
+      homeStatistique: json['homeStatistique'],
+      awayStatistique: json['awayStatistique'],
+      idGame: json['idGame'],
+      rang: json['rang'],
+    );
+  }
+  Map<String, dynamic> toJson() => {
+        'idStatistique': idStatistique,
+        'codeStatistique': codeStatistique,
+        'nomStatistique': nomStatistique,
+        'homeStatistique': homeStatistique,
+        'awayStatistique': awayStatistique,
+        'idGame': idGame,
+        'rang': rang,
+      };
+
   Statistique copyWith({
     String? idStatistique,
     String? codeStatistique,

@@ -29,7 +29,8 @@ void main() {
   runApp(const MyApp());
 }
 
-final Color color = const Color(0xFF263238);
+// final Color color = const Color(0xFF263238);
+final Color color = const Color(0xFF1C2834);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -124,7 +125,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            textTheme: TextTheme(),
+            fontFamily: 'RobotoCondensed',
             progressIndicatorTheme: ProgressIndicatorThemeData(
               color: color,
             ),
@@ -274,7 +275,7 @@ class _GlobalPageState extends State<GlobalPage> {
         animationDuration: const Duration(milliseconds: 200),
         selectedIndex: currentIndex,
         height: 65,
-        surfaceTintColor: Color(0xFFF5F5F5),
+        surfaceTintColor: Color(0xFF1C2834),
         backgroundColor: Colors.white,
         onDestinationSelected: (value) {
           setState(() {

@@ -24,7 +24,7 @@ class EvenementWidget extends StatelessWidget {
       ),
     ));
 
-    context.read<GameEventListProvider>().setEvent(event);
+    context.read<GameEventListProvider>().editEvent(event.idEvent, event);
   }
 
   void _addEvent(BuildContext context,

@@ -23,7 +23,6 @@ class LocalService {
       final file = await _getLocaleFile();
       return await file.readAsString();
     } catch (e) {
-      print('erreur');
       return null;
     }
   }
@@ -72,7 +71,7 @@ class LocalService {
       if (time == null) return false;
       int duration =
           DateTimeRange(start: time, end: DateTime.now()).duration.inHours;
-      print(duration);
+
       if (duration < max) true;
       return true;
     } catch (e) {

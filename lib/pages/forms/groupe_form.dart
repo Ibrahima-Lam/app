@@ -98,12 +98,12 @@ class _GroupeFormState extends State<GroupeForm> {
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
-                    DropdownMenuAppFormWidget(
+                    DropDownMenuAppFormWidget(
                       controller: nomController,
                       entries: noms,
                       title: "Nom de Groupe",
                     ),
-                    DropdownMenuAppFormWidget(
+                    DropDownMenuAppFormWidget(
                       controller: phaseController,
                       entries: phaseMap,
                       title: "Nom de Phase",
