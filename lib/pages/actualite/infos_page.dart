@@ -25,8 +25,8 @@ class _InfosPageState extends State<InfosPage> {
         title: const Text('Infos'),
         titleSpacing: 20,
       ),
-      body: StreamBuilder(
-          stream: context.read<InfosProvider>().getInformations(),
+      body: FutureBuilder(
+          future: context.read<InfosProvider>().getInformations(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return const Center(

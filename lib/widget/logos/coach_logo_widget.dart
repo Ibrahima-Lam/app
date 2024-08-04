@@ -34,7 +34,8 @@ class CoachImageLogoWidget extends StatelessWidget {
                   ),
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                      image: AssetImage(''), fit: BoxFit.cover)),
+                      image: AssetImage('images/coach.jpg'),
+                      fit: BoxFit.cover)),
             )
           : CircleAvatar(
               backgroundColor:

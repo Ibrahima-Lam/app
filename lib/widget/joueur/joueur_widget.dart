@@ -22,11 +22,15 @@ class JoueurListTileWidget extends StatelessWidget {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => JoueurDetails(idJoueur: joueur.idJoueur)));
       },
-      leading: Container(
+      leading: CircleAvatar(
+        backgroundColor: Color(0xFFF5F5F5),
+        child: Container(
           padding: const EdgeInsets.symmetric(vertical: 5),
           height: 60,
           width: 60,
-          child: JoueurImageLogoWidget(url: joueur.imageUrl)),
+          child: JoueurImageLogoWidget(url: joueur.imageUrl),
+        ),
+      ),
       title: Text(joueur.nomJoueur),
       subtitle: showEquipe ? Text(joueur.participant.nomEquipe) : null,
     );

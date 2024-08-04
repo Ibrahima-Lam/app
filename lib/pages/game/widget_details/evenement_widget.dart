@@ -1,14 +1,18 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, must_be_immutable
 
 import 'package:app/collection/game_event_list_collection.dart';
+import 'package:app/controllers/competition/date.dart';
 import 'package:app/core/constants/event/kEvent.dart';
+import 'package:app/core/enums/event_type_enum.dart';
 import 'package:app/models/event.dart';
 import 'package:app/models/game.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/widget/events/event_widget.dart';
 import 'package:app/widget/app/section_title_widget.dart';
+import 'package:app/widget/modals/confirm_dialog_widget.dart';
 import 'package:app/widget_pages/event_list_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 class EvenementWidget extends StatelessWidget {
@@ -36,16 +40,27 @@ class EvenementWidget extends StatelessWidget {
     );
 
     if (val == 'but') {
-      event = kGoalEvent.copyWith(idGame: idGame, idParticipant: idParticipant);
+      event = kGoalEvent.copyWith(
+          idEvent: 'G${DateController.dateCollapsed}',
+          idGame: idGame,
+          idParticipant: idParticipant);
     } else if (val == 'rouge') {
-      event =
-          kRedCardEvent.copyWith(idGame: idGame, idParticipant: idParticipant);
+      event = kRedCardEvent.copyWith(
+          isRed: true,
+          idEvent: 'C${DateController.dateCollapsed}',
+          idGame: idGame,
+          idParticipant: idParticipant);
     } else if (val == 'jaune') {
       event = kYellowCardEvent.copyWith(
-          idGame: idGame, idParticipant: idParticipant);
+          isRed: false,
+          idEvent: 'C${DateController.dateCollapsed}',
+          idGame: idGame,
+          idParticipant: idParticipant);
     } else if (val == 'changement') {
-      event =
-          kRemplEvent.copyWith(idGame: idGame, idParticipant: idParticipant);
+      event = kRemplEvent.copyWith(
+          idEvent: 'R${DateController.dateCollapsed}',
+          idGame: idGame,
+          idParticipant: idParticipant);
     }
     if (event != null) {
       final Event? ev = await Navigator.of(context).push(MaterialPageRoute(
@@ -99,6 +114,7 @@ class EvenementWidget extends StatelessWidget {
                     children: [
                       if (gameEventListSousCollection.goals.isNotEmpty)
                         EventSectionWidget(
+                            checkUser: checkUser,
                             onDoubleTap: checkUser
                                 ? (p0) => _onDoubleTap(context, p0)
                                 : null,
@@ -107,6 +123,7 @@ class EvenementWidget extends StatelessWidget {
                             title: 'Buts'),
                       if (gameEventListSousCollection.yellowCards.isNotEmpty)
                         EventSectionWidget(
+                            checkUser: checkUser,
                             onDoubleTap: checkUser
                                 ? (p0) => _onDoubleTap(context, p0)
                                 : null,
@@ -115,6 +132,7 @@ class EvenementWidget extends StatelessWidget {
                             title: 'Cartons Jaunes'),
                       if (gameEventListSousCollection.redCards.isNotEmpty)
                         EventSectionWidget(
+                            checkUser: checkUser,
                             onDoubleTap: checkUser
                                 ? (p0) => _onDoubleTap(context, p0)
                                 : null,
@@ -123,6 +141,7 @@ class EvenementWidget extends StatelessWidget {
                             title: 'Cartons Rouges'),
                       if (gameEventListSousCollection.substitutions.isNotEmpty)
                         EventSectionWidget(
+                            checkUser: checkUser,
                             onDoubleTap: checkUser
                                 ? (p0) => _onDoubleTap(context, p0)
                                 : null,
@@ -176,12 +195,33 @@ class EventSectionWidget extends StatelessWidget {
   final Game game;
   final Function(Event)? onDoubleTap;
   final String title;
+  final bool checkUser;
   const EventSectionWidget(
       {super.key,
       required this.events,
       required this.game,
       this.onDoubleTap,
-      required this.title});
+      required this.title,
+      required this.checkUser});
+
+  void _onDelete(BuildContext context, Event event) async {
+    final bool? confirm = await showDialog(
+        context: context,
+        builder: (context) => ConfirmDialogWidget(
+              title: 'Supprimer ?',
+              content: 'Voulez vous vraiment supprimer cet evenement ?',
+            ));
+    if (confirm != null && confirm) {
+      final EventType type = event is GoalEvent
+          ? EventType.but
+          : event is CardEvent
+              ? event.isRed
+                  ? EventType.rouge
+                  : EventType.jaune
+              : EventType.changement;
+      context.read<GameEventListProvider>().deleteEvent(event.idEvent, type);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -191,12 +231,49 @@ class EventSectionWidget extends StatelessWidget {
         children: [
           SectionTitleWidget(title: title),
           ...events
-              .map((e) =>
-                  EventWidget(event: e, onDoubleTap: onDoubleTap, game: game))
+              .map((e) => EventTileWidget(
+                  enable: checkUser,
+                  event: e,
+                  onDoubleTap: onDoubleTap,
+                  onDelete: (p0) => _onDelete(context, p0),
+                  game: game))
               .toList()
         ],
       ),
     );
+  }
+}
+
+class EventTileWidget extends StatelessWidget {
+  final Event event;
+  final Function(Event)? onDoubleTap;
+  final Function(Event) onDelete;
+  final Game game;
+  final bool enable;
+  const EventTileWidget(
+      {super.key,
+      required this.event,
+      this.onDoubleTap,
+      required this.onDelete,
+      required this.game,
+      required this.enable});
+
+  @override
+  Widget build(BuildContext context) {
+    return Slidable(
+        enabled: enable,
+        startActionPane: ActionPane(
+          motion: const ScrollMotion(),
+          extentRatio: 0.2,
+          children: [
+            SlidableAction(
+              onPressed: (p0) => onDelete(event),
+              icon: Icons.delete,
+              foregroundColor: Colors.red,
+            )
+          ],
+        ),
+        child: EventWidget(event: event, onDoubleTap: onDoubleTap, game: game));
   }
 }
 

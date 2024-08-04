@@ -57,7 +57,6 @@ class GameDetailsColumnWidget extends StatelessWidget {
                             height: 50,
                             width: 50,
                             child: EquipeImageLogoWidget(
-                              noColor: true,
                               url: isHome
                                   ? (game.home.imageUrl ?? '')
                                   : (game.away.imageUrl ?? ''),

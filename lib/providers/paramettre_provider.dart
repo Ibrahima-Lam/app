@@ -24,6 +24,7 @@ class ParamettreProvider extends ChangeNotifier {
   }
 
   bool checkUser(String idEdition) {
+    if (checkRootUser()) return true;
     if (userProvider.user == null) return false;
     Paramettre? paramettre;
     try {

@@ -1,1 +1,1 @@
-enum EventType { but, jaune, rouge }
+enum EventType { but, jaune, rouge, changement }

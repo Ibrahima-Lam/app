@@ -185,7 +185,7 @@ class InformationJoueurWidget extends StatelessWidget {
                     image: DecorationImage(
                         fit: BoxFit.cover,
                         image: AssetImage(
-                          'images/messi.jpg',
+                          'images/player.png',
                         )),
                   ),
                 ),

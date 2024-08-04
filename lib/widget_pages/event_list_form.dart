@@ -42,7 +42,7 @@ class _EventListFormState extends State<EventListForm> {
     if (chk) {
       final String? nom = await showDialog(
         context: context,
-        builder: (context) => EventsimpleDialogWidget(event: widget.event),
+        builder: (context) => EventSimpleDialogWidget(event: widget.event),
       );
       if (nom != null) {
         List<Event> evs = context
@@ -58,20 +58,6 @@ class _EventListFormState extends State<EventListForm> {
     widget.event.nom = nomController.text;
     widget.event.minute = minuteController.text;
     widget.event.nomTarget = nomTargetController.text;
-    if (composition != null && widget.isNew) {
-      if (widget.event is GoalEvent) ++composition!.but;
-      if (widget.event is CardEvent) {
-        (widget.event as CardEvent).isRed
-            ? ++composition!.rouge
-            : ++composition!.jaune;
-      }
-    }
-
-    if (composition != null &&
-        composition2 != null &&
-        widget.event is RemplEvent) {
-      composition2!.entrant = composition;
-    }
 
     Navigator.pop(context, widget.event);
   }
@@ -153,7 +139,7 @@ class _EventListFormState extends State<EventListForm> {
                       final bool? check = await showDialog(
                           context: context,
                           builder: (context) => ConfirmDialogWidget(
-                                title: 'changer de l\'élément',
+                                title: 'changer  l\'élément',
                                 content:
                                     'Voulez vous changer l\'élément courant par cet élément?',
                               ));
@@ -166,6 +152,8 @@ class _EventListFormState extends State<EventListForm> {
                             composition?.idJoueur = compo.idJoueur;
                             composition?.nom = compo.nom;
                             composition?.idParticipant = compo.idParticipant;
+                            composition?.idGame = compo.idGame;
+                            composition?.imageUrl = compo.imageUrl;
                           }
                         });
                       }
@@ -188,6 +176,7 @@ class _EventListFormState extends State<EventListForm> {
                           composition?.idJoueur = joueur.idJoueur;
                           composition?.nom = joueur.nomJoueur;
                           composition?.idParticipant = joueur.idParticipant;
+                          composition?.imageUrl = joueur.imageUrl;
                         }
                       });
                     }
@@ -325,9 +314,9 @@ class NomTargetWidget extends StatelessWidget {
   }
 }
 
-class EventsimpleDialogWidget extends StatelessWidget {
+class EventSimpleDialogWidget extends StatelessWidget {
   final Event event;
-  const EventsimpleDialogWidget({super.key, required this.event});
+  const EventSimpleDialogWidget({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {

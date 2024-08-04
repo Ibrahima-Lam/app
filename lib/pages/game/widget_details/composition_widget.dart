@@ -50,8 +50,8 @@ class CompositionWidget extends StatelessWidget {
         future: context.read<CompositionProvider>().getCompositions(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Center(
-              child: Text('erreur!'),
+            return Center(
+              child: Text(snapshot.error.toString()),
             );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {

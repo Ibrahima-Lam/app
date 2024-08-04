@@ -181,7 +181,7 @@ class InformationCompetitionWidget extends StatelessWidget {
                       image: DecorationImage(
                           fit: BoxFit.cover,
                           image: AssetImage(
-                            'images/europa.jpg',
+                            'images/trophee.jpg',
                           )),
                     ),
                     child: Align(

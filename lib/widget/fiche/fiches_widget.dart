@@ -15,8 +15,8 @@ class FicheInfosWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: context.read<InfosProvider>().getInformations(),
+    return FutureBuilder(
+        future: context.read<InfosProvider>().getInformations(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Center(
@@ -27,14 +27,10 @@ class FicheInfosWidget extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
-          return Consumer<InfosProvider>(builder: (context, infos, child) {
-            final Infos? info = infos
-                .infos
-
-                /* Todo  .getInfosBy(
-                 categorie: categorieParams
-                )  */
-                .lastOrNull;
+          return Consumer<InfosProvider>(
+              builder: (context, infosProvider, child) {
+            final Infos? info =
+                infosProvider.getInfosBy(categorie: categorieParams).lastOrNull;
             return info == null
                 ? const SizedBox()
                 : Container(
@@ -67,7 +63,7 @@ class FicheInfosWidget extends StatelessWidget {
                                       AnimatedContainer(
                                     duration: Durations.medium1,
                                     child: Image.asset(
-                                      'images/santiago.jpg',
+                                      'images/infos.jpg',
                                       fit: BoxFit.cover,
                                     ),
                                   ),

@@ -34,7 +34,8 @@ class ArbitreService {
   static Future<bool> addArbitre(Arbitre arbitre) async {
     if (arbitres.any((element) =>
         element['idEdition'] == arbitre.idEdition &&
-        element['nomArbitre'] == arbitre.nomArbitre)) return false;
+        element['nomArbitre'] == arbitre.nomArbitre &&
+        element['role'] == arbitre.role)) return false;
     arbitres.add(arbitre.toJson());
     return true;
   }

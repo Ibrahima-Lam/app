@@ -31,24 +31,28 @@ class ButService {
 
   static Future<bool> addGoalEvent(GoalEvent event) async {
     buts.add(event.toJson());
+    await service.setData(buts);
     return true;
   }
 
   static Future<bool> editGoalEvent(String idBut, GoalEvent event) async {
-    if (buts.any((element) => element['idBut'] == idBut)) {
-      int index = buts.indexWhere((element) => element['idBut'] == idBut);
+    if (buts.any((element) => element['idBut'].toString() == idBut)) {
+      int index =
+          buts.indexWhere((element) => element['idBut'].toString() == idBut);
       if (index >= 0) buts[index] = event.toJson();
+      await service.setData(buts);
       return true;
     }
     return false;
   }
 
   static Future<bool> deleteGoalEvent(String idBut) async {
-    if (buts.any((element) => element['idBut'] == idBut)) {
-      buts.removeWhere((element) => element['idBut'] == idBut);
+    if (buts.any((element) => element['idBut'].toString() == idBut)) {
+      buts.removeWhere((element) => element['idBut'].toString() == idBut);
+      await service.setData(buts);
       return true;
     }
-    return true;
+    return false;
   }
 }
 

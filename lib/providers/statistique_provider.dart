@@ -31,32 +31,30 @@ class StatistiqueProvider extends ChangeNotifier {
         statistiques.where((element) => element.idGame == game.idGame).toList();
     var jauneStat = gameEventListProvider.getYellowCardStat(game);
     var rougeStat = gameEventListProvider.getRedCardStat(game);
-    if (stats.any((element) => element.codeStatistique.contains('jaune')) &&
+    if (!stats.any((element) => element.codeStatistique.contains('jaune')) &&
         jauneStat != (0, 0)) {
-      stats.removeWhere((element) => element.codeStatistique.contains('jaune'));
+      stats.add(Statistique(
+        idStatistique: 'GCJ${game.idGame}',
+        codeStatistique: 'jaune',
+        nomStatistique: 'Carton Jaune',
+        homeStatistique: jauneStat.$1.toDouble(),
+        awayStatistique: jauneStat.$2.toDouble(),
+        idGame: game.idGame,
+        isFromEvent: true,
+      ));
     }
 
-    if (stats.any((element) => element.codeStatistique.contains('rouge')) &&
+    if (!stats.any((element) => element.codeStatistique.contains('rouge')) &&
         rougeStat != (0, 0)) {
-      stats.removeWhere((element) => element.codeStatistique.contains('rouge'));
-    }
-    if (jauneStat != (0, 0)) {
       stats.add(Statistique(
-          idStatistique: 'GCJ${game.idGame}',
-          codeStatistique: 'jaune',
-          nomStatistique: 'Carton Jaune',
-          homeStatistique: jauneStat.$1.toDouble(),
-          awayStatistique: jauneStat.$2.toDouble(),
-          idGame: game.idGame));
-    }
-    if (rougeStat != (0, 0)) {
-      stats.add(Statistique(
-          idStatistique: 'GCR${game.idGame}',
-          codeStatistique: 'rouge',
-          nomStatistique: 'Carton rouge',
-          homeStatistique: rougeStat.$1.toDouble(),
-          awayStatistique: rougeStat.$2.toDouble(),
-          idGame: game.idGame));
+        idStatistique: 'GCR${game.idGame}',
+        codeStatistique: 'rouge',
+        nomStatistique: 'Carton rouge',
+        homeStatistique: rougeStat.$1.toDouble(),
+        awayStatistique: rougeStat.$2.toDouble(),
+        idGame: game.idGame,
+        isFromEvent: true,
+      ));
     }
     return stats;
   }
@@ -85,13 +83,5 @@ class StatistiqueProvider extends ChangeNotifier {
           redCard: red.awayStatistique.toInt(),
           yellowCard: yellow.awayStatistique.toInt()),
     );
-  }
-
-  Future<void> setStatistiques(Statistique stat,
-      {required String idGame, required String codeStatistique}) async {
-    StatistiqueService.setStat(stat,
-        idGame: idGame, codeStatistique: codeStatistique);
-
-    notifyListeners();
   }
 }

@@ -242,7 +242,7 @@ class InformationEquipeWidget extends StatelessWidget {
                     image: DecorationImage(
                         fit: BoxFit.cover,
                         image: AssetImage(
-                          'images/photo.jpg',
+                          'images/equipe3.jpg',
                         )),
                   ),
                   child: Align(

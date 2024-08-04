@@ -1,3 +1,4 @@
+import 'package:app/collection/composition_collection.dart';
 import 'package:app/models/app_paramettre.dart';
 import 'package:app/pages/actualite/infos_page.dart';
 import 'package:app/pages/exploration/exploration_page.dart';
@@ -59,12 +60,12 @@ class MyApp extends StatelessWidget {
           lazy: false,
           create: (context) => ScoreProvider([])..initScores(),
         ),
-        ChangeNotifierProvider(create: (context) => InfosProvider()),
+        ChangeNotifierProvider(
+            lazy: false, create: (context) => InfosProvider()),
         ChangeNotifierProvider(create: (context) => CoachProvider()),
         ChangeNotifierProvider(create: (context) => ArbitreProvider()),
         ChangeNotifierProvider(
             lazy: false, create: (context) => GroupeProvider()),
-        ChangeNotifierProvider(create: (context) => CompositionProvider()),
         ChangeNotifierProvider<GameEventListProvider>(
           lazy: false,
           create: (context) => GameEventListProvider([])..getEvents(),
@@ -121,6 +122,15 @@ class MyApp extends StatelessWidget {
             update: (context, value, previous) => JoueurProvider(
                 previous?.joueurs ?? [],
                 participantProvider: value)),
+        ChangeNotifierProxyProvider<GameEventListProvider, CompositionProvider>(
+            lazy: false,
+            create: (context) => CompositionProvider(
+                compositionCollection: CompositionCollection([]),
+                gameEventListProvider: context.read<GameEventListProvider>()),
+            update: (context, value, previous) => CompositionProvider(
+                compositionCollection: previous?.compositionCollection ??
+                    CompositionCollection([]),
+                gameEventListProvider: value)),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -275,7 +285,7 @@ class _GlobalPageState extends State<GlobalPage> {
         animationDuration: const Duration(milliseconds: 200),
         selectedIndex: currentIndex,
         height: 65,
-        surfaceTintColor: Color(0xFF1C2834),
+        surfaceTintColor: Colors.white,
         backgroundColor: Colors.white,
         onDestinationSelected: (value) {
           setState(() {

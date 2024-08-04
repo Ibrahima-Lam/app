@@ -7,13 +7,7 @@ import 'package:flutter/material.dart';
 
 class ScoreProvider extends ChangeNotifier {
   List<Score> _scores;
-  ScoreProvider(this._scores) {
-    getData().then(
-      (value) {
-        scores = value;
-      },
-    );
-  }
+  ScoreProvider(this._scores);
 
   List<Score> get scores => _scores;
   void set scores(List<Score> val) {

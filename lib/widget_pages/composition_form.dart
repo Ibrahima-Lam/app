@@ -1,9 +1,12 @@
 import 'package:app/models/composition.dart';
 import 'package:app/models/joueur.dart';
+import 'package:app/providers/composition_provider.dart';
+import 'package:app/widget/form/dropdown_menu_app_form_widget.dart';
 import 'package:app/widget/form/elevated_button_widget.dart';
 import 'package:app/widget/modals/bottom_modal_joueur_list_widget.dart';
 import 'package:app/widget/form/text_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CompositionForm extends StatefulWidget {
   final JoueurComposition composition;
@@ -17,13 +20,30 @@ class _CompositionFormState extends State<CompositionForm> {
   late final TextEditingController nomController;
 
   late final TextEditingController numeroController;
+  late final TextEditingController capitaineController;
 
   @override
   void initState() {
     nomController = TextEditingController(text: widget.composition.nom);
     numeroController =
         TextEditingController(text: (widget.composition.numero).toString());
+    capitaineController =
+        TextEditingController(text: widget.composition.isCapitaine.toString());
     super.initState();
+  }
+
+  void _onSubmit() async {
+    setState(() {
+      widget.composition.nom = nomController.text;
+      widget.composition.numero = int.parse(numeroController.text);
+      widget.composition.isCapitaine = bool.parse(capitaineController.text);
+    });
+    bool result = await context
+        .read<CompositionProvider>()
+        .setComposition(widget.composition.idComposition, widget.composition);
+    if (result) {
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -63,15 +83,12 @@ class _CompositionFormState extends State<CompositionForm> {
               const SizedBox(
                 height: 10,
               ),
+              DropDownMenuAppFormWidget(
+                  entries: {'oui': true, 'non': false},
+                  title: 'Capitaine',
+                  controller: capitaineController),
               ElevatedButtonWidget(
-                onPressed: () async {
-                  setState(() {
-                    widget.composition.nom = nomController.text;
-                    widget.composition.numero =
-                        int.parse(numeroController.text);
-                  });
-                  Navigator.pop(context, widget.composition);
-                },
+                onPressed: _onSubmit,
               )
             ],
           ),

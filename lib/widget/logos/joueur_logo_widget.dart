@@ -31,7 +31,7 @@ class JoueurImageLogoWidget extends StatelessWidget {
               decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                      image: AssetImage('images/messi.jpg'),
+                      image: AssetImage('images/player.png'),
                       fit: BoxFit.cover)),
             )
           : CircleAvatar(

@@ -9,6 +9,8 @@ class TextFormFieldWidget extends StatelessWidget {
   final FocusNode? focusNode;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
+  final int? maxLines;
+  final int? minLines;
   const TextFormFieldWidget(
       {super.key,
       this.controller,
@@ -18,18 +20,22 @@ class TextFormFieldWidget extends StatelessWidget {
       this.focusNode,
       this.obscureText = false,
       this.keyboardType,
-      this.validator});
+      this.validator,
+      this.maxLines,
+      this.minLines});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       child: Container(
-        height: 50,
+        height: minLines != null ? null : 50,
         padding: EdgeInsets.all(2),
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(4)),
         child: TextFormField(
+          maxLines: maxLines,
+          minLines: minLines,
           keyboardType: keyboardType,
           obscureText: obscureText,
           focusNode: focusNode,

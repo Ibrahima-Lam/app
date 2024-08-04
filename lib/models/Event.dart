@@ -50,9 +50,11 @@ class GoalEvent extends Event {
       nom: json['nomJoueur'].toString(),
       idParticipant: json['idParticipant'].toString(),
       idGame: json['idGame'].toString(),
-      idEvent: 'G' + json['idBut'].toString(),
+      idEvent: json['idBut'].toString(),
       minute: (json['minute'] ?? '').toString(),
       imageUrl: '',
+      idTarget: json['idTarget'],
+      nomTarget: json['nomTarget'],
     );
   }
   Map<String, dynamic> toJson() => {
@@ -62,6 +64,8 @@ class GoalEvent extends Event {
         'idGame': idGame,
         'idBut': idEvent,
         'minute': minute,
+        'idTarget': idTarget,
+        'nomTarget': nomTarget,
       };
 
   GoalEvent copyWith({
@@ -114,8 +118,10 @@ class CardEvent extends Event {
       nom: json['nomJoueur'].toString(),
       idParticipant: json['idParticipant'].toString(),
       idGame: json['idGame'].toString(),
-      idEvent: 'C' + json['idSanctionner'].toString(),
+      idEvent: json['idSanctionner'].toString(),
       imageUrl: '',
+      idTarget: json['idTarget'],
+      nomTarget: json['nomTarget'],
     );
   }
   Map<String, dynamic> toJson() => {
@@ -125,6 +131,9 @@ class CardEvent extends Event {
         'idGame': idGame,
         'idSanctionner': idEvent,
         'minute': minute,
+        'codeSanction': isRed ? 'rouge' : 'jaune',
+        'idTarget': idTarget,
+        'nomTarget': nomTarget,
       };
 
   CardEvent copyWith({
@@ -189,6 +198,19 @@ class RemplEvent extends Event {
         nomTarget: nomTarget ?? this.nomTarget,
         imageUrl: '',
       );
+  factory RemplEvent.fromJson(Map<String, dynamic> json) {
+    return RemplEvent(
+      idJoueur: json['idJoueur'].toString(),
+      nom: json['nomJoueur'].toString(),
+      idParticipant: json['idParticipant'].toString(),
+      idGame: json['idGame'].toString(),
+      idEvent: json['idChangement'].toString(),
+      minute: (json['minute'] ?? '').toString(),
+      imageUrl: '',
+      idTarget: json['idTarget'].toString(),
+      nomTarget: json['nomTarget'].toString(),
+    );
+  }
   Map<String, dynamic> toJson() => {
         'idJoueur': idJoueur,
         'nomJoueur': nom,
@@ -196,6 +218,8 @@ class RemplEvent extends Event {
         'idGame': idGame,
         'idChangement': idEvent,
         'minute': minute,
+        'idTarget': idTarget,
+        'nomTarget': nomTarget,
       };
 }
 

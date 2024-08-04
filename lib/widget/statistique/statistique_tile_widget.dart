@@ -26,7 +26,7 @@ class StatistiqueTileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onDoubleTap: checkUser
+      onDoubleTap: checkUser && !statistique.isFromEvent
           ? () async {
               final bool? isSubmited =
                   await Navigator.of(context).push(MaterialPageRoute(
@@ -41,7 +41,7 @@ class StatistiqueTileWidget extends StatelessWidget {
           : null,
       child: Slidable(
         key: ValueKey(statistique.idStatistique),
-        enabled: checkUser,
+        enabled: checkUser && !statistique.isFromEvent,
         startActionPane: ActionPane(
           motion: DrawerMotion(),
           extentRatio: 0.2,

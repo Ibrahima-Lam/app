@@ -2,6 +2,7 @@ import 'package:app/core/enums/event_type_enum.dart';
 import 'package:app/models/event.dart';
 import 'package:app/models/game.dart';
 import 'package:app/service/but_service.dart';
+import 'package:app/service/changement_service.dart';
 import 'package:app/service/event_service.dart';
 import 'package:app/service/sanction_service.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +14,29 @@ class GameEventListProvider extends ChangeNotifier {
 
   List<Event> get events => _events;
 
-  void set events(List<Event> val) => _events = val;
+  void set events(List<Event> val) => _events = val
+    ..sort(
+      (a, b) {
+        try {
+          if ((int.tryParse(a.minute ?? '0') ?? 0) -
+                  (int.tryParse(b.minute ?? '0') ?? 0) !=
+              0)
+            return (int.tryParse(a.minute ?? '0') ?? 0) -
+                (int.tryParse(b.minute ?? '0') ?? 0);
+          return a.idEvent.compareTo(b.idEvent);
+        } catch (e) {
+          return 0;
+        }
+      },
+    );
   Future<void> getEvents({bool remote = false}) async {
     if (events.isEmpty || remote)
       events = await EventService().getData(remote: remote);
+  }
+
+  Future<void> updateEvents() async {
+    events = await EventService().getData();
+    notifyListeners();
   }
 
   Future<List<Event>> getGameEvents({required String idGame}) async {
@@ -35,15 +55,16 @@ class GameEventListProvider extends ChangeNotifier {
 
   List<Event> getJoueurGameEvent(
       {required String idGame, required String idJoueur}) {
-    return _events
+    return events
         .where((element) =>
-            element.idJoueur == idJoueur && element.idGame == idGame)
+            (element.idJoueur == idJoueur || element.idTarget == idJoueur) &&
+            element.idGame == idGame)
         .toList();
   }
 
   List<Event> getEquipeGameEvent(
       {required String idGame, required String idParticipant}) {
-    return _events
+    return events
         .where((element) =>
             element.idParticipant == idParticipant && element.idGame == idGame)
         .toList();
@@ -52,8 +73,8 @@ class GameEventListProvider extends ChangeNotifier {
   void setJoueurGameEventNom(List<Event> evs, String nom) {
     for (Event ev in evs) {
       int index =
-          _events.lastIndexWhere((element) => element.idEvent == ev.idEvent);
-      _events[index].nom = nom;
+          events.lastIndexWhere((element) => element.idEvent == ev.idEvent);
+      events[index].nom = nom;
     }
     notifyListeners();
   }
@@ -114,7 +135,9 @@ class GameEventListProvider extends ChangeNotifier {
     bool result = false;
     if (event is GoalEvent) result = await ButService.addGoalEvent(event);
     if (event is CardEvent) result = await SanctionService.addCardEvent(event);
-    if (result) events = await EventService().getData(remote: true);
+    if (event is RemplEvent)
+      result = await ChangementService.addRemplEvent(event);
+    if (result) updateEvents();
     return true;
   }
 
@@ -124,7 +147,9 @@ class GameEventListProvider extends ChangeNotifier {
       result = await ButService.editGoalEvent(idEvent, event);
     if (event is CardEvent)
       result = await SanctionService.editCardEvent(idEvent, event);
-    if (result) events = await EventService().getData(remote: true);
+    if (event is RemplEvent)
+      result = await ChangementService.editRemplEvent(idEvent, event);
+    if (result) updateEvents();
     return result;
   }
 
@@ -134,7 +159,9 @@ class GameEventListProvider extends ChangeNotifier {
       result = await ButService.deleteGoalEvent(idEvent);
     if (type == EventType.jaune || type == EventType.rouge)
       result = await SanctionService.deleteCardEvent(idEvent);
-    if (result) events = await EventService().getData(remote: true);
+    if (type == EventType.changement)
+      result = await ChangementService.deleteRemplEvent(idEvent);
+    if (result) updateEvents();
     return result;
   }
 }

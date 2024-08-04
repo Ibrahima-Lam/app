@@ -34,7 +34,8 @@ class CoachService {
   static Future<bool> addCoach(Coach coach) async {
     if (coachs.any((element) =>
         element['idParticipant'] == coach.idParticipant &&
-        element['nomCoach'] == coach.nomCoach)) return false;
+        element['nomCoach'] == coach.nomCoach &&
+        element['role'] == coach.role)) return false;
     coachs.add(coach.toJson());
     return true;
   }

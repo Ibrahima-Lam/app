@@ -17,13 +17,6 @@ class InfosWidget extends StatefulWidget {
 }
 
 class _InfosWidgetState extends State<InfosWidget> {
-  String shrinkText(String text) {
-    text = text.substring(0, 100);
-    final tab = text.split(' ');
-    tab.removeAt(tab.length - 1);
-    return tab.join(' ') + '...';
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -45,7 +38,7 @@ class _InfosWidgetState extends State<InfosWidget> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Hero(
-                    tag: widget.infos.id,
+                    tag: widget.infos.idInfos,
                     child: Container(
                       height: 140,
                       width: MediaQuery.of(context).size.width * .30,
@@ -56,7 +49,7 @@ class _InfosWidgetState extends State<InfosWidget> {
                           decoration: BoxDecoration(
                             image: DecorationImage(
                                 image: AssetImage(
-                                  'images/europa.jpg',
+                                  'images/infos.jpg',
                                 ),
                                 fit: BoxFit.cover),
                           ),
@@ -66,7 +59,7 @@ class _InfosWidgetState extends State<InfosWidget> {
                   ),
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(5),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -83,7 +76,7 @@ class _InfosWidgetState extends State<InfosWidget> {
                             height: 5,
                           ),
                           Text(
-                            shrinkText(widget.infos.text),
+                            widget.infos.text,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(
@@ -125,19 +118,8 @@ class InfosFullWidget extends StatefulWidget {
 }
 
 class _InfosFullWidgetState extends State<InfosFullWidget> {
-  String shrinkText(String text) {
-    text = text.substring(0, 100);
-    final tab = text.split(' ');
-    tab.removeAt(tab.length - 1);
-    return tab.join(' ') + '...';
-  }
-
   @override
   Widget build(BuildContext context) {
-    final String texte = widget.infos.text.length < 100
-        ? widget.infos.text
-        : shrinkText(widget.infos.text);
-
     return GestureDetector(
       onTap: () async {
         await Navigator.of(context).push(MaterialPageRoute(
@@ -156,10 +138,10 @@ class _InfosFullWidgetState extends State<InfosFullWidget> {
           child: Column(
             children: [
               Hero(
-                tag: widget.infos.id,
+                tag: widget.infos.idInfos,
                 child: Container(
                   height: 300,
-                  width: MediaQuery.of(context).size.width * .30,
+                  width: MediaQuery.of(context).size.width,
                   child: CachedNetworkImage(
                     imageUrl: widget.infos.imageUrl ?? '',
                     errorWidget: (context, url, error) => AnimatedContainer(
@@ -167,7 +149,7 @@ class _InfosFullWidgetState extends State<InfosFullWidget> {
                       decoration: BoxDecoration(
                         image: DecorationImage(
                             image: AssetImage(
-                              'images/europa.jpg',
+                              'images/infos.jpg',
                             ),
                             fit: BoxFit.cover),
                       ),
@@ -189,7 +171,7 @@ class _InfosFullWidgetState extends State<InfosFullWidget> {
               Padding(
                 padding: const EdgeInsets.all(5),
                 child: Text(
-                  texte,
+                  widget.infos.text,
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                 ),
               ),
@@ -233,7 +215,7 @@ class InfosLessWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Hero(
-              tag: infos.id + 'other',
+              tag: infos.idInfos + 'other',
               child: Container(
                 height: 140,
                 width: MediaQuery.of(context).size.width * .30,
@@ -244,7 +226,7 @@ class InfosLessWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage(
-                            'images/europa.jpg',
+                            'images/infos.jpg',
                           ),
                           fit: BoxFit.cover),
                     ),

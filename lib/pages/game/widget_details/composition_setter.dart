@@ -1,25 +1,27 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 
 import 'package:app/collection/composition_collection.dart';
+import 'package:app/controllers/competition/date.dart';
+import 'package:app/core/constants/event/kEvent.dart';
 import 'package:app/core/enums/enums.dart';
 import 'package:app/models/composition.dart';
+import 'package:app/models/event.dart';
 import 'package:app/providers/composition_provider.dart';
+import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/widget/coach/coach_and_team_widget.dart';
 import 'package:app/widget/modals/composition_bottom_sheet_widget.dart';
 import 'package:app/widget/composition/composition_element_widget.dart';
 import 'package:app/widget_pages/arbitre_list_widget.dart';
 import 'package:app/widget_pages/coach_form.dart';
-import 'package:app/widget_pages/event_form.dart';
 import 'package:app/widget_pages/substitut_list_widget.dart';
 import 'package:app/widget_pages/composition_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-// ignore: must_be_immutable
 class CompositionSetter extends StatelessWidget {
   final CompositionSousCollection compositionSousCollection;
 
-  CompositionSetter({super.key, required this.compositionSousCollection});
+  const CompositionSetter({super.key, required this.compositionSousCollection});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class CompositionSetter extends StatelessWidget {
           // Todo enregistrer le formulaire des arbitres
           context
               .read<CompositionProvider>()
-              .setCompositions(compositionSousCollection.game.idGame, [
+              .setAllCompositions(compositionSousCollection.game.idGame, [
             ...compositionSousCollection.homeInside,
             ...compositionSousCollection.awayInside,
             ...compositionSousCollection.homeOutside,
@@ -44,7 +46,7 @@ class CompositionSetter extends StatelessWidget {
             ...compositionSousCollection.arbitres,
             ...[
               compositionSousCollection.homeCoatch,
-              compositionSousCollection.awayCoatch
+              compositionSousCollection.awayCoatch,
             ]
           ]);
         },
@@ -210,11 +212,7 @@ class _PlayerListWidgetState2 extends State<PlayerListWidget2> {
     setState(() {});
   }
 
-  void _onTap(JoueurComposition composition) async {
-    await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => EventFormWidget(composition: composition)));
-    setState(() {});
-  }
+  void _onTap(JoueurComposition composition) async {}
 
   void _onLongPress(JoueurComposition composition, List<JoueurComposition> data,
       bool isHome) async {
@@ -250,13 +248,17 @@ class _PlayerListWidgetState2 extends State<PlayerListWidget2> {
         return;
       }
 
-      if (isHome)
-        widget.compositionSousCollection.changeHome(composition, compos);
-      else
-        widget.compositionSousCollection.changeAway(composition, compos);
+      RemplEvent event = kRemplEvent.copyWith(
+        idEvent: 'R${DateController.dateCollapsed}',
+        idGame: composition.idGame,
+        idParticipant: composition.idParticipant,
+        idJoueur: composition.idJoueur,
+        nom: composition.nom,
+        idTarget: compos.idJoueur,
+        nomTarget: compos.nom,
+      );
+      await context.read<GameEventListProvider>().addEvent(event);
     }
-    // ignore: invalid_use_of_protected_member
-    context.read<CompositionProvider>().notifyListeners();
   }
 
   @override

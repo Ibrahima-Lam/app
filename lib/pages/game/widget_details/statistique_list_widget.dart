@@ -165,12 +165,12 @@ class _StatistiqueModalWidgetState extends State<StatistiqueModalWidget>
               ),
             ...entries.keys
                 .map((e) => OutlinedButton(
-                      onPressed:
-                          widget.statistiques.any((s) => e == s.codeStatistique)
-                              ? null
-                              : () {
-                                  Navigator.pop(context, (e, entries[e] ?? ''));
-                                },
+                      onPressed: widget.statistiques.any(
+                              (s) => e == s.codeStatistique && !s.isFromEvent)
+                          ? null
+                          : () {
+                              Navigator.pop(context, (e, entries[e] ?? ''));
+                            },
                       child: Text(entries[e] ?? ''),
                     ))
                 .toList(),

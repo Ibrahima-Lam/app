@@ -1,18 +1,21 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 
 import 'package:app/collection/composition_collection.dart';
+import 'package:app/controllers/competition/date.dart';
+import 'package:app/core/constants/event/kEvent.dart';
 import 'package:app/core/constants/strategie/rempl.dart';
 import 'package:app/core/enums/enums.dart';
 import 'package:app/models/composition.dart';
+import 'package:app/models/event.dart';
 import 'package:app/pages/joueur/joueur_details.dart';
 import 'package:app/providers/composition_provider.dart';
+import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/widget/modals/composition_bottom_sheet_widget.dart';
 import 'package:app/widget/modals/confirm_dialog_widget.dart';
 import 'package:app/widget/app/section_title_widget.dart';
 import 'package:app/widget/logos/substitut_logo_widget.dart';
 import 'package:app/widget_pages/composition_form.dart';
-import 'package:app/widget_pages/event_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -155,15 +158,6 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
   }
 
   void _onTap(JoueurComposition composition) async {
-    if (widget.compostitionWidgetType == CompostitionWidgetType.setting) {
-      await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => EventFormWidget(
-                composition: composition,
-              )));
-
-      return;
-    }
-
     final bool check =
         await context.read<JoueurProvider>().checkId(composition.idJoueur);
     if (check) {
@@ -194,11 +188,16 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
       if (!(confirm ?? false)) {
         return;
       }
-
-      if (isHome)
-        widget.compositionSousCollection.changeHome(compos, composition);
-      else
-        widget.compositionSousCollection.changeAway(compos, composition);
+      RemplEvent event = kRemplEvent.copyWith(
+        idEvent: 'R${DateController.dateCollapsed}',
+        idGame: composition.idGame,
+        idParticipant: composition.idParticipant,
+        idJoueur: compos.idJoueur,
+        nom: compos.nom,
+        idTarget: composition.idJoueur,
+        nomTarget: composition.nom,
+      );
+      await context.read<GameEventListProvider>().addEvent(event);
       widget.update!();
     }
   }
@@ -215,7 +214,7 @@ class _SubstitutListWidgetState extends State<SubstitutListWidget> {
     if (confirm == true) {
       final bool res = await context
           .read<CompositionProvider>()
-          .removeComposition(composition.idComposition);
+          .deleteComposition(composition.idComposition);
       if (res) {
         widget.compositionSousCollection.cancelChange(composition, isHome);
         widget.compositionSousCollection

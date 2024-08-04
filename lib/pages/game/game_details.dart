@@ -86,6 +86,7 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
         'journee': JourneeWidget(game: game),
         'infos': InfosListWiget(
           categorieParams: CategorieParams(
+            idEdition: game.groupe.codeEdition,
             idGame: game.idGame,
             idParticipant: game.idHome,
             idParticipant2: game.idAway,

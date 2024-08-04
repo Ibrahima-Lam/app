@@ -20,10 +20,13 @@ class ArbitreListTileWidget extends StatelessWidget {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ArbitreDetails(id: arbitre.idArbitre)));
       },
-      leading: Container(
-        height: 50,
-        width: 50,
-        child: ArbitreImageLogoWidget(url: arbitre.imageUrl),
+      leading: CircleAvatar(
+        backgroundColor: Color(0xFFF5F5F5),
+        child: Container(
+          height: 50,
+          width: 50,
+          child: ArbitreImageLogoWidget(url: arbitre.imageUrl),
+        ),
       ),
       title: Text(arbitre.nomArbitre),
       subtitle: Text(arbitre.role),

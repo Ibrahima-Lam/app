@@ -20,7 +20,7 @@ Infos _$InfosFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Infos {
-  String get id => throw _privateConstructorUsedError;
+  String get idInfos => throw _privateConstructorUsedError;
   String get text => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get datetime => throw _privateConstructorUsedError;
@@ -44,7 +44,7 @@ abstract class $InfosCopyWith<$Res> {
       _$InfosCopyWithImpl<$Res, Infos>;
   @useResult
   $Res call(
-      {String id,
+      {String idInfos,
       String text,
       String title,
       String datetime,
@@ -71,7 +71,7 @@ class _$InfosCopyWithImpl<$Res, $Val extends Infos>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? idInfos = null,
     Object? text = null,
     Object? title = null,
     Object? datetime = null,
@@ -85,9 +85,9 @@ class _$InfosCopyWithImpl<$Res, $Val extends Infos>
     Object? idCoach = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      idInfos: null == idInfos
+          ? _value.idInfos
+          : idInfos // ignore: cast_nullable_to_non_nullable
               as String,
       text: null == text
           ? _value.text
@@ -145,7 +145,7 @@ abstract class _$$InfosImplCopyWith<$Res> implements $InfosCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String id,
+      {String idInfos,
       String text,
       String title,
       String datetime,
@@ -170,7 +170,7 @@ class __$$InfosImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? idInfos = null,
     Object? text = null,
     Object? title = null,
     Object? datetime = null,
@@ -184,9 +184,9 @@ class __$$InfosImplCopyWithImpl<$Res>
     Object? idCoach = freezed,
   }) {
     return _then(_$InfosImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      idInfos: null == idInfos
+          ? _value.idInfos
+          : idInfos // ignore: cast_nullable_to_non_nullable
               as String,
       text: null == text
           ? _value.text
@@ -240,7 +240,7 @@ class __$$InfosImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
   const _$InfosImpl(
-      {required this.id,
+      {required this.idInfos,
       required this.text,
       required this.title,
       required this.datetime,
@@ -257,7 +257,7 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
       _$$InfosImplFromJson(json);
 
   @override
-  final String id;
+  final String idInfos;
   @override
   final String text;
   @override
@@ -283,7 +283,7 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Infos(id: $id, text: $text, title: $title, datetime: $datetime, source: $source, imageUrl: $imageUrl, idEdition: $idEdition, idGame: $idGame, idParticipant: $idParticipant, idJoueur: $idJoueur, idArbitre: $idArbitre, idCoach: $idCoach)';
+    return 'Infos(idInfos: $idInfos, text: $text, title: $title, datetime: $datetime, source: $source, imageUrl: $imageUrl, idEdition: $idEdition, idGame: $idGame, idParticipant: $idParticipant, idJoueur: $idJoueur, idArbitre: $idArbitre, idCoach: $idCoach)';
   }
 
   @override
@@ -291,7 +291,7 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'Infos'))
-      ..add(DiagnosticsProperty('id', id))
+      ..add(DiagnosticsProperty('idInfos', idInfos))
       ..add(DiagnosticsProperty('text', text))
       ..add(DiagnosticsProperty('title', title))
       ..add(DiagnosticsProperty('datetime', datetime))
@@ -310,7 +310,7 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$InfosImpl &&
-            (identical(other.id, id) || other.id == id) &&
+            (identical(other.idInfos, idInfos) || other.idInfos == idInfos) &&
             (identical(other.text, text) || other.text == text) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.datetime, datetime) ||
@@ -334,7 +334,7 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      id,
+      idInfos,
       text,
       title,
       datetime,
@@ -363,7 +363,7 @@ class _$InfosImpl with DiagnosticableTreeMixin implements _Infos {
 
 abstract class _Infos implements Infos {
   const factory _Infos(
-      {required final String id,
+      {required final String idInfos,
       required final String text,
       required final String title,
       required final String datetime,
@@ -379,7 +379,7 @@ abstract class _Infos implements Infos {
   factory _Infos.fromJson(Map<String, dynamic> json) = _$InfosImpl.fromJson;
 
   @override
-  String get id;
+  String get idInfos;
   @override
   String get text;
   @override

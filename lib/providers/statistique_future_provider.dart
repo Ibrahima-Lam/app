@@ -12,7 +12,7 @@ class StatistiqueFutureProvider extends ChangeNotifier {
   }
 
   Future<void> getData({bool remote = false}) async {
-    _statistiques = await StatistiqueService.getData(remote: remote);
+    _statistiques = await StatistiqueService.getData();
     notifyListeners();
   }
 
@@ -24,20 +24,20 @@ class StatistiqueFutureProvider extends ChangeNotifier {
 
   Future<bool> addStatistique(Statistique stat) async {
     final result = await StatistiqueService.addStatistique(stat);
-    if (result) await getData(remote: true);
+    if (result) await getData();
     return result;
   }
 
   Future<bool> editStatistique(String idStatistique, Statistique stat) async {
     final result =
         await StatistiqueService.editStatistique(idStatistique, stat);
-    if (result) await getData(remote: true);
+    if (result) await getData();
     return result;
   }
 
   Future<bool> deleteStatistique(String idStatistique) async {
     final result = await StatistiqueService.deleteStatistique(idStatistique);
-    if (result) await getData(remote: true);
+    if (result) await getData();
     return result;
   }
 }

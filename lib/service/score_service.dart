@@ -102,6 +102,13 @@ class ScoreService {
 }
 
 List<Map<String, dynamic>> scores = [
+  /*  {
+    "idGame": 67,
+    "homeScore": 2,
+    "awayScore": 2,
+    "homeScorePenalty": null,
+    "awayScorePenalty": null
+  }, */
   {
     "idGame": 45,
     "homeScore": 0,

@@ -7,7 +7,7 @@ part of 'infos.dart';
 // **************************************************************************
 
 _$InfosImpl _$$InfosImplFromJson(Map<String, dynamic> json) => _$InfosImpl(
-      id: json['id'] as String,
+      idInfos: json['idInfos'] as String,
       text: json['text'] as String,
       title: json['title'] as String,
       datetime: json['datetime'] as String,
@@ -23,7 +23,7 @@ _$InfosImpl _$$InfosImplFromJson(Map<String, dynamic> json) => _$InfosImpl(
 
 Map<String, dynamic> _$$InfosImplToJson(_$InfosImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'idInfos': instance.idInfos,
       'text': instance.text,
       'title': instance.title,
       'datetime': instance.datetime,

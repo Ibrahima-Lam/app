@@ -3,56 +3,49 @@ import 'package:flutter/material.dart';
 
 class EquipeImageLogoWidget extends StatelessWidget {
   final String? url;
-  final String? image;
-  final double? radius;
-  final double? size;
-  final bool noColor;
+  final double? width;
+  final double? height;
+  final bool isCircle;
 
-  final MaterialColor? backgroundColor;
-  final MaterialColor? color;
   const EquipeImageLogoWidget({
     super.key,
     this.url,
-    this.image,
-    this.radius,
-    this.size,
-    this.backgroundColor,
-    this.color,
-    this.noColor = false,
+    this.width,
+    this.height,
+    this.isCircle = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
-      width: 50,
-      decoration: const BoxDecoration(
+      height: height ?? 50,
+      width: width ?? 50,
+      decoration: BoxDecoration(
         color: Colors.white,
-        shape: BoxShape.circle,
+        shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
       ),
-      child: CachedNetworkImage(
-        width: MediaQuery.of(context).size.width,
-        fit: BoxFit.cover,
-        imageUrl: url ?? '',
-        errorWidget: (context, url, error) => ''.isEmpty
-            ? Container(
-                constraints: BoxConstraints(maxHeight: 80, maxWidth: 80),
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: AssetImage('images/photo.jpg'),
-                        fit: BoxFit.cover)),
-              )
-            : CircleAvatar(
-                backgroundColor:
-                    noColor ? null : backgroundColor ?? Color(0xFFDCDCDC),
-                radius: radius ?? 25,
-                child: Icon(
-                  color: noColor ? null : color ?? Colors.white,
-                  Icons.people,
-                  size: size ?? 30,
-                )),
-      ),
+      child: (url ?? '').isEmpty
+          ? EquipeLogoWidget()
+          : CachedNetworkImage(
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.cover,
+              imageUrl: url ?? '',
+              errorWidget: (context, url, error) => EquipeLogoWidget()),
+    );
+  }
+}
+
+class EquipeLogoWidget extends StatelessWidget {
+  const EquipeLogoWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(maxHeight: 80, maxWidth: 80),
+      decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+              image: AssetImage('images/equipe3.jpg'), fit: BoxFit.cover)),
     );
   }
 }

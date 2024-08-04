@@ -6,6 +6,7 @@ class Statistique {
   num awayStatistique;
   String idGame;
   int rang;
+  bool isFromEvent;
 
   Statistique({
     required this.idStatistique,
@@ -15,6 +16,7 @@ class Statistique {
     required this.awayStatistique,
     required this.idGame,
     this.rang = 0,
+    this.isFromEvent = false,
   });
 
   factory Statistique.fromJson(Map<String, dynamic> json) {

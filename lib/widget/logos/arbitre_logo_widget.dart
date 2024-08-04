@@ -34,7 +34,8 @@ class ArbitreImageLogoWidget extends StatelessWidget {
                   ),
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                      image: AssetImage(''), fit: BoxFit.cover)),
+                      image: AssetImage('images/arbitre.jpg'),
+                      fit: BoxFit.cover)),
             )
           : CircleAvatar(
               backgroundColor:

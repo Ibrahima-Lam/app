@@ -1,11 +1,11 @@
-import 'package:app/core/extension/list_extension.dart';
-
 abstract class Composition {
   String idComposition;
   String idGame;
   String nom;
   String? imageUrl;
+
   Map<String, dynamic> toJson();
+  external factory Composition.fromJson(Map<String, dynamic> json);
 
   Composition({
     required this.idGame,
@@ -200,26 +200,7 @@ class JoueurComposition extends EquipeComposition {
     required super.idComposition,
     super.imageUrl,
   });
-  factory JoueurComposition.fromJson(Map<String, dynamic> json,
-      {List<Map<String, dynamic>> listeComposition = const []}) {
-    JoueurComposition? entrant;
-    JoueurComposition? sortant;
-    if (json['entrant'] != null) {
-      Map<String, dynamic> e = listeComposition.singleWhereOrNull(
-              (element) => element['idJoueur'] == json['entrant']) ??
-          {};
-      if (e.isNotEmpty) {
-        entrant = JoueurComposition.fromJson(e);
-      }
-    }
-    if (json['sortant'] != null) {
-      Map<String, dynamic> s = listeComposition.singleWhereOrNull(
-              (element) => element['idJoueur'] == json['sortant']) ??
-          {};
-      if (s.isNotEmpty) {
-        sortant = JoueurComposition.fromJson(s);
-      }
-    }
+  factory JoueurComposition.fromJson(Map<String, dynamic> json) {
     return JoueurComposition(
       idGame: json['idGame'],
       idParticipant: json['idParticipant'],
@@ -229,16 +210,12 @@ class JoueurComposition extends EquipeComposition {
       idJoueur: json['idJoueur'],
       numero: json['numero'] ?? 0,
       isIn: json['isIn'] ?? false,
-      left: json['left'] ?? 0,
-      top: json['top'] ?? 0,
+      left: (json['left'] ?? 0).toDouble(),
+      top: (json['top'] ?? 0).toDouble(),
       isCapitaine: json['isCapitaine'] ?? false,
-      but: json['but'] ?? 0,
-      jaune: json['jaune'] ?? 0,
-      rouge: json['rouge'] ?? 0,
+      but: (json['but'] ?? 0).toInt(),
       tempsEntrants: json['tempsEntrants'] ?? 0,
       tempsSortant: json['tempsSortant'] ?? 0,
-      entrant: entrant,
-      sortant: sortant,
     );
   }
   toJson() {
@@ -255,12 +232,8 @@ class JoueurComposition extends EquipeComposition {
       'top': top,
       'isCapitaine': isCapitaine,
       'but': but,
-      'jaune': jaune,
-      'rouge': rouge,
       'tempsEntrants': tempsEntrants,
       'tempsSortant': tempsSortant,
-      'entrant': entrant?.idJoueur,
-      'sortant': sortant?.idJoueur,
     };
   }
 

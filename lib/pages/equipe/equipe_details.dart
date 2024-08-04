@@ -151,10 +151,9 @@ class EquipeDetails extends StatelessWidget {
                                     ),
                                     const SizedBox(width: 20),
                                     EquipeImageLogoWidget(
-                                      noColor: true,
+                                      height: 65,
+                                      width: 65,
                                       url: participant.imageUrl,
-                                      radius: 40,
-                                      size: 40,
                                     ),
                                     const SizedBox(width: 20),
                                     CircleAvatar(

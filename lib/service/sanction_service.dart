@@ -29,26 +29,36 @@ class SanctionService {
     }
   }
 
-  static Future<bool> addCardEvent(CardEvent arbitre) async {
-    sanctions.add(arbitre.toJson());
+  static Future<bool> addCardEvent(CardEvent event) async {
+    sanctions.add(event.toJson());
+    await service.setData(sanctions);
     return true;
   }
 
-  static Future<bool> editCardEvent(String idBut, CardEvent arbitre) async {
-    if (sanctions.any((element) => element['idBut'] == idBut)) {
-      int index = sanctions.indexWhere((element) => element['idBut'] == idBut);
-      if (index >= 0) sanctions[index] = arbitre.toJson();
+  static Future<bool> editCardEvent(
+      String idSanctionner, CardEvent event) async {
+    if (sanctions.any(
+        (element) => element['idSanctionner'].toString() == idSanctionner)) {
+      int index = sanctions.indexWhere(
+          (element) => element['idSanctionner'].toString() == idSanctionner);
+      if (index >= 0) sanctions[index] = event.toJson();
+      await service.setData(sanctions);
+
       return true;
     }
     return false;
   }
 
-  static Future<bool> deleteCardEvent(String idBut) async {
-    if (sanctions.any((element) => element['idBut'] == idBut)) {
-      sanctions.removeWhere((element) => element['idBut'] == idBut);
+  static Future<bool> deleteCardEvent(String idSanctionner) async {
+    if (sanctions.any(
+        (element) => element['idSanctionner'].toString() == idSanctionner)) {
+      sanctions.removeWhere(
+          (element) => element['idSanctionner'].toString() == idSanctionner);
+      await service.setData(sanctions);
+
       return true;
     }
-    return true;
+    return false;
   }
 }
 
@@ -506,7 +516,7 @@ final List<Map<String, dynamic>> sanctions = [
     "stadeGame": "Stade de Thialgou",
     "codeNiveau": "tr1",
     "nombreMatch": "1",
-    "motif": "Mauvais comportement  vers les arbitre aprés la fin du match"
+    "motif": "Mauvais comportement  vers les event aprés la fin du match"
   },
   {
     "nombreCarton": 1,

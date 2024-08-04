@@ -4,59 +4,81 @@ import 'package:app/service/infos_service.dart';
 import 'package:flutter/material.dart';
 
 class InfosProvider extends ChangeNotifier {
-  List<Infos> infos = [];
-  InfosProvider() {
-    InfosService.getData().listen(
-      (inf) {
-        infos.add(inf);
-        notifyListeners();
-      },
-    );
+  List<Infos> _infos;
+  InfosProvider([this._infos = const []]);
+
+  List<Infos> get infos => _infos;
+  void set infos(List<Infos> val) {
+    _infos = val;
+    notifyListeners();
   }
 
-  Stream<Infos> getInformations() async* {
-    /*  if (infos.isEmpty) {
-      await for (Infos inf in InfosService.getData()) {
-        infos.add(inf);
-        yield inf;
-      }
-    } */
+  Future<List<Infos>> getInformations({bool remote = false}) async {
+    if (infos.isEmpty || remote) {
+      infos = await InfosService.getData(remote: remote);
+    }
+    return infos;
   }
-
-  /* List<Infos> getInfosByInfo({required Infos info}) {
-    List<Infos> listes = getInfosBy(
-      idEdition: info.idEdition,
-      idGame: info.idGame,
-      idJoueur: info.idJoueur,
-      idParticipant: info.idParticipant,
-    );
-    return listes;
-  } */
 
   List<Infos> getInfosBy({required CategorieParams? categorie}) {
     if (categorie == null) return [];
     if (categorie.isNull) return [];
     List<Infos> listes = infos;
-    if (categorie.idEdition != null)
+
+    if (categorie.idEdition != null) {
       listes = listes
           .where((element) => element.idEdition == categorie.idEdition)
           .toList();
-    if (categorie.idGame != null)
+      return listes;
+    }
+    if (categorie.idGame != null) {
       listes = listes
           .where((element) => element.idGame == categorie.idGame)
           .toList();
-    if (categorie.idParticipant != null)
+      return listes;
+    }
+    if (categorie.idParticipant != null) {
       listes = listes
           .where((element) => element.idParticipant == categorie.idParticipant)
           .toList();
-    if (categorie.idParticipant2 != null)
+      return listes;
+    }
+    if (categorie.idParticipant2 != null) {
       listes = listes
           .where((element) => element.idParticipant == categorie.idParticipant2)
           .toList();
-    if (categorie.idJoueur != null)
+      return listes;
+    }
+    if (categorie.idJoueur != null) {
       listes = listes
           .where((element) => element.idJoueur == categorie.idJoueur)
           .toList();
-    return listes;
+      return listes;
+    }
+    return [];
+  }
+
+  Future<bool> addInfos(Infos info) async {
+    final result = await InfosService.addInfos(info);
+    if (result) {
+      await getInformations(remote: true);
+    }
+    return result;
+  }
+
+  Future<bool> editInfos(String id, Infos info) async {
+    final result = await InfosService.editInfos(id, info);
+    if (result) {
+      await getInformations(remote: true);
+    }
+    return result;
+  }
+
+  Future<bool> deleteInfos(String id) async {
+    final result = await InfosService.deleteInfos(id);
+    if (result) {
+      await getInformations(remote: true);
+    }
+    return result;
   }
 }

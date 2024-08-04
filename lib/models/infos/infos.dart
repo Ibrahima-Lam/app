@@ -6,7 +6,7 @@ part 'infos.g.dart';
 @freezed
 class Infos with _$Infos {
   const factory Infos({
-    required String id,
+    required String idInfos,
     required String text,
     required String title,
     required String datetime,

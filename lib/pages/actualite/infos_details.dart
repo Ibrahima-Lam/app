@@ -50,7 +50,7 @@ class _InfosDetailsState extends State<InfosDetails> {
                 )),
             flexibleSpace: FlexibleSpaceBar(
               background: Hero(
-                tag: widget.infos.id,
+                tag: widget.infos.idInfos,
                 child: Center(
                   child: Container(
                     constraints: BoxConstraints(minHeight: 200),
@@ -60,7 +60,7 @@ class _InfosDetailsState extends State<InfosDetails> {
                       errorWidget: (context, url, error) => Container(
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage('images/europa.jpg'),
+                              image: AssetImage('images/infos.jpg'),
                               fit: BoxFit.cover),
                         ),
                       ),

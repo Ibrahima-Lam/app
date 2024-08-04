@@ -37,7 +37,7 @@ class _ArbitreListWidgetState extends State<ArbitreListWidget> {
     if (confirm == true) {
       final bool res = await context
           .read<CompositionProvider>()
-          .removeComposition(composition.idComposition);
+          .deleteComposition(composition.idComposition);
       if (res) {
         setState(() {
           widget.compositionSousCollection

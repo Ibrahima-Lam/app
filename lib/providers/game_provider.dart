@@ -57,7 +57,8 @@ class GameProvider extends ChangeNotifier {
       await groupeProvider.initGroupes();
     if (participantProvider.participants.isEmpty || remote)
       await participantProvider.initParticipants();
-    if (scoreProvider.scores.isEmpty || remote) await scoreProvider.getData();
+    if (scoreProvider.scores.isEmpty || remote)
+      await scoreProvider.initScores();
     if (games.isEmpty || remote) await setGames(remote: remote);
     return games;
   }
@@ -89,13 +90,6 @@ class GameProvider extends ChangeNotifier {
       {required String idGame, required TimerEvent? timer}) async {
     await scoreProvider.changeTimer(idGame: idGame, timer: timer);
     return true;
-  }
-
-  void sortByDate([bool asc = true]) {
-    if (asc) {
-      games.sort((a, b) => a.dateGame!.compareTo(b.dateGame!));
-    } else
-      games.sort((a, b) => a.dateGame!.compareTo(b.dateGame!));
   }
 
   void changeEtat({required String id, required String etat}) async {
