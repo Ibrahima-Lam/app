@@ -32,9 +32,6 @@ class CompositionElementWidget extends StatelessWidget {
                     width: 50,
                     child: JoueurImageLogoWidget(
                       url: composition.imageUrl,
-                      noColor: true,
-                      radius: 15,
-                      size: 25,
                     )),
                 if (composition.but > 0)
                   Positioned(

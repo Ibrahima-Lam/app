@@ -1,15 +1,25 @@
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:app/models/user.dart';
 
 class UserService {
   static Future<User?> getUser(String email, String password) async {
-    await Future.delayed(Duration(seconds: 1));
-    User? user;
+    if (users.map((e) => e.email).contains(email))
+      return users.firstWhere((element) => element.email == email);
+    FirebaseAuth auth = FirebaseAuth.instance;
     try {
-      user = users.lastWhere((e) => e.email == email && e.password == password);
+      UserCredential uc = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      if (uc.user != null) {
+        return User(
+            id: uc.user?.uid ?? '',
+            name: uc.user?.displayName ?? '',
+            email: email,
+            password: password);
+      }
+      return null;
     } catch (e) {
       return null;
     }
-    return user;
   }
 }
 

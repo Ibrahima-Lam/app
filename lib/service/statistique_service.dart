@@ -1,8 +1,10 @@
 import 'package:app/models/statistique.dart';
 import 'package:app/service/local_service.dart';
+import 'package:app/service/remote_service.dart';
 
 class StatistiqueService {
   static LocalService get service => LocalService('statistique.json');
+  static const String collection = 'statistique';
 
   static Future<List<Statistique>?> getLocalData() async {
     if (await service.fileExists()) {
@@ -14,6 +16,8 @@ class StatistiqueService {
   }
 
   static Future<List<Statistique>> getData({bool remote = false}) async {
+    if (await service.isLoadable(2) && !remote)
+      return await getLocalData() ?? [];
     final List<Statistique> data = await getRemoteData();
     if (data.isEmpty && await service.hasData())
       return await getLocalData() ?? [];
@@ -22,40 +26,32 @@ class StatistiqueService {
 
   static Future<List<Statistique>> getRemoteData() async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      if (stats.isNotEmpty) await service.setData(stats);
-      return stats.map((e) => Statistique.fromJson(e)).toList();
+      final List data = await RemoteService.loadData(collection);
+      if (data.isNotEmpty) await service.setData(data);
+      return data.map((e) => Statistique.fromJson(e)).toList();
     } catch (e) {
       return [];
     }
   }
 
   static Future<bool> addStatistique(Statistique stat) async {
-    stats.add(stat.toJson());
-    await service.setData(stats);
-    return true;
+    final bool res = await RemoteService.setData(
+        collection, stat.idStatistique, stat.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> editStatistique(
       String idStatistique, Statistique stat) async {
-    if (stats.any((element) => element['idStatistique'] == idStatistique)) {
-      int index = stats
-          .indexWhere((element) => element['idStatistique'] == idStatistique);
-      if (index >= 0) stats[index] = stat.toJson();
-      await service.setData(stats);
-      return true;
-    }
-    return false;
+    final bool res =
+        await RemoteService.setData(collection, idStatistique, stat.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> deleteStatistique(String idStatistique) async {
-    if (stats.any((element) => element['idStatistique'] == idStatistique)) {
-      stats.removeWhere((element) => element['idStatistique'] == idStatistique);
-      await service.setData(stats);
-      return true;
-    }
-    return false;
+    final bool res = await RemoteService.deleteData(collection, idStatistique);
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 }
-
-List<Map<String, dynamic>> stats = [];

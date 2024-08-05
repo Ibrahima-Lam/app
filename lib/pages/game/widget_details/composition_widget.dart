@@ -67,59 +67,64 @@ class CompositionWidget extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  Card(
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Container(
-                          height: 900,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              RotatedBox(
-                                quarterTurns: 1,
-                                child: Container(
-                                  height: MediaQuery.of(context).size.width,
-                                  width: 800,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: AssetImage('images/stade.jpg'),
-                                          fit: BoxFit.fill)),
+                  if (compositionSousCollection.homeInside.isNotEmpty &&
+                          compositionSousCollection.awayInside.isNotEmpty ||
+                      checkUser) ...[
+                    Card(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            height: 900,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                RotatedBox(
+                                  quarterTurns: 1,
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.width,
+                                    width: 800,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image:
+                                                AssetImage('images/stade.jpg'),
+                                            fit: BoxFit.fill)),
+                                  ),
                                 ),
-                              ),
-                              PlayerListWidget(
-                                compositionSousCollection:
-                                    compositionSousCollection,
-                              ),
-                            ],
+                                PlayerListWidget(
+                                  compositionSousCollection:
+                                      compositionSousCollection,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          child: CoachAndTeamWidget(
-                              equipe: game.home.nomEquipe,
-                              composition:
-                                  compositionSousCollection.homeCoatch),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: CoachAndTeamWidget(
-                              equipe: game.away.nomEquipe,
-                              composition:
-                                  compositionSousCollection.awayCoatch),
-                        ),
-                      ],
+                          Positioned(
+                            top: 0,
+                            left: 0,
+                            child: CoachAndTeamWidget(
+                                equipe: game.home.nomEquipe,
+                                composition:
+                                    compositionSousCollection.homeCoatch),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: CoachAndTeamWidget(
+                                equipe: game.away.nomEquipe,
+                                composition:
+                                    compositionSousCollection.awayCoatch),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  SubstitutListWidget(
-                    compostitionWidgetType: CompostitionWidgetType.home,
-                    compositionSousCollection: compositionSousCollection,
-                  ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SubstitutListWidget(
+                      compostitionWidgetType: CompostitionWidgetType.home,
+                      compositionSousCollection: compositionSousCollection,
+                    )
+                  ],
                   ArbitreListWidget(
                     compostitionWidgetType: CompostitionWidgetType.home,
                     compositionSousCollection: compositionSousCollection,

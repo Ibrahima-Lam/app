@@ -2,6 +2,7 @@ import 'package:app/controllers/competition/date.dart';
 import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/infos/infos.dart';
 import 'package:app/providers/infos_provider.dart';
+import 'package:app/widget/infos/infos_error_widget.dart';
 import 'package:app/widget/infos/infos_widget.dart';
 import 'package:app/widget/sponsor/sponsor_list_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -55,16 +56,13 @@ class _InfosDetailsState extends State<InfosDetails> {
                   child: Container(
                     constraints: BoxConstraints(minHeight: 200),
                     width: MediaQuery.of(context).size.width,
-                    child: CachedNetworkImage(
-                      imageUrl: widget.infos.imageUrl ?? '',
-                      errorWidget: (context, url, error) => Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage('images/infos.jpg'),
-                              fit: BoxFit.cover),
-                        ),
-                      ),
-                    ),
+                    child: (widget.infos.imageUrl ?? '').isEmpty
+                        ? InfosErrorWidget()
+                        : CachedNetworkImage(
+                            imageUrl: widget.infos.imageUrl ?? '',
+                            errorWidget: (context, url, error) =>
+                                InfosErrorWidget(),
+                          ),
                   ),
                 ),
               ),
@@ -77,7 +75,8 @@ class _InfosDetailsState extends State<InfosDetails> {
                   color: Colors.white,
                   surfaceTintColor: Colors.white,
                   child: Container(
-                    constraints: BoxConstraints(minHeight: 300),
+                    constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height),
                     padding: EdgeInsets.all(10.0),
                     child: Column(
                       children: [
@@ -131,28 +130,10 @@ class _InfosDetailsState extends State<InfosDetails> {
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        SizedBox(
-                          height: 200,
-                        ),
-                        Center(
-                          child: Text(
-                            'Autre information',
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
                         AutreInfosWidet(info: widget.infos),
                       ],
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 10,
                 ),
                 SponsorListWidget(),
               ],
@@ -174,18 +155,37 @@ class AutreInfosWidet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<InfosProvider>(builder: (context, val, child) {
       List<Infos> infos = val.getInfosBy(
+          idInfosExclus: info.idInfos,
           categorie: CategorieParams(
-        idEdition: info.idEdition,
-        idGame: info.idGame,
-        idParticipant: info.idParticipant,
-        idJoueur: info.idJoueur,
-        idArbitre: info.idArbitre,
-        idCoach: info.idCoach,
-      ));
-      return Container(
-        child: Column(
-            children: infos.map((e) => InfosLessWidget(infos: e)).toList()),
-      );
+            idEdition: info.idEdition,
+            idGame: info.idGame,
+            idParticipant: info.idParticipant,
+            idJoueur: info.idJoueur,
+            idArbitre: info.idArbitre,
+            idCoach: info.idCoach,
+          ));
+      return infos.isEmpty
+          ? const SizedBox()
+          : Container(
+              child: Column(children: [
+                SizedBox(
+                  height: 200,
+                ),
+                Center(
+                  child: Text(
+                    'Autre information',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                ...infos.map((e) => InfosLessWidget(infos: e)).toList()
+              ]),
+            );
     });
   }
 }

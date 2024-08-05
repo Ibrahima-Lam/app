@@ -2,9 +2,11 @@ import 'package:app/models/groupe.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/models/participation.dart';
 import 'package:app/service/local_service.dart';
+import 'package:app/service/remote_service.dart';
 
 class ParticipationService {
   static LocalService get service => LocalService('participation.json');
+  static const String collection = 'participation';
   static List<Participation> _toParticipation(
       List data, List<Participant> participants, List<Groupe> groupes) {
     return data
@@ -46,43 +48,34 @@ class ParticipationService {
   static Future<List<Participation>> getRemoteData(
       List<Participant> participants, List<Groupe> groupes) async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      if (participations.isNotEmpty) await service.setData(participations);
-      return _toParticipation(participations, participants, groupes);
+      final List data = await RemoteService.loadData(collection);
+      if (data.isNotEmpty) await service.setData(data);
+      return _toParticipation(data, participants, groupes);
     } catch (e) {
       return [];
     }
   }
 
   static Future<bool> addParticipation(Participation partcipation) async {
-    if (participations.any((element) =>
-        element['idGroupe'].toString() == partcipation.idGroupe &&
-        element['idParticipant'].toString() == partcipation.idParticipant))
-      return false;
-    participations.add(partcipation.toJson());
-    return true;
+    final bool res = await RemoteService.setData(
+        collection, partcipation.idParticipation, partcipation.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> editParticipation(
-      String idParticipation, Participation participant) async {
-    if (participations.any((element) =>
-        element['idParticipation'].toString() == idParticipation)) {
-      int index = participations.indexWhere((element) =>
-          element['idParticipation'].toString() == idParticipation);
-      if (index >= 0) participations[index] = participant.toJson();
-      return true;
-    }
-    return false;
+      String idParticipation, Participation participation) async {
+    final bool res = await RemoteService.editData(
+        collection, idParticipation, participation.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> removeParticipation(String idParticipation) async {
-    if (participations.any((element) =>
-        element['idParticipation'].toString() == idParticipation)) {
-      participations.removeWhere((element) =>
-          element['idParticipation'].toString() == idParticipation);
-      return true;
-    }
-    return false;
+    final bool res =
+        await RemoteService.deleteData(collection, idParticipation);
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 }
 

@@ -1,8 +1,10 @@
 import 'package:app/models/coachs/coach.dart';
 import 'package:app/service/local_service.dart';
+import 'package:app/service/remote_service.dart';
 
 class CoachService {
   static LocalService get service => LocalService('coach.json');
+  static const String collection = 'coach';
 
   static Future<List<Coach>?> getLocalData() async {
     if (await service.fileExists()) {
@@ -23,38 +25,32 @@ class CoachService {
 
   static Future<List<Coach>> getRemoteData() async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      if (coachs.isNotEmpty) await service.setData(coachs);
-      return coachs.map((e) => Coach.fromJson(e)).toList();
+      final List data = await RemoteService.loadData(collection);
+      if (data.isNotEmpty) await service.setData(data);
+      return data.map((e) => Coach.fromJson(e)).toList();
     } catch (e) {
       return [];
     }
   }
 
   static Future<bool> addCoach(Coach coach) async {
-    if (coachs.any((element) =>
-        element['idParticipant'] == coach.idParticipant &&
-        element['nomCoach'] == coach.nomCoach &&
-        element['role'] == coach.role)) return false;
-    coachs.add(coach.toJson());
-    return true;
+    final bool res =
+        await RemoteService.setData(collection, coach.idCoach, coach.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> editCoach(String idCoach, Coach coach) async {
-    if (coachs.any((element) => element['idCoach'] == idCoach)) {
-      int index = coachs.indexWhere((element) => element['idCoach'] == idCoach);
-      if (index >= 0) coachs[index] = coach.toJson();
-      return true;
-    }
-    return false;
+    final bool res =
+        await RemoteService.setData(collection, idCoach, coach.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> deleteCoach(String idCoach) async {
-    if (coachs.any((element) => element['idCoach'] == idCoach)) {
-      coachs.removeWhere((element) => element['idCoach'] == idCoach);
-      return true;
-    }
-    return true;
+    final bool res = await RemoteService.deleteData(collection, idCoach);
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 }
 

@@ -1,11 +1,13 @@
 import 'package:app/models/coachs/coach.dart';
 import 'package:app/models/composition.dart';
+import 'package:app/providers/composition_provider.dart';
 import 'package:app/widget/events/composition_events_widget.dart';
 import 'package:app/widget/form/dropdown_menu_widget.dart';
 import 'package:app/widget/form/elevated_button_widget.dart';
 import 'package:app/widget/form/text_field_widget.dart';
 import 'package:app/widget/modals/bottom_modal_coach_list_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CoachFormWidget extends StatefulWidget {
   final CoachComposition composition;
@@ -95,7 +97,10 @@ class _CoachFormWidgetState extends State<CoachFormWidget> {
                 setState(() {
                   widget.composition.nom = nomEditingController.text;
                 });
-                Navigator.pop(context, widget.composition);
+                if (await context.read<CompositionProvider>().setComposition(
+                    widget.composition.idComposition, widget.composition)) {
+                  Navigator.pop(context);
+                }
               },
             )
           ],

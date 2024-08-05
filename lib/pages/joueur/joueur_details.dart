@@ -101,7 +101,7 @@ class JoueurDetails extends StatelessWidget {
                                                           .idParticipant)));
                                     },
                                     child: EquipeImageLogoWidget(
-                                        url: joueur.imageUrl),
+                                        url: joueur.participant.imageUrl),
                                   ),
                                 ),
                                 const SizedBox(
@@ -112,9 +112,6 @@ class JoueurDetails extends StatelessWidget {
                                   width: 80,
                                   child: JoueurImageLogoWidget(
                                     url: joueur.imageUrl,
-                                    noColor: true,
-                                    size: 40,
-                                    radius: 40,
                                   ),
                                 ),
                                 const SizedBox(

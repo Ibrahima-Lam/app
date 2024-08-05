@@ -1,9 +1,10 @@
 import 'package:app/models/paramettre.dart';
 import 'package:app/service/local_service.dart';
-import 'package:flutter/material.dart';
+import 'package:app/service/remote_service.dart';
 
 class ParamettreService {
   static LocalService get service => LocalService('paramettrages.json');
+  static String collection = 'competitionparamettre';
 
   static Future<List<Paramettre>?> getLocalData() async {
     if (await service.fileExists()) {
@@ -25,32 +26,33 @@ class ParamettreService {
 
   static Future<List<Paramettre>> getRemoteData() async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      if (paramettres.isNotEmpty) await service.setData(paramettres);
-      return paramettres.map((e) => Paramettre.fromJson(e)).toList();
+      final List data = await RemoteService.loadData(collection);
+      if (data.isNotEmpty) await service.setData(data);
+      return data.map((e) => Paramettre.fromJson(e)).toList();
     } catch (e) {
       return [];
     }
   }
 
   static Future<bool> addData(Paramettre paramettre) async {
-    await Future.delayed(Durations.extralong4);
-    paramettres.add(paramettre.toJson());
-    return true;
+    final bool res = await RemoteService.setData(
+        collection, paramettre.idParamettre, paramettre.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> updateData(
       String idEdition, Paramettre paramettre) async {
-    await Future.delayed(Durations.extralong4);
-    paramettres.removeWhere((element) => element['idEdition'] == idEdition);
-    paramettres.add(paramettre.toJson());
-    return true;
+    final bool res =
+        await RemoteService.setData(collection, idEdition, paramettre.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> removeData(String idEdition) async {
-    await Future.delayed(Durations.extralong4);
-    paramettres.removeWhere((element) => element['idEdition'] == idEdition);
-    return true;
+    final bool res = await RemoteService.deleteData(collection, idEdition);
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 }
 

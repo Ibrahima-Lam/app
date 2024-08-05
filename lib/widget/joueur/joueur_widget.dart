@@ -25,9 +25,8 @@ class JoueurListTileWidget extends StatelessWidget {
       leading: CircleAvatar(
         backgroundColor: Color(0xFFF5F5F5),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          height: 60,
-          width: 60,
+          height: 50,
+          width: 50,
           child: JoueurImageLogoWidget(url: joueur.imageUrl),
         ),
       ),

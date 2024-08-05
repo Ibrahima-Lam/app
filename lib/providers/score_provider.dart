@@ -1,4 +1,5 @@
 import 'package:app/core/enums/game_etat_enum.dart';
+import 'package:app/core/extension/list_extension.dart';
 import 'package:app/models/gameEvent.dart';
 import 'package:app/models/scores/score.dart';
 
@@ -35,19 +36,19 @@ class ScoreProvider extends ChangeNotifier {
 
   Future<bool> changeEtat(
       {required String idGame, required GameEtatClass etat}) async {
-    final bool result = await ScoreService.changeEtat(idGame, etat);
+    Score? score =
+        scores.singleWhereOrNull((element) => element.idGame == idGame);
+    if (score != null)
+      score.etat = etat;
+    else
+      score = Score(idGame: idGame, etat: etat);
+    final bool result = await await ScoreService.editScore(idGame, score);
     if (result) await getData(remote: true);
     return result;
   }
 
   Future<bool> editScore(String idGame, Score score) async {
     final bool result = await ScoreService.editScore(idGame, score);
-    if (result) await getData(remote: true);
-    return result;
-  }
-
-  Future<bool> editScorePenalty(String idGame, Score score) async {
-    final bool result = await ScoreService.editScorePenalty(idGame, score);
     if (result) await getData(remote: true);
     return result;
   }
@@ -60,7 +61,13 @@ class ScoreProvider extends ChangeNotifier {
 
   Future<bool> changeTimer(
       {required String idGame, required TimerEvent? timer}) async {
-    final bool result = await ScoreService.changeTimer(idGame, timer);
+    Score? score =
+        scores.singleWhereOrNull((element) => element.idGame == idGame);
+    if (score != null)
+      score.timer = timer;
+    else
+      score = Score(idGame: idGame, timer: timer);
+    final bool result = await await ScoreService.editScore(idGame, score);
     if (result) await getData(remote: true);
     return result;
   }

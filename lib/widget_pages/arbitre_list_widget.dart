@@ -60,7 +60,9 @@ class _ArbitreListWidgetState extends State<ArbitreListWidget> {
       child: Column(
         children: [
           SectionTitleWidget(title: 'Arbitres'),
-          widget.compositionSousCollection.arbitres.isEmpty
+          widget.compositionSousCollection.arbitres.isEmpty &&
+                  widget.compostitionWidgetType !=
+                      CompostitionWidgetType.setting
               ? const Center(
                   child: Padding(
                     padding: EdgeInsets.all(10.0),

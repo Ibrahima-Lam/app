@@ -20,8 +20,10 @@ class CompositionProvider extends ChangeNotifier {
     if (e is JoueurComposition) {
       List<Event> evs = gameEventListProvider.getJoueurGameEvent(
           idGame: e.idGame, idJoueur: e.idJoueur);
-      int but =
-          evs.whereType<GoalEvent>().where((element) => element.propre).length;
+      int but = evs
+          .whereType<GoalEvent>()
+          .where((element) => element.propre && element.idJoueur == e.idJoueur)
+          .length;
       int jaune =
           evs.whereType<CardEvent>().where((element) => !element.isRed).length;
       int rouge =
@@ -60,7 +62,7 @@ class CompositionProvider extends ChangeNotifier {
 
   Future setCollection() async {
     compositionCollection = CompositionCollection(
-        (await CompositionService.getCompositions()).map(_toElement).toList());
+        (await CompositionService.getData()).map(_toElement).toList());
     notifyListeners();
   }
 
@@ -82,21 +84,6 @@ class CompositionProvider extends ChangeNotifier {
       String idGame, List<Composition> compos) async {
     final bool result =
         await CompositionService.setAllCompositions(idGame, compos);
-    if (result) {
-      await setCollection();
-    }
-    return result;
-  }
-
-  Future<bool> setJoueurComposition(JoueurComposition composition,
-      {required String idGame,
-      required String idParticipant,
-      required String idJoueur}) async {
-    final bool result = await CompositionService.setJoueurComposition(
-        composition,
-        idGame: idGame,
-        idParticipant: idParticipant,
-        idJoueur: idJoueur);
     if (result) {
       await setCollection();
     }
@@ -130,17 +117,6 @@ class CompositionProvider extends ChangeNotifier {
 
   Future<bool> addComposition(Composition competition) async {
     final result = await CompositionService.addComposition(competition);
-    if (result) {
-      await setCollection();
-    }
-    return result;
-  }
-
-  Future<bool> changeComposition(
-      JoueurComposition sortant, JoueurComposition entrant,
-      {required String idGame, required String idParticipant}) async {
-    final result = await CompositionService.changeComposition(sortant, entrant,
-        idGame: idGame, idParticipant: idParticipant);
     if (result) {
       await setCollection();
     }

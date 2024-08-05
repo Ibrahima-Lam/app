@@ -6,12 +6,12 @@ class ParticipantProvider extends ChangeNotifier {
   List<Participant> participants = [];
 
   Future setParticipants({bool remote = false}) async {
-    participants = await ParticipantService.getData(remote: remote);
+    participants = await ParticipantService.getData();
     notifyListeners();
   }
 
   Future initParticipants({bool remote = false}) async {
-    participants = await ParticipantService.getData(remote: remote);
+    participants = await ParticipantService.getData();
   }
 
   Future<List<Participant>> getParticipants({bool remote = false}) async {

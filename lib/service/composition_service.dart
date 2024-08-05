@@ -1,49 +1,13 @@
 import 'package:app/controllers/competition/date.dart';
 import 'package:app/models/composition.dart';
 import 'package:app/service/local_service.dart';
+import 'package:app/service/remote_service.dart';
 import 'package:flutter/material.dart';
 
 class CompositionService {
-  static Future<List<Composition>> getCompositions() async {
-    await Future.delayed(Duration(seconds: 1));
-    return _toCompositions(strategies);
-  }
-
-  static Future<bool> addAllCompositions(
-      String idGame, List<Composition> compos) async {
-    if (strategies.any((element) => element['idGame'] == idGame)) return false;
-    strategies.addAll(compos.map((e) => e.toJson()));
-    return true;
-  }
-
-  static Future<bool> setAllCompositions(
-      String idGame, List<Composition> compos) async {
-    strategies.removeWhere((element) => element['idGame'] == idGame);
-    strategies.addAll(compos.map((e) => e.toJson()));
-    return true;
-  }
-
-  static Future<bool> setJoueurComposition(JoueurComposition composition,
-      {required String idGame,
-      required String idParticipant,
-      required String idJoueur}) async {
-    final bool Function(Composition) fn = (element) =>
-        (element as JoueurComposition).idGame == idGame &&
-        (element).idParticipant == idParticipant &&
-        (element).idJoueur == idJoueur;
-    final bool check = strategies.whereType<JoueurComposition>().any(fn);
-    if (!check) return false;
-    final int index = strategies.indexWhere(
-      (element) {
-        if (element is! JoueurComposition) return false;
-        return fn(_toComposition(element));
-      },
-    );
-    strategies[index] = composition.toJson();
-    return true;
-  }
-
   static LocalService get service => LocalService('composition.json');
+  static const String collection = 'composition';
+
   static List<Composition> _toCompositions(List data) {
     return data.map((e) => _toComposition(e)).toList();
   }
@@ -59,6 +23,21 @@ class CompositionService {
     return StaffComposition.fromJson(data);
   }
 
+  static Future<bool> addAllCompositions(
+      String idGame, List<Composition> compos) async {
+    if (strategies.any((element) => element['idGame'] == idGame)) return false;
+    strategies.addAll(compos.map((e) => e.toJson()));
+    return true;
+  }
+
+  static Future<bool> setAllCompositions(
+      String idGame, List<Composition> compos) async {
+    for (var element in compos) {
+      if (!await setComposition(element.idComposition, element)) return false;
+    }
+    return true;
+  }
+
   static Future<List<Composition>?> getLocalData() async {
     if (await service.fileExists()) {
       final List? data = (await service.getData());
@@ -68,6 +47,8 @@ class CompositionService {
   }
 
   static Future<List<Composition>> getData({bool remote = false}) async {
+    if (await service.isLoadable(2) && !remote)
+      return await getLocalData() ?? [];
     final List<Composition> data = await getRemoteData();
     if (data.isEmpty && await service.hasData())
       return await getLocalData() ?? [];
@@ -76,77 +57,41 @@ class CompositionService {
 
   static Future<List<Composition>> getRemoteData() async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      if (strategies.isNotEmpty) await service.setData(strategies);
-      return _toCompositions(strategies);
+      final List data = await RemoteService.loadData(collection);
+      if (data.isNotEmpty) await service.setData(data);
+      return _toCompositions(data);
     } catch (e) {
       return [];
     }
   }
 
-  static Future<bool> addComposition(Composition stat) async {
-    strategies.add(stat.toJson());
-    return true;
+  static Future<bool> addComposition(Composition compos) async {
+    final bool res = await RemoteService.setData(
+        collection, compos.idComposition, compos.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> editComposition(
-      String idComposition, Composition stat) async {
-    if (strategies
-        .any((element) => element['idComposition'] == idComposition)) {
-      int index = strategies
-          .indexWhere((element) => element['idComposition'] == idComposition);
-      if (index >= 0) strategies[index] = stat.toJson();
-      return true;
-    }
-    return false;
+      String idComposition, Composition compos) async {
+    final bool res =
+        await RemoteService.setData(collection, idComposition, compos.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> setComposition(
-      String idComposition, Composition stat) async {
-    if (strategies
-        .any((element) => element['idComposition'] == idComposition)) {
-      int index = strategies
-          .indexWhere((element) => element['idComposition'] == idComposition);
-      if (index >= 0) strategies[index] = stat.toJson();
-
-      return true;
-    }
-    strategies.add(stat.toJson());
-    return true;
-  }
-
-  static Future<bool> changeComposition(
-      JoueurComposition sortant, JoueurComposition entrant,
-      {required String idGame, required String idParticipant}) async {
-    if (strategies.any((element) =>
-            element['idJoueur'] == sortant.idJoueur &&
-            element['idGame'] == idGame &&
-            element['idParticipant'] == idParticipant) &&
-        strategies.any((element) =>
-            element['idJoueur'] == entrant.idJoueur &&
-            element['idGame'] == idGame &&
-            element['idParticipant'] == idParticipant)) {
-      int indexS = strategies
-          .indexWhere((element) => element['idJoueur'] == sortant.idJoueur);
-      int indexE = strategies
-          .indexWhere((element) => element['idJoueur'] == entrant.idJoueur);
-      if (indexS >= 0 && indexE >= 0) {
-        strategies[indexS]['entrant'] = entrant.idJoueur;
-        strategies[indexE]['sortant'] = sortant.idJoueur;
-      }
-      return true;
-    }
-    return false;
+      String idComposition, Composition compos) async {
+    final bool res =
+        await RemoteService.setData(collection, idComposition, compos.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> deleteComposition(String idComposition) async {
-    if (strategies
-        .any((element) => element['idComposition'] == idComposition)) {
-      strategies
-          .removeWhere((element) => element['idComposition'] == idComposition);
-      return true;
-    }
-    return false;
+    final bool res = await RemoteService.deleteData(collection, idComposition);
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 }
 

@@ -1,8 +1,10 @@
 import 'package:app/models/competition.dart';
 import 'package:app/service/local_service.dart';
+import 'package:app/service/remote_service.dart';
 
 class CompetitionService {
   static const file = 'competition.json';
+  static const collection = 'competition';
   final LocalService service;
 
   const CompetitionService([this.service = const LocalService(file)]);
@@ -30,38 +32,33 @@ class CompetitionService {
 
   Future<List<Competition>> getRemoteData() async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      if (competitions.isNotEmpty) await service.setData(competitions);
-      return competitions.map((e) => Competition.fromJson(e)).toList()
-        ..sort(_sorter);
+      final data = await RemoteService.loadData(collection);
+      if (data.isNotEmpty) await service.setData(data);
+      return data.map((e) => Competition.fromJson(e)).toList()..sort(_sorter);
     } catch (e) {
       return [];
     }
   }
 
   Future<bool> addCompetition(Competition competition) async {
-    await Future.delayed(const Duration(seconds: 2));
-    competitions.add(competition.toJson());
-    return true;
+    final bool res = await RemoteService.setData(
+        collection, competition.codeEdition, competition.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   Future<bool> removeCompetition(String codeEdition) async {
-    await Future.delayed(const Duration(seconds: 1));
-    competitions
-        .removeWhere((element) => element['codeEdition'] == codeEdition);
-    return true;
+    final bool res = await RemoteService.deleteData(collection, codeEdition);
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   Future<bool> editCompetition(
       String codeEdition, Competition competition) async {
-    await Future.delayed(const Duration(seconds: 1));
-    int index = competitions
-        .lastIndexWhere((element) => element['codeEdition'] == codeEdition);
-    if (index >= 0) {
-      competitions[index] = competition.toJson();
-      return true;
-    }
-    return false;
+    final bool res = await RemoteService.setData(
+        collection, codeEdition, competition.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 }
 

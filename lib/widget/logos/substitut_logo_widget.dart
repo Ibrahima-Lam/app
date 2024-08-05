@@ -27,8 +27,6 @@ class SubstitutLogoWidget extends StatelessWidget {
             width: 40,
             child: JoueurImageLogoWidget(
               url: composition.imageUrl,
-              size: 30,
-              radius: 15,
             ),
           ),
         ),

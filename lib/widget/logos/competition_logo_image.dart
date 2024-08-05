@@ -14,17 +14,24 @@ class CompetitionImageLogoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width ?? 50,
-      height: height ?? 50,
-      child: (url ?? '').isEmpty
-          ? CompetitionLogoWidget()
-          : CachedNetworkImage(
-              fit: BoxFit.cover,
-              errorListener: (value) {},
-              imageUrl: url ?? '',
-              errorWidget: (context, url, error) => CompetitionLogoWidget(),
-            ),
+    return ClipOval(
+      child: Container(
+        width: width ?? 50,
+        height: height ?? 50,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+        ),
+        child: (url ?? '').isEmpty
+            ? CompetitionLogoWidget()
+            : CachedNetworkImage(
+                width: MediaQuery.sizeOf(context).width,
+                height: MediaQuery.sizeOf(context).height,
+                fit: BoxFit.cover,
+                errorListener: (value) {},
+                imageUrl: url ?? '',
+                errorWidget: (context, url, error) => CompetitionLogoWidget(),
+              ),
+      ),
     );
   }
 }

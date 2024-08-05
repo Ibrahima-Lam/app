@@ -1,6 +1,7 @@
 import 'package:app/controllers/competition/date.dart';
 import 'package:app/models/infos/infos.dart';
 import 'package:app/pages/actualite/infos_details.dart';
+import 'package:app/widget/infos/infos_error_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -29,8 +30,7 @@ class _InfosWidgetState extends State<InfosWidget> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
         color: Colors.white,
         child: Container(
-          padding: const EdgeInsets.all(5),
-          constraints: const BoxConstraints(maxHeight: 180),
+          constraints: const BoxConstraints(maxHeight: 185),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -40,21 +40,14 @@ class _InfosWidgetState extends State<InfosWidget> {
                   Hero(
                     tag: widget.infos.idInfos,
                     child: Container(
-                      height: 140,
+                      height: 150,
                       width: MediaQuery.of(context).size.width * .30,
-                      child: CachedNetworkImage(
-                        imageUrl: widget.infos.imageUrl ?? '',
-                        errorWidget: (context, url, error) => AnimatedContainer(
-                          duration: Durations.medium1,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage(
-                                  'images/infos.jpg',
-                                ),
-                                fit: BoxFit.cover),
-                          ),
-                        ),
-                      ),
+                      child: (widget.infos.imageUrl ?? '').isEmpty
+                          ? InfosErrorWidget()
+                          : CachedNetworkImage(
+                              imageUrl: widget.infos.imageUrl ?? '',
+                              errorWidget: (context, url, error) =>
+                                  InfosErrorWidget()),
                     ),
                   ),
                   Expanded(
@@ -67,20 +60,17 @@ class _InfosWidgetState extends State<InfosWidget> {
                             child: Text(
                               widget.infos.title,
                               style: const TextStyle(
-                                fontSize: 18,
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 5,
                           ),
                           Text(
                             widget.infos.text,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w400),
+                                fontSize: 14, fontWeight: FontWeight.w400),
                           )
                         ],
                       ),
@@ -142,19 +132,13 @@ class _InfosFullWidgetState extends State<InfosFullWidget> {
                 child: Container(
                   height: 300,
                   width: MediaQuery.of(context).size.width,
-                  child: CachedNetworkImage(
-                    imageUrl: widget.infos.imageUrl ?? '',
-                    errorWidget: (context, url, error) => AnimatedContainer(
-                      duration: Durations.medium1,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(
-                              'images/infos.jpg',
-                            ),
-                            fit: BoxFit.cover),
-                      ),
-                    ),
-                  ),
+                  child: (widget.infos.imageUrl ?? '').isEmpty
+                      ? InfosErrorWidget()
+                      : CachedNetworkImage(
+                          imageUrl: widget.infos.imageUrl ?? '',
+                          errorWidget: (context, url, error) =>
+                              InfosErrorWidget(),
+                        ),
                 ),
               ),
               const SizedBox(
@@ -205,7 +189,7 @@ class InfosLessWidget extends StatelessWidget {
             builder: (context) => InfosDetails(infos: infos)));
       },
       child: Container(
-        constraints: BoxConstraints(maxHeight: 150),
+        constraints: BoxConstraints(maxHeight: 160),
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(width: 0.5),
@@ -217,26 +201,20 @@ class InfosLessWidget extends StatelessWidget {
             Hero(
               tag: infos.idInfos + 'other',
               child: Container(
-                height: 140,
+                height: 150,
                 width: MediaQuery.of(context).size.width * .30,
-                child: CachedNetworkImage(
-                  imageUrl: infos.imageUrl ?? '',
-                  errorWidget: (context, url, error) => AnimatedContainer(
-                    duration: Durations.medium1,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(
-                            'images/infos.jpg',
-                          ),
-                          fit: BoxFit.cover),
-                    ),
-                  ),
-                ),
+                child: (infos.imageUrl ?? '').isEmpty
+                    ? InfosErrorWidget()
+                    : CachedNetworkImage(
+                        imageUrl: infos.imageUrl ?? '',
+                        errorWidget: (context, url, error) =>
+                            InfosErrorWidget(),
+                      ),
               ),
             ),
             Expanded(
                 child: Container(
-              constraints: BoxConstraints(minHeight: 160),
+              constraints: BoxConstraints(minHeight: 150),
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

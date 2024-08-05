@@ -1,8 +1,10 @@
 import 'package:app/models/event.dart';
 import 'package:app/service/local_service.dart';
+import 'package:app/service/remote_service.dart';
 
 class ChangementService {
   static LocalService get service => LocalService('changement.json');
+  static const String collection = 'changement';
 
   static Future<List<RemplEvent>?> getLocalData() async {
     if (await service.fileExists()) {
@@ -21,46 +23,33 @@ class ChangementService {
 
   static Future<List<RemplEvent>> getRemoteData() async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      if (changements.isNotEmpty) await service.setData(changements);
-      return changements.map((e) => RemplEvent.fromJson(e)).toList();
+      final List data = await RemoteService.loadData(collection);
+      if (data.isNotEmpty) await service.setData(data);
+      return data.map((e) => RemplEvent.fromJson(e)).toList();
     } catch (e) {
       return [];
     }
   }
 
   static Future<bool> addRemplEvent(RemplEvent event) async {
-    changements.add(event.toJson());
-    await service.setData(changements);
-    return true;
+    final bool res =
+        await RemoteService.setData(collection, event.idEvent, event.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> editRemplEvent(
       String idChangement, RemplEvent event) async {
-    if (changements
-        .any((element) => element['idChangement'].toString() == idChangement)) {
-      int index = changements.indexWhere(
-          (element) => element['idChangement'].toString() == idChangement);
-      if (index >= 0) changements[index] = event.toJson();
-      await service.setData(changements);
-
-      return true;
-    }
-    return false;
+    final bool res =
+        await RemoteService.setData(collection, idChangement, event.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> deleteRemplEvent(String idChangement) async {
-    print(idChangement);
-    print(changements);
-    if (changements
-        .any((element) => element['idChangement'].toString() == idChangement)) {
-      changements.removeWhere(
-          (element) => element['idChangement'].toString() == idChangement);
-      await service.setData(changements);
-
-      return true;
-    }
-    return false;
+    final bool res = await RemoteService.deleteData(collection, idChangement);
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 }
 

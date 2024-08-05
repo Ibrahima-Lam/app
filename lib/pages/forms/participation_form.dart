@@ -57,7 +57,8 @@ class _ParticipationFormState extends State<ParticipationForm> {
             );
     if (participant == null || groupe == null) return;
     final Participation participation = Participation(
-        idParticipation: widget.codeEdition + participantController.text,
+        idParticipation: widget.participation?.idParticipation ??
+            widget.codeEdition + participantController.text,
         idParticipant: participantController.text,
         idGroupe: groupeController.text,
         groupe: groupe,

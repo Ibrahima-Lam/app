@@ -5,9 +5,12 @@ import 'package:app/pages/equipe/equipe_page.dart';
 import 'package:app/pages/competition/competition_page.dart';
 import 'package:app/pages/game/game_search.dart';
 import 'package:app/pages/joueur/joueur_page.dart';
+import 'package:app/pages/skelton/aide_page.dart';
 import 'package:app/pages/skelton/contact_page.dart';
 import 'package:app/pages/skelton/login_page.dart';
 import 'package:app/pages/skelton/paramettre_page.dart';
+import 'package:app/pages/skelton/plus_infos_page.dart';
+import 'package:app/pages/skelton/signaler_page.dart';
 import 'package:app/providers/app_paramettre_provider.dart';
 import 'package:app/providers/user_provider.dart';
 import 'package:app/widget/events/composition_events_widget.dart';
@@ -173,6 +176,11 @@ class DrawerWidget extends StatelessWidget {
                 size: size,
               ),
               title: 'Plus d\'infos',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => PlusInfosPage()));
+              },
             ),
             listTileWidget(
               icon: Icon(
@@ -181,6 +189,11 @@ class DrawerWidget extends StatelessWidget {
                 size: size,
               ),
               title: 'Aide',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const AidePage()));
+              },
             ),
             const Divider(),
             listTileWidget(
@@ -204,6 +217,11 @@ class DrawerWidget extends StatelessWidget {
                 size: size,
               ),
               title: 'Signaler',
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SignalerPage()));
+              },
             ),
           ],
         ),

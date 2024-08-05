@@ -1,9 +1,11 @@
 import 'package:app/models/joueur.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/service/local_service.dart';
+import 'package:app/service/remote_service.dart';
 
 class JoueurService {
   static LocalService get service => LocalService('joueur.json');
+  static const String collection = 'joueur';
 
   static List<Joueur> _toJoueurs(List data, List<Participant> participants) {
     return data
@@ -38,34 +40,32 @@ class JoueurService {
   static Future<List<Joueur>> getRemoteData(
       List<Participant> participants) async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      if (joueurs.isNotEmpty) await service.setData(joueurs);
-      return _toJoueurs(joueurs, participants);
+      final List data = await RemoteService.loadData(collection);
+      if (data.isNotEmpty) await service.setData(data);
+      return _toJoueurs(data, participants);
     } catch (e) {
       return [];
     }
   }
 
   static Future<bool> addJoueur(Joueur joueur) async {
-    if (joueurs
-        .any((element) => element['idJoueur'].toString() == joueur.idJoueur)) {
-      return false;
-    }
-    joueurs.add(joueur.toJson());
-    return true;
+    final bool res = await RemoteService.setData(
+        collection, joueur.idJoueur, joueur.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> deleteJoueur(String idJoueur) async {
-    joueurs
-        .removeWhere((element) => element['idJoueur'].toString() == idJoueur);
-    return true;
+    final bool res = await RemoteService.deleteData(collection, idJoueur);
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> editJoueur(String idJoueur, Joueur joueur) async {
-    joueurs
-        .removeWhere((element) => element['idJoueur'].toString() == idJoueur);
-    joueurs.add(joueur.toJson());
-    return true;
+    final bool res =
+        await RemoteService.setData(collection, idJoueur, joueur.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 }
 

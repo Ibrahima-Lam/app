@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -59,11 +61,28 @@ class ContactPage extends StatelessWidget {
           ),
           Card(
             child: ListTile(
-              onTap: () {
-                try {
-                  launchUrl(Uri.parse('https://web.whatsapp.com/'),
-                      mode: LaunchMode.externalApplication);
-                } catch (e) {}
+              onTap: () async {
+                var whatsapp = "+22241916418";
+                var whatsappURl_android =
+                    "whatsapp://send?phone=" + whatsapp + "&text=";
+                var whatappURL_ios =
+                    "https://wa.me/$whatsapp?text=${Uri.parse("")}";
+                if (Platform.isIOS) {
+                  if (await canLaunchUrl(Uri.parse(whatappURL_ios))) {
+                    await launchUrl(Uri.parse(whatappURL_ios));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: new Text("whatsapp non installé")));
+                  }
+                } else {
+                  // android , web
+                  if (await canLaunchUrl(Uri.parse(whatsappURl_android))) {
+                    await launchUrl(Uri.parse(whatsappURl_android));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: new Text("whatsapp non installé")));
+                  }
+                }
               },
               leading: Icon(Icons.chat),
               title: Text('Whatsapp'),

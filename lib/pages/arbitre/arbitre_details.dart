@@ -103,7 +103,6 @@ class ArbitreDetails extends StatelessWidget {
                                         height: 80,
                                         width: 80,
                                         child: ArbitreImageLogoWidget(
-                                          noColor: true,
                                           url: arbitre.imageUrl,
                                         ),
                                       ),

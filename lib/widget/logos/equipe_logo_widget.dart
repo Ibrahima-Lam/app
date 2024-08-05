@@ -17,20 +17,22 @@ class EquipeImageLogoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height ?? 50,
-      width: width ?? 50,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
+    return ClipOval(
+      child: Container(
+        height: height ?? 50,
+        width: width ?? 50,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
+        ),
+        child: (url ?? '').isEmpty
+            ? EquipeLogoWidget()
+            : CachedNetworkImage(
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.cover,
+                imageUrl: url ?? '',
+                errorWidget: (context, url, error) => EquipeLogoWidget()),
       ),
-      child: (url ?? '').isEmpty
-          ? EquipeLogoWidget()
-          : CachedNetworkImage(
-              width: MediaQuery.of(context).size.width,
-              fit: BoxFit.cover,
-              imageUrl: url ?? '',
-              errorWidget: (context, url, error) => EquipeLogoWidget()),
     );
   }
 }

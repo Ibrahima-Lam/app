@@ -1,8 +1,10 @@
 import 'package:app/models/event.dart';
 import 'package:app/service/local_service.dart';
+import 'package:app/service/remote_service.dart';
 
 class ButService {
   static LocalService get service => LocalService('but.json');
+  static const String collection = 'but';
 
   static Future<List<GoalEvent>?> getLocalData() async {
     if (await service.fileExists()) {
@@ -21,38 +23,32 @@ class ButService {
 
   static Future<List<GoalEvent>> getRemoteData() async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      if (buts.isNotEmpty) await service.setData(buts);
-      return buts.map((e) => GoalEvent.fromJson(e)).toList();
+      final List data = await RemoteService.loadData(collection);
+      if (data.isNotEmpty) await service.setData(data);
+      return data.map((e) => GoalEvent.fromJson(e)).toList();
     } catch (e) {
       return [];
     }
   }
 
   static Future<bool> addGoalEvent(GoalEvent event) async {
-    buts.add(event.toJson());
-    await service.setData(buts);
-    return true;
+    final bool res =
+        await RemoteService.setData(collection, event.idEvent, event.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> editGoalEvent(String idBut, GoalEvent event) async {
-    if (buts.any((element) => element['idBut'].toString() == idBut)) {
-      int index =
-          buts.indexWhere((element) => element['idBut'].toString() == idBut);
-      if (index >= 0) buts[index] = event.toJson();
-      await service.setData(buts);
-      return true;
-    }
-    return false;
+    final bool res =
+        await RemoteService.setData(collection, idBut, event.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> deleteGoalEvent(String idBut) async {
-    if (buts.any((element) => element['idBut'].toString() == idBut)) {
-      buts.removeWhere((element) => element['idBut'].toString() == idBut);
-      await service.setData(buts);
-      return true;
-    }
-    return false;
+    final bool res = await RemoteService.deleteData(collection, idBut);
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 }
 

@@ -4,9 +4,11 @@ import 'package:app/models/niveau.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/service/local_service.dart';
 import 'package:app/service/niveau_service.dart';
+import 'package:app/service/remote_service.dart';
 
 class GameService {
   static const file = 'game.json';
+  static const String collection = 'game';
   static LocalService get service => LocalService(file);
   Future<List<Game>> _toGame(
       List data, List<Participant> participants, List<Groupe> groupes) async {
@@ -65,39 +67,32 @@ class GameService {
   Future<List<Game>> getRemoteData(
       List<Participant> participants, List<Groupe> groupes) async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      if (games.isNotEmpty) await service.setData(games);
-      return _toGame(games, participants, groupes);
+      final List data = await RemoteService.loadData(collection);
+      if (data.isNotEmpty) await service.setData(data);
+      return _toGame(data, participants, groupes);
     } catch (e) {
       return [];
     }
   }
 
   Future<bool> addGame(Game game) async {
-    await Future.delayed(const Duration(seconds: 2));
-    if (games.every(
-      (element) => element['idGame'].toString() != game.idGame,
-    )) {
-      games.add(game.toJson());
-      return true;
-    }
-    return false;
+    final bool res =
+        await RemoteService.setData(collection, game.idGame, game.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   Future<bool> removeGame(String idGame) async {
-    await Future.delayed(const Duration(seconds: 1));
-    games.removeWhere((element) => element['idGame'].toString() == idGame);
-    return true;
+    final bool res = await RemoteService.deleteData(collection, idGame);
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   Future<bool> editGame(String idGame, Game game) async {
-    await Future.delayed(const Duration(seconds: 1));
-    int index = games.lastIndexWhere((element) => element['idGame'] == idGame);
-    if (index >= 0) {
-      games[index] = game.toJson();
-      return true;
-    }
-    return false;
+    final bool res =
+        await RemoteService.setData(collection, idGame, game.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 }
 

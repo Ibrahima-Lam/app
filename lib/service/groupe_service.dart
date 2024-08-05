@@ -2,9 +2,11 @@ import 'package:app/models/groupe.dart';
 import 'package:app/models/phase.dart';
 import 'package:app/service/local_service.dart';
 import 'package:app/service/phase_service.dart';
+import 'package:app/service/remote_service.dart';
 
 class GroupeService {
   static LocalService get service => LocalService('groupe.json');
+  static const String collection = 'groupe';
 
   static Future<List<Groupe>> _toGroupes(List groupes) async {
     final List<Phase> phases = await PhaseService.getData();
@@ -37,38 +39,32 @@ class GroupeService {
 
   static Future<List<Groupe>> getRemoteData() async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      if (groupes.isNotEmpty) await service.setData(groupes);
-      return _toGroupes(groupes);
+      final data = await RemoteService.loadData(collection);
+      if (data.isNotEmpty) await service.setData(data);
+      return _toGroupes(data);
     } catch (e) {
       return [];
     }
   }
 
   static Future<bool> addGroupe(Groupe groupe) async {
-    if (groupes.any((element) =>
-        element['nomGroupe'] == groupe.nomGroupe &&
-        element['codeEdition'] == groupe.codeEdition)) return false;
-    groupes.add(groupe.toJson());
-    return true;
+    final bool res = await RemoteService.setData(
+        collection, groupe.idGroupe, groupe.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> editGroupe(String idGroupe, Groupe groupe) async {
-    if (groupes.any((element) => element['idGroupe'] == idGroupe)) {
-      int index =
-          groupes.indexWhere((element) => element['idGroupe'] == idGroupe);
-      if (index >= 0) groupes[index] = groupe.toJson();
-      return true;
-    }
-    return false;
+    final bool res =
+        await RemoteService.editData(collection, idGroupe, groupe.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> removeGroupe(String idGroupe) async {
-    if (groupes.any((element) => element['idGroupe'] == idGroupe)) {
-      groupes.removeWhere((element) => element['idGroupe'] == idGroupe);
-      return true;
-    }
-    return true;
+    final bool res = await RemoteService.deleteData(collection, idGroupe);
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 }
 

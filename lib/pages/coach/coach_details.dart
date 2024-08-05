@@ -105,7 +105,6 @@ class CoachDetails extends StatelessWidget {
                                         height: 80,
                                         width: 80,
                                         child: CoachImageLogoWidget(
-                                          noColor: true,
                                           url: coach.imageUrl,
                                         ),
                                       ),

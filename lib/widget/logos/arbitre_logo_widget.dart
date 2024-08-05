@@ -3,49 +3,44 @@ import 'package:flutter/material.dart';
 
 class ArbitreImageLogoWidget extends StatelessWidget {
   final String? url;
-  final String? image;
-  final double? radius;
-  final double? size;
-  final bool noColor;
+  final double? width;
+  final double? height;
 
-  final MaterialColor? backgroundColor;
-  final MaterialColor? color;
   const ArbitreImageLogoWidget({
     super.key,
     this.url,
-    this.image,
-    this.radius,
-    this.size,
-    this.backgroundColor,
-    this.color,
-    this.noColor = false,
+    this.width,
+    this.height,
   });
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: url ?? '',
-      errorWidget: (context, url, error) => ''.isEmpty
-          ? Container(
-              constraints: BoxConstraints(maxHeight: 80, maxWidth: 80),
-              decoration: const BoxDecoration(
-                  gradient: RadialGradient(
-                    colors: [Colors.white, Colors.grey, Colors.green],
-                  ),
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                      image: AssetImage('images/arbitre.jpg'),
-                      fit: BoxFit.cover)),
-            )
-          : CircleAvatar(
-              backgroundColor:
-                  noColor ? null : backgroundColor ?? Color(0xFFDCDCDC),
-              radius: radius ?? 25,
-              child: Icon(
-                color: noColor ? null : color ?? Colors.white,
-                Icons.person,
-                size: size ?? 30,
-              )),
+    return ClipOval(
+      child: Container(
+        width: width,
+        height: height,
+        child: (url ?? '').isEmpty
+            ? ArbitreLogoWidget()
+            : CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: url ?? '',
+                errorWidget: (context, url, error) => ArbitreLogoWidget(),
+              ),
+      ),
+    );
+  }
+}
+
+class ArbitreLogoWidget extends StatelessWidget {
+  const ArbitreLogoWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          image: DecorationImage(
+              image: AssetImage('images/arbitre.jpg'), fit: BoxFit.cover)),
     );
   }
 }

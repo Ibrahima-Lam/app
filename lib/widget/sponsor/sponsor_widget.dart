@@ -19,12 +19,13 @@ class SponsorWidget extends StatelessWidget {
           children: [
             Container(
               height: 250,
-              child: CachedNetworkImage(
-                imageUrl: sponsor.imageUrl,
-                errorWidget: (context, url, error) => AnimatedContainer(
-                    duration: Durations.medium1,
-                    child: Image.asset('images/fusion.jpg', fit: BoxFit.cover)),
-              ),
+              child: sponsor.imageUrl.isEmpty
+                  ? SponsorErrorWidget()
+                  : CachedNetworkImage(
+                      imageUrl: sponsor.imageUrl,
+                      errorWidget: (context, url, error) =>
+                          SponsorErrorWidget(),
+                    ),
             ),
             if (sponsor.description != null)
               Container(
@@ -39,5 +40,16 @@ class SponsorWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class SponsorErrorWidget extends StatelessWidget {
+  const SponsorErrorWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+        duration: Durations.medium1,
+        child: Image.asset('images/fusion.jpg', fit: BoxFit.cover));
   }
 }

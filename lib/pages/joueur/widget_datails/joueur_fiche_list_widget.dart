@@ -269,21 +269,21 @@ class JoueurMoreinfosWidget extends StatelessWidget {
                     icon: Icon(Icons.calendar_view_month),
                     label: 'Age'),
                 JoueurMoreinfosColumnWidget(
-                  content: joueur.poids != null
+                  content: (joueur.poids ?? 0) > 0
                       ? '${joueur.poids.toString()} kg'
                       : null,
                   icon: Icon(Icons.line_weight_outlined),
                   label: 'Poids',
                 ),
                 JoueurMoreinfosColumnWidget(
-                  content: joueur.taille != null
+                  content: (joueur.taille ?? 0) > 0
                       ? '${joueur.taille.toString()} m'
                       : null,
                   icon: Icon(Icons.height),
                   label: 'Taille',
                 ),
                 JoueurMoreinfosColumnWidget(
-                  content: joueur.vitesse != null
+                  content: (joueur.vitesse ?? 0) > 0
                       ? '${joueur.vitesse.toString()} km/h'
                       : null,
                   icon: Icon(Icons.speed),

@@ -33,8 +33,10 @@ class _ParticipantFormState extends State<ParticipantForm> {
 
   void _onSubmit() async {
     final Participant participant = Participant(
-        idParticipant: 'P' + DateController.dateCollapsed,
-        idEquipe: 'E' + DateController.dateCollapsed,
+        idParticipant: widget.participant?.idParticipant ??
+            'P' + DateController.dateCollapsed,
+        idEquipe:
+            widget.participant?.idEquipe ?? 'E' + DateController.dateCollapsed,
         nomEquipe: nomController.text,
         codeEdition: widget.codeEdition,
         imageUrl: urlController.text,

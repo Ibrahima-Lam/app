@@ -2,6 +2,7 @@ import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/infos/infos.dart';
 import 'package:app/pages/actualite/infos_details.dart';
 import 'package:app/providers/infos_provider.dart';
+import 'package:app/widget/infos/infos_error_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -57,17 +58,19 @@ class FicheInfosWidget extends StatelessWidget {
                                     top: 5, left: 2, right: 2, bottom: 5),
                                 constraints:
                                     const BoxConstraints(maxHeight: 250),
-                                child: CachedNetworkImage(
-                                  imageUrl: '',
-                                  errorWidget: (context, url, error) =>
-                                      AnimatedContainer(
-                                    duration: Durations.medium1,
-                                    child: Image.asset(
-                                      'images/infos.jpg',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
+                                child: (info.imageUrl ?? '').isEmpty
+                                    ? InfosErrorWidget()
+                                    : CachedNetworkImage(
+                                        imageUrl: info.imageUrl ?? '',
+                                        errorWidget: (context, url, error) =>
+                                            AnimatedContainer(
+                                          duration: Durations.medium1,
+                                          child: Image.asset(
+                                            'images/infos.jpg',
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
                               ),
                               Container(
                                 padding: const EdgeInsets.symmetric(
@@ -99,7 +102,7 @@ class FicheSponsorWidget extends StatelessWidget {
     super.key,
     required this.categorieParams,
   });
-
+  String get url => '';
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -113,11 +116,14 @@ class FicheSponsorWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CachedNetworkImage(
-                imageUrl: '',
-                errorWidget: (context, url, error) => AnimatedContainer(
-                    duration: Durations.medium1,
-                    child: Image.asset('images/fusion.jpg', fit: BoxFit.cover)),
+              Container(
+                child: url.isEmpty
+                    ? FichesErrorWidget()
+                    : CachedNetworkImage(
+                        imageUrl: url,
+                        errorWidget: (context, url, error) =>
+                            FichesErrorWidget(),
+                      ),
               ),
               Container(
                   padding: const EdgeInsets.all(10.0), child: Text('Sponsor'))
@@ -126,5 +132,16 @@ class FicheSponsorWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class FichesErrorWidget extends StatelessWidget {
+  const FichesErrorWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+        duration: Durations.medium1,
+        child: Image.asset('images/fusion.jpg', fit: BoxFit.cover));
   }
 }

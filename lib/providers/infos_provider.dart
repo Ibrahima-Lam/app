@@ -20,20 +20,18 @@ class InfosProvider extends ChangeNotifier {
     return infos;
   }
 
-  List<Infos> getInfosBy({required CategorieParams? categorie}) {
+  List<Infos> getInfosBy(
+      {required CategorieParams? categorie, String? idInfosExclus}) {
     if (categorie == null) return [];
     if (categorie.isNull) return [];
     List<Infos> listes = infos;
-
-    if (categorie.idEdition != null) {
-      listes = listes
-          .where((element) => element.idEdition == categorie.idEdition)
-          .toList();
-      return listes;
+    if (idInfosExclus != null) {
+      listes =
+          listes.where((element) => element.idInfos != idInfosExclus).toList();
     }
-    if (categorie.idGame != null) {
+    if (categorie.idJoueur != null) {
       listes = listes
-          .where((element) => element.idGame == categorie.idGame)
+          .where((element) => element.idJoueur == categorie.idJoueur)
           .toList();
       return listes;
     }
@@ -49,12 +47,20 @@ class InfosProvider extends ChangeNotifier {
           .toList();
       return listes;
     }
-    if (categorie.idJoueur != null) {
+    if (categorie.idGame != null) {
       listes = listes
-          .where((element) => element.idJoueur == categorie.idJoueur)
+          .where((element) => element.idGame == categorie.idGame)
           .toList();
       return listes;
     }
+
+    if (categorie.idEdition != null) {
+      listes = listes
+          .where((element) => element.idEdition == categorie.idEdition)
+          .toList();
+      return listes;
+    }
+
     return [];
   }
 
@@ -69,6 +75,7 @@ class InfosProvider extends ChangeNotifier {
   Future<bool> editInfos(String id, Infos info) async {
     final result = await InfosService.editInfos(id, info);
     if (result) {
+      print("ok");
       await getInformations(remote: true);
     }
     return result;

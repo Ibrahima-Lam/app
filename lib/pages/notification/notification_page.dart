@@ -30,7 +30,7 @@ class _NotificationPageState extends State<NotificationPage> {
         ),
         title: const Text('Notification'),
         titleSpacing: 20,
-        actions: [IconButton(onPressed: null, icon: const Icon(Icons.star))],
+        actions: [Icon(Icons.notifications)],
       ),
       body: FutureBuilder<bool>(
           future: getData(),
@@ -47,12 +47,10 @@ class _NotificationPageState extends State<NotificationPage> {
               );
             }
 
-            return Center();
+            return Center(
+              child: Text('Page de notification disponible !'),
+            );
           }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ),
       drawer: const DrawerWidget(),
     );
   }

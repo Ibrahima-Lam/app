@@ -1,8 +1,10 @@
 import 'package:app/models/event.dart';
 import 'package:app/service/local_service.dart';
+import 'package:app/service/remote_service.dart';
 
 class SanctionService {
   static LocalService get service => LocalService('sanction.json');
+  static const String collection = 'sanction';
 
   static Future<List<CardEvent>?> getLocalData() async {
     if (await service.fileExists()) {
@@ -21,44 +23,33 @@ class SanctionService {
 
   static Future<List<CardEvent>> getRemoteData() async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      if (sanctions.isNotEmpty) await service.setData(sanctions);
-      return sanctions.map((e) => CardEvent.fromJson(e)).toList();
+      final List data = await RemoteService.loadData(collection);
+      if (data.isNotEmpty) await service.setData(data);
+      return data.map((e) => CardEvent.fromJson(e)).toList();
     } catch (e) {
       return [];
     }
   }
 
   static Future<bool> addCardEvent(CardEvent event) async {
-    sanctions.add(event.toJson());
-    await service.setData(sanctions);
-    return true;
+    final bool res =
+        await RemoteService.setData(collection, event.idEvent, event.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> editCardEvent(
       String idSanctionner, CardEvent event) async {
-    if (sanctions.any(
-        (element) => element['idSanctionner'].toString() == idSanctionner)) {
-      int index = sanctions.indexWhere(
-          (element) => element['idSanctionner'].toString() == idSanctionner);
-      if (index >= 0) sanctions[index] = event.toJson();
-      await service.setData(sanctions);
-
-      return true;
-    }
-    return false;
+    final bool res =
+        await RemoteService.setData(collection, idSanctionner, event.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> deleteCardEvent(String idSanctionner) async {
-    if (sanctions.any(
-        (element) => element['idSanctionner'].toString() == idSanctionner)) {
-      sanctions.removeWhere(
-          (element) => element['idSanctionner'].toString() == idSanctionner);
-      await service.setData(sanctions);
-
-      return true;
-    }
-    return false;
+    final bool res = await RemoteService.deleteData(collection, idSanctionner);
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 }
 

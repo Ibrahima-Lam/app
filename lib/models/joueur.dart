@@ -59,6 +59,7 @@ class Joueur implements Searchable, Populaire {
         pseudo: json['pseudo'],
         rating: json['rating'],
         numero: json['numero'],
+        imageUrl: json['imageUrl'],
         participant: participant);
   }
   Map<String, dynamic> toJson() {

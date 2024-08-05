@@ -45,7 +45,7 @@ class _InfosFormState extends State<InfosForm> {
         _datetimeController.text.isEmpty) {
       return;
     }
-    final infos = Infos(
+    final Infos infos = Infos(
       idInfos: widget.infos?.idInfos ?? 'I' + DateController.dateCollapsed,
       title: _titleController.text,
       text: _textController.text,

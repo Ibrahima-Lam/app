@@ -1,8 +1,10 @@
 import 'package:app/models/arbitres/arbitre.dart';
 import 'package:app/service/local_service.dart';
+import 'package:app/service/remote_service.dart';
 
 class ArbitreService {
   static LocalService get service => LocalService('arbitre.json');
+  static const String collection = 'arbitre';
 
   static Future<List<Arbitre>?> getLocalData() async {
     if (await service.fileExists()) {
@@ -23,39 +25,32 @@ class ArbitreService {
 
   static Future<List<Arbitre>> getRemoteData() async {
     try {
-      await Future.delayed(const Duration(seconds: 1));
-      if (arbitres.isNotEmpty) await service.setData(arbitres);
-      return arbitres.map((e) => Arbitre.fromJson(e)).toList();
+      final List data = await RemoteService.loadData(collection);
+      if (data.isNotEmpty) await service.setData(data);
+      return data.map((e) => Arbitre.fromJson(e)).toList();
     } catch (e) {
       return [];
     }
   }
 
   static Future<bool> addArbitre(Arbitre arbitre) async {
-    if (arbitres.any((element) =>
-        element['idEdition'] == arbitre.idEdition &&
-        element['nomArbitre'] == arbitre.nomArbitre &&
-        element['role'] == arbitre.role)) return false;
-    arbitres.add(arbitre.toJson());
-    return true;
+    final bool res = await RemoteService.setData(
+        collection, arbitre.idArbitre, arbitre.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> editArbitre(String idArbitre, Arbitre arbitre) async {
-    if (arbitres.any((element) => element['idArbitre'] == idArbitre)) {
-      int index =
-          arbitres.indexWhere((element) => element['idArbitre'] == idArbitre);
-      if (index >= 0) arbitres[index] = arbitre.toJson();
-      return true;
-    }
-    return false;
+    final bool res =
+        await RemoteService.setData(collection, idArbitre, arbitre.toJson());
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 
   static Future<bool> deleteArbitre(String idArbitre) async {
-    if (arbitres.any((element) => element['idArbitre'] == idArbitre)) {
-      arbitres.removeWhere((element) => element['idArbitre'] == idArbitre);
-      return true;
-    }
-    return false;
+    final bool res = await RemoteService.deleteData(collection, idArbitre);
+    if (res) await service.setData(await RemoteService.loadData(collection));
+    return res;
   }
 }
 
