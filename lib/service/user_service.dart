@@ -1,10 +1,12 @@
+import 'package:app/core/extension/list_extension.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:app/models/user.dart';
 
 class UserService {
   static Future<User?> getUser(String email, String password) async {
-    if (users.map((e) => e.email).contains(email))
-      return users.firstWhere((element) => element.email == email);
+    User? user = users
+        .singleWhereOrNull((e) => e.email == email && e.password == password);
+    if (user != null) return user;
     FirebaseAuth auth = FirebaseAuth.instance;
     try {
       UserCredential uc = await auth.signInWithEmailAndPassword(

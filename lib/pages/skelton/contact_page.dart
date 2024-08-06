@@ -50,7 +50,7 @@ class ContactPage extends StatelessWidget {
                 try {
                   final Uri launchUri = Uri(
                     scheme: 'mailto',
-                    path: 'ibrahimaaboulam@gmail.com',
+                    path: 'ibrahimaaboulam02@gmail.com',
                   );
                   launchUrl(launchUri);
                 } catch (e) {}
@@ -62,7 +62,7 @@ class ContactPage extends StatelessWidget {
           Card(
             child: ListTile(
               onTap: () async {
-                var whatsapp = "+22241916418";
+                var whatsapp = "+22241022382";
                 var whatsappURl_android =
                     "whatsapp://send?phone=" + whatsapp + "&text=";
                 var whatappURL_ios =

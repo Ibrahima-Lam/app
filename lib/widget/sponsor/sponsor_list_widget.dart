@@ -1,41 +1,64 @@
+import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/sponsor.dart';
+import 'package:app/providers/sponsor_provider.dart';
 import 'package:app/widget/sponsor/sponsor_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SponsorListWidget extends StatelessWidget {
-  SponsorListWidget({super.key});
+  final CategorieParams? categorieParams;
+  SponsorListWidget({super.key, required this.categorieParams});
   final ScrollController scrollController =
       ScrollController(initialScrollOffset: 0);
 
   @override
   Widget build(BuildContext context) {
-    return Scrollbar(
-      radius: Radius.circular(10),
-      controller: scrollController,
-      child: Container(
-        constraints: BoxConstraints(maxHeight: 360),
-        padding: EdgeInsets.symmetric(vertical: 5),
-        width: MediaQuery.sizeOf(context).width,
-        child: SingleChildScrollView(
-          controller: scrollController,
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(
-                    3,
-                    (index) => Sponsor(
-                        idSponsor: '',
-                        imageUrl: '',
-                        description:
-                            'Hello flutter i am right now coding on flutter framework i found it more special so good,'
-                            ' i try to use for  the best project in my life '))
-                .map(
-                  (e) => SponsorWidget(sponsor: e),
-                )
-                .toList(),
-          ),
-        ),
-      ),
-    );
+    return FutureBuilder(
+        future: context.read<SponsorProvider>().getData(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('erreur!'),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return Consumer<SponsorProvider>(
+              builder: (context, sponsorProvider, child) {
+            List<Sponsor> sponsors = [];
+            if (categorieParams != null && !(categorieParams?.isNull ?? true)) {
+              sponsors =
+                  sponsorProvider.getSponsorBy(categorie: categorieParams);
+            } else
+              sponsors = sponsorProvider.sponsors;
+            sponsors..shuffle();
+            sponsors = sponsors.take(5).toList();
+
+            return Scrollbar(
+              radius: Radius.circular(10),
+              controller: scrollController,
+              child: sponsors.isEmpty
+                  ? const SizedBox()
+                  : Container(
+                      constraints: BoxConstraints(maxHeight: 360),
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      width: MediaQuery.sizeOf(context).width,
+                      child: SingleChildScrollView(
+                        controller: scrollController,
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: sponsors
+                                .map(
+                                  (e) => SponsorWidget(sponsor: e),
+                                )
+                                .toList()),
+                      ),
+                    ),
+            );
+          });
+        });
   }
 }

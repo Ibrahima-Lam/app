@@ -58,6 +58,8 @@ class GameService {
   Future<List<Game>> getData(
       List<Participant> participants, List<Groupe> groupes,
       {bool remote = false}) async {
+    if (await service.isLoadable(2) && !remote)
+      return await getLocalData(participants, groupes) ?? [];
     final List<Game> data = await getRemoteData(participants, groupes);
     if (data.isEmpty && await service.hasData())
       return await getLocalData(participants, groupes) ?? [];

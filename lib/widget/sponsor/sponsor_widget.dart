@@ -50,6 +50,6 @@ class SponsorErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
         duration: Durations.medium1,
-        child: Image.asset('images/fusion.jpg', fit: BoxFit.cover));
+        child: Image.asset('images/football.jpg', fit: BoxFit.cover));
   }
 }

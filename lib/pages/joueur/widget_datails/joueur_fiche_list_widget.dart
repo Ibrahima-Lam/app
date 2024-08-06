@@ -163,7 +163,6 @@ class InformationJoueurWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                  //Todo
                   PopupMenuButton(
                     itemBuilder: (context) => [
                       PopupMenuItem(

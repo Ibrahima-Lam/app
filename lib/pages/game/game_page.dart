@@ -266,7 +266,7 @@ class CompetitionGamesWidget extends StatelessWidget {
                                 date: date,
                                 competitions: competitions,
                                 playing: playing),
-                            SponsorListWidget(),
+                            SponsorListWidget(categorieParams: null),
                           ],
                         ),
                       ],

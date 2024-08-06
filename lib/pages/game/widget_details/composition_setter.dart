@@ -35,7 +35,6 @@ class CompositionSetter extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Todo enregistrer le formulaire des arbitres
           context
               .read<CompositionProvider>()
               .setAllCompositions(compositionSousCollection.game.idGame, [

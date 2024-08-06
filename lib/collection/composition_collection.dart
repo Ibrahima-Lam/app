@@ -90,18 +90,21 @@ class CompositionCollection implements Collection {
         .toList();
     if (!create && rempls.isEmpty) return [];
     if (rempls.isEmpty) {
-      rempls = kRempl.map((e) {
-        return e.copyWith(
-            isIn: false,
-            idGame: idGame,
-            idParticipant: idParticipant,
-            idJoueur: 'G${idGame}P${idParticipant}R${kRempl.indexWhere(
-              (element) => element.nom == e.nom,
-            )}',
-            idComposition: 'G${idGame}P${idParticipant}R${kRempl.indexWhere(
-              (element) => element.nom == e.nom,
-            )}');
-      }).toList();
+      rempls = kRempl
+          .map((e) {
+            return e.copyWith(
+                isIn: false,
+                idGame: idGame,
+                idParticipant: idParticipant,
+                idJoueur: 'G${idGame}P${idParticipant}R${kRempl.indexWhere(
+                  (element) => element.nom == e.nom,
+                )}',
+                idComposition: 'G${idGame}P${idParticipant}R${kRempl.indexWhere(
+                  (element) => element.nom == e.nom,
+                )}');
+          })
+          .take(1)
+          .toList();
     }
     return rempls;
   }

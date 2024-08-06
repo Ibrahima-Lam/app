@@ -17,7 +17,7 @@
   </intent>
 </queries>
     <application
-        android:label="Foot"
+        android:label="FScore"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

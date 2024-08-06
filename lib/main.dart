@@ -13,6 +13,7 @@ import 'package:app/providers/favori_provider.dart';
 import 'package:app/providers/infos_provider.dart';
 import 'package:app/providers/paramettre_provider.dart';
 import 'package:app/providers/score_provider.dart';
+import 'package:app/providers/sponsor_provider.dart';
 import 'package:app/providers/user_provider.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/providers/game_provider.dart';
@@ -65,6 +66,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           lazy: false,
           create: (context) => ScoreProvider([])..initScores(),
+        ),
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (context) => SponsorProvider([]),
         ),
         ChangeNotifierProvider(
             lazy: false, create: (context) => InfosProvider()),

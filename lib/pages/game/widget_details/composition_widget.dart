@@ -28,15 +28,15 @@ class CompositionWidget extends StatelessWidget {
     compositionSousCollection = CompositionSousCollection(
       game: game,
       homeInside: compositionCollection.getTitulaire(
-          idGame: game.idGame, idParticipant: game.idHome),
+          create: checkUser, idGame: game.idGame, idParticipant: game.idHome),
       awayInside: compositionCollection.getTitulaire(
-          idGame: game.idGame, idParticipant: game.idAway),
+          create: checkUser, idGame: game.idGame, idParticipant: game.idAway),
       homeOutside: compositionCollection.getRempl(
-          create: false, idGame: game.idGame, idParticipant: game.idHome),
+          create: checkUser, idGame: game.idGame, idParticipant: game.idHome),
       awayOutside: compositionCollection.getRempl(
-          create: false, idGame: game.idGame, idParticipant: game.idAway),
+          create: checkUser, idGame: game.idGame, idParticipant: game.idAway),
       arbitres: compositionCollection.getArbitresBygame(
-          idGame: game.idGame, create: false),
+          idGame: game.idGame, create: checkUser),
       homeCoatch: compositionCollection.getCoach(
           idGame: game.idGame, idParticipant: game.idHome),
       awayCoatch: compositionCollection.getCoach(
@@ -67,9 +67,8 @@ class CompositionWidget extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  if (compositionSousCollection.homeInside.isNotEmpty &&
-                          compositionSousCollection.awayInside.isNotEmpty ||
-                      checkUser) ...[
+                  if (compositionSousCollection.homeInside.length == 11 &&
+                      compositionSousCollection.awayInside.length == 11) ...[
                     Card(
                       child: Stack(
                         alignment: Alignment.center,

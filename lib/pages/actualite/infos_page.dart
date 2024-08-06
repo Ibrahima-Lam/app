@@ -2,6 +2,7 @@ import 'package:app/models/infos/infos.dart';
 import 'package:app/providers/infos_provider.dart';
 import 'package:app/widget/skelton/drawer_widget.dart';
 import 'package:app/widget/infos/infos_widget.dart';
+import 'package:app/widget/sponsor/sponsor_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,11 +40,15 @@ class _InfosPageState extends State<InfosPage> {
 
             return Consumer<InfosProvider>(builder: (context, value, child) {
               final List<Infos> dataInfos = value.infos;
-              return ListView.builder(
-                itemCount: dataInfos.length,
-                itemBuilder: (context, index) {
-                  return InfosFullWidget(infos: dataInfos[index]);
-                },
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ...dataInfos.map((e) => InfosFullWidget(infos: e)).toList(),
+                    SponsorListWidget(
+                      categorieParams: null,
+                    ),
+                  ],
+                ),
               );
             });
           }),

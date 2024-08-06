@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 class LocalService {
@@ -65,16 +66,14 @@ class LocalService {
 
   Future<bool> isLoadable([int max = 24]) async {
     try {
-      /* 
       if (!await hasData()) return false;
-        DateTime? time = await lastModified();
+      DateTime? time = await lastModified();
       if (time == null) return false;
       int duration =
           DateTimeRange(start: time, end: DateTime.now()).duration.inHours;
 
-       if (duration < max) true; */
-      //  Todo : changer le retour en true
-      return false;
+      if (duration <= max) true;
+      return true;
     } catch (e) {
       return false;
     }

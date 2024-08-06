@@ -1,7 +1,9 @@
 import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/infos/infos.dart';
+import 'package:app/models/sponsor.dart';
 import 'package:app/pages/actualite/infos_details.dart';
 import 'package:app/providers/infos_provider.dart';
+import 'package:app/providers/sponsor_provider.dart';
 import 'package:app/widget/infos/infos_error_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -102,36 +104,51 @@ class FicheSponsorWidget extends StatelessWidget {
     super.key,
     required this.categorieParams,
   });
-  String get url => '';
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 5.0),
-      child: Card(
-        child: Container(
-          width: MediaQuery.sizeOf(context).width,
-          constraints: const BoxConstraints(
-            minHeight: 200,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                child: url.isEmpty
-                    ? FichesErrorWidget()
-                    : CachedNetworkImage(
-                        imageUrl: url,
-                        errorWidget: (context, url, error) =>
-                            FichesErrorWidget(),
+    return Consumer<SponsorProvider>(
+        builder: (context, sponsorProvider, child) {
+      List<Sponsor> sponsors = [];
+      if (!categorieParams.isNull) {
+        sponsors = sponsorProvider.sponsors;
+      } else
+        sponsors = sponsorProvider.sponsors;
+      sponsors..shuffle();
+
+      Sponsor? sponsor = sponsors.lastOrNull;
+
+      return sponsor == null
+          ? const SizedBox()
+          : Padding(
+              padding: const EdgeInsets.only(top: 5.0),
+              child: Card(
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width,
+                  constraints: const BoxConstraints(
+                    minHeight: 200,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        child: sponsor.imageUrl.isEmpty
+                            ? FichesErrorWidget()
+                            : CachedNetworkImage(
+                                imageUrl: sponsor.imageUrl,
+                                errorWidget: (context, url, error) =>
+                                    FichesErrorWidget(),
+                              ),
                       ),
+                      Container(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(sponsor.nom))
+                    ],
+                  ),
+                ),
               ),
-              Container(
-                  padding: const EdgeInsets.all(10.0), child: Text('Sponsor'))
-            ],
-          ),
-        ),
-      ),
-    );
+            );
+    });
   }
 }
 
@@ -142,6 +159,6 @@ class FichesErrorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
         duration: Durations.medium1,
-        child: Image.asset('images/fusion.jpg', fit: BoxFit.cover));
+        child: Image.asset('images/football.jpg', fit: BoxFit.cover));
   }
 }

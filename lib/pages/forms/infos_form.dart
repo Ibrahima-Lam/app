@@ -1,10 +1,11 @@
 import 'package:app/controllers/competition/date.dart';
 import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/infos/infos.dart';
-import 'package:app/service/infos_service.dart';
+import 'package:app/providers/infos_provider.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class InfosForm extends StatefulWidget {
   final Infos? infos;
@@ -62,8 +63,10 @@ class _InfosFormState extends State<InfosForm> {
     );
     setIsloading(true);
     final bool result = widget.infos == null
-        ? await InfosService.addInfos(infos)
-        : await InfosService.editInfos(widget.infos!.idInfos, infos);
+        ? await context.read<InfosProvider>().addInfos(infos)
+        : await context
+            .read<InfosProvider>()
+            .editInfos(widget.infos!.idInfos, infos);
     setIsloading(false);
     if (result) {
       Navigator.pop(context);
@@ -98,7 +101,6 @@ class _InfosFormState extends State<InfosForm> {
                             initialDate: DateTime.now(),
                             firstDate:
                                 DateTime.now().add(const Duration(days: -7)),
-                            keyboardType: TextInputType.datetime,
                             initialEntryMode: DatePickerEntryMode.calendar,
                             lastDate: DateTime.now())
                         .then(

@@ -135,7 +135,9 @@ class _InfosDetailsState extends State<InfosDetails> {
                     ),
                   ),
                 ),
-                SponsorListWidget(),
+                SponsorListWidget(
+                  categorieParams: null,
+                ),
               ],
             ),
           ),
