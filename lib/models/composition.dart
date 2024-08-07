@@ -5,7 +5,6 @@ abstract class Composition {
   String? imageUrl;
 
   Map<String, dynamic> toJson();
-  external factory Composition.fromJson(Map<String, dynamic> json);
 
   Composition({
     required this.idGame,

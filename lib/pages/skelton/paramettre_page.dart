@@ -4,19 +4,12 @@ import 'package:app/models/app_paramettre.dart';
 import 'package:app/pages/forms/competition_form.dart';
 import 'package:app/pages/skelton/sponsor_page.dart';
 import 'package:app/providers/app_paramettre_provider.dart';
-import 'package:app/providers/arbitre_provider.dart';
-import 'package:app/providers/coach_provider.dart';
-import 'package:app/providers/competition_provider.dart';
-import 'package:app/providers/game_event_list_provider.dart';
-import 'package:app/providers/game_provider.dart';
-import 'package:app/providers/groupe_provider.dart';
-import 'package:app/providers/infos_provider.dart';
-import 'package:app/providers/joueur_provider.dart';
 import 'package:app/providers/paramettre_provider.dart';
-import 'package:app/providers/participant_provider.dart';
-import 'package:app/providers/participation_provider.dart';
-import 'package:app/providers/sponsor_provider.dart';
 import 'package:app/service/app_paramettre_service.dart';
+import 'package:app/service/competition_service.dart';
+import 'package:app/service/groupe_service.dart';
+import 'package:app/service/paramettre_service.dart';
+import 'package:app/service/participant_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -74,48 +67,18 @@ class ParamettrePage extends StatelessWidget {
                                         setState(() {
                                           isLoading = true;
                                         });
-                                        await context
-                                            .read<ParamettreProvider>()
-                                            .getData(remote: true);
-                                        await context
-                                            .read<CompetitionProvider>()
-                                            .getCompetitions(remote: true);
-                                        await context
-                                            .read<ParticipantProvider>()
-                                            .getParticipants(remote: true);
-                                        await context
-                                            .read<GroupeProvider>()
-                                            .getGroupes(remote: true);
-                                        await context
-                                            .read<ParticipationProvider>()
-                                            .getParticipations(remote: true);
-                                        await context
-                                            .read<GameEventListProvider>()
-                                            .getEvents(remote: true);
-                                        await context
-                                            .read<GameProvider>()
-                                            .getGames(remote: true);
-                                        await context
-                                            .read<JoueurProvider>()
-                                            .getJoueurs(remote: true);
-                                        await context
-                                            .read<CoachProvider>()
-                                            .getData(remote: true);
-                                        await context
-                                            .read<ArbitreProvider>()
-                                            .getData(remote: true);
-                                        await context
-                                            .read<InfosProvider>()
-                                            .getInformations(remote: true);
-                                        await context
-                                            .read<SponsorProvider>()
-                                            .getData(remote: true);
+                                        await ParamettreService.getRemoteData();
+                                        await CompetitionService()
+                                            .getRemoteData();
+                                        await GroupeService.getRemoteData();
+                                        await ParticipantService
+                                            .getRemoteData();
+
                                         setState(() {
                                           isLoading = false;
                                         });
                                       },
-                                      child: Text(
-                                          'Actualiser les Donnees en stock')),
+                                      child: Text('Actualiser')),
                                   if (isLoading)
                                     const CircularProgressIndicator(),
                                 ],
