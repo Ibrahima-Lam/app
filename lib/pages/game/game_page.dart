@@ -196,7 +196,8 @@ class CompetitionGamesWidget extends StatelessWidget {
       required this.competitions,
       required this.playing});
 
-  final String _message = 'Pas de Match Pour cette date!';
+  String get _message =>
+      playing ? 'Pas de match en direct!' : 'Pas de Match Pour cette date!';
   List<Game> getTodayGames(GameProvider gameProvider) =>
       gameProvider.getGamesBy(dateGame: date, playing: playing);
 
@@ -219,11 +220,15 @@ class CompetitionGamesWidget extends StatelessWidget {
           .where((element) =>
               element.groupe.codeEdition == competition.codeEdition)
           .toList();
+  Future<void> _getData(BuildContext context) async {
+    await context.read<CompetitionProvider>().getCompetitions();
+    await context.read<GameProvider>().getGames();
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: context.read<GameProvider>().getGames(),
+        future: _getData(context),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(

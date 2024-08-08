@@ -152,7 +152,7 @@ class _ScoreFormModalWidgetState extends State<ScoreFormModalWidget> {
             const SizedBox(height: 10.0),
             ElevatedButtonWidget(
               onPressed: () {
-                Navigator.pop(context, score.isNull ? null : score);
+                Navigator.pop(context, score);
               },
             )
           ],

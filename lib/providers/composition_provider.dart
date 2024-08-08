@@ -19,7 +19,7 @@ class CompositionProvider extends ChangeNotifier {
   Composition _toElement(e) {
     if (e is JoueurComposition) {
       List<Event> evs = gameEventListProvider.getJoueurGameEvent(
-          idGame: e.idGame, idJoueur: e.idJoueur);
+          idGame: e.idGame, idJoueur: e.idJoueur, target: true);
       int but = evs
           .whereType<GoalEvent>()
           .where((element) => element.propre && element.idJoueur == e.idJoueur)

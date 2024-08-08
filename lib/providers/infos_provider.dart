@@ -75,7 +75,6 @@ class InfosProvider extends ChangeNotifier {
   Future<bool> editInfos(String id, Infos info) async {
     final result = await InfosService.editInfos(id, info);
     if (result) {
-      print("ok");
       await getInformations(remote: true);
     }
     return result;

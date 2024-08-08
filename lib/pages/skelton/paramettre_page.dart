@@ -1,15 +1,25 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:app/models/app_paramettre.dart';
+import 'package:app/models/groupe.dart';
+import 'package:app/models/participant.dart';
 import 'package:app/pages/forms/competition_form.dart';
 import 'package:app/pages/skelton/sponsor_page.dart';
 import 'package:app/providers/app_paramettre_provider.dart';
 import 'package:app/providers/paramettre_provider.dart';
 import 'package:app/service/app_paramettre_service.dart';
+import 'package:app/service/arbitre_service.dart';
+import 'package:app/service/coach_service.dart';
 import 'package:app/service/competition_service.dart';
+import 'package:app/service/game_service.dart';
 import 'package:app/service/groupe_service.dart';
+import 'package:app/service/infos_service.dart';
+import 'package:app/service/joueur_service.dart';
 import 'package:app/service/paramettre_service.dart';
 import 'package:app/service/participant_service.dart';
+import 'package:app/service/participation_service.dart';
+import 'package:app/service/sponsor_service.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -64,15 +74,44 @@ class ParamettrePage extends StatelessWidget {
                                 children: [
                                   OutlinedButton(
                                       onPressed: () async {
+                                        if ((await Connectivity()
+                                                .checkConnectivity())
+                                            .contains(
+                                                ConnectivityResult.none)) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  'Vous etes hors ligne !'),
+                                              duration: const Duration(
+                                                  milliseconds: 1000),
+                                            ),
+                                          );
+                                          return;
+                                        }
+
                                         setState(() {
                                           isLoading = true;
                                         });
                                         await ParamettreService.getRemoteData();
                                         await CompetitionService()
                                             .getRemoteData();
-                                        await GroupeService.getRemoteData();
-                                        await ParticipantService
-                                            .getRemoteData();
+                                        List<Participant> participants =
+                                            await ParticipantService
+                                                .getRemoteData();
+                                        List<Groupe> groupes =
+                                            await GroupeService.getRemoteData();
+                                        await ParticipationService
+                                            .getRemoteData(
+                                                participants, groupes);
+                                        await GameService().getRemoteData(
+                                            participants, groupes);
+                                        await JoueurService.getRemoteData(
+                                            participants);
+                                        await CoachService.getRemoteData();
+                                        await ArbitreService.getRemoteData();
+                                        await InfosService.getRemoteData();
+                                        await SponsorService.getRemoteData();
 
                                         setState(() {
                                           isLoading = false;

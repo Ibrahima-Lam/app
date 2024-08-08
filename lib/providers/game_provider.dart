@@ -29,11 +29,20 @@ class GameProvider extends ChangeNotifier {
     required this.groupeProvider,
     required this.scoreProvider,
   }) {
-    _games = _games.map((e) {
+    /* _games = _games.map((e) {
       e.score = scoreProvider.scores
           .singleWhereOrNull((element) => element.idGame == e.idGame);
       return e;
-    }).toList();
+    }).toList(); */
+
+    scoreProvider.ListenData().listen((event) {
+      _games = _games.map((e) {
+        e.score =
+            event.singleWhereOrNull((element) => element.idGame == e.idGame);
+        return e;
+      }).toList();
+      notifyListeners();
+    });
   }
 
   GameList get games => _games;
@@ -52,14 +61,14 @@ class GameProvider extends ChangeNotifier {
         remote: remote);
   }
 
-  Future<GameList> getGames({bool remote = false}) async {
+  Future<GameList> getGames({bool remote = false, bool locale = false}) async {
     if (groupeProvider.groupes.isEmpty || remote)
       await groupeProvider.initGroupes();
     if (participantProvider.participants.isEmpty || remote)
       await participantProvider.initParticipants();
     if (scoreProvider.scores.isEmpty || remote)
       await scoreProvider.initScores();
-    if (games.isEmpty || remote) await setGames(remote: remote);
+    if (games.isEmpty || remote || locale) await setGames(remote: remote);
     return games;
   }
 

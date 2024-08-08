@@ -3,7 +3,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 
 class RemoteService {
   const RemoteService();
-  static get _db => FirebaseFirestore.instance;
+  static FirebaseFirestore get _db => FirebaseFirestore.instance;
   static Future<bool> get isConnected async =>
       (await Connectivity().checkConnectivity())
           .contains(ConnectivityResult.none);
@@ -41,16 +41,14 @@ class RemoteService {
     return data;
   }
 
-  static Stream<DocumentSnapshot> listenData(
-      String collection, String document) {
+  static Stream<List<Map<String, dynamic>>> listenData(
+      String collection) async* {
     try {
-      return _db
-          .collection(collection)
-          .doc(document)
-          .snapshots()
-          .map((event) => event.data());
+      yield* _db.collection(collection).snapshots().map((event) {
+        return event.docs.map((e) => e.data()).toList();
+      });
     } catch (e) {
-      return Stream.empty();
+      yield [];
     }
   }
 

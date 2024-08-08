@@ -24,12 +24,7 @@ class _InfosDetailsState extends State<InfosDetails> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()
-      ..addListener(() {
-        setState(() {
-          color = _scrollController.offset > 200 ? Colors.white : Colors.black;
-        });
-      });
+    _scrollController = ScrollController();
   }
 
   @override
@@ -39,35 +34,41 @@ class _InfosDetailsState extends State<InfosDetails> {
       body: CustomScrollView(
         controller: _scrollController,
         slivers: [
-          SliverAppBar(
-            foregroundColor: color,
-            elevation: 2,
-            expandedHeight: 300,
-            pinned: true,
-            leading: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: Icon(
-                  Icons.navigate_before,
-                )),
-            flexibleSpace: FlexibleSpaceBar(
-              background: Hero(
-                tag: widget.infos.idInfos,
-                child: Center(
-                  child: Container(
-                    constraints: BoxConstraints(minHeight: 200),
-                    width: MediaQuery.of(context).size.width,
-                    child: (widget.infos.imageUrl ?? '').isEmpty
-                        ? InfosErrorWidget()
-                        : CachedNetworkImage(
-                            imageUrl: widget.infos.imageUrl ?? '',
-                            errorWidget: (context, url, error) =>
-                                InfosErrorWidget(),
-                          ),
+          ListenableBuilder(
+              listenable: _scrollController,
+              builder: (context, _) {
+                return SliverAppBar(
+                  foregroundColor: _scrollController.offset > 200
+                      ? Colors.white
+                      : Colors.black,
+                  elevation: 2,
+                  expandedHeight: 300,
+                  pinned: true,
+                  leading: IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(
+                        Icons.navigate_before,
+                      )),
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Hero(
+                      tag: widget.infos.idInfos,
+                      child: Center(
+                        child: Container(
+                          constraints: BoxConstraints(minHeight: 200),
+                          width: MediaQuery.of(context).size.width,
+                          child: (widget.infos.imageUrl ?? '').isEmpty
+                              ? InfosErrorWidget()
+                              : CachedNetworkImage(
+                                  imageUrl: widget.infos.imageUrl ?? '',
+                                  errorWidget: (context, url, error) =>
+                                      InfosErrorWidget(),
+                                ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ),
+                );
+              }),
           SliverList(
             delegate: SliverChildListDelegate(
               [

@@ -16,10 +16,12 @@ class ScoreProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Stream<List<Score>> ListenData({bool remote = false}) async* {
+    yield* ScoreService.listenData();
+  }
+
+// Todo: remove this
   Future<List<Score>> getData({bool remote = false}) async {
-    if (scores.isEmpty || remote) {
-      scores = await ScoreService.getData(remote: remote);
-    }
     return scores;
   }
 
@@ -70,5 +72,10 @@ class ScoreProvider extends ChangeNotifier {
     final bool result = await await ScoreService.editScore(idGame, score);
     if (result) await getData(remote: true);
     return result;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

@@ -24,6 +24,7 @@ import 'package:app/providers/participation_provider.dart';
 import 'package:app/providers/statistique_future_provider.dart';
 import 'package:app/providers/statistique_provider.dart';
 import 'package:app/widget/skelton/drawer_widget.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => CompetitionProvider()),
         ChangeNotifierProvider(
           create: (context) => FavoriProvider()
             ..getCompetitions()
@@ -58,14 +60,13 @@ class MyApp extends StatelessWidget {
             create: (context) =>
                 AppParamettreProvider(appParamettre: AppParamettre())
                   ..getData()),
-        ChangeNotifierProvider(create: (context) => CompetitionProvider()),
         ChangeNotifierProvider(
             lazy: false,
             create: (context) => ParticipantProvider()..initParticipants()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(
           lazy: false,
-          create: (context) => ScoreProvider([])..initScores(),
+          create: (context) => ScoreProvider([]),
         ),
         ChangeNotifierProvider(
           lazy: false,
@@ -202,6 +203,60 @@ class GlobalPage extends StatefulWidget {
 final double size = 30;
 
 class _GlobalPageState extends State<GlobalPage> {
+  late Connectivity _connectivity;
+  initState() {
+    super.initState();
+    _connectivity = Connectivity();
+    _connectivity.checkConnectivity().then((value) {
+      if (value.contains(ConnectivityResult.none)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.white,
+            content: ListTile(
+                leading: Icon(Icons.wifi_off),
+                title: Text('Vous etes hors ligne !')),
+            duration: const Duration(milliseconds: 5000),
+          ),
+        );
+        _connectivity.onConnectivityChanged.listen((event) {
+          if (event.contains(ConnectivityResult.none)) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                backgroundColor: Colors.white,
+                content: ListTile(
+                    leading: Icon(Icons.wifi_off),
+                    title: Text('Vous etes hors ligne !')),
+                duration: const Duration(milliseconds: 5000),
+              ),
+            );
+          } else {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                backgroundColor: Colors.white,
+                content: ListTile(
+                    leading: Icon(Icons.wifi, color: Colors.green),
+                    title: Text('Connexion retablie !')),
+                duration: const Duration(milliseconds: 3000),
+              ),
+            );
+            context
+                .read<CompetitionProvider>()
+                .getCompetitions(locale: true)
+                .then((value) {
+              context.read<GameProvider>().getGames(locale: true);
+            });
+          }
+        });
+      }
+    });
+  }
+
+  dispose() {
+    super.dispose();
+  }
+
   int currentIndex = 0;
   List<Widget> destinations = [
     NavigationDestination(

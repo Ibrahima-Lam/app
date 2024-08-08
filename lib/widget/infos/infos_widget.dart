@@ -156,6 +156,8 @@ class _InfosFullWidgetState extends State<InfosFullWidget> {
                 padding: const EdgeInsets.all(5),
                 child: Text(
                   widget.infos.text,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
                 ),
               ),

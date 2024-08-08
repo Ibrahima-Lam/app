@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app/collection/competition_collection.dart';
 import 'package:app/core/class/abbreviable.dart';
+import 'package:app/core/enums/enums.dart';
 import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/competition.dart';
 import 'package:app/models/game.dart';
@@ -11,6 +12,7 @@ import 'package:app/pages/game/widget_details/composition_widget.dart';
 import 'package:app/pages/game/widget_details/evenement_widget.dart';
 import 'package:app/pages/game/widget_details/statistique_list_widget.dart';
 import 'package:app/providers/paramettre_provider.dart';
+import 'package:app/providers/score_provider.dart';
 import 'package:app/widget/classement/classement_widget.dart';
 import 'package:app/pages/game/widget_details/journee_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
@@ -18,6 +20,7 @@ import 'package:app/providers/game_provider.dart';
 import 'package:app/widget/game/game_bottom_navbar_edit_widget.dart';
 import 'package:app/widget/game/game_details_column_widget.dart';
 import 'package:app/widget/game/game_details_score_column_widget.dart';
+import 'package:app/widget/modals/confirm_dialog_widget.dart';
 import 'package:app/widget/modals/custom_delegate_search.dart';
 import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
@@ -307,6 +310,23 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
                 ),
                 bottomNavigationBar:
                     checkUser ? GameBottomNavbarEditWidget(game: game) : null,
+                floatingActionButton: checkUser && game.score != null
+                    ? FloatingActionButton(
+                        onPressed: () async {
+                          final bool? confirm = await showDialog(
+                              context: context,
+                              builder: (context) => ConfirmDialogWidget(
+                                  defaut: ConfirmDialogDefault.non,
+                                  title: 'Confirmer la suppression',
+                                  content: 'Voulez vous supprimer le score ?'));
+                          if (confirm == true)
+                            context
+                                .read<ScoreProvider>()
+                                .deleteScore(game.idGame);
+                        },
+                        child: const Icon(Icons.delete),
+                      )
+                    : null,
               ),
             );
           });

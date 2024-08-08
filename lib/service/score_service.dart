@@ -31,6 +31,13 @@ class ScoreService {
     }
   }
 
+  static Stream<List<Score>> listenData() {
+    return RemoteService.listenData(collection).map((event) {
+      service.setData(event);
+      return event.map((e) => Score.fromJson(e)).toList();
+    });
+  }
+
   static Future<bool> addScore(Score score) async {
     final bool res =
         await RemoteService.setData(collection, score.idGame, score.toJson());

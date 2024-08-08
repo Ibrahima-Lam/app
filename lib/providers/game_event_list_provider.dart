@@ -54,10 +54,11 @@ class GameEventListProvider extends ChangeNotifier {
   }
 
   List<Event> getJoueurGameEvent(
-      {required String idGame, required String idJoueur}) {
+      {required String idGame, required String idJoueur, bool target = false}) {
     return events
         .where((element) =>
-            (element.idJoueur == idJoueur || element.idTarget == idJoueur) &&
+            (element.idJoueur == idJoueur ||
+                element.idTarget == idJoueur && target) &&
             element.idGame == idGame)
         .toList();
   }
