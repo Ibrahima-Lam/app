@@ -3,6 +3,7 @@ import 'package:app/models/competition.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/widget/form/dropdown_menu_app_form_widget.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
+import 'package:app/widget/form/file_form_field_widget.dart';
 import 'package:app/widget/form/slider_rating_form_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +102,8 @@ class _CompetitionFormState extends State<CompetitionForm> {
                     controller: localiteController,
                     hintText: 'Entrer la localité de la compétition'),
                 const SizedBox(height: 5.0),
-                TextFormFieldWidget(
+                FileFormFieldWidget(
+                    directory: 'competition',
                     controller: urlController,
                     hintText: 'Entrer l\'url du logo'),
                 const SizedBox(height: 5.0),

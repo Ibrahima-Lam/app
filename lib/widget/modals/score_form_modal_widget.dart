@@ -152,6 +152,7 @@ class _ScoreFormModalWidgetState extends State<ScoreFormModalWidget> {
             const SizedBox(height: 10.0),
             ElevatedButtonWidget(
               onPressed: () {
+                score.datetime = DateTime.now().toString();
                 Navigator.pop(context, score);
               },
             )

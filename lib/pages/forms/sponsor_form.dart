@@ -3,6 +3,7 @@ import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/sponsor.dart';
 import 'package:app/providers/sponsor_provider.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
+import 'package:app/widget/form/file_form_field_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -86,8 +87,10 @@ class _SponsorFormState extends State<SponsorForm> {
                 controller: _descriptionController,
                 hintText: 'Description',
                 minLines: 5),
-            TextFormFieldWidget(
-                controller: _imageController, hintText: 'Image'),
+            FileFormFieldWidget(
+                controller: _imageController,
+                hintText: 'Image',
+                directory: 'sponsor'),
             Card(
               child: ListTile(
                 title: const Text('Date'),

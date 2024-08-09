@@ -9,6 +9,7 @@ class Score {
   int? awayScorePenalty;
   TimerEvent? timer;
   GameEtatClass? etat;
+  String? datetime;
   Score({
     required this.idGame,
     this.homeScore,
@@ -17,6 +18,7 @@ class Score {
     this.awayScorePenalty,
     this.timer,
     this.etat,
+    this.datetime,
   });
   bool get isPenalty => homeScorePenalty != null && awayScorePenalty != null;
   bool get isScore => homeScore != null && awayScore != null;
@@ -34,6 +36,7 @@ class Score {
     int? awayScorePenalty,
     TimerEvent? timer,
     GameEtatClass? etat,
+    String? datetime,
   }) =>
       Score(
         idGame: idGame ?? this.idGame,
@@ -43,6 +46,7 @@ class Score {
         awayScorePenalty: awayScorePenalty ?? this.awayScorePenalty,
         timer: timer ?? this.timer,
         etat: etat ?? this.etat,
+        datetime: datetime ?? this.datetime,
       );
 
   factory Score.fromJson(Map<String, dynamic> json) => Score(
@@ -51,6 +55,7 @@ class Score {
       awayScore: json['awayScore'],
       homeScorePenalty: json['homeScorePenalty'],
       awayScorePenalty: json['awayScorePenalty'],
+      datetime: json['datetime'],
       etat: json['etat'] == null ? null : GameEtatClass(json['etat']),
       timer: TimerEvent.fromJson({
         "start": json['start'],
@@ -67,6 +72,7 @@ class Score {
         "homeScorePenalty": homeScorePenalty,
         "awayScorePenalty": awayScorePenalty,
         "etat": etat?.text,
+        "datetime": datetime,
         ...timer?.toJson() ?? {},
       };
 }

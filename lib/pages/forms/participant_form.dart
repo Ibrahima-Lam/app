@@ -2,6 +2,7 @@ import 'package:app/controllers/competition/date.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
+import 'package:app/widget/form/file_form_field_widget.dart';
 import 'package:app/widget/form/slider_rating_form_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -90,8 +91,8 @@ class _ParticipantFormState extends State<ParticipantForm> {
                 controller: localiteController,
                 hintText: 'Entrer la localité de  l\'équipe'),
             const SizedBox(height: 5.0),
-            TextFormFieldWidget(
-                keyboardType: TextInputType.url,
+            FileFormFieldWidget(
+                directory: 'participant',
                 controller: urlController,
                 hintText: 'Entrer l\'url du logo'),
             const SizedBox(height: 5.0),

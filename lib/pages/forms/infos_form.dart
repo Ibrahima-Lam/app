@@ -3,6 +3,7 @@ import 'package:app/core/params/categorie/categorie_params.dart';
 import 'package:app/models/infos/infos.dart';
 import 'package:app/providers/infos_provider.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
+import 'package:app/widget/form/file_form_field_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -86,8 +87,10 @@ class _InfosFormState extends State<InfosForm> {
                 controller: _titleController, hintText: 'Titre'),
             TextFormFieldWidget(
                 controller: _textController, hintText: 'Texte', minLines: 5),
-            TextFormFieldWidget(
-                controller: _imageController, hintText: 'Image'),
+            FileFormFieldWidget(
+                controller: _imageController,
+                hintText: 'Image',
+                directory: 'infos'),
             TextFormFieldWidget(
                 controller: _sourceController, hintText: 'Source'),
             Card(

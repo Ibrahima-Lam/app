@@ -7,6 +7,7 @@ import 'package:app/pages/game/game_details.dart';
 import 'package:app/models/game.dart';
 import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/widget/game/card_and_num_widget.dart';
+import 'package:app/widget/game/game_score_animation_widget.dart';
 import 'package:app/widget/logos/equipe_logo_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -306,7 +307,7 @@ class GameLessWidget extends GameWidget {
   }
 }
 
-class GameScoreWiget extends StatelessWidget {
+class GameScoreWiget extends StatefulWidget {
   final Game game;
   final bool showDate;
   final bool showEtat;
@@ -326,6 +327,24 @@ class GameScoreWiget extends StatelessWidget {
   });
 
   @override
+  State<GameScoreWiget> createState() => _GameScoreWigetState();
+}
+
+class _GameScoreWigetState extends State<GameScoreWiget>
+    with TickerProviderStateMixin {
+  bool get animate {
+    int duration = 0;
+    if (widget.game.score?.datetime != null) {
+      try {
+        DateTime date = DateTime.parse(widget.game.score!.datetime!);
+        duration =
+            DateTimeRange(start: date, end: DateTime.now()).duration.inSeconds;
+      } catch (e) {}
+    }
+    return duration > 0 && duration <= 120;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.sizeOf(context).height,
@@ -333,19 +352,35 @@ class GameScoreWiget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            (game.niveau.nomNiveau).capitalize(),
+            (widget.game.niveau.nomNiveau).capitalize(),
             style: const TextStyle(
               fontSize: 14,
             ),
           ),
-          Text(
-            game.scoreText,
-            style: TextStyle(
-                fontSize: fontSize ?? 16,
-                fontWeight: FontWeight.bold,
-                color: colorScore,
-                decoration: game.noDated ? TextDecoration.lineThrough : null),
-          ),
+          animate
+              ? GameScoreAnimationWidget(
+                  child: Text(
+                    widget.game.scoreText,
+                    style: TextStyle(
+                        fontSize: widget.fontSize ?? 16,
+                        fontWeight: FontWeight.bold,
+                        color: widget.colorScore,
+                        decoration: widget.game.noDated
+                            ? TextDecoration.lineThrough
+                            : null),
+                  ),
+                  animate: animate,
+                )
+              : Text(
+                  widget.game.scoreText,
+                  style: TextStyle(
+                      fontSize: widget.fontSize ?? 16,
+                      fontWeight: FontWeight.bold,
+                      color: widget.colorScore,
+                      decoration: widget.game.noDated
+                          ? TextDecoration.lineThrough
+                          : null),
+                ),
           ConstrainedBox(
             constraints: const BoxConstraints(
               minHeight: 30,
@@ -354,17 +389,17 @@ class GameScoreWiget extends StatelessWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (showDate)
+                if (widget.showDate)
                   Text(
-                    DateController.frDate(game.dateGame, abbr: true),
+                    DateController.frDate(widget.game.dateGame, abbr: true),
                     style: const TextStyle(fontSize: 12),
                   ),
-                if (showEtat && etat != GameEtat.avant)
+                if (widget.showEtat && widget.etat != GameEtat.avant)
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 3.0),
-                    color: colorEtat,
+                    color: widget.colorEtat,
                     child: Text(
-                      game.etat.text.substring(0, 3).toUpperCase(),
+                      widget.game.etat.text.substring(0, 3).toUpperCase(),
                       style: TextStyle(color: Colors.white, fontSize: 10),
                     ),
                   )

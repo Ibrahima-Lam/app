@@ -2,6 +2,7 @@ import 'package:app/controllers/competition/date.dart';
 import 'package:app/core/enums/game_etat_enum.dart';
 import 'package:app/models/game.dart';
 import 'package:app/models/gameEvent.dart';
+import 'package:app/widget/game/game_score_animation_widget.dart';
 import 'package:flutter/material.dart';
 
 class GameDetailsScoreColumnWidget extends StatelessWidget {
@@ -9,6 +10,18 @@ class GameDetailsScoreColumnWidget extends StatelessWidget {
   final TimerEvent? timer;
   const GameDetailsScoreColumnWidget(
       {super.key, required this.game, this.timer});
+
+  bool get animate {
+    int duration = 0;
+    if (game.score?.datetime != null) {
+      try {
+        DateTime date = DateTime.parse(game.score!.datetime!);
+        duration =
+            DateTimeRange(start: date, end: DateTime.now()).duration.inSeconds;
+      } catch (e) {}
+    }
+    return duration > 0 && duration <= 120;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +32,16 @@ class GameDetailsScoreColumnWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizedBox(),
-          TextScore(
-            '${game.scoreText}',
-          ),
+          animate
+              ? GameScoreAnimationWidget(
+                  animate: animate,
+                  child: TextScore(
+                    '${game.scoreText}',
+                  ),
+                )
+              : TextScore(
+                  '${game.scoreText}',
+                ),
           Column(
             children: [
               Text(

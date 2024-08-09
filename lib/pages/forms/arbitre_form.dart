@@ -3,6 +3,7 @@ import 'package:app/models/arbitres/arbitre.dart';
 import 'package:app/providers/arbitre_provider.dart';
 import 'package:app/widget/form/dropdown_menu_app_form_widget.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
+import 'package:app/widget/form/file_form_field_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -96,7 +97,8 @@ class _ArbitreFormState extends State<ArbitreForm> {
                 'var': 'var',
                 'arbitre': 'arbitre'
               }, title: 'Role', controller: _roleController),
-              TextFormFieldWidget(
+              FileFormFieldWidget(
+                directory: 'arbitre',
                 controller: _imageUrlController,
                 hintText: 'Entrez l\'url de l\'image du coach',
               ),

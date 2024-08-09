@@ -3,6 +3,7 @@ import 'package:app/models/joueur.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
+import 'package:app/widget/form/file_form_field_widget.dart';
 import 'package:app/widget/form/slider_rating_form_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -153,7 +154,8 @@ class _JoueurFormState extends State<JoueurForm> {
                   ),
                 ),
               ),
-              TextFormFieldWidget(
+              FileFormFieldWidget(
+                directory: 'joueur',
                 controller: _imageUrlController,
                 hintText: 'Entrez l\'url de l\'image du joueur',
               ),
