@@ -135,6 +135,7 @@ class _InfosFullWidgetState extends State<InfosFullWidget> {
                   child: (widget.infos.imageUrl ?? '').isEmpty
                       ? InfosErrorWidget()
                       : CachedNetworkImage(
+                          fit: BoxFit.cover,
                           imageUrl: widget.infos.imageUrl ?? '',
                           errorWidget: (context, url, error) =>
                               InfosErrorWidget(),

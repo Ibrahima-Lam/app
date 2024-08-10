@@ -23,8 +23,10 @@ import 'package:app/providers/participant_provider.dart';
 import 'package:app/providers/participation_provider.dart';
 import 'package:app/providers/statistique_future_provider.dart';
 import 'package:app/providers/statistique_provider.dart';
+import 'package:app/service/local_notification_service.dart';
 import 'package:app/widget/skelton/drawer_widget.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,9 +34,22 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  LocalNotificationService.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: true,
+    sound: true,
+  );
+
+  FirebaseMessaging.onBackgroundMessage(LocalNotificationService().onMessage);
   runApp(const MyApp());
 }
 

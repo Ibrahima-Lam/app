@@ -1,4 +1,6 @@
+import 'package:app/service/local_notification_service.dart';
 import 'package:app/widget/skelton/drawer_widget.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -10,6 +12,13 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
+  void listenMessage(RemoteMessage message) async {
+    await LocalNotificationService().showNotification(
+      title: message.notification?.title ?? 'Notification',
+      description: message.notification?.body ?? 'Corps de la notification',
+    );
+  }
+
   Future<bool> getData() async {
     await Future.delayed(const Duration(seconds: 1));
     return true;
@@ -18,6 +27,7 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   void initState() {
     super.initState();
+    FirebaseMessaging.onMessage.listen(listenMessage);
   }
 
   @override
@@ -52,6 +62,12 @@ class _NotificationPageState extends State<NotificationPage> {
             );
           }),
       drawer: const DrawerWidget(),
+      /*   floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          FirebaseMessaging.instance.getToken().then((value) {});
+        },
+        child: const Icon(Icons.notifications),
+      ), */
     );
   }
 }
