@@ -49,7 +49,6 @@ class _NotificationPageState extends State<NotificationPage> {
         ),
         title: const Text('Notification'),
         titleSpacing: 20,
-        actions: [Icon(Icons.notifications)],
       ),
       body: FutureBuilder(
           future: getData(),
