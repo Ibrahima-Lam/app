@@ -80,18 +80,6 @@ class _NotificationPageState extends State<NotificationPage> {
                   );
           }),
       drawer: const DrawerWidget(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await NotifSqliteService().insertNotif(Notif(
-              idNotif: '3',
-              title: 'titre3',
-              content: 'contenu3',
-              date: DateTime.now().toString(),
-              type: 'type'));
-          setState(() {});
-        },
-        child: const Icon(Icons.notifications),
-      ),
     );
   }
 }
