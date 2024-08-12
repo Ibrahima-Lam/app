@@ -67,7 +67,9 @@ class LocalNotificationService {
   }
 
   Future<void> showNotification(
-      {required String title, required String description}) async {
+      {required String title,
+      required String description,
+      required Map data}) async {
     final notificationDetails = Platform.isAndroid
         ? getNotificationDetailsAndroid(title, description)
         : getNotificationDetailsIos(title, description);
@@ -84,6 +86,7 @@ class LocalNotificationService {
     await showNotification(
       title: message.notification?.title ?? 'Notification',
       description: message.notification?.body ?? 'Corps de la notification',
+      data: message.data,
     );
   }
 }

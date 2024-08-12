@@ -63,6 +63,7 @@ class FicheInfosWidget extends StatelessWidget {
                                 child: (info.imageUrl ?? '').isEmpty
                                     ? InfosErrorWidget()
                                     : CachedNetworkImage(
+                                        fit: BoxFit.cover,
                                         imageUrl: info.imageUrl ?? '',
                                         errorWidget: (context, url, error) =>
                                             AnimatedContainer(
@@ -135,6 +136,7 @@ class FicheSponsorWidget extends StatelessWidget {
                         child: sponsor.imageUrl.isEmpty
                             ? FichesErrorWidget()
                             : CachedNetworkImage(
+                                fit: BoxFit.cover,
                                 imageUrl: sponsor.imageUrl,
                                 errorWidget: (context, url, error) =>
                                     FichesErrorWidget(),

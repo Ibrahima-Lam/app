@@ -1,6 +1,6 @@
 import 'package:app/models/scores/score.dart';
-import 'package:app/service/local_service.dart';
-import 'package:app/service/remote_service.dart';
+import 'package:app/core/service/local_service.dart';
+import 'package:app/core/service/remote_service.dart';
 
 class ScoreService {
   static LocalService get service => LocalService('score.json');

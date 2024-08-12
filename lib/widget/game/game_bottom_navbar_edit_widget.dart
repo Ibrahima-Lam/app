@@ -89,7 +89,7 @@ class GameBottomNavbarEditWidget extends StatelessWidget {
       context: context,
       builder: (context) => GameEtatFormModalWidget(etat: game.etat.text),
     );
-    if (res is String) {
+    if (res is String && res.isNotEmpty) {
       context.read<GameProvider>().changeEtat(id: game.idGame, etat: res);
     }
   }

@@ -1,9 +1,13 @@
 import 'package:app/controllers/competition/date.dart';
+import 'package:app/core/extension/list_extension.dart';
 import 'package:app/core/params/categorie/categorie_params.dart';
+import 'package:app/models/competition.dart';
 import 'package:app/models/infos/infos.dart';
+import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/infos_provider.dart';
 import 'package:app/widget/infos/infos_error_widget.dart';
 import 'package:app/widget/infos/infos_widget.dart';
+import 'package:app/widget/logos/competition_logo_image.dart';
 import 'package:app/widget/sponsor/sponsor_list_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +34,15 @@ class _InfosDetailsState extends State<InfosDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /* backgroundColor: Color(0xFFEDE7F6), violet clair */
-      body: CustomScrollView(
+        /* backgroundColor: Color(0xFFEDE7F6), violet clair */
+        body: Consumer<CompetitionProvider>(
+            builder: (context, competitionProvider, child) {
+      final Competition? competition = competitionProvider
+          .collection.competitions
+          .singleWhereOrNull((competition) =>
+              competition.codeEdition == widget.infos.idEdition);
+
+      return CustomScrollView(
         controller: _scrollController,
         slivers: [
           ListenableBuilder(
@@ -50,6 +61,29 @@ class _InfosDetailsState extends State<InfosDetails> {
                         Icons.navigate_before,
                       )),
                   flexibleSpace: FlexibleSpaceBar(
+                    title: Row(
+                      children: [
+                        if (competition != null) ...[
+                          SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: CompetitionImageLogoWidget(
+                                url: competition.imageUrl),
+                          ),
+                          SizedBox(width: 10)
+                        ],
+                        Text(
+                          competition?.nomCompetition ?? 'Global',
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: _scrollController.offset > 200
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    expandedTitleScale: 1,
                     background: Hero(
                       tag: widget.infos.idInfos,
                       child: Center(
@@ -144,8 +178,8 @@ class _InfosDetailsState extends State<InfosDetails> {
             ),
           ),
         ],
-      ),
-    );
+      );
+    }));
   }
 }
 

@@ -145,8 +145,10 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
         future: _getData(context),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Center(
-              child: Text('erreur!'),
+            return Scaffold(
+              body: const Center(
+                child: Text('erreur!'),
+              ),
             );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -195,7 +197,7 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
                                   context: context,
                                   delegate: CustomDelegateSearch());
                             },
-                            icon: Icon(Icons.search))
+                            icon: Icon(Icons.search)),
                       ],
                       centerTitle: true,
                       title: ValueListenableBuilder(

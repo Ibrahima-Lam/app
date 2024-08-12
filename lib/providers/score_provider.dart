@@ -13,7 +13,6 @@ class ScoreProvider extends ChangeNotifier {
   List<Score> get scores => _scores;
   void set scores(List<Score> val) {
     _scores = val;
-    notifyListeners();
   }
 
   Stream<List<Score>> ListenData({bool remote = false}) async* {
@@ -40,11 +39,13 @@ class ScoreProvider extends ChangeNotifier {
       {required String idGame, required GameEtatClass etat}) async {
     Score? score =
         scores.singleWhereOrNull((element) => element.idGame == idGame);
-    if (score != null)
+
+    if (score != null) {
       score.etat = etat;
-    else
+    } else {
       score = Score(idGame: idGame, etat: etat);
-    final bool result = await await ScoreService.editScore(idGame, score);
+    }
+    final bool result = await ScoreService.editScore(idGame, score);
     if (result) await getData(remote: true);
     return result;
   }
@@ -69,7 +70,7 @@ class ScoreProvider extends ChangeNotifier {
       score.timer = timer;
     else
       score = Score(idGame: idGame, timer: timer);
-    final bool result = await await ScoreService.editScore(idGame, score);
+    final bool result = await ScoreService.editScore(idGame, score);
     if (result) await getData(remote: true);
     return result;
   }

@@ -1,7 +1,11 @@
-import 'package:app/service/local_notification_service.dart';
+import 'package:app/models/notification.dart';
+import 'package:app/pages/game/game_details.dart';
+import 'package:app/providers/game_provider.dart';
+import 'package:app/service/notif_sqlite_service.dart';
+import 'package:app/widget/modals/confirm_dialog_widget.dart';
 import 'package:app/widget/skelton/drawer_widget.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NotificationPage extends StatefulWidget {
   final Function()? openDrawer;
@@ -12,22 +16,27 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  void listenMessage(RemoteMessage message) async {
-    await LocalNotificationService().showNotification(
-      title: message.notification?.title ?? 'Notification',
-      description: message.notification?.body ?? 'Corps de la notification',
-    );
-  }
-
-  Future<bool> getData() async {
-    await Future.delayed(const Duration(seconds: 1));
-    return true;
+  Future<List<Notif>> getData() async {
+    return await NotifSqliteService().getNotifs();
   }
 
   @override
   void initState() {
     super.initState();
-    FirebaseMessaging.onMessage.listen(listenMessage);
+  }
+
+  _onDelete(String id) async {
+    await NotifSqliteService().deleteNotif(id);
+    final bool? confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => const ConfirmDialogWidget(
+          title: "Supprimer la notification",
+          content: 'Voulez-vous supprimer la notification ?'),
+    );
+    if (confirm ?? false) {
+      await NotifSqliteService().deleteNotif(id);
+      setState(() {});
+    }
   }
 
   @override
@@ -42,12 +51,12 @@ class _NotificationPageState extends State<NotificationPage> {
         titleSpacing: 20,
         actions: [Icon(Icons.notifications)],
       ),
-      body: FutureBuilder<bool>(
+      body: FutureBuilder(
           future: getData(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
-              return const Center(
-                child: Text('Erreur!'),
+              return Center(
+                child: Text(snapshot.error.toString()),
               );
             }
 
@@ -56,18 +65,69 @@ class _NotificationPageState extends State<NotificationPage> {
                 child: CircularProgressIndicator(),
               );
             }
-
-            return Center(
-              child: Text('Page de notification disponible !'),
-            );
+            final List<Notif> notif = snapshot.data!;
+            return notif.isEmpty
+                ? const Center(
+                    child: Text('Aucune notification'),
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      children: notif
+                          .map((e) => NotificationWidget(
+                              notif: e, onDelete: () => _onDelete(e.idNotif)))
+                          .toList(),
+                    ),
+                  );
           }),
       drawer: const DrawerWidget(),
-      /*   floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          FirebaseMessaging.instance.getToken().then((value) {});
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await NotifSqliteService().insertNotif(Notif(
+              idNotif: '3',
+              title: 'titre3',
+              content: 'contenu3',
+              date: DateTime.now().toString(),
+              type: 'type'));
+          setState(() {});
         },
         child: const Icon(Icons.notifications),
-      ), */
+      ),
+    );
+  }
+}
+
+class NotificationWidget extends StatelessWidget {
+  final Notif notif;
+
+  final Function() onDelete;
+
+  const NotificationWidget({required this.notif, required this.onDelete});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 1, horizontal: 4),
+      child: ListTile(
+        onTap: () async {
+          bool check =
+              await context.read<GameProvider>().checkGame(notif.idGame ?? '');
+          if (check) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => GameDetails(id: notif.idGame ?? '')));
+          }
+        },
+        title: Text(notif.title),
+        subtitle: Text(notif.content),
+        trailing: PopupMenuButton(
+            itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: const Text('Supprimer'),
+                    onTap: onDelete,
+                  ),
+                ]),
+      ),
     );
   }
 }

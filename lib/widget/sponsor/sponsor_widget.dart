@@ -22,6 +22,7 @@ class SponsorWidget extends StatelessWidget {
               child: sponsor.imageUrl.isEmpty
                   ? SponsorErrorWidget()
                   : CachedNetworkImage(
+                      fit: BoxFit.cover,
                       imageUrl: sponsor.imageUrl,
                       errorWidget: (context, url, error) =>
                           SponsorErrorWidget(),

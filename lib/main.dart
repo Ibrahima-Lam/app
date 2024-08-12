@@ -23,7 +23,7 @@ import 'package:app/providers/participant_provider.dart';
 import 'package:app/providers/participation_provider.dart';
 import 'package:app/providers/statistique_future_provider.dart';
 import 'package:app/providers/statistique_provider.dart';
-import 'package:app/service/local_notification_service.dart';
+import 'package:app/core/service/local_notification_service.dart';
 import 'package:app/widget/skelton/drawer_widget.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -218,9 +218,18 @@ class GlobalPage extends StatefulWidget {
 final double size = 30;
 
 class _GlobalPageState extends State<GlobalPage> {
+  void listenMessage(RemoteMessage message) async {
+    await LocalNotificationService().showNotification(
+      title: message.notification?.title ?? 'Notification',
+      description: message.notification?.body ?? 'Corps de la notification',
+      data: message.data,
+    );
+  }
+
   late Connectivity _connectivity;
   initState() {
     super.initState();
+    FirebaseMessaging.onMessage.listen(listenMessage);
     _connectivity = Connectivity();
     _connectivity.checkConnectivity().then((value) {
       if (value.contains(ConnectivityResult.none)) {

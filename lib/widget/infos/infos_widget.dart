@@ -1,9 +1,13 @@
 import 'package:app/controllers/competition/date.dart';
+import 'package:app/core/extension/list_extension.dart';
+import 'package:app/models/competition.dart';
 import 'package:app/models/infos/infos.dart';
 import 'package:app/pages/actualite/infos_details.dart';
+import 'package:app/providers/competition_provider.dart';
 import 'package:app/widget/infos/infos_error_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class InfosWidget extends StatefulWidget {
   final Infos infos;
@@ -45,6 +49,7 @@ class _InfosWidgetState extends State<InfosWidget> {
                       child: (widget.infos.imageUrl ?? '').isEmpty
                           ? InfosErrorWidget()
                           : CachedNetworkImage(
+                              fit: BoxFit.cover,
                               imageUrl: widget.infos.imageUrl ?? '',
                               errorWidget: (context, url, error) =>
                                   InfosErrorWidget()),
@@ -110,73 +115,82 @@ class InfosFullWidget extends StatefulWidget {
 class _InfosFullWidgetState extends State<InfosFullWidget> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        await Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => InfosDetails(infos: widget.infos)));
-        setState(() {});
-      },
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
-        elevation: 2,
-        color: Colors.white,
-        child: Container(
-          constraints: BoxConstraints(
-            minHeight: 200,
-          ),
-          padding: const EdgeInsets.all(5),
-          child: Column(
-            children: [
-              Hero(
-                tag: widget.infos.idInfos,
-                child: Container(
-                  height: 300,
-                  width: MediaQuery.of(context).size.width,
-                  child: (widget.infos.imageUrl ?? '').isEmpty
-                      ? InfosErrorWidget()
-                      : CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          imageUrl: widget.infos.imageUrl ?? '',
-                          errorWidget: (context, url, error) =>
-                              InfosErrorWidget(),
-                        ),
+    return Consumer<CompetitionProvider>(
+        builder: (context, competitionProvider, child) {
+      final Competition? competition = competitionProvider
+          .collection.competitions
+          .singleWhereOrNull((competition) =>
+              competition.codeEdition == widget.infos.idEdition);
+
+      return GestureDetector(
+        onTap: () async {
+          await Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => InfosDetails(infos: widget.infos)));
+          setState(() {});
+        },
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
+          elevation: 2,
+          color: Colors.white,
+          child: Container(
+            constraints: BoxConstraints(
+              minHeight: 200,
+            ),
+            padding: const EdgeInsets.all(5),
+            child: Column(
+              children: [
+                Hero(
+                  tag: widget.infos.idInfos,
+                  child: Container(
+                    height: 260,
+                    width: MediaQuery.of(context).size.width,
+                    child: (widget.infos.imageUrl ?? '').isEmpty
+                        ? InfosErrorWidget()
+                        : CachedNetworkImage(
+                            fit: BoxFit.cover,
+                            imageUrl: widget.infos.imageUrl ?? '',
+                            errorWidget: (context, url, error) =>
+                                InfosErrorWidget(),
+                          ),
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Text(
-                widget.infos.title,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(5),
-                child: Text(
-                  widget.infos.text,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                const SizedBox(
+                  height: 5,
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Global'),
-                    Text(DateController.frDateTime(widget.infos.datetime)),
-                  ],
+                Text(
+                  widget.infos.title,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-              ),
-            ],
+                const SizedBox(
+                  height: 5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Text(
+                    widget.infos.text,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(competition?.nomCompetition ?? 'Global'),
+                      Text(DateController.frDateTime(widget.infos.datetime)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -209,6 +223,7 @@ class InfosLessWidget extends StatelessWidget {
                 child: (infos.imageUrl ?? '').isEmpty
                     ? InfosErrorWidget()
                     : CachedNetworkImage(
+                        fit: BoxFit.cover,
                         imageUrl: infos.imageUrl ?? '',
                         errorWidget: (context, url, error) =>
                             InfosErrorWidget(),

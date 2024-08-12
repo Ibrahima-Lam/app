@@ -1,8 +1,8 @@
 import 'package:app/models/groupe.dart';
 import 'package:app/models/participant.dart';
 import 'package:app/models/participation.dart';
-import 'package:app/service/local_service.dart';
-import 'package:app/service/remote_service.dart';
+import 'package:app/core/service/local_service.dart';
+import 'package:app/core/service/remote_service.dart';
 
 class ParticipationService {
   static LocalService get service => LocalService('participation.json');

@@ -35,13 +35,13 @@ class _GameTimerFormModalWidgetState extends State<GameTimerFormModalWidget> {
           extra: 0,
         );
     initialController =
-        TextEditingController(text: (timerEvent.initial).toString());
+        TextEditingController(text: (timerEvent.initial ?? '0').toString());
     durationController =
-        TextEditingController(text: (timerEvent.duration ?? '').toString());
+        TextEditingController(text: (timerEvent.duration ?? '0').toString());
     retardController =
-        TextEditingController(text: (timerEvent.retard ?? '').toString());
+        TextEditingController(text: (timerEvent.retard ?? '0').toString());
     extraController =
-        TextEditingController(text: (timerEvent.extra ?? '').toString());
+        TextEditingController(text: (timerEvent.extra ?? '0').toString());
 
     super.initState();
   }
@@ -116,7 +116,7 @@ class _GameTimerFormModalWidgetState extends State<GameTimerFormModalWidget> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Expanded(child: Text(' Duree')),
+                  Expanded(child: Text('Duree')),
                   SizedBox(
                     width: 100,
                     height: 50,

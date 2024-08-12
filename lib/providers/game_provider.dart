@@ -36,22 +36,18 @@ class GameProvider extends ChangeNotifier {
     }).toList(); */
 
     scoreProvider.ListenData().listen((event) {
+      scoreProvider.scores = event;
       _games = _games.map((e) {
         e.score =
             event.singleWhereOrNull((element) => element.idGame == e.idGame);
         return e;
       }).toList();
-      notifyListeners();
     });
   }
 
   GameList get games => _games;
   void set games(GameList val) {
-    _games = val.map((e) {
-      e.score = scoreProvider.scores
-          .singleWhereOrNull((element) => element.idGame == e.idGame);
-      return e;
-    }).toList();
+    _games = val;
     notifyListeners();
   }
 
@@ -70,6 +66,11 @@ class GameProvider extends ChangeNotifier {
       await scoreProvider.initScores();
     if (games.isEmpty || remote || locale) await setGames(remote: remote);
     return games;
+  }
+
+  Future<bool> checkGame(String idGame) async {
+    if (games.isEmpty) await getGames();
+    return games.any((element) => element.idGame == idGame);
   }
 
   Future<bool> addGame(Game game) async {

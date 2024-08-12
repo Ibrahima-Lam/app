@@ -1,7 +1,7 @@
 import 'package:app/controllers/competition/date.dart';
 import 'package:app/models/composition.dart';
-import 'package:app/service/local_service.dart';
-import 'package:app/service/remote_service.dart';
+import 'package:app/core/service/local_service.dart';
+import 'package:app/core/service/remote_service.dart';
 import 'package:flutter/material.dart';
 
 class CompositionService {
