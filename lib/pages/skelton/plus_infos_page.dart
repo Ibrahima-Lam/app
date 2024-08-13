@@ -14,6 +14,18 @@ class PlusInfosPage extends StatelessWidget {
         children: [
           Card(
             child: ListTile(
+              leading: Icon(Icons.link),
+              title: Text('https://fscore-sport.web.app'),
+              onTap: () async {
+                String url = 'https://fscore-sport.web.app';
+                if (await canLaunchUrl(Uri.parse(url))) {
+                  launchUrl(Uri.parse(url));
+                }
+              },
+            ),
+          ),
+          Card(
+            child: ListTile(
               leading: Icon(Icons.facebook),
               title: Text('Facebook'),
               onTap: () async {

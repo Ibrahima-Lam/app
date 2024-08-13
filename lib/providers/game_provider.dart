@@ -47,7 +47,11 @@ class GameProvider extends ChangeNotifier {
 
   GameList get games => _games;
   void set games(GameList val) {
-    _games = val;
+    _games = val.map((e) {
+      e.score = scoreProvider.scores
+          .singleWhereOrNull((element) => element.idGame == e.idGame);
+      return e;
+    }).toList();
     notifyListeners();
   }
 

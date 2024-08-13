@@ -39,7 +39,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-  await messaging.requestPermission(
+ await messaging.requestPermission(
     alert: true,
     announcement: false,
     badge: true,
