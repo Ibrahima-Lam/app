@@ -22,6 +22,7 @@ import 'package:app/widget/game/game_details_column_widget.dart';
 import 'package:app/widget/game/game_details_score_column_widget.dart';
 import 'package:app/widget/modals/confirm_dialog_widget.dart';
 import 'package:app/widget/modals/custom_delegate_search.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -141,197 +142,200 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _getData(context),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Scaffold(
-              body: const Center(
-                child: Text('erreur!'),
-              ),
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
-              body: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
+    return LayoutBuilderWidget(
+      child: FutureBuilder(
+          future: _getData(context),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Scaffold(
+                body: const Center(
+                  child: Text('erreur!'),
+                ),
+              );
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Scaffold(
+                body: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            return Consumer<ParamettreProvider>(
+                builder: (context, paramettreProvider, _) {
+              checkUser =
+                  paramettreProvider.checkUser(competition?.codeEdition ?? '');
+              final Paramettre? paramettre = paramettreProvider
+                  .getCompetitionParamettre(game.groupe.codeEdition);
+              Set<String> tabs = tabBarString(
+                composition: (paramettre?.showComposition ?? false),
+                classement: game.niveau.typeNiveau == 'groupe' ||
+                    game.niveau.typeNiveau == 'championnat',
+                evenement:
+                    game.etat.started && (paramettre?.showEvenement ?? true),
+                statistique:
+                    game.etat.started && (paramettre?.showStatistique ?? true),
+              );
+              int initial = tabBarIndex(tabs.toList());
 
-          return Consumer<ParamettreProvider>(
-              builder: (context, paramettreProvider, _) {
-            checkUser =
-                paramettreProvider.checkUser(competition?.codeEdition ?? '');
-            final Paramettre? paramettre = paramettreProvider
-                .getCompetitionParamettre(game.groupe.codeEdition);
-            Set<String> tabs = tabBarString(
-              composition: (paramettre?.showComposition ?? false),
-              classement: game.niveau.typeNiveau == 'groupe' ||
-                  game.niveau.typeNiveau == 'championnat',
-              evenement:
-                  game.etat.started && (paramettre?.showEvenement ?? true),
-              statistique:
-                  game.etat.started && (paramettre?.showStatistique ?? true),
-            );
-            int initial = tabBarIndex(tabs.toList());
-
-            return DefaultTabController(
-              initialIndex: initial,
-              length: tabs.length,
-              child: Scaffold(
-                body: NestedScrollView(
-                  controller: _scrollController,
-                  headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                    SliverAppBar(
-                      pinned: true,
-                      expandedHeight: 250,
-                      leading: IconButton(
-                        icon: const Icon(Icons.navigate_before),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                      actions: [
-                        IconButton(
-                            onPressed: () {
-                              showSearch(
-                                  context: context,
-                                  delegate: CustomDelegateSearch());
-                            },
-                            icon: Icon(Icons.search)),
-                      ],
-                      centerTitle: true,
-                      title: ValueListenableBuilder(
-                          valueListenable: _isExpended,
-                          builder: (context, val, child) {
-                            return AnimatedOpacity(
-                              opacity: _isExpended.value ? 0.0 : 1.0,
-                              duration: Duration(milliseconds: 300),
-                              child: Text(
-                                '${abbr(game.home.nomEquipe)} ${game.scoreText} ${abbr(game.away.nomEquipe.toString())}',
-                                style: const TextStyle(fontSize: 15),
-                              ),
-                            );
-                          }),
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const SizedBox(height: 20),
-                              Center(
-                                child: TextButton(
-                                  onPressed: competition != null
-                                      ? () {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  CompetitionDetails(
-                                                      id: competition!
-                                                          .codeEdition),
-                                            ),
-                                          );
-                                        }
-                                      : null,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '${competition?.nomCompetition ?? ''}. ',
-                                        style: const TextStyle(
-                                            fontSize: 17,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.normal),
-                                      ),
-                                      Text(
-                                        '${game.niveau.nomNiveau.capitalize()}',
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ],
+              return DefaultTabController(
+                initialIndex: initial,
+                length: tabs.length,
+                child: Scaffold(
+                  body: NestedScrollView(
+                    controller: _scrollController,
+                    headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                      SliverAppBar(
+                        pinned: true,
+                        expandedHeight: 250,
+                        leading: IconButton(
+                          icon: const Icon(Icons.navigate_before),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        actions: [
+                          IconButton(
+                              onPressed: () {
+                                showSearch(
+                                    context: context,
+                                    delegate: CustomDelegateSearch());
+                              },
+                              icon: Icon(Icons.search)),
+                        ],
+                        centerTitle: true,
+                        title: ValueListenableBuilder(
+                            valueListenable: _isExpended,
+                            builder: (context, val, child) {
+                              return AnimatedOpacity(
+                                opacity: _isExpended.value ? 0.0 : 1.0,
+                                duration: Duration(milliseconds: 300),
+                                child: Text(
+                                  '${abbr(game.home.nomEquipe)} ${game.scoreText} ${abbr(game.away.nomEquipe.toString())}',
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                              );
+                            }),
+                        flexibleSpace: FlexibleSpaceBar(
+                          background: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const SizedBox(height: 20),
+                                Center(
+                                  child: TextButton(
+                                    onPressed: competition != null
+                                        ? () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CompetitionDetails(
+                                                        id: competition!
+                                                            .codeEdition),
+                                              ),
+                                            );
+                                          }
+                                        : null,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '${competition?.nomCompetition ?? ''}. ',
+                                          style: const TextStyle(
+                                              fontSize: 17,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.normal),
+                                        ),
+                                        Text(
+                                          '${game.niveau.nomNiveau.capitalize()}',
+                                          style: const TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w300),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(),
-                              Consumer<GameProvider>(
-                                builder: (context, value, child) {
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: GameDetailsColumnWidget(
-                                          text: game.home.nomEquipe,
-                                          id: game.idHome,
-                                          isHome: true,
-                                          game: game,
+                                SizedBox(),
+                                Consumer<GameProvider>(
+                                  builder: (context, value, child) {
+                                    return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: GameDetailsColumnWidget(
+                                            text: game.home.nomEquipe,
+                                            id: game.idHome,
+                                            isHome: true,
+                                            game: game,
+                                          ),
                                         ),
-                                      ),
-                                      GameDetailsScoreColumnWidget(
-                                        game: game,
-                                        timer: game.score?.timer,
-                                      ),
-                                      Expanded(
-                                        child: GameDetailsColumnWidget(
-                                          text: game.away.nomEquipe,
-                                          id: game.idAway,
-                                          isHome: false,
+                                        GameDetailsScoreColumnWidget(
                                           game: game,
+                                          timer: game.score?.timer,
                                         ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-                            ],
+                                        Expanded(
+                                          child: GameDetailsColumnWidget(
+                                            text: game.away.nomEquipe,
+                                            id: game.idAway,
+                                            isHome: false,
+                                            game: game,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ),
+                        bottom: TabBarWidget.build(
+                          tabs: [
+                            for (final tab in tabs)
+                              Tab(
+                                text: tabBarLabel[tab] ?? '',
+                              )
+                          ],
+                        ),
                       ),
-                      bottom: TabBarWidget.build(
-                        tabs: [
-                          for (final tab in tabs)
-                            Tab(
-                              text: tabBarLabel[tab] ?? '',
-                            )
-                        ],
-                      ),
-                    ),
-                  ],
-                  body: TabBarView(
-                    children: [
-                      for (final tab in tabs)
-                        tabBarViewChildren[tab] ??
-                            const Center(
-                              child: Text('Page vide'),
-                            )
                     ],
+                    body: TabBarView(
+                      children: [
+                        for (final tab in tabs)
+                          tabBarViewChildren[tab] ??
+                              const Center(
+                                child: Text('Page vide'),
+                              )
+                      ],
+                    ),
                   ),
+                  bottomNavigationBar:
+                      checkUser ? GameBottomNavbarEditWidget(game: game) : null,
+                  floatingActionButton: checkUser && game.score != null
+                      ? FloatingActionButton(
+                          onPressed: () async {
+                            final bool? confirm = await showDialog(
+                                context: context,
+                                builder: (context) => ConfirmDialogWidget(
+                                    defaut: ConfirmDialogDefault.non,
+                                    title: 'Confirmer la suppression',
+                                    content:
+                                        'Voulez vous supprimer le score ?'));
+                            if (confirm == true)
+                              context
+                                  .read<ScoreProvider>()
+                                  .deleteScore(game.idGame);
+                          },
+                          child: const Icon(Icons.delete),
+                        )
+                      : null,
                 ),
-                bottomNavigationBar:
-                    checkUser ? GameBottomNavbarEditWidget(game: game) : null,
-                floatingActionButton: checkUser && game.score != null
-                    ? FloatingActionButton(
-                        onPressed: () async {
-                          final bool? confirm = await showDialog(
-                              context: context,
-                              builder: (context) => ConfirmDialogWidget(
-                                  defaut: ConfirmDialogDefault.non,
-                                  title: 'Confirmer la suppression',
-                                  content: 'Voulez vous supprimer le score ?'));
-                          if (confirm == true)
-                            context
-                                .read<ScoreProvider>()
-                                .deleteScore(game.idGame);
-                        },
-                        child: const Icon(Icons.delete),
-                      )
-                    : null,
-              ),
-            );
-          });
-        });
+              );
+            });
+          }),
+    );
   }
 }

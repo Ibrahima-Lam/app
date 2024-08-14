@@ -19,6 +19,7 @@ import 'package:app/widget/classement/classement_widget.dart';
 import 'package:app/pages/equipe/widget_details/equipe_statistiques_widget.dart';
 import 'package:app/widget/logos/competition_logo_image.dart';
 import 'package:app/widget/logos/equipe_logo_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -67,133 +68,136 @@ class EquipeDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _getEquipe(context),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Scaffold(
-              body: Center(
-                child: Text('Erreur de chargement!'),
-              ),
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-          return Consumer<ParamettreProvider>(
-              builder: (context, paramettreProvider, child) {
-            checkUser = paramettreProvider.checkUser(participant.codeEdition);
-            if (!competition.hasClassement) {
-              tabs.remove(CLASSEMENT);
+    return LayoutBuilderWidget(
+      child: FutureBuilder(
+          future: _getEquipe(context),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Scaffold(
+                body: Center(
+                  child: Text('Erreur de chargement!'),
+                ),
+              );
             }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            return Consumer<ParamettreProvider>(
+                builder: (context, paramettreProvider, child) {
+              checkUser = paramettreProvider.checkUser(participant.codeEdition);
+              if (!competition.hasClassement) {
+                tabs.remove(CLASSEMENT);
+              }
 
-            return DefaultTabController(
-              length: tabs.length,
-              child: Scaffold(
-                body: NestedScrollView(
-                  headerSliverBuilder: (context, innerBoxIsScrolled) {
-                    return [
-                      SliverAppBar(
-                        centerTitle: true,
-                        pinned: true,
-                        expandedHeight: 180,
-                        leading: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(Icons.navigate_before),
-                        ),
-                        title: Text(
-                          participant.nomEquipe,
-                          style: TextStyle(
-                            fontSize: 18,
+              return DefaultTabController(
+                length: tabs.length,
+                child: Scaffold(
+                  body: NestedScrollView(
+                    headerSliverBuilder: (context, innerBoxIsScrolled) {
+                      return [
+                        SliverAppBar(
+                          centerTitle: true,
+                          pinned: true,
+                          expandedHeight: 180,
+                          leading: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.navigate_before),
                           ),
-                        ),
-                        actions: [
-                          FavoriIconWidget(id: id, categorie: Categorie.equipe),
-                          IconButton(
-                              onPressed: () {
-                                showSearch(
-                                    context: context,
-                                    delegate: JoueurDelegateSearch(
-                                        idParticipant: id));
-                              },
-                              icon: Icon(Icons.search)),
-                        ],
-                        flexibleSpace: FlexibleSpaceBar(
-                          background: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(height: 35),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () => Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  CompetitionDetails(
-                                                      id: competition
-                                                          .codeEdition))),
-                                      child: SizedBox(
-                                        height: 50,
-                                        width: 50,
-                                        child: CompetitionImageLogoWidget(
-                                            url: competition.imageUrl ?? ''),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 20),
-                                    EquipeImageLogoWidget(
-                                      height: 65,
-                                      width: 65,
-                                      url: participant.imageUrl,
-                                    ),
-                                    const SizedBox(width: 20),
-                                    CircleAvatar(
-                                      radius: 20,
-                                      child: Icon(Icons.house),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                          title: Text(
+                            participant.nomEquipe,
+                            style: TextStyle(
+                              fontSize: 18,
                             ),
                           ),
+                          actions: [
+                            FavoriIconWidget(
+                                id: id, categorie: Categorie.equipe),
+                            IconButton(
+                                onPressed: () {
+                                  showSearch(
+                                      context: context,
+                                      delegate: JoueurDelegateSearch(
+                                          idParticipant: id));
+                                },
+                                icon: Icon(Icons.search)),
+                          ],
+                          flexibleSpace: FlexibleSpaceBar(
+                            background: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(height: 35),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () => Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CompetitionDetails(
+                                                        id: competition
+                                                            .codeEdition))),
+                                        child: SizedBox(
+                                          height: 50,
+                                          width: 50,
+                                          child: CompetitionImageLogoWidget(
+                                              url: competition.imageUrl ?? ''),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 20),
+                                      EquipeImageLogoWidget(
+                                        height: 65,
+                                        width: 65,
+                                        url: participant.imageUrl,
+                                      ),
+                                      const SizedBox(width: 20),
+                                      CircleAvatar(
+                                        radius: 20,
+                                        child: Icon(Icons.house),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          bottom: TabBarWidget.build(
+                              tabs: tabs.map((e) => Tab(text: e)).toList()),
                         ),
-                        bottom: TabBarWidget.build(
-                            tabs: tabs.map((e) => Tab(text: e)).toList()),
-                      ),
-                    ];
-                  },
-                  body: TabBarView(
-                    children: tabs
-                        .map((e) =>
-                            tabBarViewWidgets[e.toLowerCase()] ??
-                            Center(
-                              child: Text('page vide !'),
-                            ))
-                        .toList(),
+                      ];
+                    },
+                    body: TabBarView(
+                      children: tabs
+                          .map((e) =>
+                              tabBarViewWidgets[e.toLowerCase()] ??
+                              Center(
+                                child: Text('page vide !'),
+                              ))
+                          .toList(),
+                    ),
                   ),
+                  floatingActionButton: checkUser
+                      ? FloatingActionButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    JoueurForm(participant: participant)));
+                          },
+                          child: Icon(Icons.add),
+                        )
+                      : null,
                 ),
-                floatingActionButton: checkUser
-                    ? FloatingActionButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  JoueurForm(participant: participant)));
-                        },
-                        child: Icon(Icons.add),
-                      )
-                    : null,
-              ),
-            );
-          });
-        });
+              );
+            });
+          }),
+    );
   }
 }

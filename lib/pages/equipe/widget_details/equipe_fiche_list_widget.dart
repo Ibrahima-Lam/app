@@ -345,17 +345,21 @@ class SomePlayerWidget extends StatelessWidget {
                 ..reversed,
             ];
 
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ...elements,
-                ...List.generate(
-                    (8 - elements.length).positiveOrZero,
-                    (index) => CircularLogoWidget(
-                          path: '',
-                          categorie: Categorie.joueur,
-                        )),
-              ].take(8).toList(),
+            return Container(
+              constraints:
+                  BoxConstraints(minWidth: MediaQuery.sizeOf(context).width),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ...elements,
+                  ...List.generate(
+                      (8 - elements.length).positiveOrZero,
+                      (index) => CircularLogoWidget(
+                            path: '',
+                            categorie: Categorie.joueur,
+                          )),
+                ].take(8).toList(),
+              ),
             );
           }),
         ),

@@ -48,7 +48,8 @@ class CompetitionFicheListWidget extends StatelessWidget {
 
 class SomeTeamWidget extends StatelessWidget {
   final String idEdition;
-  const SomeTeamWidget({super.key, required this.idEdition});
+  SomeTeamWidget({super.key, required this.idEdition});
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -79,20 +80,25 @@ class SomeTeamWidget extends StatelessWidget {
                         horizontal: 0, vertical: 5.0),
                     color: Colors.white,
                     child: SingleChildScrollView(
+                      controller: _scrollController,
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ...participants.map((e) => GestureDetector(
-                                onTap: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) => EquipeDetails(
-                                            id: e.idParticipant))),
-                                child: CircularLogoWidget(
-                                    path: e.imageUrl ?? '',
-                                    categorie: Categorie.equipe),
-                              )),
-                        ],
+                      child: Container(
+                        constraints: BoxConstraints(
+                            minWidth: MediaQuery.sizeOf(context).width),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ...participants.map((e) => GestureDetector(
+                                  onTap: () => Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (context) => EquipeDetails(
+                                              id: e.idParticipant))),
+                                  child: CircularLogoWidget(
+                                      path: e.imageUrl ?? '',
+                                      categorie: Categorie.equipe),
+                                )),
+                          ],
+                        ),
                       ),
                     ),
                   );

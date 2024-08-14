@@ -42,6 +42,7 @@ class GameProvider extends ChangeNotifier {
             event.singleWhereOrNull((element) => element.idGame == e.idGame);
         return e;
       }).toList();
+      notifyListeners();
     });
   }
 

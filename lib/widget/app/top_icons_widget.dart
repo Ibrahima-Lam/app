@@ -118,7 +118,7 @@ class TopIconsWidget extends StatelessWidget {
               builder: (context, joueurProvider, eventProvider, _) {
             return Container(
               padding: EdgeInsets.symmetric(vertical: 5),
-              width: MediaQuery.sizeOf(context).height,
+              width: MediaQuery.sizeOf(context).width,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Builder(builder: (context) {
@@ -135,10 +135,14 @@ class TopIconsWidget extends StatelessWidget {
                         lastGames, joueurProvider, eventProvider),
                   ].take(20).toList().reversed.toList();
 
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    children: elements,
+                  return Container(
+                    constraints: BoxConstraints(
+                        minWidth: MediaQuery.sizeOf(context).width),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: elements,
+                    ),
                   );
                 }),
               ),

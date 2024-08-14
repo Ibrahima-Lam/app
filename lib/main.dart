@@ -39,7 +39,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FirebaseMessaging messaging = FirebaseMessaging.instance;
- await messaging.requestPermission(
+  await messaging.requestPermission(
     alert: true,
     announcement: false,
     badge: true,
@@ -202,7 +202,16 @@ class MyApp extends StatelessWidget {
               surfaceTintColor: Colors.white,
               color: Colors.white,
             )),
-        home: GlobalPage(),
+        home: Scaffold(
+          body: LayoutBuilder(builder: (context, constraint) {
+            return Padding(
+              padding: constraint.maxWidth > 800
+                  ? EdgeInsets.symmetric(horizontal: constraint.maxWidth * .14)
+                  : EdgeInsets.zero,
+              child: GlobalPage(),
+            );
+          }),
+        ),
       ),
     );
   }
@@ -342,8 +351,8 @@ class _GlobalPageState extends State<GlobalPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraint) {
+      body: Builder(
+        builder: (context) {
           List<Widget> pages = [
             GamePage(
               openDrawer: () => Scaffold.of(context).openDrawer(),
@@ -359,11 +368,7 @@ class _GlobalPageState extends State<GlobalPage> {
             )
           ];
 
-          return Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: constraint.maxWidth > 800 ? 200 : 0),
-            child: pages[currentIndex],
-          );
+          return pages[currentIndex];
         },
       ),
       bottomNavigationBar: NavigationBar(

@@ -18,6 +18,7 @@ import 'package:app/pages/forms/game_form.dart';
 import 'package:app/providers/paramettre_provider.dart';
 import 'package:app/widget/app/favori_icon_widget.dart';
 import 'package:app/widget/logos/competition_logo_image.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/widget/skelton/tab_bar_widget.dart';
@@ -163,120 +164,122 @@ class _CompetitionDetailsState extends State<CompetitionDetails>
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: context.read<CompetitionProvider>().getCompetitions(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Scaffold(
-              body: Center(
-                child: Text('erreur!'),
-              ),
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Scaffold(
-              body: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
+    return LayoutBuilderWidget(
+      child: FutureBuilder(
+          future: context.read<CompetitionProvider>().getCompetitions(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Scaffold(
+                body: Center(
+                  child: Text('erreur!'),
+                ),
+              );
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Scaffold(
+                body: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
 
-          return Consumer2<CompetitionProvider, ParamettreProvider>(builder:
-              (context, competitionProvider, paramettreProvider, child) {
-            checkUser = paramettreProvider.checkUser(widget.id);
-            competition =
-                competitionProvider.collection.getElementAt(widget.id);
-            tabs = tabBarString(competition.type.type, checkUser);
-            return DefaultTabController(
-              length: tabs.length,
-              initialIndex: 0,
-              child: Scaffold(
-                body: NestedScrollView(
-                  headerSliverBuilder: (context, innerBoxIsScrolled) {
-                    return [
-                      SliverAppBar(
-                        title: Text(
-                          competition.nomCompetition,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        centerTitle: true,
-                        pinned: true,
-                        expandedHeight: 180,
-                        leading: IconButton(
-                          icon: const Icon(Icons.navigate_before),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                        actions: [
-                          FavoriIconWidget(
-                              id: competition.codeEdition,
-                              categorie: Categorie.competition)
-                        ],
-                        flexibleSpace: FlexibleSpaceBar(
-                          background: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const SizedBox(
-                                  height: 35,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 25,
-                                      child: Icon(Icons.local_grocery_store),
-                                    ),
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
-                                    Container(
-                                      width: 80,
-                                      height: 80,
-                                      child: CompetitionImageLogoWidget(
-                                        url: competition.imageUrl ?? '',
+            return Consumer2<CompetitionProvider, ParamettreProvider>(builder:
+                (context, competitionProvider, paramettreProvider, child) {
+              checkUser = paramettreProvider.checkUser(widget.id);
+              competition =
+                  competitionProvider.collection.getElementAt(widget.id);
+              tabs = tabBarString(competition.type.type, checkUser);
+              return DefaultTabController(
+                length: tabs.length,
+                initialIndex: 0,
+                child: Scaffold(
+                  body: NestedScrollView(
+                    headerSliverBuilder: (context, innerBoxIsScrolled) {
+                      return [
+                        SliverAppBar(
+                          title: Text(
+                            competition.nomCompetition,
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          centerTitle: true,
+                          pinned: true,
+                          expandedHeight: 180,
+                          leading: IconButton(
+                            icon: const Icon(Icons.navigate_before),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                          actions: [
+                            FavoriIconWidget(
+                                id: competition.codeEdition,
+                                categorie: Categorie.competition)
+                          ],
+                          flexibleSpace: FlexibleSpaceBar(
+                            background: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(
+                                    height: 35,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 25,
+                                        child: Icon(Icons.local_grocery_store),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      width: 15,
-                                    ),
-                                    CircleAvatar(
-                                      radius: 25,
-                                      child: Icon(
-                                          Icons.assignment_turned_in_rounded),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                      const SizedBox(
+                                        width: 15,
+                                      ),
+                                      Container(
+                                        width: 80,
+                                        height: 80,
+                                        child: CompetitionImageLogoWidget(
+                                          url: competition.imageUrl ?? '',
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 15,
+                                      ),
+                                      CircleAvatar(
+                                        radius: 25,
+                                        child: Icon(
+                                            Icons.assignment_turned_in_rounded),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        bottom: TabBarWidget.build(
-                            tabs: tabs
-                                .map((e) => Tab(
-                                      text: e,
-                                    ))
-                                .toList()),
-                      )
-                    ];
-                  },
-                  body: TabBarView(
-                    children: tabBarViewChildren(tabs),
+                          bottom: TabBarWidget.build(
+                              tabs: tabs
+                                  .map((e) => Tab(
+                                        text: e,
+                                      ))
+                                  .toList()),
+                        )
+                      ];
+                    },
+                    body: TabBarView(
+                      children: tabBarViewChildren(tabs),
+                    ),
                   ),
+                  floatingActionButton: checkUser
+                      ? FloatingActionButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    GameForm(codeEdition: widget.id)));
+                          },
+                          child: Icon(Icons.add),
+                        )
+                      : null,
                 ),
-                floatingActionButton: checkUser
-                    ? FloatingActionButton(
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  GameForm(codeEdition: widget.id)));
-                        },
-                        child: Icon(Icons.add),
-                      )
-                    : null,
-              ),
-            );
-          });
-        });
+              );
+            });
+          }),
+    );
   }
 }
