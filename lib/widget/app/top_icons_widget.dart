@@ -118,7 +118,7 @@ class TopIconsWidget extends StatelessWidget {
               builder: (context, joueurProvider, eventProvider, _) {
             return Container(
               padding: EdgeInsets.symmetric(vertical: 5),
-              width: MediaQuery.sizeOf(context).width,
+              width: MediaQuery.of(context).size.width,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Builder(builder: (context) {
@@ -137,7 +137,7 @@ class TopIconsWidget extends StatelessWidget {
 
                   return Container(
                     constraints: BoxConstraints(
-                        minWidth: MediaQuery.sizeOf(context).width),
+                        minWidth: MediaQuery.of(context).size.width),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       mainAxisSize: MainAxisSize.max,

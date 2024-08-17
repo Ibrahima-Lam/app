@@ -10,7 +10,7 @@ class SponsorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Container(
-        width: MediaQuery.sizeOf(context).width,
+        width: MediaQuery.of(context).size.width,
         constraints: const BoxConstraints(
           minHeight: 200,
         ),

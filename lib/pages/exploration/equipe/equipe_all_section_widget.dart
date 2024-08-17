@@ -33,7 +33,7 @@ class EquipeAllSectionWidget extends StatelessWidget {
     }
     return participants.isEmpty
         ? Container(
-            height: MediaQuery.sizeOf(context).width,
+            height: MediaQuery.of(context).size.width,
             child: Center(
               child: Text(controller.text.isEmpty
                   ? 'Pas d\'équipe disponible!'
@@ -64,7 +64,7 @@ class EquipeAllSectionWidget extends StatelessWidget {
                 Card(
                   margin: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
                   child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width,
+                    width: MediaQuery.of(context).size.width,
                     child: Column(
                       children: participants
                           .map((e) => EquipeHorizontalTileWidget(

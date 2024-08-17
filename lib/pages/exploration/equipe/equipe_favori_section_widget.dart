@@ -58,7 +58,7 @@ class EquipeHorizontalListWidget extends StatelessWidget {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
       child: SizedBox(
-        width: MediaQuery.sizeOf(context).width,
+        width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(

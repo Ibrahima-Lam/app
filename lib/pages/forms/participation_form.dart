@@ -7,6 +7,7 @@ import 'package:app/providers/groupe_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/providers/participation_provider.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -76,61 +77,65 @@ class _ParticipationFormState extends State<ParticipationForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Formulaire de  Participations'),
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Formulaire de  Participations'),
+        ),
+        body: FutureBuilder(
+            future: Future.wait([
+              context.read<ParticipantProvider>().getParticipants(),
+              context.read<GroupeProvider>().getGroupes(),
+            ]),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('erreur!'),
+                );
+              }
+
+              return Consumer2<ParticipantProvider, GroupeProvider>(
+                  builder: (context, participantProvider, groupeProvider, _) {
+                final List<Groupe> groupes = groupeProvider.groupes
+                    .where(
+                        (element) => element.codeEdition == widget.codeEdition)
+                    .toList();
+                final List<Participant> participants = participantProvider
+                    .participants
+                    .where(
+                        (element) => element.codeEdition == widget.codeEdition)
+                    .toList();
+                final Map<String, dynamic> groupeMap = groupes.asMap().map(
+                    (key, value) => MapEntry(value.nomGroupe, value.idGroupe));
+                final Map<String, dynamic> participantMap = participants
+                    .asMap()
+                    .map((key, value) =>
+                        MapEntry(value.nomEquipe, value.idParticipant));
+
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      DropDownButtonWidget(
+                        controller: participantController,
+                        entries: participantMap,
+                        label: 'Equipe',
+                      ),
+                      DropDownButtonWidget(
+                        controller: groupeController,
+                        entries: groupeMap,
+                        label: 'Groupe',
+                      ),
+                      ElevatedButtonFormWidget(
+                        onPressed: () => _onSubmit(context),
+                        isSending: isLoading,
+                      ),
+                    ],
+                  ),
+                );
+              });
+            }),
       ),
-      body: FutureBuilder(
-          future: Future.wait([
-            context.read<ParticipantProvider>().getParticipants(),
-            context.read<GroupeProvider>().getGroupes(),
-          ]),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text('erreur!'),
-              );
-            }
-
-            return Consumer2<ParticipantProvider, GroupeProvider>(
-                builder: (context, participantProvider, groupeProvider, _) {
-              final List<Groupe> groupes = groupeProvider.groupes
-                  .where((element) => element.codeEdition == widget.codeEdition)
-                  .toList();
-              final List<Participant> participants = participantProvider
-                  .participants
-                  .where((element) => element.codeEdition == widget.codeEdition)
-                  .toList();
-              final Map<String, dynamic> groupeMap = groupes.asMap().map(
-                  (key, value) => MapEntry(value.nomGroupe, value.idGroupe));
-              final Map<String, dynamic> participantMap = participants
-                  .asMap()
-                  .map((key, value) =>
-                      MapEntry(value.nomEquipe, value.idParticipant));
-
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 10),
-                    DropDownButtonWidget(
-                      controller: participantController,
-                      entries: participantMap,
-                      label: 'Equipe',
-                    ),
-                    DropDownButtonWidget(
-                      controller: groupeController,
-                      entries: groupeMap,
-                      label: 'Groupe',
-                    ),
-                    ElevatedButtonFormWidget(
-                      onPressed: () => _onSubmit(context),
-                      isSending: isLoading,
-                    ),
-                  ],
-                ),
-              );
-            });
-          }),
     );
   }
 }
@@ -157,7 +162,7 @@ class DropDownButtonWidget extends StatelessWidget {
             shape: WidgetStatePropertyAll(
                 RoundedRectangleBorder(side: BorderSide.none)),
             backgroundColor: WidgetStatePropertyAll(Colors.white)),
-        width: MediaQuery.sizeOf(context).width * .98,
+        width: MediaQuery.of(context).size.width * .98,
         label: Text(label, style: Theme.of(context).textTheme.titleMedium),
         dropdownMenuEntries: [
           ...entries.entries.map(

@@ -1,3 +1,4 @@
+import 'package:app/core/constants/app/styles.dart';
 import 'package:app/models/user.dart';
 import 'package:app/pages/arbitre/arbitre_page.dart';
 import 'package:app/pages/coach/coach_page.dart';
@@ -18,214 +19,224 @@ import 'package:app/widget/modals/confirm_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-final Color color = const Color(0xFF1C2834);
 final double size = 28;
 
 class DrawerWidget extends StatelessWidget {
-  const DrawerWidget({super.key});
+  final bool showUser;
+  final bool isSideBar;
+  final bool checkPlatform;
+
+  const DrawerWidget(
+      {super.key,
+      this.showUser = true,
+      this.isSideBar = false,
+      required this.checkPlatform});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<UserProvider, AppParamettreProvider>(
-        builder: (context, val, paramettre, child) {
-      User? user = val.user;
-      return Drawer(
-        elevation: 20,
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
-        child: ListView(
-          children: [
-            DrawerHeader(
-              padding: EdgeInsets.all(0),
-              margin: EdgeInsets.all(0),
-              duration: Duration(milliseconds: 200),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  PersonWidget(radius: 30),
-                  const SizedBox(height: 10),
-                  if (paramettre.appParamettre.showUserName)
-                    Text(
-                      user?.name ?? 'Pas d\'utilisateur',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: color,
+    return LayoutBuilder(builder: (context, constraint) {
+      return Consumer2<UserProvider, AppParamettreProvider>(
+          builder: (context, val, paramettre, child) {
+        User? user = val.user;
+        return Drawer(
+          elevation: 20,
+          backgroundColor: Color(0xFFF5F5F5),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
+          child: ListView(
+            children: [
+              DrawerHeader(
+                padding: EdgeInsets.all(0),
+                margin: EdgeInsets.all(0),
+                duration: Duration(milliseconds: 200),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    PersonWidget(radius: 30),
+                    const SizedBox(height: 10),
+                    if (paramettre.appParamettre.showUserName)
+                      Text(
+                        user?.name ?? 'Pas d\'utilisateur',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: kColor,
+                        ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            listTileWidget(
+              listTileWidget(
+                  icon: Icon(
+                    color: kColor,
+                    Icons.house,
+                    size: size,
+                  ),
+                  title: 'Compétitions',
+                  onTap: () {
+                    if (!checkPlatform) Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CompetitionPage()));
+                  }),
+              listTileWidget(
+                  icon: Icon(
+                    color: kColor,
+                    Icons.safety_check,
+                    size: size,
+                  ),
+                  title: 'Equipes',
+                  onTap: () {
+                    if (!checkPlatform) Navigator.pop(context);
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => EquipePage()));
+                  }),
+              listTileWidget(
+                  icon: Icon(
+                    color: kColor,
+                    Icons.person,
+                    size: size,
+                  ),
+                  title: 'Joueurs',
+                  onTap: () {
+                    if (!checkPlatform) Navigator.pop(context);
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => JoueurPage()));
+                  }),
+              listTileWidget(
+                  icon: Icon(
+                    color: kColor,
+                    Icons.gamepad,
+                    size: size,
+                  ),
+                  title: 'Matchs',
+                  onTap: () {
+                    if (!checkPlatform) Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => GameSearchPage()));
+                  }),
+              listTileWidget(
                 icon: Icon(
-                  color: color,
-                  Icons.house,
+                  color: kColor,
+                  Icons.person_3_rounded,
                   size: size,
                 ),
-                title: 'Compétitions',
+                title: 'Entraineurs',
                 onTap: () {
-                  Navigator.pop(context);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CompetitionPage()));
-                }),
-            listTileWidget(
-                icon: Icon(
-                  color: color,
-                  Icons.safety_check,
-                  size: size,
-                ),
-                title: 'Equipes',
-                onTap: () {
-                  Navigator.pop(context);
+                  if (!checkPlatform) Navigator.pop(context);
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => EquipePage()));
-                }),
-            listTileWidget(
+                      MaterialPageRoute(builder: (context) => CoachPage()));
+                },
+              ),
+              listTileWidget(
                 icon: Icon(
-                  color: color,
-                  Icons.person,
+                  color: kColor,
+                  Icons.person_pin,
                   size: size,
                 ),
-                title: 'Joueurs',
+                title: 'Arbitres',
                 onTap: () {
-                  Navigator.pop(context);
+                  if (!checkPlatform) Navigator.pop(context);
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => JoueurPage()));
-                }),
-            listTileWidget(
+                      MaterialPageRoute(builder: (context) => ArbitrePage()));
+                },
+              ),
+              const Divider(),
+              listTileWidget(
                 icon: Icon(
-                  color: color,
-                  Icons.gamepad,
+                  color: kColor,
+                  Icons.account_box,
                   size: size,
                 ),
-                title: 'Matchs',
+                title: user == null ? 'Se connecter' : 'Se Deconnecter',
+                onTap: () async {
+                  if (user == null) {
+                    await Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => LoginPage()));
+                  } else {
+                    final bool? logout = await showDialog(
+                        context: context,
+                        builder: (context) => ConfirmDialogWidget(
+                              title: 'Confirmation de deconnexion',
+                              content: 'Voulez vous deconnecter ?',
+                            ));
+                    if (logout == true)
+                      context.read<UserProvider>().deconnectUser();
+                  }
+                },
+              ),
+              listTileWidget(
+                icon: Icon(
+                  color: kColor,
+                  Icons.settings,
+                  size: size,
+                ),
+                title: 'Paramettre',
                 onTap: () {
-                  Navigator.pop(context);
+                  if (!checkPlatform) Navigator.pop(context);
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => GameSearchPage()));
-                }),
-            listTileWidget(
-              icon: Icon(
-                color: color,
-                Icons.person_3_rounded,
-                size: size,
+                      builder: (context) => ParamettrePage()));
+                },
               ),
-              title: 'Entraineurs',
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => CoachPage()));
-              },
-            ),
-            listTileWidget(
-              icon: Icon(
-                color: color,
-                Icons.person_pin,
-                size: size,
+              listTileWidget(
+                icon: Icon(
+                  color: kColor,
+                  Icons.info,
+                  size: size,
+                ),
+                title: 'Plus d\'infos',
+                onTap: () {
+                  if (!checkPlatform) Navigator.pop(context);
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => PlusInfosPage()));
+                },
               ),
-              title: 'Arbitres',
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ArbitrePage()));
-              },
-            ),
-            const Divider(),
-            listTileWidget(
-              icon: Icon(
-                color: color,
-                Icons.account_box,
-                size: size,
+              listTileWidget(
+                icon: Icon(
+                  color: kColor,
+                  Icons.help,
+                  size: size,
+                ),
+                title: 'Aide',
+                onTap: () {
+                  if (!checkPlatform) Navigator.pop(context);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const AidePage()));
+                },
               ),
-              title: user == null ? 'Se connecter' : 'Se Deconnecter',
-              onTap: () async {
-                if (user == null) {
-                  await Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => LoginPage()));
-                } else {
-                  final bool? logout = await showDialog(
-                      context: context,
-                      builder: (context) => ConfirmDialogWidget(
-                            title: 'Confirmation de deconnexion',
-                            content: 'Voulez vous deconnecter ?',
-                          ));
-                  if (logout == true)
-                    context.read<UserProvider>().deconnectUser();
-                }
-              },
-            ),
-            listTileWidget(
-              icon: Icon(
-                color: color,
-                Icons.settings,
-                size: size,
-              ),
-              title: 'Paramettre',
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ParamettrePage()));
-              },
-            ),
-            listTileWidget(
-              icon: Icon(
-                color: color,
-                Icons.info,
-                size: size,
-              ),
-              title: 'Plus d\'infos',
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => PlusInfosPage()));
-              },
-            ),
-            listTileWidget(
-              icon: Icon(
-                color: color,
-                Icons.help,
-                size: size,
-              ),
-              title: 'Aide',
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const AidePage()));
-              },
-            ),
-            const Divider(),
-            listTileWidget(
-              icon: Icon(
-                color: color,
-                Icons.contact_phone,
-                size: size,
-              ),
-              title: 'Nous contacter',
-              onTap: () {
-                Navigator.pop(context);
+              const Divider(),
+              listTileWidget(
+                icon: Icon(
+                  color: kColor,
+                  Icons.contact_phone,
+                  size: size,
+                ),
+                title: 'Nous contacter',
+                onTap: () {
+                  if (!checkPlatform) Navigator.pop(context);
 
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ContactPage()));
-              },
-            ),
-            listTileWidget(
-              icon: Icon(
-                color: color,
-                Icons.dangerous_outlined,
-                size: size,
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ContactPage()));
+                },
               ),
-              title: 'Signaler',
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SignalerPage()));
-              },
-            ),
-          ],
-        ),
-      );
+              listTileWidget(
+                icon: Icon(
+                  color: kColor,
+                  Icons.dangerous_outlined,
+                  size: size,
+                ),
+                title: 'Signaler',
+                onTap: () {
+                  if (!checkPlatform) Navigator.pop(context);
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => SignalerPage()));
+                },
+              ),
+            ],
+          ),
+        );
+      });
     });
   }
 
@@ -241,7 +252,7 @@ class DrawerWidget extends StatelessWidget {
       title: Text(
         title,
         style: TextStyle(
-          color: color,
+          color: kColor,
           fontSize: 15,
           fontWeight: FontWeight.normal,
         ),

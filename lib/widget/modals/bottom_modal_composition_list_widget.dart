@@ -43,7 +43,7 @@ class BottomModalSheetCompositionListWidget extends StatelessWidget {
                       controller: scrollController,
                       children: [
                         Container(
-                          width: MediaQuery.sizeOf(context).width,
+                          width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(10.0),
                           color: Colors.grey[400],
                           height: 50,
@@ -86,7 +86,7 @@ class CompositionSectionWidget extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: MediaQuery.sizeOf(context).width,
+          width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.all(10.0),
           color: Colors.grey[200],
           height: 50,

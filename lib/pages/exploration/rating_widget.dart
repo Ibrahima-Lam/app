@@ -10,7 +10,7 @@ class RatingWidget extends StatelessWidget {
     num value = rating ?? 0;
 
     return Container(
-      width: MediaQuery.sizeOf(context).width,
+      width: MediaQuery.of(context).size.width,
       child: Row(
         mainAxisAlignment:
             centered ? MainAxisAlignment.center : MainAxisAlignment.start,

@@ -5,6 +5,7 @@ import 'package:app/providers/infos_provider.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
 import 'package:app/widget/form/file_form_field_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -76,66 +77,68 @@ class _InfosFormState extends State<InfosForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Informations'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            TextFormFieldWidget(
-                controller: _titleController, hintText: 'Titre'),
-            TextFormFieldWidget(
-                controller: _textController, hintText: 'Texte', minLines: 5),
-            FileFormFieldWidget(
-                controller: _imageController,
-                hintText: 'Image',
-                directory: 'infos'),
-            TextFormFieldWidget(
-                controller: _sourceController, hintText: 'Source'),
-            Card(
-              child: ListTile(
-                title: const Text('Date et heure'),
-                subtitle: Text(_datetimeController.text),
-                trailing: IconButton(
-                  onPressed: () {
-                    showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate:
-                                DateTime.now().add(const Duration(days: -7)),
-                            initialEntryMode: DatePickerEntryMode.calendar,
-                            lastDate: DateTime.now())
-                        .then(
-                      (date) {
-                        if (date != null) {
-                          showTimePicker(
-                                  context: context,
-                                  initialTime: TimeOfDay.now())
-                              .then((heure) {
-                            if (heure != null) {
-                              setState(() {
-                                _datetimeController.text = date
-                                    .add(Duration(
-                                        hours: heure.hour,
-                                        minutes: heure.minute))
-                                    .toString();
-                              });
-                            }
-                          });
-                        }
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.calendar_today),
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Informations'),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextFormFieldWidget(
+                  controller: _titleController, hintText: 'Titre'),
+              TextFormFieldWidget(
+                  controller: _textController, hintText: 'Texte', minLines: 5),
+              FileFormFieldWidget(
+                  controller: _imageController,
+                  hintText: 'Image',
+                  directory: 'infos'),
+              TextFormFieldWidget(
+                  controller: _sourceController, hintText: 'Source'),
+              Card(
+                child: ListTile(
+                  title: const Text('Date et heure'),
+                  subtitle: Text(_datetimeController.text),
+                  trailing: IconButton(
+                    onPressed: () {
+                      showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate:
+                                  DateTime.now().add(const Duration(days: -7)),
+                              initialEntryMode: DatePickerEntryMode.calendar,
+                              lastDate: DateTime.now())
+                          .then(
+                        (date) {
+                          if (date != null) {
+                            showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now())
+                                .then((heure) {
+                              if (heure != null) {
+                                setState(() {
+                                  _datetimeController.text = date
+                                      .add(Duration(
+                                          hours: heure.hour,
+                                          minutes: heure.minute))
+                                      .toString();
+                                });
+                              }
+                            });
+                          }
+                        },
+                      );
+                    },
+                    icon: const Icon(Icons.calendar_today),
+                  ),
                 ),
               ),
-            ),
-            ElevatedButtonFormWidget(
-                onPressed: _onSubmit,
-                label: 'Enregistrer',
-                isSending: isLoading)
-          ],
+              ElevatedButtonFormWidget(
+                  onPressed: _onSubmit,
+                  label: 'Enregistrer',
+                  isSending: isLoading)
+            ],
+          ),
         ),
       ),
     );

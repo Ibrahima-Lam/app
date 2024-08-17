@@ -47,7 +47,7 @@ class JoueurDelegateSearch extends SearchDelegate {
           borderRadius: BorderRadius.circular(0),
         ),
         child: Container(
-          height: MediaQuery.sizeOf(context).height,
+          height: MediaQuery.of(context).size.height,
           child: FutureBuilder(
               future: joueurs.isNotEmpty
                   ? null

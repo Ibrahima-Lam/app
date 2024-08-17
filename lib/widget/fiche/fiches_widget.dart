@@ -47,7 +47,7 @@ class FicheInfosWidget extends StatelessWidget {
                       },
                       child: Card(
                         child: Container(
-                          width: MediaQuery.sizeOf(context).width,
+                          width: MediaQuery.of(context).size.width,
                           constraints: const BoxConstraints(
                             minHeight: 100,
                           ),
@@ -55,7 +55,7 @@ class FicheInfosWidget extends StatelessWidget {
                             alignment: Alignment.bottomCenter,
                             children: [
                               Container(
-                                width: MediaQuery.sizeOf(context).width,
+                                width: MediaQuery.of(context).size.width,
                                 padding: const EdgeInsets.only(
                                     top: 5, left: 2, right: 2, bottom: 5),
                                 constraints:
@@ -125,7 +125,7 @@ class FicheSponsorWidget extends StatelessWidget {
               padding: const EdgeInsets.only(top: 5.0),
               child: Card(
                 child: Container(
-                  width: MediaQuery.sizeOf(context).width,
+                  width: MediaQuery.of(context).size.width,
                   constraints: const BoxConstraints(
                     minHeight: 200,
                   ),

@@ -5,6 +5,7 @@ import 'package:app/widget/form/dropdown_menu_app_form_widget.dart';
 import 'package:app/widget/form/elevated_button_widget.dart';
 import 'package:app/widget/modals/bottom_modal_joueur_list_widget.dart';
 import 'package:app/widget/form/text_field_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -48,49 +49,53 @@ class _CompositionFormState extends State<CompositionForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              IconButton(
-                  onPressed: () async {
-                    Joueur? joueur = await showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return BottomModalSheetJoueurListWidget(
-                          idParticipant: widget.composition.idParticipant,
-                        );
-                      },
-                    );
-                    if (joueur != null) {
-                      nomController.text = joueur.nomJoueur;
-                      widget.composition.idJoueur = joueur.idJoueur;
-                      widget.composition.imageUrl = joueur.imageUrl;
-                    }
-                  },
-                  icon: Icon(Icons.list)),
-              TextFieldWidget(
-                  textEditingController: nomController,
-                  hintText: 'Entrer le nom'),
-              const SizedBox(
-                height: 10,
-              ),
-              TextFieldWidget(
-                  textEditingController: numeroController,
-                  hintText: 'Entrer le numero'),
-              const SizedBox(
-                height: 10,
-              ),
-              DropDownMenuAppFormWidget(
-                  entries: {'oui': true, 'non': false},
-                  title: 'Capitaine',
-                  controller: capitaineController),
-              ElevatedButtonWidget(
-                onPressed: _onSubmit,
-              )
-            ],
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Composition'),
+        ),
+        body: Container(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                IconButton(
+                    onPressed: () async {
+                      Joueur? joueur = await showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return BottomModalSheetJoueurListWidget(
+                            idParticipant: widget.composition.idParticipant,
+                          );
+                        },
+                      );
+                      if (joueur != null) {
+                        nomController.text = joueur.nomJoueur;
+                        widget.composition.idJoueur = joueur.idJoueur;
+                        widget.composition.imageUrl = joueur.imageUrl;
+                      }
+                    },
+                    icon: Icon(Icons.list)),
+                TextFieldWidget(
+                    textEditingController: nomController,
+                    hintText: 'Entrer le nom'),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFieldWidget(
+                    textEditingController: numeroController,
+                    hintText: 'Entrer le numero'),
+                const SizedBox(
+                  height: 10,
+                ),
+                DropDownMenuAppFormWidget(
+                    entries: {'oui': true, 'non': false},
+                    title: 'Capitaine',
+                    controller: capitaineController),
+                ElevatedButtonWidget(
+                  onPressed: _onSubmit,
+                )
+              ],
+            ),
           ),
         ),
       ),

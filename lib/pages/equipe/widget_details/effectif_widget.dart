@@ -206,7 +206,7 @@ class _EffectifJoueurSectionWidgetState
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
-              height: MediaQuery.sizeOf(context).height * .75,
+              height: MediaQuery.of(context).size.height * .75,
               child: const Center(
                 child: CircularProgressIndicator(),
               ),
@@ -222,7 +222,7 @@ class _EffectifJoueurSectionWidgetState
 
             return joueurs.isEmpty && !widget.checkUser
                 ? Container(
-                    height: MediaQuery.sizeOf(context).height * .75,
+                    height: MediaQuery.of(context).size.height * .75,
                     child: const Center(
                       child:
                           Text('Pas de joueur disponible pour cette equipe!'),

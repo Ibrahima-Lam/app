@@ -16,7 +16,6 @@ import 'package:app/pages/exploration/search_field_widget.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/providers/joueur_provider.dart';
 import 'package:app/providers/participant_provider.dart';
-import 'package:app/widget/skelton/drawer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,16 +25,19 @@ Joueur? joueur;
 
 class ExplorationPage extends StatelessWidget {
   final Function()? openDrawer;
-  ExplorationPage({super.key, this.openDrawer});
+  final bool checkPlatform;
+  ExplorationPage({super.key, this.openDrawer, required this.checkPlatform});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: openDrawer,
-          icon: Icon(Icons.menu),
-        ),
+        leading: checkPlatform
+            ? null
+            : IconButton(
+                onPressed: openDrawer,
+                icon: Icon(Icons.menu),
+              ),
         title: const Text('Exploration'),
         titleSpacing: 20,
       ),
@@ -99,7 +101,6 @@ class ExplorationPage extends StatelessWidget {
                             ));
             });
           }),
-      drawer: const DrawerWidget(),
     );
   }
 }

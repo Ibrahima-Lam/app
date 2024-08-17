@@ -52,5 +52,3 @@ class ChangementService {
     return res;
   }
 }
-
-List<Map<String, dynamic>> changements = [];

@@ -27,7 +27,7 @@ class AllSectionWidget extends StatelessWidget {
     }
     return competitions.isEmpty
         ? Container(
-            height: MediaQuery.sizeOf(context).width,
+            height: MediaQuery.of(context).size.width,
             child: Center(
               child: Text(controller.text.isEmpty
                   ? 'Pas de compétition disponible!'
@@ -58,7 +58,7 @@ class AllSectionWidget extends StatelessWidget {
                 Card(
                   margin: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
                   child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width,
+                    width: MediaQuery.of(context).size.width,
                     child: Column(
                       children: competitions
                           .map((e) => CompetitionHorizontalTileWidget(

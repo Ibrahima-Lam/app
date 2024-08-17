@@ -44,7 +44,7 @@ class SponsorListWidget extends StatelessWidget {
                   : Container(
                       constraints: BoxConstraints(maxHeight: 360),
                       padding: EdgeInsets.symmetric(vertical: 5),
-                      width: MediaQuery.sizeOf(context).width,
+                      width: MediaQuery.of(context).size.width,
                       child: SingleChildScrollView(
                         controller: scrollController,
                         scrollDirection: Axis.horizontal,

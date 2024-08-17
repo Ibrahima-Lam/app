@@ -6,6 +6,7 @@ import 'package:app/providers/game_provider.dart';
 import 'package:app/providers/participant_provider.dart';
 import 'package:app/widget/game/game_widget.dart';
 import 'package:app/widget/form/text_field_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -59,120 +60,123 @@ class _GameSearchPageState extends State<GameSearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Recherche de match'),
-      ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: TextFieldWidget(
-                  focusNode: homeFocusNode,
-                  textEditingController: homeController,
-                  hintText: 'Entrer une equipe',
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Recherche de match'),
+        ),
+        body: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextFieldWidget(
+                    focusNode: homeFocusNode,
+                    textEditingController: homeController,
+                    hintText: 'Entrer une equipe',
+                  ),
                 ),
-              ),
-              Expanded(
-                child: TextFieldWidget(
-                  focusNode: awayFocusNode,
-                  textEditingController: awayController,
-                  hintText: 'Entrer une equipe',
-                ),
-              )
-            ],
-          ),
-          Expanded(
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0)),
-              child: Container(
-                child: Stack(
-                  children: [
-                    FutureBuilder(
-                      future: context.read<GameProvider>().getGames(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return const Center(
-                            child: Text('erreur!'),
-                          );
-                        }
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        return Consumer<GameProvider>(
-                          builder: (context, matchs, child) {
-                            List<Game> games = matchs.games;
-
-                            return Builder(builder: (context) {
-                              List<Game> elements =
-                                  homeController.text.isEmpty ||
-                                          awayController.text.isEmpty
-                                      ? []
-                                      : games
-                                          .where((element) =>
-                                              element.idHome == idHome &&
-                                                  element.idAway == idAway ||
-                                              element.idHome == idAway &&
-                                                  element.idAway == idHome)
-                                          .toList();
-                              return elements.isEmpty
-                                  ? Center(
-                                      child: Text(homeController.text.isEmpty ||
-                                              awayController.text.isEmpty
-                                          ? 'Renseigner les deux champs svp!'
-                                          : 'Pas de correspondance de match!'))
-                                  : SingleChildScrollView(
-                                      child: Column(
-                                        children: elements
-                                            .map((e) => GameWidget(game: e))
-                                            .toList(),
-                                      ),
-                                    );
-                            });
-                          },
-                        );
-                      },
-                    ),
-                    if (showHome)
-                      Positioned(
-                        child: EquipeSearchListWidget(
-                          controller: homeController,
-                          onSelected: (e) {
-                            setState(() {
-                              homeFocusNode.canRequestFocus = false;
-                              idHome = e.idParticipant;
-                              homeController.text = e.nomEquipe;
-                              showHome = false;
-                            });
-                          },
-                        ),
-                      ),
-                    if (showAway)
-                      Positioned(
-                        child: EquipeSearchListWidget(
-                          controller: awayController,
-                          onSelected: (e) {
-                            setState(() {
-                              awayFocusNode.canRequestFocus = false;
-                              idAway = e.idParticipant;
-                              awayController.text = e.nomEquipe;
-                              showHome = false;
-                              showAway = false;
-                            });
-                          },
-                        ),
-                      )
-                  ],
-                ),
-              ),
+                Expanded(
+                  child: TextFieldWidget(
+                    focusNode: awayFocusNode,
+                    textEditingController: awayController,
+                    hintText: 'Entrer une equipe',
+                  ),
+                )
+              ],
             ),
-          )
-        ],
+            Expanded(
+              child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0)),
+                child: Container(
+                  child: Stack(
+                    children: [
+                      FutureBuilder(
+                        future: context.read<GameProvider>().getGames(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return const Center(
+                              child: Text('erreur!'),
+                            );
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          return Consumer<GameProvider>(
+                            builder: (context, matchs, child) {
+                              List<Game> games = matchs.games;
+
+                              return Builder(builder: (context) {
+                                List<Game> elements =
+                                    homeController.text.isEmpty ||
+                                            awayController.text.isEmpty
+                                        ? []
+                                        : games
+                                            .where((element) =>
+                                                element.idHome == idHome &&
+                                                    element.idAway == idAway ||
+                                                element.idHome == idAway &&
+                                                    element.idAway == idHome)
+                                            .toList();
+                                return elements.isEmpty
+                                    ? Center(
+                                        child: Text(homeController
+                                                    .text.isEmpty ||
+                                                awayController.text.isEmpty
+                                            ? 'Renseigner les deux champs svp!'
+                                            : 'Pas de correspondance de match!'))
+                                    : SingleChildScrollView(
+                                        child: Column(
+                                          children: elements
+                                              .map((e) => GameWidget(game: e))
+                                              .toList(),
+                                        ),
+                                      );
+                              });
+                            },
+                          );
+                        },
+                      ),
+                      if (showHome)
+                        Positioned(
+                          child: EquipeSearchListWidget(
+                            controller: homeController,
+                            onSelected: (e) {
+                              setState(() {
+                                homeFocusNode.canRequestFocus = false;
+                                idHome = e.idParticipant;
+                                homeController.text = e.nomEquipe;
+                                showHome = false;
+                              });
+                            },
+                          ),
+                        ),
+                      if (showAway)
+                        Positioned(
+                          child: EquipeSearchListWidget(
+                            controller: awayController,
+                            onSelected: (e) {
+                              setState(() {
+                                awayFocusNode.canRequestFocus = false;
+                                idAway = e.idParticipant;
+                                awayController.text = e.nomEquipe;
+                                showHome = false;
+                                showAway = false;
+                              });
+                            },
+                          ),
+                        )
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -98,7 +98,7 @@ class JoueurStatistiqueSectionWidget extends StatelessWidget {
           radius: Radius.circular(4),
           controller: scrollController,
           child: Container(
-            width: MediaQuery.sizeOf(context).width,
+            width: MediaQuery.of(context).size.width,
             child: SingleChildScrollView(
               padding: const EdgeInsets.only(bottom: 5),
               controller: scrollController,
@@ -208,7 +208,7 @@ class GameJoueurStatWidget extends StatelessWidget {
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
         height: 160,
         constraints: BoxConstraints(
-          maxWidth: one ? MediaQuery.sizeOf(context).width : 220,
+          maxWidth: one ? MediaQuery.of(context).size.width : 220,
         ),
         child: PhysicalModel(
           borderRadius: BorderRadius.circular(4),
@@ -220,7 +220,7 @@ class GameJoueurStatWidget extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.all(5.0),
-                width: one ? MediaQuery.sizeOf(context).width * .80 : 150,
+                width: one ? MediaQuery.of(context).size.width * .80 : 150,
                 child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -305,7 +305,7 @@ class EquipeRowWidget extends StatelessWidget {
               SizedBox(width: 5),
               ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxWidth: one ? MediaQuery.sizeOf(context).width * .50 : 50,
+                  maxWidth: one ? MediaQuery.of(context).size.width * .50 : 50,
                 ),
                 child: Text(participant.nomEquipe,
                     maxLines: 1,

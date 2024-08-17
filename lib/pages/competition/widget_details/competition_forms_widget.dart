@@ -54,7 +54,7 @@ class FormButtonWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 4.0, vertical: 1.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
       child: Container(
-        width: MediaQuery.sizeOf(context).width,
+        width: MediaQuery.of(context).size.width,
         child: Center(
           child: OutlinedButton(
               onPressed: onPressed,

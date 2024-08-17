@@ -4,6 +4,7 @@ import 'package:app/core/extension/string_extension.dart';
 import 'package:app/models/statistique.dart';
 import 'package:app/widget/form/elevated_button_widget.dart';
 import 'package:app/widget/form/text_field_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 
 class StatistiqueForm extends StatefulWidget {
@@ -29,34 +30,36 @@ class _StatistiqueFormState extends State<StatistiqueForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.statistique.nomStatistique),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            if (widget.statistique.codeStatistique.contains('possession'))
-              StatFormSliderWidget(
-                homeController: homeController,
-                awayController: awayController,
-              )
-            else
-              StatFormTextFieldWidget(
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.statistique.nomStatistique),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              if (widget.statistique.codeStatistique.contains('possession'))
+                StatFormSliderWidget(
                   homeController: homeController,
-                  awayController: awayController),
-            const SizedBox(height: 10),
-            ElevatedButtonWidget(
-              onPressed: () {
-                widget.statistique.homeStatistique =
-                    num.parse(homeController.text);
-                widget.statistique.awayStatistique =
-                    num.parse(awayController.text);
+                  awayController: awayController,
+                )
+              else
+                StatFormTextFieldWidget(
+                    homeController: homeController,
+                    awayController: awayController),
+              const SizedBox(height: 10),
+              ElevatedButtonWidget(
+                onPressed: () {
+                  widget.statistique.homeStatistique =
+                      num.parse(homeController.text);
+                  widget.statistique.awayStatistique =
+                      num.parse(awayController.text);
 
-                Navigator.pop(context, true);
-              },
-            )
-          ],
+                  Navigator.pop(context, true);
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

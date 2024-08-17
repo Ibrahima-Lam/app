@@ -23,7 +23,7 @@ class CompetitionTitleWidget extends StatelessWidget {
         elevation: 2,
         margin: EdgeInsets.symmetric(horizontal: 3, vertical: 1),
         child: Container(
-          width: MediaQuery.sizeOf(context).width,
+          width: MediaQuery.of(context).size.width,
           height: 40,
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
@@ -65,7 +65,7 @@ class CompetitionTitleWidget extends StatelessWidget {
                 ),
               ),
               Container(
-                height: MediaQuery.sizeOf(context).height,
+                height: MediaQuery.of(context).size.height,
                 width: 60,
                 child: Center(
                   child: PopupMenuButton(

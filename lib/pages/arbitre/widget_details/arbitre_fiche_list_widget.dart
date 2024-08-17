@@ -40,7 +40,7 @@ class InformationArbitreWidget extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 3.0),
           height: 300,
-          width: MediaQuery.sizeOf(context).width,
+          width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
               Row(

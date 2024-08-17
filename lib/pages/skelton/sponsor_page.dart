@@ -2,6 +2,7 @@ import 'package:app/models/sponsor.dart';
 import 'package:app/pages/forms/sponsor_form.dart';
 import 'package:app/providers/sponsor_provider.dart';
 import 'package:app/widget/modals/confirm_dialog_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:app/widget/sponsor/sponsor_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -27,49 +28,51 @@ class SponsorPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Les Sponsors'),
-      ),
-      body: SingleChildScrollView(
-        child: FutureBuilder(
-            future: context.read<SponsorProvider>().getData(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return const Center(
-                  child: Text('erreur!'),
-                );
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Les Sponsors'),
+        ),
+        body: SingleChildScrollView(
+          child: FutureBuilder(
+              future: context.read<SponsorProvider>().getData(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return const Center(
+                    child: Text('erreur!'),
+                  );
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-              return Consumer<SponsorProvider>(
-                  builder: (context, sponsorProvider, child) {
-                List<Sponsor> sponsors = sponsorProvider.sponsors;
+                return Consumer<SponsorProvider>(
+                    builder: (context, sponsorProvider, child) {
+                  List<Sponsor> sponsors = sponsorProvider.sponsors;
 
-                return Column(
-                  children: [
-                    ...sponsors.map((e) => SponsorTileWidget(
-                          sponsor: e,
-                          onDelete: (e) => _delete(context, e),
-                          onEdit: (e) => _edit(context, e),
-                          enable: true,
-                        ))
-                  ],
-                );
-              });
-            }),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => SponsorForm(),
-            ),
-          );
-        },
-        child: Icon(Icons.add),
+                  return Column(
+                    children: [
+                      ...sponsors.map((e) => SponsorTileWidget(
+                            sponsor: e,
+                            onDelete: (e) => _delete(context, e),
+                            onEdit: (e) => _edit(context, e),
+                            enable: true,
+                          ))
+                    ],
+                  );
+                });
+              }),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => SponsorForm(),
+              ),
+            );
+          },
+          child: Icon(Icons.add),
+        ),
       ),
     );
   }

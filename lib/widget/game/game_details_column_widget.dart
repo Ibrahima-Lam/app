@@ -42,7 +42,7 @@ class GameDetailsColumnWidget extends StatelessWidget {
           children: [
             Container(
               height: 100,
-              width: MediaQuery.sizeOf(context).width,
+              width: MediaQuery.of(context).size.width,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,

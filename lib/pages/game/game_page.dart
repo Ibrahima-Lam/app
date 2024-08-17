@@ -19,7 +19,8 @@ import 'package:provider/provider.dart';
 
 class GamePage extends StatefulWidget {
   final Function()? openDrawer;
-  const GamePage({super.key, this.openDrawer});
+  final bool checkPlatform;
+  const GamePage({super.key, this.openDrawer, required this.checkPlatform});
 
   @override
   State<GamePage> createState() => _GamePageState();
@@ -121,6 +122,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
       initialIndex: playing ? 0 : 7,
       length: tabs.length,
       child: ScaffoldWidget(
+        checkPlatform: widget.checkPlatform,
         playing: playing,
         openDrawer: widget.openDrawer,
         onPressedSearch: _showSearch,

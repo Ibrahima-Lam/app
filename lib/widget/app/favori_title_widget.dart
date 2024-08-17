@@ -16,7 +16,7 @@ class FavoriTitleWidget extends StatelessWidget {
       elevation: 2,
       margin: margin ?? EdgeInsets.symmetric(horizontal: 3, vertical: 1),
       child: Container(
-        width: MediaQuery.sizeOf(context).width,
+        width: MediaQuery.of(context).size.width,
         height: 35,
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(

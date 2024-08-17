@@ -9,8 +9,10 @@ class ScaffoldWidget extends StatelessWidget {
   final Function() onPressedStream;
   final Function()? openDrawer;
   final bool playing;
+  final bool checkPlatform;
   const ScaffoldWidget({
     super.key,
+    required this.checkPlatform,
     this.floatButton,
     this.bottom,
     required this.body,
@@ -28,10 +30,12 @@ class ScaffoldWidget extends StatelessWidget {
         return NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverAppBar(
-              leading: IconButton(
-                onPressed: openDrawer,
-                icon: Icon(Icons.menu),
-              ),
+              leading: checkPlatform
+                  ? null
+                  : IconButton(
+                      onPressed: openDrawer,
+                      icon: Icon(Icons.menu),
+                    ),
               floating: true,
               pinned: true,
               title: const Text('Matchs'),

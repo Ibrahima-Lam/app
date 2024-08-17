@@ -8,6 +8,7 @@ import 'package:app/providers/arbitre_provider.dart';
 import 'package:app/providers/competition_provider.dart';
 import 'package:app/widget/logos/arbitre_logo_widget.dart';
 import 'package:app/widget/logos/competition_logo_image.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -27,114 +28,118 @@ class ArbitreDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: null,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const Center(
-            child: Text('erreur!'),
-          );
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        return Consumer2<ArbitreProvider, CompetitionProvider>(
-          builder: (context, arb, comp, child) {
-            arbitre = arb.getArbitre(id)!;
-            competition = comp.collection.getElementAt(arbitre.idEdition);
-            return Scaffold(
-              body: DefaultTabController(
-                length: tabs.length,
-                child: NestedScrollView(
-                    headerSliverBuilder: (context, innerBoxIsScrolled) {
-                      return [
-                        SliverAppBar(
-                          centerTitle: true,
-                          title: Text(
-                            arbitre.nomArbitre,
-                            style: TextStyle(
-                              fontSize: 17,
-                            ),
-                          ),
-                          actions: [
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Icon(
-                                arbitre.role == 'assistant'
-                                    ? Icons.flag
-                                    : arbitre.role == 'principale'
-                                        ? Icons.sports
-                                        : arbitre.role == 'var'
-                                            ? Icons.tv
-                                            : Icons
-                                                .settings_backup_restore_outlined,
-                              ),
-                            ),
-                          ],
-                          expandedHeight: 180,
-                          pinned: true,
-                          flexibleSpace: FlexibleSpaceBar(
-                            background: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 20, horizontal: 10),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const SizedBox(height: 35),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () => Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    CompetitionDetails(
-                                                        id: competition
-                                                            .codeEdition))),
-                                        child: SizedBox(
-                                          height: 50,
-                                          width: 50,
-                                          child: CompetitionImageLogoWidget(
-                                              url: competition.imageUrl ?? ''),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 20),
-                                      SizedBox(
-                                        height: 80,
-                                        width: 80,
-                                        child: ArbitreImageLogoWidget(
-                                          url: arbitre.imageUrl,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 20),
-                                      CircleAvatar(
-                                        radius: 20,
-                                        child: Icon(Icons.house),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          bottom: TabBarWidget.build(
-                              tabs: tabs.map((e) => Tab(text: e)).toList()),
-                        )
-                      ];
-                    },
-                    body: TabBarView(
-                        children: tabs
-                            .map((e) =>
-                                tabBarViewWidget[e.toLowerCase()] ??
-                                const Center(
-                                  child: Text('Page vide!'),
-                                ))
-                            .toList())),
-              ),
+    return LayoutBuilderWidget(
+      child: FutureBuilder(
+        future: null,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text('erreur!'),
             );
-          },
-        );
-      },
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return Consumer2<ArbitreProvider, CompetitionProvider>(
+            builder: (context, arb, comp, child) {
+              arbitre = arb.getArbitre(id)!;
+              competition = comp.collection.getElementAt(arbitre.idEdition);
+              return Scaffold(
+                body: DefaultTabController(
+                  length: tabs.length,
+                  child: NestedScrollView(
+                      headerSliverBuilder: (context, innerBoxIsScrolled) {
+                        return [
+                          SliverAppBar(
+                            centerTitle: true,
+                            title: Text(
+                              arbitre.nomArbitre,
+                              style: TextStyle(
+                                fontSize: 17,
+                              ),
+                            ),
+                            actions: [
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Icon(
+                                  arbitre.role == 'assistant'
+                                      ? Icons.flag
+                                      : arbitre.role == 'principale'
+                                          ? Icons.sports
+                                          : arbitre.role == 'var'
+                                              ? Icons.tv
+                                              : Icons
+                                                  .settings_backup_restore_outlined,
+                                ),
+                              ),
+                            ],
+                            expandedHeight: 180,
+                            pinned: true,
+                            flexibleSpace: FlexibleSpaceBar(
+                              background: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(height: 35),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () => Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CompetitionDetails(
+                                                          id: competition
+                                                              .codeEdition))),
+                                          child: SizedBox(
+                                            height: 50,
+                                            width: 50,
+                                            child: CompetitionImageLogoWidget(
+                                                url:
+                                                    competition.imageUrl ?? ''),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 20),
+                                        SizedBox(
+                                          height: 80,
+                                          width: 80,
+                                          child: ArbitreImageLogoWidget(
+                                            url: arbitre.imageUrl,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 20),
+                                        CircleAvatar(
+                                          radius: 20,
+                                          child: Icon(Icons.house),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            bottom: TabBarWidget.build(
+                                tabs: tabs.map((e) => Tab(text: e)).toList()),
+                          )
+                        ];
+                      },
+                      body: TabBarView(
+                          children: tabs
+                              .map((e) =>
+                                  tabBarViewWidget[e.toLowerCase()] ??
+                                  const Center(
+                                    child: Text('Page vide!'),
+                                  ))
+                              .toList())),
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

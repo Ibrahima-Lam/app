@@ -55,7 +55,7 @@ class ClassementListWidget extends StatelessWidget {
                       borderRadius: BorderRadius.zero),
                   color: Colors.white,
                   child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width,
+                    width: MediaQuery.of(context).size.width,
                     child: Column(
                       children: [
                         SectionTitleWidget(title: 'Groupe ${stat.key}'),

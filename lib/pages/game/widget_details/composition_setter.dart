@@ -11,6 +11,7 @@ import 'package:app/providers/game_event_list_provider.dart';
 import 'package:app/widget/coach/coach_and_team_widget.dart';
 import 'package:app/widget/modals/composition_bottom_sheet_widget.dart';
 import 'package:app/widget/composition/composition_element_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:app/widget_pages/arbitre_list_widget.dart';
 import 'package:app/widget_pages/coach_form.dart';
 import 'package:app/widget_pages/substitut_list_widget.dart';
@@ -25,31 +26,33 @@ class CompositionSetter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Composition'),
-        actions: [],
-      ),
-      body: CompositionSetterWidget(
-        compositionSousCollection: compositionSousCollection,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context
-              .read<CompositionProvider>()
-              .setAllCompositions(compositionSousCollection.game.idGame, [
-            ...compositionSousCollection.homeInside,
-            ...compositionSousCollection.awayInside,
-            ...compositionSousCollection.homeOutside,
-            ...compositionSousCollection.awayOutside,
-            ...compositionSousCollection.arbitres,
-            ...[
-              compositionSousCollection.homeCoatch,
-              compositionSousCollection.awayCoatch,
-            ]
-          ]);
-        },
-        child: Icon(Icons.save),
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Composition'),
+          actions: [],
+        ),
+        body: CompositionSetterWidget(
+          compositionSousCollection: compositionSousCollection,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            context
+                .read<CompositionProvider>()
+                .setAllCompositions(compositionSousCollection.game.idGame, [
+              ...compositionSousCollection.homeInside,
+              ...compositionSousCollection.awayInside,
+              ...compositionSousCollection.homeOutside,
+              ...compositionSousCollection.awayOutside,
+              ...compositionSousCollection.arbitres,
+              ...[
+                compositionSousCollection.homeCoatch,
+                compositionSousCollection.awayCoatch,
+              ]
+            ]);
+          },
+          child: Icon(Icons.save),
+        ),
       ),
     );
   }

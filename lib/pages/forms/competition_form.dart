@@ -6,6 +6,7 @@ import 'package:app/widget/form/elevated_button_form_widget.dart';
 import 'package:app/widget/form/file_form_field_widget.dart';
 import 'package:app/widget/form/slider_rating_form_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -78,59 +79,61 @@ class _CompetitionFormState extends State<CompetitionForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Formulaire de compétition')),
-      body: SingleChildScrollView(
-        child: Form(
-            key: _key,
-            child: Column(
-              children: [
-                const SizedBox(height: 10.0),
-                TextFormFieldWidget(
-                    controller: codeController,
-                    hintText: 'Entrer le code de la compétition'),
-                const SizedBox(height: 5.0),
-                TextFormFieldWidget(
-                    controller: nomController,
-                    hintText: 'Entrer le nom de la compétition'),
-                const SizedBox(height: 5.0),
-                TextFormFieldWidget(
-                    controller: nomEditionController,
-                    hintText: 'Entrer le nom de l\'édition'),
-                const SizedBox(height: 5.0),
-                TextFormFieldWidget(
-                    controller: localiteController,
-                    hintText: 'Entrer la localité de la compétition'),
-                const SizedBox(height: 5.0),
-                FileFormFieldWidget(
-                    directory: 'competition',
-                    controller: urlController,
-                    hintText: 'Entrer l\'url du logo'),
-                const SizedBox(height: 5.0),
-                TextFormFieldWidget(
-                    keyboardType: TextInputType.number,
-                    controller: anneeController,
-                    hintText: 'Entrer l\'année de l\'édition'),
-                const SizedBox(height: 5.0),
-                SliderRatingFormWidget(controller: ratingController),
-                const SizedBox(height: 5.0),
-                DropDownMenuAppFormWidget(
-                  controller: typeController,
-                  entries: {
-                    'coupe': 'coupe',
-                    'championnat': 'championnat',
-                    'amicale': 'amicale',
-                    'elimination direct': 'finale',
-                  },
-                  title: 'Type de compétition',
-                ),
-                const SizedBox(height: 5.0),
-                ElevatedButtonFormWidget(
-                  onPressed: _onSubmit,
-                  isSending: isLoading,
-                ),
-              ],
-            )),
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(title: Text('Formulaire de compétition')),
+        body: SingleChildScrollView(
+          child: Form(
+              key: _key,
+              child: Column(
+                children: [
+                  const SizedBox(height: 10.0),
+                  TextFormFieldWidget(
+                      controller: codeController,
+                      hintText: 'Entrer le code de la compétition'),
+                  const SizedBox(height: 5.0),
+                  TextFormFieldWidget(
+                      controller: nomController,
+                      hintText: 'Entrer le nom de la compétition'),
+                  const SizedBox(height: 5.0),
+                  TextFormFieldWidget(
+                      controller: nomEditionController,
+                      hintText: 'Entrer le nom de l\'édition'),
+                  const SizedBox(height: 5.0),
+                  TextFormFieldWidget(
+                      controller: localiteController,
+                      hintText: 'Entrer la localité de la compétition'),
+                  const SizedBox(height: 5.0),
+                  FileFormFieldWidget(
+                      directory: 'competition',
+                      controller: urlController,
+                      hintText: 'Entrer l\'url du logo'),
+                  const SizedBox(height: 5.0),
+                  TextFormFieldWidget(
+                      keyboardType: TextInputType.number,
+                      controller: anneeController,
+                      hintText: 'Entrer l\'année de l\'édition'),
+                  const SizedBox(height: 5.0),
+                  SliderRatingFormWidget(controller: ratingController),
+                  const SizedBox(height: 5.0),
+                  DropDownMenuAppFormWidget(
+                    controller: typeController,
+                    entries: {
+                      'coupe': 'coupe',
+                      'championnat': 'championnat',
+                      'amicale': 'amicale',
+                      'elimination direct': 'finale',
+                    },
+                    title: 'Type de compétition',
+                  ),
+                  const SizedBox(height: 5.0),
+                  ElevatedButtonFormWidget(
+                    onPressed: _onSubmit,
+                    isSending: isLoading,
+                  ),
+                ],
+              )),
+        ),
       ),
     );
   }

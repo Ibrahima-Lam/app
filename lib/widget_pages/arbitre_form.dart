@@ -5,6 +5,7 @@ import 'package:app/widget/form/dropdown_menu_widget.dart';
 import 'package:app/widget/form/elevated_button_widget.dart';
 import 'package:app/widget/form/text_field_widget.dart';
 import 'package:app/widget/modals/bottom_modal_arbitre_list_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,51 +43,53 @@ class _ArbitreFormWidgetState extends State<ArbitreFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.composition.nom),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            TextFieldWidget(
-                prefixIcon:
-                    IconButton(onPressed: _onPressed, icon: Icon(Icons.list)),
-                textEditingController: nomEditingController,
-                hintText: 'Entrer le nom'),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text('Role'),
-                DropDownMenuWidget(
-                    onChanged: (val) {
-                      setState(() {
-                        widget.composition.role = val!;
-                      });
-                    },
-                    tab: ['principale', 'assistant', '4 eme', 'var'],
-                    value: widget.composition.role),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            ElevatedButtonWidget(
-              onPressed: () async {
-                setState(() {
-                  widget.composition.nom = nomEditingController.text;
-                });
-                final bool result = await context
-                    .read<CompositionProvider>()
-                    .setComposition(
-                        widget.composition.idComposition, widget.composition);
-                if (result) Navigator.pop(context);
-              },
-            )
-          ],
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.composition.nom),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextFieldWidget(
+                  prefixIcon:
+                      IconButton(onPressed: _onPressed, icon: Icon(Icons.list)),
+                  textEditingController: nomEditingController,
+                  hintText: 'Entrer le nom'),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('Role'),
+                  DropDownMenuWidget(
+                      onChanged: (val) {
+                        setState(() {
+                          widget.composition.role = val!;
+                        });
+                      },
+                      tab: ['principale', 'assistant', '4 eme', 'var'],
+                      value: widget.composition.role),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButtonWidget(
+                onPressed: () async {
+                  setState(() {
+                    widget.composition.nom = nomEditingController.text;
+                  });
+                  final bool result = await context
+                      .read<CompositionProvider>()
+                      .setComposition(
+                          widget.composition.idComposition, widget.composition);
+                  if (result) Navigator.pop(context);
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

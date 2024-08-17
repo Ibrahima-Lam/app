@@ -15,7 +15,7 @@ class ElevatedButtonFormWidget extends StatelessWidget {
         Container(
           padding: EdgeInsets.all(4),
           height: 60,
-          width: MediaQuery.sizeOf(context).width,
+          width: MediaQuery.of(context).size.width,
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                   elevation: 5,

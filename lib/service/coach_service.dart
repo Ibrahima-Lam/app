@@ -53,27 +53,3 @@ class CoachService {
     return res;
   }
 }
-
-List<Map<String, dynamic>> coachs = [
-  {
-    'idCoach': 'c1',
-    'nomCoach': 'Wagne',
-    'role': 'coach',
-    'idParticipant': '25',
-    'imageUrl': '',
-  },
-  {
-    'idCoach': 'c2',
-    'nomCoach': 'Bathie',
-    'role': 'coach',
-    'imageUrl': '',
-    'idParticipant': '26',
-  },
-  {
-    'idCoach': 'c3',
-    'nomCoach': 'Cheikh',
-    'role': 'coach',
-    'idParticipant': '28',
-    'imageUrl': '',
-  },
-];

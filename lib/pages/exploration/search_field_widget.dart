@@ -14,7 +14,7 @@ class SearchFieldWidget extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(3),
         ),
-        width: MediaQuery.sizeOf(context).width,
+        width: MediaQuery.of(context).size.width,
         height: 50,
         child: TextField(
           controller: controller,

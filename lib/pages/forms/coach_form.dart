@@ -6,6 +6,7 @@ import 'package:app/widget/form/dropdown_menu_app_form_widget.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
 import 'package:app/widget/form/file_form_field_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -77,34 +78,36 @@ class _CoachFormState extends State<CoachForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Formulaire de Coach'),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(5),
-          child: Column(
-            children: [
-              SizedBox(height: 5.0),
-              TextFormFieldWidget(
-                controller: _nomController,
-                hintText: 'Entrez le nom du coach',
-              ),
-              DropDownMenuAppFormWidget(
-                  entries: {'coach': 'coach'},
-                  title: 'Role',
-                  controller: _roleController),
-              FileFormFieldWidget(
-                directory: 'coach',
-                controller: _imageUrlController,
-                hintText: 'Entrez l\'url de l\'image du coach',
-              ),
-              ElevatedButtonFormWidget(
-                  onPressed: _onSubmit,
-                  label: 'Enregistrer',
-                  isSending: isLoading)
-            ],
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Formulaire de Coach'),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(5),
+            child: Column(
+              children: [
+                SizedBox(height: 5.0),
+                TextFormFieldWidget(
+                  controller: _nomController,
+                  hintText: 'Entrez le nom du coach',
+                ),
+                DropDownMenuAppFormWidget(
+                    entries: {'coach': 'coach'},
+                    title: 'Role',
+                    controller: _roleController),
+                FileFormFieldWidget(
+                  directory: 'coach',
+                  controller: _imageUrlController,
+                  hintText: 'Entrez l\'url de l\'image du coach',
+                ),
+                ElevatedButtonFormWidget(
+                    onPressed: _onSubmit,
+                    label: 'Enregistrer',
+                    isSending: isLoading)
+              ],
+            ),
           ),
         ),
       ),

@@ -7,6 +7,7 @@ import 'package:app/providers/paramettre_provider.dart';
 import 'package:app/widget/logos/competition_logo_image.dart';
 import 'package:app/widget/form/text_search_field_widget.dart';
 import 'package:app/widget/modals/confirm_dialog_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -63,76 +64,80 @@ class _CompetitionPageState extends State<CompetitionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Compétitions'),
-      ),
-      body: Container(
-        child: FutureBuilder(
-          future: context.read<CompetitionProvider>().getCompetitions(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text('Erreur!'),
-              );
-            }
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Compétitions'),
+        ),
+        body: Container(
+          child: FutureBuilder(
+            future: context.read<CompetitionProvider>().getCompetitions(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Erreur!'),
+                );
+              }
 
-            return Consumer2<CompetitionProvider, ParamettreProvider>(
-              builder: (context, value, paramettreProvider, child) {
-                final bool enabled = paramettreProvider.checkRootUser();
+              return Consumer2<CompetitionProvider, ParamettreProvider>(
+                builder: (context, value, paramettreProvider, child) {
+                  final bool enabled = paramettreProvider.checkRootUser();
 
-                List<Competition> competitions = value.collection.competitions;
+                  List<Competition> competitions =
+                      value.collection.competitions;
 
-                return competitions.length == 0
-                    ? const Center(
-                        child: Text('Pas de donnees'),
-                      )
-                    : Column(
-                        children: [
-                          TextSearchFieldWidget(
-                            textEditingController: textEditingController,
-                            hintText: 'Recherche de Competition...',
-                          ),
-                          Expanded(
-                            child: Card(
-                              child: ValueListenableBuilder(
-                                  valueListenable: competitionNotifier,
-                                  builder: (context, val, child) {
-                                    competitions = competitionNotifier
-                                            .value.isNotEmpty
-                                        ? value.collection.competitions
-                                            .where((element) => element
-                                                .nomCompetition
-                                                .toUpperCase()
-                                                .startsWith(competitionNotifier
-                                                    .value
-                                                    .toUpperCase()))
-                                            .toList()
-                                        : value.collection.competitions;
-                                    return ListView.separated(
-                                        itemCount: competitions.length,
-                                        separatorBuilder: (context, index) =>
-                                            Divider(),
-                                        itemBuilder: (context, index) =>
-                                            CompetitionListTileWidget(
-                                              onEdit: _onEdit,
-                                              onDelete: _onDelete,
-                                              enabled: enabled,
-                                              competition: competitions[index],
-                                            ));
-                                  }),
+                  return competitions.length == 0
+                      ? const Center(
+                          child: Text('Pas de donnees'),
+                        )
+                      : Column(
+                          children: [
+                            TextSearchFieldWidget(
+                              textEditingController: textEditingController,
+                              hintText: 'Recherche de Competition...',
                             ),
-                          )
-                        ],
-                      );
-              },
-            );
-          },
+                            Expanded(
+                              child: Card(
+                                child: ValueListenableBuilder(
+                                    valueListenable: competitionNotifier,
+                                    builder: (context, val, child) {
+                                      competitions = competitionNotifier
+                                              .value.isNotEmpty
+                                          ? value.collection.competitions
+                                              .where((element) => element
+                                                  .nomCompetition
+                                                  .toUpperCase()
+                                                  .startsWith(
+                                                      competitionNotifier.value
+                                                          .toUpperCase()))
+                                              .toList()
+                                          : value.collection.competitions;
+                                      return ListView.separated(
+                                          itemCount: competitions.length,
+                                          separatorBuilder: (context, index) =>
+                                              Divider(),
+                                          itemBuilder: (context, index) =>
+                                              CompetitionListTileWidget(
+                                                onEdit: _onEdit,
+                                                onDelete: _onDelete,
+                                                enabled: enabled,
+                                                competition:
+                                                    competitions[index],
+                                              ));
+                                    }),
+                              ),
+                            )
+                          ],
+                        );
+                },
+              );
+            },
+          ),
         ),
       ),
     );

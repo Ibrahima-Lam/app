@@ -7,7 +7,7 @@ class SectionTitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.sizeOf(context).width,
+      width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(5.0),
       decoration: const BoxDecoration(
           gradient: LinearGradient(colors: [

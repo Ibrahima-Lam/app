@@ -6,6 +6,7 @@ import 'package:app/widget/form/elevated_button_form_widget.dart';
 import 'package:app/widget/form/file_form_field_widget.dart';
 import 'package:app/widget/form/slider_rating_form_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -108,79 +109,81 @@ class _JoueurFormState extends State<JoueurForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Formulaire de Joueur'),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(5),
-          child: Column(
-            children: [
-              SizedBox(height: 5.0),
-              TextFormFieldWidget(
-                controller: _nomController,
-                hintText: 'Entrez le nom du joueur',
-              ),
-              TextFormFieldWidget(
-                controller: _pseudoController,
-                hintText: 'Entrez le pseudo du joueur',
-              ),
-              TextFormFieldWidget(
-                controller: _localiteController,
-                hintText: 'Entrez la localité du joueur',
-              ),
-              Card(
-                child: ListTile(
-                  title: Text('Date de naissance'),
-                  subtitle: Text(_dateNaissanceController.text),
-                  trailing: IconButton(
-                    onPressed: () {
-                      showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(1900),
-                              lastDate: DateTime.now())
-                          .then((value) {
-                        if (value != null) {
-                          setState(() {
-                            _dateNaissanceController.text =
-                                value.toString().substring(0, 10);
-                          });
-                        }
-                      });
-                    },
-                    icon: Icon(Icons.edit),
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Formulaire de Joueur'),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(5),
+            child: Column(
+              children: [
+                SizedBox(height: 5.0),
+                TextFormFieldWidget(
+                  controller: _nomController,
+                  hintText: 'Entrez le nom du joueur',
+                ),
+                TextFormFieldWidget(
+                  controller: _pseudoController,
+                  hintText: 'Entrez le pseudo du joueur',
+                ),
+                TextFormFieldWidget(
+                  controller: _localiteController,
+                  hintText: 'Entrez la localité du joueur',
+                ),
+                Card(
+                  child: ListTile(
+                    title: Text('Date de naissance'),
+                    subtitle: Text(_dateNaissanceController.text),
+                    trailing: IconButton(
+                      onPressed: () {
+                        showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime.now())
+                            .then((value) {
+                          if (value != null) {
+                            setState(() {
+                              _dateNaissanceController.text =
+                                  value.toString().substring(0, 10);
+                            });
+                          }
+                        });
+                      },
+                      icon: Icon(Icons.edit),
+                    ),
                   ),
                 ),
-              ),
-              FileFormFieldWidget(
-                directory: 'joueur',
-                controller: _imageUrlController,
-                hintText: 'Entrez l\'url de l\'image du joueur',
-              ),
-              TextFormFieldWidget(
-                controller: _poidsController,
-                hintText: 'Entrez le poids du joueur en kg',
-              ),
-              TextFormFieldWidget(
-                controller: _tailleController,
-                hintText: 'Entrez la taille du joueur en m',
-              ),
-              TextFormFieldWidget(
-                controller: _vitesseController,
-                hintText: 'Entrez la vitesse du joueur en km/h',
-              ),
-              TextFormFieldWidget(
-                controller: _numeroController,
-                hintText: 'Entrez le numero du joueur',
-              ),
-              SliderRatingFormWidget(controller: _ratingController),
-              ElevatedButtonFormWidget(
-                  onPressed: _onSubmit,
-                  label: 'Enregistrer',
-                  isSending: isLoading)
-            ],
+                FileFormFieldWidget(
+                  directory: 'joueur',
+                  controller: _imageUrlController,
+                  hintText: 'Entrez l\'url de l\'image du joueur',
+                ),
+                TextFormFieldWidget(
+                  controller: _poidsController,
+                  hintText: 'Entrez le poids du joueur en kg',
+                ),
+                TextFormFieldWidget(
+                  controller: _tailleController,
+                  hintText: 'Entrez la taille du joueur en m',
+                ),
+                TextFormFieldWidget(
+                  controller: _vitesseController,
+                  hintText: 'Entrez la vitesse du joueur en km/h',
+                ),
+                TextFormFieldWidget(
+                  controller: _numeroController,
+                  hintText: 'Entrez le numero du joueur',
+                ),
+                SliderRatingFormWidget(controller: _ratingController),
+                ElevatedButtonFormWidget(
+                    onPressed: _onSubmit,
+                    label: 'Enregistrer',
+                    isSending: isLoading)
+              ],
+            ),
           ),
         ),
       ),

@@ -5,6 +5,7 @@ import 'package:app/providers/sponsor_provider.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
 import 'package:app/widget/form/file_form_field_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -75,54 +76,56 @@ class _SponsorFormState extends State<SponsorForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sponsor'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            TextFormFieldWidget(controller: _nomController, hintText: 'Nom'),
-            TextFormFieldWidget(
-                controller: _descriptionController,
-                hintText: 'Description',
-                minLines: 5),
-            FileFormFieldWidget(
-                controller: _imageController,
-                hintText: 'Image',
-                directory: 'sponsor'),
-            Card(
-              child: ListTile(
-                title: const Text('Date'),
-                subtitle: Text(_dateController.text),
-                trailing: IconButton(
-                  onPressed: () {
-                    showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate:
-                                DateTime.now().add(const Duration(days: -7)),
-                            initialEntryMode: DatePickerEntryMode.calendar,
-                            lastDate: DateTime.now())
-                        .then(
-                      (date) {
-                        if (date != null) {
-                          setState(() {
-                            _dateController.text = date.toString();
-                          });
-                        }
-                      },
-                    );
-                  },
-                  icon: const Icon(Icons.calendar_today),
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Sponsor'),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextFormFieldWidget(controller: _nomController, hintText: 'Nom'),
+              TextFormFieldWidget(
+                  controller: _descriptionController,
+                  hintText: 'Description',
+                  minLines: 5),
+              FileFormFieldWidget(
+                  controller: _imageController,
+                  hintText: 'Image',
+                  directory: 'sponsor'),
+              Card(
+                child: ListTile(
+                  title: const Text('Date'),
+                  subtitle: Text(_dateController.text),
+                  trailing: IconButton(
+                    onPressed: () {
+                      showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate:
+                                  DateTime.now().add(const Duration(days: -7)),
+                              initialEntryMode: DatePickerEntryMode.calendar,
+                              lastDate: DateTime.now())
+                          .then(
+                        (date) {
+                          if (date != null) {
+                            setState(() {
+                              _dateController.text = date.toString();
+                            });
+                          }
+                        },
+                      );
+                    },
+                    icon: const Icon(Icons.calendar_today),
+                  ),
                 ),
               ),
-            ),
-            ElevatedButtonFormWidget(
-                onPressed: _onSubmit,
-                label: 'Enregistrer',
-                isSending: isLoading)
-          ],
+              ElevatedButtonFormWidget(
+                  onPressed: _onSubmit,
+                  label: 'Enregistrer',
+                  isSending: isLoading)
+            ],
+          ),
         ),
       ),
     );

@@ -90,7 +90,7 @@ class FichePerformanceWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 0, horizontal: 4),
       child: Container(
         height: 50,
-        width: MediaQuery.sizeOf(context).width,
+        width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.all(5.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -127,7 +127,7 @@ class InformationJoueurWidget extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 3.0),
           height: 300,
-          width: MediaQuery.sizeOf(context).width,
+          width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
               Row(
@@ -227,7 +227,7 @@ class JoueurMoreinfosWidget extends StatelessWidget {
           0;
       return Card(
         child: Container(
-          width: MediaQuery.sizeOf(context).width,
+          width: MediaQuery.of(context).size.width,
           height: 90,
           child: SingleChildScrollView(
             controller: scrollController,
@@ -312,7 +312,7 @@ class JoueurMoreinfosColumnWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(5),
       width: 80,
-      height: MediaQuery.sizeOf(context).height,
+      height: MediaQuery.of(context).size.height,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

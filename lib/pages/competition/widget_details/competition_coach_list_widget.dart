@@ -39,7 +39,7 @@ class CompetitionCoachListWidget extends StatelessWidget {
 
             return coaches.isEmpty
                 ? SizedBox(
-                    height: MediaQuery.sizeOf(context).height * .75,
+                    height: MediaQuery.of(context).size.height * .75,
                     child: const Center(
                       child: Text(
                           'Pas d\'entraineur disponible pour cette competition !'),

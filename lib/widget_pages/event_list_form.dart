@@ -229,7 +229,7 @@ class NomTargetWidget extends StatelessWidget {
         child: DropdownMenu(
             menuStyle: MenuStyle(
                 backgroundColor: WidgetStatePropertyAll(Colors.white)),
-            width: MediaQuery.sizeOf(context).width * .95,
+            width: MediaQuery.of(context).size.width * .95,
             label: Text('Selectionner la cause'),
             enableSearch: true,
             controller: nomTargetController,

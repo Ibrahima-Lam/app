@@ -1,6 +1,7 @@
 import 'package:app/providers/user_provider.dart';
 import 'package:app/widget/form/elevated_button_widget.dart';
 import 'package:app/widget/form/text_field_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,91 +37,94 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(
-        child: Container(
-          color: Colors.white,
-          height: MediaQuery.sizeOf(context).height,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
-                Container(
-                  child: Text(
-                    'Login',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(),
+        body: SafeArea(
+          child: Container(
+            color: Colors.white,
+            height: MediaQuery.of(context).size.height,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  Container(
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 100),
-                TextFieldWidget(
-                    textEditingController: emailController,
-                    hintText: 'Entrer votre email'),
-                const SizedBox(height: 10),
-                TextFieldWidget(
-                    obscureText: obscureText,
-                    suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            obscureText = !obscureText;
-                          });
-                        },
-                        icon: Icon(!obscureText
-                            ? Icons.visibility
-                            : Icons.visibility_off),
-                        color: obscureText ? null : Colors.blue),
-                    textEditingController: passwordController,
-                    hintText: 'Entrer votre mot de pass'),
-                Row(
-                  children: [
-                    Checkbox(
-                      checkColor: Colors.blue,
-                      activeColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Colors.blue, width: 1)),
-                      overlayColor: WidgetStatePropertyAll(Colors.blue),
-                      value: remember,
-                      onChanged: (value) => setState(() {
-                        remember = !remember;
-                      }),
-                    ),
-                    Text(
-                      'Se souvenir de moi',
-                      style: TextStyle(
-                          color: Colors.blue, fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    ElevatedButtonWidget(
-                      label: 'Se Connecter',
-                      onPressed: isLoading
-                          ? null
-                          : () async {
-                              final bool login = await _login();
-                              if (login) {
-                                Navigator.pop(context);
-                                return;
-                              }
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Utilisateur inconnu !'),
-                                  duration: const Duration(milliseconds: 1000),
-                                ),
-                              );
-                            },
-                    ),
-                    if (isLoading)
-                      CircularProgressIndicator(color: Colors.blue),
-                  ],
-                )
-              ],
+                  const SizedBox(height: 100),
+                  TextFieldWidget(
+                      textEditingController: emailController,
+                      hintText: 'Entrer votre email'),
+                  const SizedBox(height: 10),
+                  TextFieldWidget(
+                      obscureText: obscureText,
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              obscureText = !obscureText;
+                            });
+                          },
+                          icon: Icon(!obscureText
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                          color: obscureText ? null : Colors.blue),
+                      textEditingController: passwordController,
+                      hintText: 'Entrer votre mot de pass'),
+                  Row(
+                    children: [
+                      Checkbox(
+                        checkColor: Colors.blue,
+                        activeColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Colors.blue, width: 1)),
+                        overlayColor: WidgetStatePropertyAll(Colors.blue),
+                        value: remember,
+                        onChanged: (value) => setState(() {
+                          remember = !remember;
+                        }),
+                      ),
+                      Text(
+                        'Se souvenir de moi',
+                        style: TextStyle(
+                            color: Colors.blue, fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      ElevatedButtonWidget(
+                        label: 'Se Connecter',
+                        onPressed: isLoading
+                            ? null
+                            : () async {
+                                final bool login = await _login();
+                                if (login) {
+                                  Navigator.pop(context);
+                                  return;
+                                }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Utilisateur inconnu !'),
+                                    duration:
+                                        const Duration(milliseconds: 1000),
+                                  ),
+                                );
+                              },
+                      ),
+                      if (isLoading)
+                        CircularProgressIndicator(color: Colors.blue),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

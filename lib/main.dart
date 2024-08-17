@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:app/collection/composition_collection.dart';
+import 'package:app/core/constants/app/styles.dart';
+import 'package:app/core/constants/navigation/kdestination.dart';
 import 'package:app/models/app_paramettre.dart';
 import 'package:app/pages/actualite/infos_page.dart';
 import 'package:app/pages/exploration/exploration_page.dart';
@@ -25,6 +29,7 @@ import 'package:app/providers/statistique_future_provider.dart';
 import 'package:app/providers/statistique_provider.dart';
 import 'package:app/core/service/local_notification_service.dart';
 import 'package:app/widget/skelton/drawer_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -52,9 +57,6 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(LocalNotificationService().onMessage);
   runApp(const MyApp());
 }
-
-// final Color color = const Color(0xFF263238);
-final Color color = const Color(0xFF1C2834);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -164,21 +166,21 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             fontFamily: 'RobotoCondensed',
             progressIndicatorTheme: ProgressIndicatorThemeData(
-              color: color,
+              color: kColor,
             ),
             outlinedButtonTheme: OutlinedButtonThemeData(
                 style: ButtonStyle(
-              foregroundColor: WidgetStatePropertyAll(color),
+              foregroundColor: WidgetStatePropertyAll(kColor),
             )),
             textButtonTheme: TextButtonThemeData(
                 style: ButtonStyle(
-              foregroundColor: WidgetStatePropertyAll(color),
+              foregroundColor: WidgetStatePropertyAll(kColor),
             )),
-            primaryColor: color,
+            primaryColor: kColor,
             floatingActionButtonTheme: FloatingActionButtonThemeData(
-                backgroundColor: color, foregroundColor: Colors.white),
+                backgroundColor: kColor, foregroundColor: Colors.white),
             appBarTheme: AppBarTheme(
-              backgroundColor: color,
+              backgroundColor: kColor,
               foregroundColor: Colors.white,
             ),
             // Color(0xFFEDE7F6) Color.fromARGB(255, 232, 232, 232)
@@ -196,7 +198,7 @@ class MyApp extends StatelessWidget {
               surfaceTintColor: Colors.white,
             ),
             navigationBarTheme: NavigationBarThemeData(
-              overlayColor: WidgetStatePropertyAll(color),
+              overlayColor: WidgetStatePropertyAll(kColor),
             ),
             popupMenuTheme: PopupMenuThemeData(
               surfaceTintColor: Colors.white,
@@ -204,11 +206,10 @@ class MyApp extends StatelessWidget {
             )),
         home: Scaffold(
           body: LayoutBuilder(builder: (context, constraint) {
-            return Padding(
-              padding: constraint.maxWidth > 800
-                  ? EdgeInsets.symmetric(horizontal: constraint.maxWidth * .14)
-                  : EdgeInsets.zero,
-              child: GlobalPage(),
+            return LayoutBuilderWidget(
+              child: GlobalPage(
+                maxWidth: constraint.maxWidth,
+              ),
             );
           }),
         ),
@@ -218,13 +219,12 @@ class MyApp extends StatelessWidget {
 }
 
 class GlobalPage extends StatefulWidget {
-  const GlobalPage({super.key});
+  final double maxWidth;
+  const GlobalPage({super.key, required this.maxWidth});
 
   @override
   State<GlobalPage> createState() => _GlobalPageState();
 }
-
-final double size = 30;
 
 class _GlobalPageState extends State<GlobalPage> {
   void listenMessage(RemoteMessage message) async {
@@ -291,62 +291,9 @@ class _GlobalPageState extends State<GlobalPage> {
   }
 
   int currentIndex = 0;
-  List<Widget> destinations = [
-    NavigationDestination(
-      icon: Icon(
-        Icons.home_outlined,
-        size: size,
-      ),
-      selectedIcon: Icon(
-        Icons.home,
-        size: size,
-        color: color,
-      ),
-      label: 'Match',
-    ),
-    NavigationDestination(
-      label: 'Infos',
-      icon: Icon(
-        Icons.info_outline,
-        size: size,
-      ),
-      selectedIcon: Icon(
-        Icons.info,
-        size: size,
-        color: color,
-      ),
-    ),
-    NavigationDestination(
-      label: 'Explorer',
-      icon: Icon(
-        Icons.open_in_browser,
-        size: size,
-      ),
-      selectedIcon: Icon(
-        Icons.open_in_browser,
-        size: size,
-        color: color,
-      ),
-    ),
-    NavigationDestination(
-      label: 'Notification',
-      icon: Badge(
-          isLabelVisible: false,
-          label: null,
-          child: Icon(
-            Icons.notifications_none,
-            size: size,
-          )),
-      selectedIcon: Badge(
-          isLabelVisible: false,
-          label: null,
-          child: Icon(
-            Icons.notifications,
-            size: size,
-            color: color,
-          )),
-    ),
-  ];
+  bool get checkPlatform =>
+      widget.maxWidth > 800 &&
+      (Platform.isWindows || Platform.isLinux || Platform.isMacOS);
 
   @override
   Widget build(BuildContext context) {
@@ -355,15 +302,19 @@ class _GlobalPageState extends State<GlobalPage> {
         builder: (context) {
           List<Widget> pages = [
             GamePage(
+              checkPlatform: checkPlatform,
               openDrawer: () => Scaffold.of(context).openDrawer(),
             ),
             InfosPage(
+              checkPlatform: checkPlatform,
               openDrawer: () => Scaffold.of(context).openDrawer(),
             ),
             ExplorationPage(
+              checkPlatform: checkPlatform,
               openDrawer: () => Scaffold.of(context).openDrawer(),
             ),
             NotificationPage(
+              checkPlatform: checkPlatform,
               openDrawer: () => Scaffold.of(context).openDrawer(),
             )
           ];
@@ -371,24 +322,32 @@ class _GlobalPageState extends State<GlobalPage> {
           return pages[currentIndex];
         },
       ),
-      bottomNavigationBar: NavigationBar(
-        elevation: 10,
-        overlayColor: WidgetStatePropertyAll(Colors.grey),
-        shadowColor: color,
-        indicatorColor: const Color(0xFFF5F5F5),
-        destinations: destinations,
-        animationDuration: const Duration(milliseconds: 200),
-        selectedIndex: currentIndex,
-        height: 65,
-        surfaceTintColor: Colors.white,
-        backgroundColor: Colors.white,
-        onDestinationSelected: (value) {
-          setState(() {
-            currentIndex = value;
-          });
-        },
-      ),
-      drawer: DrawerWidget(),
+      bottomNavigationBar: checkPlatform
+          ? null
+          : NavigationBar(
+              elevation: 10,
+              overlayColor: WidgetStatePropertyAll(Colors.grey),
+              shadowColor: kColor,
+              indicatorColor: const Color(0xFFF5F5F5),
+              destinations: kDestinations
+                  .map((e) => NavigationDestination(
+                        icon: e['icon'],
+                        selectedIcon: e['selectedIcon'],
+                        label: e['label'],
+                      ))
+                  .toList(),
+              animationDuration: const Duration(milliseconds: 200),
+              selectedIndex: currentIndex,
+              height: 65,
+              surfaceTintColor: Colors.white,
+              backgroundColor: Colors.white,
+              onDestinationSelected: (value) {
+                setState(() {
+                  currentIndex = value;
+                });
+              },
+            ),
+      drawer: checkPlatform ? null : DrawerWidget(checkPlatform: checkPlatform),
     );
   }
 }

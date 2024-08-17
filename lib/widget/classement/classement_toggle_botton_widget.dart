@@ -21,7 +21,7 @@ class _ClassementToggleBottonWidgetState
       margin: EdgeInsets.symmetric(horizontal: 4),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
       child: Container(
-        width: MediaQuery.sizeOf(context).width,
+        width: MediaQuery.of(context).size.width,
         decoration: const BoxDecoration(
             color: Colors.white,
             gradient: LinearGradient(colors: [

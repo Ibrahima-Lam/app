@@ -18,7 +18,7 @@ class DropDownMenuAppFormWidget extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
       child: Container(
-        width: MediaQuery.sizeOf(context).width,
+        width: MediaQuery.of(context).size.width,
         child: DropdownMenu(
             onSelected: (value) {
               if (value != null && controller != null)
@@ -29,7 +29,7 @@ class DropDownMenuAppFormWidget extends StatelessWidget {
                 shape: WidgetStatePropertyAll(
                     RoundedRectangleBorder(side: BorderSide.none)),
                 backgroundColor: WidgetStatePropertyAll(Colors.white)),
-            width: MediaQuery.sizeOf(context).width * .98,
+            width: MediaQuery.of(context).size.width * .98,
             label: Text(title),
             menuHeight: 300,
             enableSearch: true,

@@ -5,6 +5,7 @@ import 'package:app/widget/form/elevated_button_form_widget.dart';
 import 'package:app/widget/form/file_form_field_widget.dart';
 import 'package:app/widget/form/slider_rating_form_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -71,38 +72,40 @@ class _ParticipantFormState extends State<ParticipantForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Formulaire d\'équipe'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 5.0),
-            TextFormFieldWidget(
-                controller: nomController,
-                hintText: 'Entrer le nom de l\'équipe'),
-            const SizedBox(height: 5.0),
-            TextFormFieldWidget(
-                controller: libelleController,
-                hintText: 'Entrer la libellé de l\'équipe'),
-            const SizedBox(height: 5.0),
-            TextFormFieldWidget(
-                controller: localiteController,
-                hintText: 'Entrer la localité de  l\'équipe'),
-            const SizedBox(height: 5.0),
-            FileFormFieldWidget(
-                directory: 'participant',
-                controller: urlController,
-                hintText: 'Entrer l\'url du logo'),
-            const SizedBox(height: 5.0),
-            SliderRatingFormWidget(controller: ratingController),
-            const SizedBox(height: 5.0),
-            ElevatedButtonFormWidget(
-              onPressed: _onSubmit,
-              isSending: isLoading,
-            ),
-          ],
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Formulaire d\'équipe'),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 5.0),
+              TextFormFieldWidget(
+                  controller: nomController,
+                  hintText: 'Entrer le nom de l\'équipe'),
+              const SizedBox(height: 5.0),
+              TextFormFieldWidget(
+                  controller: libelleController,
+                  hintText: 'Entrer la libellé de l\'équipe'),
+              const SizedBox(height: 5.0),
+              TextFormFieldWidget(
+                  controller: localiteController,
+                  hintText: 'Entrer la localité de  l\'équipe'),
+              const SizedBox(height: 5.0),
+              FileFormFieldWidget(
+                  directory: 'participant',
+                  controller: urlController,
+                  hintText: 'Entrer l\'url du logo'),
+              const SizedBox(height: 5.0),
+              SliderRatingFormWidget(controller: ratingController),
+              const SizedBox(height: 5.0),
+              ElevatedButtonFormWidget(
+                onPressed: _onSubmit,
+                isSending: isLoading,
+              ),
+            ],
+          ),
         ),
       ),
     );

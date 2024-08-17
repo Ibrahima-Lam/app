@@ -3,13 +3,14 @@ import 'package:app/pages/game/game_details.dart';
 import 'package:app/providers/game_provider.dart';
 import 'package:app/service/notif_sqlite_service.dart';
 import 'package:app/widget/modals/confirm_dialog_widget.dart';
-import 'package:app/widget/skelton/drawer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class NotificationPage extends StatefulWidget {
   final Function()? openDrawer;
-  const NotificationPage({super.key, this.openDrawer});
+  final bool checkPlatform;
+  const NotificationPage(
+      {super.key, this.openDrawer, required this.checkPlatform});
 
   @override
   State<NotificationPage> createState() => _NotificationPageState();
@@ -17,7 +18,11 @@ class NotificationPage extends StatefulWidget {
 
 class _NotificationPageState extends State<NotificationPage> {
   Future<List<Notif>> getData() async {
-    return await NotifSqliteService().getNotifs();
+    try {
+      return await NotifSqliteService().getNotifs();
+    } catch (e) {
+      return [];
+    }
   }
 
   @override
@@ -43,10 +48,12 @@ class _NotificationPageState extends State<NotificationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: widget.openDrawer,
-          icon: Icon(Icons.menu),
-        ),
+        leading: widget.checkPlatform
+            ? null
+            : IconButton(
+                onPressed: widget.openDrawer,
+                icon: Icon(Icons.menu),
+              ),
         title: const Text('Notification'),
         titleSpacing: 20,
       ),
@@ -78,7 +85,6 @@ class _NotificationPageState extends State<NotificationPage> {
                     ),
                   );
           }),
-      drawer: const DrawerWidget(),
     );
   }
 }

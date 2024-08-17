@@ -13,6 +13,7 @@ import 'package:app/service/niveau_service.dart';
 import 'package:app/widget/form/dropdown_menu_app_form_widget.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
 import 'package:app/widget/form/text_form_field_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,45 +24,47 @@ class GameForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Formulaire de match')),
-      body: FutureBuilder(
-          future: Future.wait([
-            NiveauService.getNiveaux(),
-            context.read<ParticipationProvider>().getParticipations(),
-            context.read<GroupeProvider>().getGroupes(),
-          ]),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text('erreur!'),
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(title: Text('Formulaire de match')),
+        body: FutureBuilder(
+            future: Future.wait([
+              NiveauService.getNiveaux(),
+              context.read<ParticipationProvider>().getParticipations(),
+              context.read<GroupeProvider>().getGroupes(),
+            ]),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('erreur!'),
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              List<Niveau> niveaux = [];
+              niveaux = (snapshot.data ?? []).elementAt(0) as List<Niveau>;
+
+              List<Participation> participations = [];
+              participations = ((snapshot.data ?? []).elementAt(1)
+                      as List<Participation>)
+                  .where((element) => element.groupe.codeEdition == codeEdition)
+                  .toList();
+
+              List<Groupe> groupes = [];
+              groupes = ((snapshot.data ?? []).elementAt(2) as List<Groupe>)
+                  .where((element) => element.codeEdition == codeEdition)
+                  .toList();
+
+              return GameFormListWidget(
+                game: game,
+                groupes: groupes,
+                niveaux: niveaux,
+                participations: participations,
+                codeEdition: codeEdition,
               );
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            List<Niveau> niveaux = [];
-            niveaux = (snapshot.data ?? []).elementAt(0) as List<Niveau>;
-
-            List<Participation> participations = [];
-            participations = ((snapshot.data ?? []).elementAt(1)
-                    as List<Participation>)
-                .where((element) => element.groupe.codeEdition == codeEdition)
-                .toList();
-
-            List<Groupe> groupes = [];
-            groupes = ((snapshot.data ?? []).elementAt(2) as List<Groupe>)
-                .where((element) => element.codeEdition == codeEdition)
-                .toList();
-
-            return GameFormListWidget(
-              game: game,
-              groupes: groupes,
-              niveaux: niveaux,
-              participations: participations,
-              codeEdition: codeEdition,
-            );
-          }),
+            }),
+      ),
     );
   }
 }

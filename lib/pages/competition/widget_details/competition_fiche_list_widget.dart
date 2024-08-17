@@ -73,7 +73,7 @@ class SomeTeamWidget extends StatelessWidget {
             return participants.isEmpty
                 ? const SizedBox()
                 : Container(
-                    width: MediaQuery.sizeOf(context).width,
+                    width: MediaQuery.of(context).size.width,
                     margin: const EdgeInsets.symmetric(
                         horizontal: 5.0, vertical: 10),
                     padding: const EdgeInsets.symmetric(
@@ -84,7 +84,7 @@ class SomeTeamWidget extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       child: Container(
                         constraints: BoxConstraints(
-                            minWidth: MediaQuery.sizeOf(context).width),
+                            minWidth: MediaQuery.of(context).size.width),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -107,10 +107,11 @@ class SomeTeamWidget extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class InformationCompetitionWidget extends StatelessWidget {
   final String idEdition;
   InformationCompetitionWidget({super.key, required this.idEdition});
-  late final Competition? competition;
+  Competition? competition;
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +130,7 @@ class InformationCompetitionWidget extends StatelessWidget {
             padding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 3.0),
             height: 300,
-            width: MediaQuery.sizeOf(context).width,
+            width: MediaQuery.of(context).size.width,
             child: Column(
               children: [
                 Row(

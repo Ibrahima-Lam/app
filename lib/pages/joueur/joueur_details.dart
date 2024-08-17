@@ -10,6 +10,7 @@ import 'package:app/providers/joueur_provider.dart';
 import 'package:app/widget/app/favori_icon_widget.dart';
 import 'package:app/widget/logos/equipe_logo_widget.dart';
 import 'package:app/widget/logos/joueur_logo_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
 import 'package:flutter/material.dart';
@@ -42,110 +43,112 @@ class JoueurDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
-          future: _getJoueur(context),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text('erreur!'),
-              );
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        body: FutureBuilder(
+            future: _getJoueur(context),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('erreur!'),
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
-            return DefaultTabController(
-              length: tabs.length,
-              child: NestedScrollView(
-                headerSliverBuilder: (context, innerBoxIsScrolled) {
-                  return [
-                    SliverAppBar(
-                      centerTitle: true,
-                      title: Text(
-                        joueur.nomJoueur,
-                        style: TextStyle(
-                          fontSize: 17,
-                        ),
-                      ),
-                      forceElevated: innerBoxIsScrolled,
-                      expandedHeight: 180.0,
-                      pinned: true,
-                      actions: [
-                        FavoriIconWidget(
-                            id: joueur.idJoueur, categorie: Categorie.joueur)
-                      ],
-                      flexibleSpace: FlexibleSpaceBar(
-                          background: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              height: 35,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 50,
-                                  width: 50,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EquipeDetails(
-                                                      id: joueur
-                                                          .idParticipant)));
-                                    },
-                                    child: EquipeImageLogoWidget(
-                                        url: joueur.participant.imageUrl),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                SizedBox(
-                                  height: 80,
-                                  width: 80,
-                                  child: JoueurImageLogoWidget(
-                                    url: joueur.imageUrl,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                CircleAvatar(
-                                  child: Icon(Icons.check_circle),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      )),
-                      bottom: TabBarWidget.build(
-                          tabs: tabs
-                              .map((e) => Tab(
-                                    text: e,
-                                  ))
-                              .toList()),
-                    ),
-                  ];
-                },
-                body: TabBarView(
-                  children: [
-                    for (String tab in tabs)
-                      tabBarViewWidget[tab.toLowerCase()] ??
-                          Center(
-                            child: Text('Page vide!'),
+              return DefaultTabController(
+                length: tabs.length,
+                child: NestedScrollView(
+                  headerSliverBuilder: (context, innerBoxIsScrolled) {
+                    return [
+                      SliverAppBar(
+                        centerTitle: true,
+                        title: Text(
+                          joueur.nomJoueur,
+                          style: TextStyle(
+                            fontSize: 17,
                           ),
-                  ],
+                        ),
+                        forceElevated: innerBoxIsScrolled,
+                        expandedHeight: 180.0,
+                        pinned: true,
+                        actions: [
+                          FavoriIconWidget(
+                              id: joueur.idJoueur, categorie: Categorie.joueur)
+                        ],
+                        flexibleSpace: FlexibleSpaceBar(
+                            background: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(
+                                height: 35,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    height: 50,
+                                    width: 50,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EquipeDetails(
+                                                        id: joueur
+                                                            .idParticipant)));
+                                      },
+                                      child: EquipeImageLogoWidget(
+                                          url: joueur.participant.imageUrl),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  SizedBox(
+                                    height: 80,
+                                    width: 80,
+                                    child: JoueurImageLogoWidget(
+                                      url: joueur.imageUrl,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  CircleAvatar(
+                                    child: Icon(Icons.check_circle),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        )),
+                        bottom: TabBarWidget.build(
+                            tabs: tabs
+                                .map((e) => Tab(
+                                      text: e,
+                                    ))
+                                .toList()),
+                      ),
+                    ];
+                  },
+                  body: TabBarView(
+                    children: [
+                      for (String tab in tabs)
+                        tabBarViewWidget[tab.toLowerCase()] ??
+                            Center(
+                              child: Text('Page vide!'),
+                            ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }),
+              );
+            }),
+      ),
     );
   }
 }

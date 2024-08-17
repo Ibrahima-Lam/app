@@ -93,7 +93,7 @@ class PerformanceWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 1, horizontal: 4),
       shadowColor: Colors.grey,
       child: Container(
-        width: MediaQuery.sizeOf(context).width,
+        width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.all(5.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,

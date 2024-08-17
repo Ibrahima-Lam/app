@@ -4,6 +4,7 @@ import 'package:app/providers/groupe_provider.dart';
 import 'package:app/service/phase_service.dart';
 import 'package:app/widget/form/dropdown_menu_app_form_widget.dart';
 import 'package:app/widget/form/elevated_button_form_widget.dart';
+import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -57,66 +58,68 @@ class _GroupeFormState extends State<GroupeForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Formulaire de  Groupes'),
+    return LayoutBuilderWidget(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Formulaire de  Groupes'),
+        ),
+        body: FutureBuilder(
+            future: Future.wait([
+              PhaseService.getData(),
+              context.read<GroupeProvider>().getGroupes(),
+            ]),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('erreur!'),
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              phases = (snapshot.data ?? []).elementAt(0) as List<Phase>;
+
+              return Consumer<GroupeProvider>(
+                  builder: (context, groupeProvider, _) {
+                List<Groupe> groupes =
+                    groupeProvider.getGroupesBy(edition: widget.codeEdition);
+                final Map<String, dynamic> phaseMap = phases.asMap().map(
+                    (key, value) => MapEntry(value.nomPhase, value.codePhase));
+
+                final Map<String, String> noms = names
+                    .where((element) {
+                      if (widget.groupe != null) return true;
+                      return groupes.every((e) =>
+                          element.toUpperCase() != e.nomGroupe.toUpperCase());
+                    })
+                    .toList()
+                    .asMap()
+                    .map((key, value) => MapEntry(value, value));
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      DropDownMenuAppFormWidget(
+                        controller: nomController,
+                        entries: noms,
+                        title: "Nom de Groupe",
+                      ),
+                      DropDownMenuAppFormWidget(
+                        controller: phaseController,
+                        entries: phaseMap,
+                        title: "Nom de Phase",
+                      ),
+                      ElevatedButtonFormWidget(
+                        onPressed: _onSubmit,
+                        isSending: isLoading,
+                      ),
+                    ],
+                  ),
+                );
+              });
+            }),
       ),
-      body: FutureBuilder(
-          future: Future.wait([
-            PhaseService.getData(),
-            context.read<GroupeProvider>().getGroupes(),
-          ]),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Center(
-                child: Text('erreur!'),
-              );
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            phases = (snapshot.data ?? []).elementAt(0) as List<Phase>;
-
-            return Consumer<GroupeProvider>(
-                builder: (context, groupeProvider, _) {
-              List<Groupe> groupes =
-                  groupeProvider.getGroupesBy(edition: widget.codeEdition);
-              final Map<String, dynamic> phaseMap = phases.asMap().map(
-                  (key, value) => MapEntry(value.nomPhase, value.codePhase));
-
-              final Map<String, String> noms = names
-                  .where((element) {
-                    if (widget.groupe != null) return true;
-                    return groupes.every((e) =>
-                        element.toUpperCase() != e.nomGroupe.toUpperCase());
-                  })
-                  .toList()
-                  .asMap()
-                  .map((key, value) => MapEntry(value, value));
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 10),
-                    DropDownMenuAppFormWidget(
-                      controller: nomController,
-                      entries: noms,
-                      title: "Nom de Groupe",
-                    ),
-                    DropDownMenuAppFormWidget(
-                      controller: phaseController,
-                      entries: phaseMap,
-                      title: "Nom de Phase",
-                    ),
-                    ElevatedButtonFormWidget(
-                      onPressed: _onSubmit,
-                      isSending: isLoading,
-                    ),
-                  ],
-                ),
-              );
-            });
-          }),
     );
   }
 }

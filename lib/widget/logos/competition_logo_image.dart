@@ -24,8 +24,8 @@ class CompetitionImageLogoWidget extends StatelessWidget {
         child: (url ?? '').isEmpty
             ? CompetitionLogoWidget()
             : CachedNetworkImage(
-                width: MediaQuery.sizeOf(context).width,
-                height: MediaQuery.sizeOf(context).height,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
                 fit: BoxFit.cover,
                 errorListener: (value) {},
                 imageUrl: url ?? '',
