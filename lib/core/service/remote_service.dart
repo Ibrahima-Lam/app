@@ -4,9 +4,11 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 class RemoteService {
   const RemoteService();
   static FirebaseFirestore get _db => FirebaseFirestore.instance;
-  static Future<bool> get isConnected async =>
+  static Future<bool> get isNotConnected async =>
       (await Connectivity().checkConnectivity())
           .contains(ConnectivityResult.none);
+
+  static Future<bool> get isConnected async => !await isNotConnected;
 
   static Future<bool> addData(
       String collection, Map<String, dynamic> data) async {
@@ -31,7 +33,7 @@ class RemoteService {
   static Future<List> loadData(String collection) async {
     List data = [];
     try {
-      if (await isConnected) return [];
+      if (await isNotConnected) return [];
       await _db.collection(collection).get().then((value) {
         data = value.docs.map((e) => e.data()).toList();
       });
@@ -54,7 +56,7 @@ class RemoteService {
 
   static Future<bool> deleteData(String collection, String document) async {
     try {
-      if (await isConnected) return false;
+      if (await isNotConnected) return false;
       await _db.collection(collection).doc(document).delete();
       return true;
     } catch (e) {
@@ -65,7 +67,7 @@ class RemoteService {
   static Future<bool> editData(
       String collection, String document, Map<String, dynamic> data) async {
     try {
-      if (await isConnected) return false;
+      if (await isNotConnected) return false;
       await _db.collection(collection).doc(document).update(data);
       return true;
     } catch (e) {

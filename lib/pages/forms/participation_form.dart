@@ -59,7 +59,7 @@ class _ParticipationFormState extends State<ParticipationForm> {
     if (participant == null || groupe == null) return;
     final Participation participation = Participation(
         idParticipation: widget.participation?.idParticipation ??
-            widget.codeEdition + participantController.text,
+            widget.codeEdition + groupe.nomGroupe + participantController.text,
         idParticipant: participantController.text,
         idGroupe: groupeController.text,
         groupe: groupe,
@@ -94,8 +94,10 @@ class _ParticipationFormState extends State<ParticipationForm> {
                 );
               }
 
-              return Consumer2<ParticipantProvider, GroupeProvider>(
-                  builder: (context, participantProvider, groupeProvider, _) {
+              return Consumer3<ParticipantProvider, GroupeProvider,
+                      ParticipationProvider>(
+                  builder: (context, participantProvider, groupeProvider,
+                      participationProvider, _) {
                 final List<Groupe> groupes = groupeProvider.groupes
                     .where(
                         (element) => element.codeEdition == widget.codeEdition)
@@ -107,25 +109,42 @@ class _ParticipationFormState extends State<ParticipationForm> {
                     .toList();
                 final Map<String, dynamic> groupeMap = groupes.asMap().map(
                     (key, value) => MapEntry(value.nomGroupe, value.idGroupe));
-                final Map<String, dynamic> participantMap = participants
-                    .asMap()
-                    .map((key, value) =>
-                        MapEntry(value.nomEquipe, value.idParticipant));
 
                 return SingleChildScrollView(
                   child: Column(
                     children: [
                       const SizedBox(height: 10),
                       DropDownButtonWidget(
-                        controller: participantController,
-                        entries: participantMap,
-                        label: 'Equipe',
-                      ),
-                      DropDownButtonWidget(
                         controller: groupeController,
                         entries: groupeMap,
                         label: 'Groupe',
                       ),
+                      ListenableBuilder(
+                          listenable: groupeController,
+                          builder: (context, _) {
+                            final Map<String, dynamic> participantMap =
+                                participants
+                                    .where((element) {
+                                      if (groupeController.text.isEmpty)
+                                        return true;
+                                      return !participationProvider
+                                          .participations
+                                          .any((e) =>
+                                              e.idGroupe ==
+                                                  groupeController.text &&
+                                              e.idParticipant ==
+                                                  element.idParticipant);
+                                    })
+                                    .toList()
+                                    .asMap()
+                                    .map((key, value) => MapEntry(
+                                        value.nomEquipe, value.idParticipant));
+                            return DropDownButtonWidget(
+                              controller: participantController,
+                              entries: participantMap,
+                              label: 'Equipe',
+                            );
+                          }),
                       ElevatedButtonFormWidget(
                         onPressed: () => _onSubmit(context),
                         isSending: isLoading,

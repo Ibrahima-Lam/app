@@ -22,8 +22,7 @@ class EquipeListTileWidget extends StatelessWidget {
       child: ListTile(
         shape: border
             ? RoundedRectangleBorder(
-                side:
-                    BorderSide(width: 0.5, color: Colors.grey.withOpacity(0.8)))
+                side: BorderSide(width: 0.5, color: Colors.grey))
             : null,
         onTap: () {
           Navigator.of(context).push(

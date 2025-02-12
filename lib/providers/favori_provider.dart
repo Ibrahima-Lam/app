@@ -90,9 +90,4 @@ class FavoriProvider extends ChangeNotifier {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.setStringList(key, values);
   }
-
-  void _removeFavories(String key) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.remove(key);
-  }
 }

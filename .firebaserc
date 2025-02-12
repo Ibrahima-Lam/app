@@ -1,6 +1,8 @@
 {
   "projects": {
-    "fscore-sport": "fscore-sport"
+    "fscore-sport": "fscore-sport",
+    "fscore": "fscore-8d32b",
+    "default": "fscore-8d32b"
   },
   "targets": {},
   "etags": {}

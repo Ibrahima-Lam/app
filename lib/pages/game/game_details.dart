@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:app/collection/competition_collection.dart';
 import 'package:app/core/class/abbreviable.dart';
@@ -13,6 +14,7 @@ import 'package:app/pages/game/widget_details/evenement_widget.dart';
 import 'package:app/pages/game/widget_details/statistique_list_widget.dart';
 import 'package:app/providers/paramettre_provider.dart';
 import 'package:app/providers/score_provider.dart';
+import 'package:app/service/token_service.dart';
 import 'package:app/widget/classement/classement_widget.dart';
 import 'package:app/pages/game/widget_details/journee_list_widget.dart';
 import 'package:app/providers/competition_provider.dart';
@@ -25,9 +27,11 @@ import 'package:app/widget/modals/custom_delegate_search.dart';
 import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:app/widget/skelton/tab_bar_widget.dart';
 import 'package:app/widget_pages/infos_list_widget.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:app/core/extension/string_extension.dart';
+import 'package:http/http.dart' as http;
 
 class GameDetails extends StatefulWidget {
   final String id;
@@ -199,6 +203,7 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
                                     delegate: CustomDelegateSearch());
                               },
                               icon: Icon(Icons.search)),
+                          if (checkUser) NotificationSenderWidget(),
                         ],
                         centerTitle: true,
                         title: ValueListenableBuilder(
@@ -337,5 +342,130 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
             });
           }),
     );
+  }
+}
+
+class NotificationSenderWidget extends StatefulWidget {
+  const NotificationSenderWidget({super.key});
+
+  @override
+  State<NotificationSenderWidget> createState() =>
+      _NotificationSenderWidgetState();
+}
+
+class _NotificationSenderWidgetState extends State<NotificationSenderWidget> {
+  late final TextEditingController _titleController;
+  late final TextEditingController _bodyController;
+  List<String> tokens = [];
+
+  Future<void> sendNotification(String token, String title, String body) async {
+    final String serverToken = 'AIzaSyANQtzhbpalhJuc0GsS51XPE3LuRHpeNkw';
+    try {
+      http.Response response = await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'key=$serverToken',
+        },
+        body: jsonEncode({
+          'to': token,
+          'notification': {
+            'title': title,
+            'body': body,
+          },
+        }),
+      );
+      print(response.body);
+      print(response.statusCode);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    _titleController = TextEditingController();
+    _bodyController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<String>>(
+        future: TokenService.getTokens(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Icon(Icons.error);
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const IconButton(
+              onPressed: null,
+              icon: CircularProgressIndicator(),
+            );
+          }
+          tokens = snapshot.data ?? [];
+          return IconButton(
+              onPressed: () async {
+                await showDialog(
+                  context: context,
+                  builder: (context) => SimpleDialog(
+                    contentPadding: const EdgeInsets.all(10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                    title: const Text('Notification'),
+                    children: [
+                      TextField(
+                        controller: _titleController,
+                        decoration: const InputDecoration(
+                          labelText: 'Titre',
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextField(
+                        controller: _bodyController,
+                        minLines: 3,
+                        maxLines: 4,
+                        decoration: const InputDecoration(
+                          labelText: 'Contenu',
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              foregroundColor: Colors.white,
+                            ),
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('Annuler'),
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              foregroundColor: Colors.white,
+                            ),
+                            onPressed: () async {
+                              String title = _titleController.text;
+                              String body = _bodyController.text;
+                              for (final token in tokens) {
+                                if (token.isNotEmpty) {
+                                  sendNotification(token, title, body);
+                                }
+                              }
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Envoyer'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+              icon: const Icon(Icons.send));
+        });
   }
 }

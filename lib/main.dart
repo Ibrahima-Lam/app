@@ -28,6 +28,7 @@ import 'package:app/providers/participation_provider.dart';
 import 'package:app/providers/statistique_future_provider.dart';
 import 'package:app/providers/statistique_provider.dart';
 import 'package:app/core/service/local_notification_service.dart';
+import 'package:app/service/token_service.dart';
 import 'package:app/widget/skelton/drawer_widget.dart';
 import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -238,6 +239,12 @@ class _GlobalPageState extends State<GlobalPage> {
   late Connectivity _connectivity;
   initState() {
     super.initState();
+    FirebaseMessaging.instance.getToken().then((token) async {
+      if (token != null) {
+        await TokenService.setToken(token);
+      }
+    });
+
     FirebaseMessaging.onMessage.listen(listenMessage);
     _connectivity = Connectivity();
     _connectivity.checkConnectivity().then((value) {

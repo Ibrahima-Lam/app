@@ -206,7 +206,7 @@ class _GameFormListWidgetState extends State<GameFormListWidget> {
           ),
           DateOuHeureFormWidget(
             controller: heureController,
-            label: 'Date',
+            label: 'Heure',
             isDate: false,
           ),
           ElevatedButtonFormWidget(
@@ -255,8 +255,14 @@ class _DateOuHeureFormWidgetState extends State<DateOuHeureFormWidget> {
                   }
                   return;
                 } else {
+                  int? h = int.tryParse(widget.controller.text.split(':')[0]);
+                  int? m = int.tryParse(widget.controller.text.split(':')[1]);
+
                   TimeOfDay? heure = await showTimePicker(
-                      context: context, initialTime: TimeOfDay.now());
+                      context: context,
+                      initialTime: h != null && m != null
+                          ? TimeOfDay(hour: h, minute: m)
+                          : TimeOfDay.now());
                   if (heure != null) {
                     setState(() {
                       widget.controller.text =
