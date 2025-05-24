@@ -22,7 +22,7 @@ class CompetitionFicheListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData(
-          cardTheme: CardTheme(
+          cardTheme: CardThemeData(
               color: Colors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5)))),

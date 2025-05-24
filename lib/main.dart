@@ -186,7 +186,7 @@ class MyApp extends StatelessWidget {
             ),
             // Color(0xFFEDE7F6) Color.fromARGB(255, 232, 232, 232)
             scaffoldBackgroundColor: Color.fromARGB(255, 232, 232, 232),
-            cardTheme: CardTheme(
+            cardTheme: CardThemeData(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4.0)),
               color: Colors.white,
