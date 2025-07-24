@@ -33,6 +33,7 @@ import 'package:app/widget/skelton/drawer_widget.dart';
 import 'package:app/widget/skelton/layout_builder_widget.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -298,9 +299,14 @@ class _GlobalPageState extends State<GlobalPage> {
   }
 
   int currentIndex = 0;
-  bool get checkPlatform =>
-      widget.maxWidth > 800 &&
-      (Platform.isWindows || Platform.isLinux || Platform.isMacOS);
+  bool get checkPlatform {
+    if (kIsWeb) {
+      return false;
+    } else {
+      return widget.maxWidth > 800 &&
+          (Platform.isWindows || Platform.isLinux || Platform.isMacOS);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

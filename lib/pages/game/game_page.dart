@@ -1,5 +1,6 @@
 import 'package:app/collection/competition_collection.dart';
 import 'package:app/controllers/competition/date.dart';
+import 'package:app/core/constants/game/tab_bar.dart';
 import 'package:app/models/competition.dart';
 import 'package:app/models/game.dart';
 import 'package:app/providers/competition_provider.dart';
@@ -52,7 +53,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     if (date == null) return;
     initialDate = date;
     _setTabs(initialDate);
-    _tabController.animateTo(7);
+    _tabController.animateTo(kTabBarLength);
   }
 
   Future _showSearch() async {
@@ -70,7 +71,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
       return;
     }
     List<String> newdates = [];
-    for (var i = -7; i <= 7; i++) {
+    for (var i = -kTabBarLength; i <= kTabBarLength; i++) {
       String dt = date.add(Duration(days: i)).toString().substring(0, 10);
       newdates.add(dt);
     }
@@ -119,7 +120,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      initialIndex: playing ? 0 : 7,
+      initialIndex: playing ? 0 : kTabBarLength,
       length: tabs.length,
       child: ScaffoldWidget(
         checkPlatform: widget.checkPlatform,
