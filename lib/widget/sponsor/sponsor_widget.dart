@@ -1,4 +1,4 @@
-import 'package:app/models/sponsor.dart';
+import 'package:fscore/models/sponsor.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 

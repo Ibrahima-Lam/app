@@ -1,10 +1,10 @@
-import 'package:app/core/constants/statistique/kStatistique.dart';
-import 'package:app/models/game.dart';
-import 'package:app/models/gameEvent.dart';
-import 'package:app/models/statistique.dart';
-import 'package:app/providers/game_event_list_provider.dart';
-import 'package:app/providers/statistique_future_provider.dart';
-import 'package:app/service/statistique_service.dart';
+import 'package:fscore/core/constants/statistique/kStatistique.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/models/gameEvent.dart';
+import 'package:fscore/models/statistique.dart';
+import 'package:fscore/providers/game_event_list_provider.dart';
+import 'package:fscore/providers/statistique_future_provider.dart';
+import 'package:fscore/service/statistique_service.dart';
 import 'package:flutter/material.dart';
 
 class StatistiqueProvider extends ChangeNotifier {

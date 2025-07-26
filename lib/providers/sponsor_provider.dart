@@ -1,6 +1,6 @@
-import 'package:app/core/params/categorie/categorie_params.dart';
-import 'package:app/models/sponsor.dart';
-import 'package:app/service/sponsor_service.dart';
+import 'package:fscore/core/params/categorie/categorie_params.dart';
+import 'package:fscore/models/sponsor.dart';
+import 'package:fscore/service/sponsor_service.dart';
 import 'package:flutter/material.dart';
 
 class SponsorProvider extends ChangeNotifier {

@@ -1,10 +1,10 @@
-import 'package:app/core/params/categorie/categorie_params.dart';
-import 'package:app/models/arbitres/arbitre.dart';
-import 'package:app/models/competition.dart';
-import 'package:app/providers/competition_provider.dart';
-import 'package:app/widget/logos/arbitre_logo_widget.dart';
-import 'package:app/widget/logos/competition_logo_image.dart';
-import 'package:app/widget/fiche/fiches_widget.dart';
+import 'package:fscore/core/params/categorie/categorie_params.dart';
+import 'package:fscore/models/arbitres/arbitre.dart';
+import 'package:fscore/models/competition.dart';
+import 'package:fscore/providers/competition_provider.dart';
+import 'package:fscore/widget/logos/arbitre_logo_widget.dart';
+import 'package:fscore/widget/logos/competition_logo_image.dart';
+import 'package:fscore/widget/fiche/fiches_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,9 +1,9 @@
-import 'package:app/core/enums/game_etat_enum.dart';
-import 'package:app/core/extension/list_extension.dart';
-import 'package:app/models/gameEvent.dart';
-import 'package:app/models/scores/score.dart';
+import 'package:fscore/core/enums/game_etat_enum.dart';
+import 'package:fscore/core/extension/list_extension.dart';
+import 'package:fscore/models/gameEvent.dart';
+import 'package:fscore/models/scores/score.dart';
 
-import 'package:app/service/score_service.dart';
+import 'package:fscore/service/score_service.dart';
 import 'package:flutter/material.dart';
 
 class ScoreProvider extends ChangeNotifier {

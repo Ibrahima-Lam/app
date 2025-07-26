@@ -1,4 +1,4 @@
-import 'package:app/models/event.dart';
+import 'package:fscore/models/event.dart';
 
 final kGoalEvent = GoalEvent(
     idJoueur: 'joueur',

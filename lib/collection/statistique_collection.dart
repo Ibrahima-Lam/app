@@ -1,5 +1,5 @@
-import 'package:app/collection/collection.dart';
-import 'package:app/models/statistique.dart';
+import 'package:fscore/collection/collection.dart';
+import 'package:fscore/models/statistique.dart';
 
 class StatistiqueCollection extends Collection {
   List<Statistique> _statistiques;

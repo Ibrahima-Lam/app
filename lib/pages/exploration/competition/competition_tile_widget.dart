@@ -1,7 +1,7 @@
-import 'package:app/models/competition.dart';
-import 'package:app/pages/competition/competition_details.dart';
-import 'package:app/pages/exploration/rating_widget.dart';
-import 'package:app/widget/logos/competition_logo_image.dart';
+import 'package:fscore/models/competition.dart';
+import 'package:fscore/pages/competition/competition_details.dart';
+import 'package:fscore/pages/exploration/rating_widget.dart';
+import 'package:fscore/widget/logos/competition_logo_image.dart';
 import 'package:flutter/material.dart';
 
 abstract class CompetitionSupTileWidget extends StatelessWidget {

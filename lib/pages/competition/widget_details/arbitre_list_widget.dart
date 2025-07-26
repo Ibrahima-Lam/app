@@ -1,8 +1,8 @@
-import 'package:app/models/arbitres/arbitre.dart';
-import 'package:app/pages/forms/arbitre_form.dart';
-import 'package:app/providers/arbitre_provider.dart';
-import 'package:app/widget/arbitre/arbitre_list_tile_widget.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
+import 'package:fscore/models/arbitres/arbitre.dart';
+import 'package:fscore/pages/forms/arbitre_form.dart';
+import 'package:fscore/providers/arbitre_provider.dart';
+import 'package:fscore/widget/arbitre/arbitre_list_tile_widget.dart';
+import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';

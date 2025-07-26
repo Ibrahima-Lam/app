@@ -1,7 +1,7 @@
-import 'package:app/models/groupe.dart';
-import 'package:app/pages/forms/groupe_form.dart';
-import 'package:app/providers/groupe_provider.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
+import 'package:fscore/models/groupe.dart';
+import 'package:fscore/pages/forms/groupe_form.dart';
+import 'package:fscore/providers/groupe_provider.dart';
+import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';

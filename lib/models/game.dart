@@ -1,9 +1,9 @@
-import 'package:app/core/enums/game_etat_enum.dart';
-import 'package:app/models/groupe.dart';
-import 'package:app/models/niveau.dart';
-import 'package:app/models/participant.dart';
-import 'package:app/models/scores/score.dart';
-import 'package:app/models/searchable.dart';
+import 'package:fscore/core/enums/game_etat_enum.dart';
+import 'package:fscore/models/groupe.dart';
+import 'package:fscore/models/niveau.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/models/scores/score.dart';
+import 'package:fscore/models/searchable.dart';
 
 class Game implements Searchable {
   String idGame;

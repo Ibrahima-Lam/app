@@ -1,8 +1,8 @@
-import 'package:app/models/groupe.dart';
-import 'package:app/models/phase.dart';
-import 'package:app/core/service/local_service.dart';
-import 'package:app/service/phase_service.dart';
-import 'package:app/core/service/remote_service.dart';
+import 'package:fscore/models/groupe.dart';
+import 'package:fscore/models/phase.dart';
+import 'package:fscore/core/service/local_service.dart';
+import 'package:fscore/service/phase_service.dart';
+import 'package:fscore/core/service/remote_service.dart';
 
 class GroupeService {
   static LocalService get service => LocalService('groupe.json');

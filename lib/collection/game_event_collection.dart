@@ -1,5 +1,5 @@
-import 'package:app/collection/collection.dart';
-import 'package:app/models/gameEvent.dart';
+import 'package:fscore/collection/collection.dart';
+import 'package:fscore/models/gameEvent.dart';
 
 class GameEventCollection implements Collection {
   List<GameEvent> _gameEvents;

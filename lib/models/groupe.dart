@@ -1,4 +1,4 @@
-import 'package:app/models/phase.dart';
+import 'package:fscore/models/phase.dart';
 
 class Groupe {
   String idGroupe;

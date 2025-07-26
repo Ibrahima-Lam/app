@@ -1,10 +1,10 @@
-import 'package:app/core/params/categorie/categorie_params.dart';
-import 'package:app/models/coachs/coach.dart';
-import 'package:app/models/participant.dart';
-import 'package:app/providers/participant_provider.dart';
-import 'package:app/widget/logos/coach_logo_widget.dart';
-import 'package:app/widget/logos/equipe_logo_widget.dart';
-import 'package:app/widget/fiche/fiches_widget.dart';
+import 'package:fscore/core/params/categorie/categorie_params.dart';
+import 'package:fscore/models/coachs/coach.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/providers/participant_provider.dart';
+import 'package:fscore/widget/logos/coach_logo_widget.dart';
+import 'package:fscore/widget/logos/equipe_logo_widget.dart';
+import 'package:fscore/widget/fiche/fiches_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,5 +1,5 @@
-import 'package:app/core/enums/categorie_enum.dart';
-import 'package:app/providers/favori_provider.dart';
+import 'package:fscore/core/enums/categorie_enum.dart';
+import 'package:fscore/providers/favori_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

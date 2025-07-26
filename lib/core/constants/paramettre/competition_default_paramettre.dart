@@ -1,4 +1,4 @@
-import 'package:app/models/paramettre.dart';
+import 'package:fscore/models/paramettre.dart';
 
 final Paramettre kCompetitionDefaultParamettre = Paramettre(
   idParamettre: 'paramettre',

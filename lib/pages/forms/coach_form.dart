@@ -1,12 +1,12 @@
-import 'package:app/controllers/competition/date.dart';
-import 'package:app/models/coachs/coach.dart';
-import 'package:app/models/participant.dart';
-import 'package:app/providers/coach_provider.dart';
-import 'package:app/widget/form/dropdown_menu_app_form_widget.dart';
-import 'package:app/widget/form/elevated_button_form_widget.dart';
-import 'package:app/widget/form/file_form_field_widget.dart';
-import 'package:app/widget/form/text_form_field_widget.dart';
-import 'package:app/widget/skelton/layout_builder_widget.dart';
+import 'package:fscore/controllers/competition/date.dart';
+import 'package:fscore/models/coachs/coach.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/providers/coach_provider.dart';
+import 'package:fscore/widget/form/dropdown_menu_app_form_widget.dart';
+import 'package:fscore/widget/form/elevated_button_form_widget.dart';
+import 'package:fscore/widget/form/file_form_field_widget.dart';
+import 'package:fscore/widget/form/text_form_field_widget.dart';
+import 'package:fscore/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

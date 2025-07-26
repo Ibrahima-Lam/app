@@ -1,5 +1,5 @@
-import 'package:app/core/enums/performance_type.dart';
-import 'package:app/models/game.dart';
+import 'package:fscore/core/enums/performance_type.dart';
+import 'package:fscore/models/game.dart';
 
 class Performance {
   String id;

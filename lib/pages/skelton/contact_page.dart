@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:app/widget/skelton/layout_builder_widget.dart';
+import 'package:fscore/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 

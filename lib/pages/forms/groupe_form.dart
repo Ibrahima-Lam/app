@@ -1,10 +1,10 @@
-import 'package:app/models/groupe.dart';
-import 'package:app/models/phase.dart';
-import 'package:app/providers/groupe_provider.dart';
-import 'package:app/service/phase_service.dart';
-import 'package:app/widget/form/dropdown_menu_app_form_widget.dart';
-import 'package:app/widget/form/elevated_button_form_widget.dart';
-import 'package:app/widget/skelton/layout_builder_widget.dart';
+import 'package:fscore/models/groupe.dart';
+import 'package:fscore/models/phase.dart';
+import 'package:fscore/providers/groupe_provider.dart';
+import 'package:fscore/service/phase_service.dart';
+import 'package:fscore/widget/form/dropdown_menu_app_form_widget.dart';
+import 'package:fscore/widget/form/elevated_button_form_widget.dart';
+import 'package:fscore/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

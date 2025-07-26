@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:app/widget/form/text_form_field_widget.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
+import 'package:fscore/widget/form/text_form_field_widget.dart';
+import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

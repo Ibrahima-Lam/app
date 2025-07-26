@@ -1,4 +1,4 @@
-import 'package:app/core/service/remote_service.dart';
+import 'package:fscore/core/service/remote_service.dart';
 
 class TokenService {
   static String collection = 'token';

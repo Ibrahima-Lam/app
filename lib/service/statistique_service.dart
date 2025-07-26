@@ -1,6 +1,6 @@
-import 'package:app/models/statistique.dart';
-import 'package:app/core/service/local_service.dart';
-import 'package:app/core/service/remote_service.dart';
+import 'package:fscore/models/statistique.dart';
+import 'package:fscore/core/service/local_service.dart';
+import 'package:fscore/core/service/remote_service.dart';
 
 class StatistiqueService {
   static LocalService get service => LocalService('statistique.json');

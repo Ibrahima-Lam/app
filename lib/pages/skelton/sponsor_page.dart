@@ -1,9 +1,9 @@
-import 'package:app/models/sponsor.dart';
-import 'package:app/pages/forms/sponsor_form.dart';
-import 'package:app/providers/sponsor_provider.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
-import 'package:app/widget/skelton/layout_builder_widget.dart';
-import 'package:app/widget/sponsor/sponsor_widget.dart';
+import 'package:fscore/models/sponsor.dart';
+import 'package:fscore/pages/forms/sponsor_form.dart';
+import 'package:fscore/providers/sponsor_provider.dart';
+import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
+import 'package:fscore/widget/skelton/layout_builder_widget.dart';
+import 'package:fscore/widget/sponsor/sponsor_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';

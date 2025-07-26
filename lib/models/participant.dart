@@ -1,5 +1,5 @@
-import 'package:app/core/class/populaire.dart';
-import 'package:app/models/searchable.dart';
+import 'package:fscore/core/class/populaire.dart';
+import 'package:fscore/models/searchable.dart';
 
 class Participant implements Searchable, Populaire {
   String idParticipant;

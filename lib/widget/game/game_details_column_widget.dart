@@ -1,9 +1,9 @@
-import 'package:app/models/game.dart';
-import 'package:app/models/gameEvent.dart';
-import 'package:app/pages/equipe/equipe_details.dart';
-import 'package:app/providers/statistique_provider.dart';
-import 'package:app/widget/game/card_and_num_widget.dart';
-import 'package:app/widget/logos/equipe_logo_widget.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/models/gameEvent.dart';
+import 'package:fscore/pages/equipe/equipe_details.dart';
+import 'package:fscore/providers/statistique_provider.dart';
+import 'package:fscore/widget/game/card_and_num_widget.dart';
+import 'package:fscore/widget/logos/equipe_logo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

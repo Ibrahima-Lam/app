@@ -1,7 +1,7 @@
-import 'package:app/models/competition.dart';
-import 'package:app/pages/exploration/competition/competition_tile_widget.dart';
-import 'package:app/providers/competition_provider.dart';
-import 'package:app/widget/app/favori_title_widget.dart';
+import 'package:fscore/models/competition.dart';
+import 'package:fscore/pages/exploration/competition/competition_tile_widget.dart';
+import 'package:fscore/providers/competition_provider.dart';
+import 'package:fscore/widget/app/favori_title_widget.dart';
 import 'package:flutter/material.dart';
 
 class AllSectionWidget extends StatelessWidget {

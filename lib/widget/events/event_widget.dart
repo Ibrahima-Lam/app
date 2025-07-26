@@ -1,9 +1,9 @@
-import 'package:app/models/event.dart';
-import 'package:app/models/game.dart';
-import 'package:app/pages/joueur/joueur_details.dart';
-import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/events/composition_events_widget.dart';
-import 'package:app/widget/logos/joueur_logo_widget.dart';
+import 'package:fscore/models/event.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/pages/joueur/joueur_details.dart';
+import 'package:fscore/providers/joueur_provider.dart';
+import 'package:fscore/widget/events/composition_events_widget.dart';
+import 'package:fscore/widget/logos/joueur_logo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

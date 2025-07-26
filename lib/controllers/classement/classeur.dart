@@ -1,9 +1,9 @@
-import 'package:app/controllers/classement/classeur_controller.dart';
-import 'package:app/controllers/classement/classeur_ripository.dart';
-import 'package:app/models/game.dart';
-import 'package:app/models/groupe.dart';
-import 'package:app/models/participation.dart';
-import 'package:app/models/stat.dart';
+import 'package:fscore/controllers/classement/classeur_controller.dart';
+import 'package:fscore/controllers/classement/classeur_ripository.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/models/groupe.dart';
+import 'package:fscore/models/participation.dart';
+import 'package:fscore/models/stat.dart';
 
 final class Classeur extends ClasseurRipository {
   final List<Groupe> groupes;

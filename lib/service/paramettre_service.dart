@@ -1,6 +1,6 @@
-import 'package:app/models/paramettre.dart';
-import 'package:app/core/service/local_service.dart';
-import 'package:app/core/service/remote_service.dart';
+import 'package:fscore/models/paramettre.dart';
+import 'package:fscore/core/service/local_service.dart';
+import 'package:fscore/core/service/remote_service.dart';
 
 class ParamettreService {
   static LocalService get service => LocalService('paramettrages.json');

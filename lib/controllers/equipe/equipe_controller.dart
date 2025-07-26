@@ -1,5 +1,5 @@
-import 'package:app/core/enums/event_type_enum.dart';
-import 'package:app/models/event.dart';
+import 'package:fscore/core/enums/event_type_enum.dart';
+import 'package:fscore/models/event.dart';
 
 class EquipeController {
   @Deprecated('implementer Abbreviable')

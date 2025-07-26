@@ -1,5 +1,5 @@
-import 'package:app/core/service/sqlite_service.dart';
-import 'package:app/models/notification.dart';
+import 'package:fscore/core/service/sqlite_service.dart';
+import 'package:fscore/models/notification.dart';
 
 class NotifSqliteService extends SqliteService {
   NotifSqliteService();

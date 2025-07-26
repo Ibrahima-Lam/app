@@ -1,12 +1,12 @@
-import 'package:app/core/enums/enums.dart';
-import 'package:app/core/extension/int_extension.dart';
-import 'package:app/models/game.dart';
-import 'package:app/models/gameEvent.dart';
-import 'package:app/models/scores/score.dart';
-import 'package:app/providers/game_provider.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
-import 'package:app/widget/modals/game_etat_form_modal_widget.dart';
-import 'package:app/widget/modals/score_form_modal_widget.dart';
+import 'package:fscore/core/enums/enums.dart';
+import 'package:fscore/core/extension/int_extension.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/models/gameEvent.dart';
+import 'package:fscore/models/scores/score.dart';
+import 'package:fscore/providers/game_provider.dart';
+import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
+import 'package:fscore/widget/modals/game_etat_form_modal_widget.dart';
+import 'package:fscore/widget/modals/score_form_modal_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

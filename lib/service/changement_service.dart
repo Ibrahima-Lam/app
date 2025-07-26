@@ -1,6 +1,6 @@
-import 'package:app/models/event.dart';
-import 'package:app/core/service/local_service.dart';
-import 'package:app/core/service/remote_service.dart';
+import 'package:fscore/models/event.dart';
+import 'package:fscore/core/service/local_service.dart';
+import 'package:fscore/core/service/remote_service.dart';
 
 class ChangementService {
   static LocalService get service => LocalService('changement.json');

@@ -1,4 +1,4 @@
-import 'package:app/models/composition.dart';
+import 'package:fscore/models/composition.dart';
 import 'package:flutter/material.dart';
 
 class CompositionBottomSheetWidget extends StatelessWidget {

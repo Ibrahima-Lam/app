@@ -1,6 +1,6 @@
-import 'package:app/models/coachs/coach.dart';
-import 'package:app/pages/coach/coach_details.dart';
-import 'package:app/widget/logos/coach_logo_widget.dart';
+import 'package:fscore/models/coachs/coach.dart';
+import 'package:fscore/pages/coach/coach_details.dart';
+import 'package:fscore/widget/logos/coach_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 class CoachListTileWidget extends StatelessWidget {

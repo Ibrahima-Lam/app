@@ -1,5 +1,5 @@
-import 'package:app/models/user.dart';
-import 'package:app/service/user_service.dart';
+import 'package:fscore/models/user.dart';
+import 'package:fscore/service/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

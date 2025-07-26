@@ -1,7 +1,7 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:app/models/scores/score.dart';
-import 'package:app/widget/form/elevated_button_widget.dart';
+import 'package:fscore/models/scores/score.dart';
+import 'package:fscore/widget/form/elevated_button_widget.dart';
 import 'package:flutter/material.dart';
 
 class ScoreFormModalWidget extends StatefulWidget {

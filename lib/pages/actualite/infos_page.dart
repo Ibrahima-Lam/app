@@ -1,7 +1,7 @@
-import 'package:app/models/infos/infos.dart';
-import 'package:app/providers/infos_provider.dart';
-import 'package:app/widget/infos/infos_widget.dart';
-import 'package:app/widget/sponsor/sponsor_list_widget.dart';
+import 'package:fscore/models/infos/infos.dart';
+import 'package:fscore/providers/infos_provider.dart';
+import 'package:fscore/widget/infos/infos_widget.dart';
+import 'package:fscore/widget/sponsor/sponsor_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

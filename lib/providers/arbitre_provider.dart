@@ -1,5 +1,5 @@
-import 'package:app/models/arbitres/arbitre.dart';
-import 'package:app/service/arbitre_service.dart';
+import 'package:fscore/models/arbitres/arbitre.dart';
+import 'package:fscore/service/arbitre_service.dart';
 import 'package:flutter/material.dart';
 
 class ArbitreProvider extends ChangeNotifier {

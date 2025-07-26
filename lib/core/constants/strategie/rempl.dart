@@ -1,5 +1,5 @@
-import 'package:app/controllers/competition/date.dart';
-import 'package:app/models/composition.dart';
+import 'package:fscore/controllers/competition/date.dart';
+import 'package:fscore/models/composition.dart';
 
 final JoueurComposition kRemplComposition = JoueurComposition(
     idComposition: 'R0' + DateController.dateCollapsed,

@@ -1,4 +1,4 @@
-import 'package:app/core/extension/string_extension.dart';
+import 'package:fscore/core/extension/string_extension.dart';
 import 'package:flutter/material.dart';
 
 class DropDownMenuAppFormWidget extends StatelessWidget {

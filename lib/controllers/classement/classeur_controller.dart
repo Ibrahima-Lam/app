@@ -1,10 +1,10 @@
-import 'package:app/controllers/classement/classeur_ripository.dart';
-import 'package:app/core/enums/enums.dart';
-import 'package:app/core/enums/game_etat_enum.dart';
-import 'package:app/core/extension/list_extension.dart';
-import 'package:app/models/game.dart';
-import 'package:app/models/participation.dart';
-import 'package:app/models/stat.dart';
+import 'package:fscore/controllers/classement/classeur_ripository.dart';
+import 'package:fscore/core/enums/enums.dart';
+import 'package:fscore/core/enums/game_etat_enum.dart';
+import 'package:fscore/core/extension/list_extension.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/models/participation.dart';
+import 'package:fscore/models/stat.dart';
 
 class ClasseurController extends ClasseurControllerRipository {
   const ClasseurController(

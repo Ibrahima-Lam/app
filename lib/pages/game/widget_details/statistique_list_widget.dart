@@ -1,13 +1,13 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:app/core/constants/statistique/kStatistique.dart';
-import 'package:app/models/game.dart';
-import 'package:app/models/statistique.dart';
-import 'package:app/providers/statistique_future_provider.dart';
-import 'package:app/providers/statistique_provider.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
-import 'package:app/widget/statistique/statistique_tile_widget.dart';
-import 'package:app/widget_pages/statistique_form.dart';
+import 'package:fscore/core/constants/statistique/kStatistique.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/models/statistique.dart';
+import 'package:fscore/providers/statistique_future_provider.dart';
+import 'package:fscore/providers/statistique_provider.dart';
+import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
+import 'package:fscore/widget/statistique/statistique_tile_widget.dart';
+import 'package:fscore/widget_pages/statistique_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,6 +1,6 @@
-import 'package:app/core/extension/list_extension.dart';
+import 'package:fscore/core/extension/list_extension.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide User;
-import 'package:app/models/user.dart';
+import 'package:fscore/models/user.dart';
 
 class UserService {
   static Future<User?> getUser(String email, String password) async {

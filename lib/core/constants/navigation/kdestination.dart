@@ -1,4 +1,4 @@
-import 'package:app/core/constants/app/styles.dart';
+import 'package:fscore/core/constants/app/styles.dart';
 import 'package:flutter/material.dart';
 
 List<Map<String, dynamic>> kDestinations = [

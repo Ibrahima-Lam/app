@@ -1,8 +1,8 @@
-import 'package:app/models/notification.dart';
-import 'package:app/pages/game/game_details.dart';
-import 'package:app/providers/game_provider.dart';
-import 'package:app/service/notif_sqlite_service.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
+import 'package:fscore/models/notification.dart';
+import 'package:fscore/pages/game/game_details.dart';
+import 'package:fscore/providers/game_provider.dart';
+import 'package:fscore/service/notif_sqlite_service.dart';
+import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

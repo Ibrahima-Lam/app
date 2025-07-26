@@ -1,6 +1,6 @@
-import 'package:app/core/class/populaire.dart';
-import 'package:app/models/participant.dart';
-import 'package:app/models/searchable.dart';
+import 'package:fscore/core/class/populaire.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/models/searchable.dart';
 import 'package:flutter/material.dart';
 
 class Joueur implements Searchable, Populaire {

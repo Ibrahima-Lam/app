@@ -31,7 +31,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.app"
+        applicationId = "com.fscore.app"
         minSdk = 23
         targetSdk = 35
         versionCode = flutter.versionCode

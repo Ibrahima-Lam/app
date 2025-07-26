@@ -1,5 +1,5 @@
-import 'package:app/models/coachs/coach.dart';
-import 'package:app/service/coach_service.dart';
+import 'package:fscore/models/coachs/coach.dart';
+import 'package:fscore/service/coach_service.dart';
 import 'package:flutter/material.dart';
 
 class CoachProvider extends ChangeNotifier {

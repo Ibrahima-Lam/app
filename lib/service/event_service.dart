@@ -1,7 +1,7 @@
-import 'package:app/models/event.dart';
-import 'package:app/service/but_service.dart';
-import 'package:app/service/changement_service.dart';
-import 'package:app/service/sanction_service.dart';
+import 'package:fscore/models/event.dart';
+import 'package:fscore/service/but_service.dart';
+import 'package:fscore/service/changement_service.dart';
+import 'package:fscore/service/sanction_service.dart';
 
 class EventService {
   Future<List<Event>> getData({bool remote = false}) async {

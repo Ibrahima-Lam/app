@@ -1,17 +1,17 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 
-import 'package:app/collection/composition_collection.dart';
-import 'package:app/core/enums/enums.dart';
-import 'package:app/models/composition.dart';
-import 'package:app/models/game.dart';
-import 'package:app/pages/game/widget_details/composition_setter.dart';
-import 'package:app/pages/joueur/joueur_details.dart';
-import 'package:app/providers/composition_provider.dart';
-import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/coach/coach_and_team_widget.dart';
-import 'package:app/widget/composition/composition_element_widget.dart';
-import 'package:app/widget_pages/arbitre_list_widget.dart';
-import 'package:app/widget_pages/substitut_list_widget.dart';
+import 'package:fscore/collection/composition_collection.dart';
+import 'package:fscore/core/enums/enums.dart';
+import 'package:fscore/models/composition.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/pages/game/widget_details/composition_setter.dart';
+import 'package:fscore/pages/joueur/joueur_details.dart';
+import 'package:fscore/providers/composition_provider.dart';
+import 'package:fscore/providers/joueur_provider.dart';
+import 'package:fscore/widget/coach/coach_and_team_widget.dart';
+import 'package:fscore/widget/composition/composition_element_widget.dart';
+import 'package:fscore/widget_pages/arbitre_list_widget.dart';
+import 'package:fscore/widget_pages/substitut_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,12 +1,12 @@
-import 'package:app/models/participation.dart';
-import 'package:app/models/stat.dart';
-import 'package:app/providers/game_provider.dart';
-import 'package:app/providers/groupe_provider.dart';
-import 'package:app/providers/participation_provider.dart';
-import 'package:app/service/stat_service.dart';
-import 'package:app/widget/app/section_title_widget.dart';
-import 'package:app/widget/classement/classement_toggle_botton_widget.dart';
-import 'package:app/widget/classement/table_widget.dart';
+import 'package:fscore/models/participation.dart';
+import 'package:fscore/models/stat.dart';
+import 'package:fscore/providers/game_provider.dart';
+import 'package:fscore/providers/groupe_provider.dart';
+import 'package:fscore/providers/participation_provider.dart';
+import 'package:fscore/service/stat_service.dart';
+import 'package:fscore/widget/app/section_title_widget.dart';
+import 'package:fscore/widget/classement/classement_toggle_botton_widget.dart';
+import 'package:fscore/widget/classement/table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

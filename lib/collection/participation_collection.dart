@@ -1,6 +1,6 @@
-import 'package:app/collection/collection.dart';
-import 'package:app/core/enums/competition_phase_enum.dart';
-import 'package:app/models/participation.dart';
+import 'package:fscore/collection/collection.dart';
+import 'package:fscore/core/enums/competition_phase_enum.dart';
+import 'package:fscore/models/participation.dart';
 
 class ParticipationCollection implements Collection {
   List<Participation> _participations;

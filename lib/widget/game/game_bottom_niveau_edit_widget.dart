@@ -1,6 +1,6 @@
-import 'package:app/models/niveau.dart';
-import 'package:app/service/niveau_service.dart';
-import 'package:app/widget/app/section_title_widget.dart';
+import 'package:fscore/models/niveau.dart';
+import 'package:fscore/service/niveau_service.dart';
+import 'package:fscore/widget/app/section_title_widget.dart';
 import 'package:flutter/material.dart';
 
 class GameBottomNiveauEditWidget extends StatelessWidget {

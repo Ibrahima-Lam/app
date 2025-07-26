@@ -1,5 +1,5 @@
-import 'package:app/core/enums/competition_phase_enum.dart';
-import 'package:app/models/groupe.dart';
+import 'package:fscore/core/enums/competition_phase_enum.dart';
+import 'package:fscore/models/groupe.dart';
 
 class GroupeCollection {
   List<Groupe> _groupes;

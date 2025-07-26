@@ -1,10 +1,10 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:app/core/enums/game_etat_enum.dart';
-import 'package:app/core/extension/string_extension.dart';
-import 'package:app/models/gameEvent.dart';
-import 'package:app/widget/form/elevated_button_widget.dart';
-import 'package:app/widget/form/text_field_widget.dart';
+import 'package:fscore/core/enums/game_etat_enum.dart';
+import 'package:fscore/core/extension/string_extension.dart';
+import 'package:fscore/models/gameEvent.dart';
+import 'package:fscore/widget/form/elevated_button_widget.dart';
+import 'package:fscore/widget/form/text_field_widget.dart';
 import 'package:flutter/material.dart';
 
 class GameTimerFormModalWidget extends StatefulWidget {

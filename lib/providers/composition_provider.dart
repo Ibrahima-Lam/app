@@ -1,10 +1,10 @@
-import 'package:app/collection/composition_collection.dart';
-import 'package:app/core/extension/list_extension.dart';
+import 'package:fscore/collection/composition_collection.dart';
+import 'package:fscore/core/extension/list_extension.dart';
 
-import 'package:app/models/composition.dart';
-import 'package:app/models/event.dart';
-import 'package:app/providers/game_event_list_provider.dart';
-import 'package:app/service/composition_service.dart';
+import 'package:fscore/models/composition.dart';
+import 'package:fscore/models/event.dart';
+import 'package:fscore/providers/game_event_list_provider.dart';
+import 'package:fscore/service/composition_service.dart';
 import 'package:flutter/material.dart';
 
 class CompositionProvider extends ChangeNotifier {

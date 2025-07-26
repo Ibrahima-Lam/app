@@ -1,10 +1,10 @@
-import 'package:app/core/params/categorie/categorie_params.dart';
-import 'package:app/models/infos/infos.dart';
-import 'package:app/models/sponsor.dart';
-import 'package:app/pages/actualite/infos_details.dart';
-import 'package:app/providers/infos_provider.dart';
-import 'package:app/providers/sponsor_provider.dart';
-import 'package:app/widget/infos/infos_error_widget.dart';
+import 'package:fscore/core/params/categorie/categorie_params.dart';
+import 'package:fscore/models/infos/infos.dart';
+import 'package:fscore/models/sponsor.dart';
+import 'package:fscore/pages/actualite/infos_details.dart';
+import 'package:fscore/providers/infos_provider.dart';
+import 'package:fscore/providers/sponsor_provider.dart';
+import 'package:fscore/widget/infos/infos_error_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

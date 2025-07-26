@@ -1,8 +1,8 @@
-import 'package:app/models/participant.dart';
-import 'package:app/pages/forms/participant_form.dart';
-import 'package:app/providers/participant_provider.dart';
-import 'package:app/widget/logos/equipe_logo_widget.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/pages/forms/participant_form.dart';
+import 'package:fscore/providers/participant_provider.dart';
+import 'package:fscore/widget/logos/equipe_logo_widget.dart';
+import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';

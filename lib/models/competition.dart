@@ -1,6 +1,6 @@
-import 'package:app/core/class/populaire.dart';
-import 'package:app/core/enums/competition_type.dart';
-import 'package:app/models/searchable.dart';
+import 'package:fscore/core/class/populaire.dart';
+import 'package:fscore/core/enums/competition_type.dart';
+import 'package:fscore/models/searchable.dart';
 
 class Competition implements Searchable, Populaire {
   String codeCompetition;

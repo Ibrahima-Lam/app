@@ -1,17 +1,17 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
 
-import 'package:app/core/extension/string_extension.dart';
-import 'package:app/models/composition.dart';
-import 'package:app/models/event.dart';
-import 'package:app/models/joueur.dart';
-import 'package:app/providers/composition_provider.dart';
-import 'package:app/providers/game_event_list_provider.dart';
-import 'package:app/widget/modals/bottom_modal_composition_list_widget.dart';
-import 'package:app/widget/events/composition_events_widget.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
-import 'package:app/widget/form/elevated_button_widget.dart';
-import 'package:app/widget/modals/bottom_modal_joueur_list_widget.dart';
-import 'package:app/widget/form/text_field_widget.dart';
+import 'package:fscore/core/extension/string_extension.dart';
+import 'package:fscore/models/composition.dart';
+import 'package:fscore/models/event.dart';
+import 'package:fscore/models/joueur.dart';
+import 'package:fscore/providers/composition_provider.dart';
+import 'package:fscore/providers/game_event_list_provider.dart';
+import 'package:fscore/widget/modals/bottom_modal_composition_list_widget.dart';
+import 'package:fscore/widget/events/composition_events_widget.dart';
+import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
+import 'package:fscore/widget/form/elevated_button_widget.dart';
+import 'package:fscore/widget/modals/bottom_modal_joueur_list_widget.dart';
+import 'package:fscore/widget/form/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,21 +1,21 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:app/models/competition.dart';
-import 'package:app/models/joueur.dart';
-import 'package:app/models/participant.dart';
-import 'package:app/pages/exploration/competition/all_section_widget.dart';
-import 'package:app/pages/exploration/competition/competition_tile_widget.dart';
-import 'package:app/pages/exploration/competition/favori_section_widget.dart';
-import 'package:app/pages/exploration/competition/populaire_section_widget.dart';
-import 'package:app/pages/exploration/equipe/equipe_all_section_widget.dart';
-import 'package:app/pages/exploration/equipe/equipe_favori_section_widget.dart';
-import 'package:app/pages/exploration/equipe/equipe_tile_widget.dart';
-import 'package:app/pages/exploration/joueur/joueur_all_section_widget.dart';
-import 'package:app/pages/exploration/joueur/joueur_favori_section_widget.dart';
-import 'package:app/pages/exploration/search_field_widget.dart';
-import 'package:app/providers/competition_provider.dart';
-import 'package:app/providers/joueur_provider.dart';
-import 'package:app/providers/participant_provider.dart';
+import 'package:fscore/models/competition.dart';
+import 'package:fscore/models/joueur.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/pages/exploration/competition/all_section_widget.dart';
+import 'package:fscore/pages/exploration/competition/competition_tile_widget.dart';
+import 'package:fscore/pages/exploration/competition/favori_section_widget.dart';
+import 'package:fscore/pages/exploration/competition/populaire_section_widget.dart';
+import 'package:fscore/pages/exploration/equipe/equipe_all_section_widget.dart';
+import 'package:fscore/pages/exploration/equipe/equipe_favori_section_widget.dart';
+import 'package:fscore/pages/exploration/equipe/equipe_tile_widget.dart';
+import 'package:fscore/pages/exploration/joueur/joueur_all_section_widget.dart';
+import 'package:fscore/pages/exploration/joueur/joueur_favori_section_widget.dart';
+import 'package:fscore/pages/exploration/search_field_widget.dart';
+import 'package:fscore/providers/competition_provider.dart';
+import 'package:fscore/providers/joueur_provider.dart';
+import 'package:fscore/providers/participant_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

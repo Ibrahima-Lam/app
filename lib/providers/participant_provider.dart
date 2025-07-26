@@ -1,5 +1,5 @@
-import 'package:app/models/participant.dart';
-import 'package:app/service/participant_service.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/service/participant_service.dart';
 import 'package:flutter/material.dart';
 
 class ParticipantProvider extends ChangeNotifier {

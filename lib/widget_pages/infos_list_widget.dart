@@ -1,10 +1,10 @@
-import 'package:app/core/params/categorie/categorie_params.dart';
-import 'package:app/models/infos/infos.dart';
-import 'package:app/pages/forms/infos_form.dart';
-import 'package:app/providers/infos_provider.dart';
-import 'package:app/providers/paramettre_provider.dart';
-import 'package:app/widget/infos/infos_widget.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
+import 'package:fscore/core/params/categorie/categorie_params.dart';
+import 'package:fscore/models/infos/infos.dart';
+import 'package:fscore/pages/forms/infos_form.dart';
+import 'package:fscore/providers/infos_provider.dart';
+import 'package:fscore/providers/paramettre_provider.dart';
+import 'package:fscore/widget/infos/infos_widget.dart';
+import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';

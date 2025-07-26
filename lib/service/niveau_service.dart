@@ -1,4 +1,4 @@
-import 'package:app/models/niveau.dart';
+import 'package:fscore/models/niveau.dart';
 
 class NiveauService {
   static Future<List<Niveau>> getNiveaux() async =>

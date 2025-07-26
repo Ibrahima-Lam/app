@@ -1,12 +1,12 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:app/models/game.dart';
-import 'package:app/models/participant.dart';
-import 'package:app/providers/game_provider.dart';
-import 'package:app/providers/participant_provider.dart';
-import 'package:app/widget/game/game_widget.dart';
-import 'package:app/widget/form/text_field_widget.dart';
-import 'package:app/widget/skelton/layout_builder_widget.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/providers/game_provider.dart';
+import 'package:fscore/providers/participant_provider.dart';
+import 'package:fscore/widget/game/game_widget.dart';
+import 'package:fscore/widget/form/text_field_widget.dart';
+import 'package:fscore/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,6 +1,6 @@
-import 'package:app/collection/collection.dart';
-import 'package:app/models/event.dart';
-import 'package:app/models/game.dart';
+import 'package:fscore/collection/collection.dart';
+import 'package:fscore/models/event.dart';
+import 'package:fscore/models/game.dart';
 
 class GameEventListCollection extends Collection {
   List<Event> _events;

@@ -1,14 +1,14 @@
-import 'package:app/controllers/competition/date.dart';
-import 'package:app/core/enums/game_etat_enum.dart';
-import 'package:app/core/enums/show_niveau_enum.dart';
-import 'package:app/core/extension/string_extension.dart';
-import 'package:app/models/event.dart';
-import 'package:app/pages/game/game_details.dart';
-import 'package:app/models/game.dart';
-import 'package:app/providers/game_event_list_provider.dart';
-import 'package:app/widget/game/card_and_num_widget.dart';
-import 'package:app/widget/game/game_score_animation_widget.dart';
-import 'package:app/widget/logos/equipe_logo_widget.dart';
+import 'package:fscore/controllers/competition/date.dart';
+import 'package:fscore/core/enums/game_etat_enum.dart';
+import 'package:fscore/core/enums/show_niveau_enum.dart';
+import 'package:fscore/core/extension/string_extension.dart';
+import 'package:fscore/models/event.dart';
+import 'package:fscore/pages/game/game_details.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/providers/game_event_list_provider.dart';
+import 'package:fscore/widget/game/card_and_num_widget.dart';
+import 'package:fscore/widget/game/game_score_animation_widget.dart';
+import 'package:fscore/widget/logos/equipe_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 class GameWidget extends StatelessWidget {

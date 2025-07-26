@@ -1,6 +1,6 @@
-import 'package:app/models/arbitres/arbitre.dart';
-import 'package:app/core/service/local_service.dart';
-import 'package:app/core/service/remote_service.dart';
+import 'package:fscore/models/arbitres/arbitre.dart';
+import 'package:fscore/core/service/local_service.dart';
+import 'package:fscore/core/service/remote_service.dart';
 
 class ArbitreService {
   static LocalService get service => LocalService('arbitre.json');

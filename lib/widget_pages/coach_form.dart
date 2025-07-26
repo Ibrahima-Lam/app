@@ -1,12 +1,12 @@
-import 'package:app/models/coachs/coach.dart';
-import 'package:app/models/composition.dart';
-import 'package:app/providers/composition_provider.dart';
-import 'package:app/widget/events/composition_events_widget.dart';
-import 'package:app/widget/form/dropdown_menu_widget.dart';
-import 'package:app/widget/form/elevated_button_widget.dart';
-import 'package:app/widget/form/text_field_widget.dart';
-import 'package:app/widget/modals/bottom_modal_coach_list_widget.dart';
-import 'package:app/widget/skelton/layout_builder_widget.dart';
+import 'package:fscore/models/coachs/coach.dart';
+import 'package:fscore/models/composition.dart';
+import 'package:fscore/providers/composition_provider.dart';
+import 'package:fscore/widget/events/composition_events_widget.dart';
+import 'package:fscore/widget/form/dropdown_menu_widget.dart';
+import 'package:fscore/widget/form/elevated_button_widget.dart';
+import 'package:fscore/widget/form/text_field_widget.dart';
+import 'package:fscore/widget/modals/bottom_modal_coach_list_widget.dart';
+import 'package:fscore/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

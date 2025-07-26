@@ -1,10 +1,10 @@
-import 'package:app/core/enums/event_type_enum.dart';
-import 'package:app/models/event.dart';
-import 'package:app/models/game.dart';
-import 'package:app/service/but_service.dart';
-import 'package:app/service/changement_service.dart';
-import 'package:app/service/event_service.dart';
-import 'package:app/service/sanction_service.dart';
+import 'package:fscore/core/enums/event_type_enum.dart';
+import 'package:fscore/models/event.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/service/but_service.dart';
+import 'package:fscore/service/changement_service.dart';
+import 'package:fscore/service/event_service.dart';
+import 'package:fscore/service/sanction_service.dart';
 import 'package:flutter/material.dart';
 
 class GameEventListProvider extends ChangeNotifier {

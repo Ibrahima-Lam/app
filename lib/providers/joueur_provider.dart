@@ -1,6 +1,6 @@
-import 'package:app/models/joueur.dart';
-import 'package:app/providers/participant_provider.dart';
-import 'package:app/service/joueur_service.dart';
+import 'package:fscore/models/joueur.dart';
+import 'package:fscore/providers/participant_provider.dart';
+import 'package:fscore/service/joueur_service.dart';
 import 'package:flutter/material.dart';
 
 class JoueurProvider extends ChangeNotifier {

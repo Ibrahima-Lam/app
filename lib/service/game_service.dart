@@ -1,10 +1,10 @@
-import 'package:app/models/game.dart';
-import 'package:app/models/groupe.dart';
-import 'package:app/models/niveau.dart';
-import 'package:app/models/participant.dart';
-import 'package:app/core/service/local_service.dart';
-import 'package:app/service/niveau_service.dart';
-import 'package:app/core/service/remote_service.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/models/groupe.dart';
+import 'package:fscore/models/niveau.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/core/service/local_service.dart';
+import 'package:fscore/service/niveau_service.dart';
+import 'package:fscore/core/service/remote_service.dart';
 
 class GameService {
   static const file = 'game.json';

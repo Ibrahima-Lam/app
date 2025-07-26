@@ -1,8 +1,8 @@
-import 'package:app/models/participant.dart';
-import 'package:app/models/joueur.dart';
-import 'package:app/pages/exploration/joueur/joueur_tile_widget.dart';
-import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/app/favori_title_widget.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/models/joueur.dart';
+import 'package:fscore/pages/exploration/joueur/joueur_tile_widget.dart';
+import 'package:fscore/providers/joueur_provider.dart';
+import 'package:fscore/widget/app/favori_title_widget.dart';
 import 'package:flutter/material.dart';
 
 class JoueurAllSectionWidget extends StatelessWidget {

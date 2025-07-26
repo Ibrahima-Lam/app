@@ -1,5 +1,5 @@
-import 'package:app/models/game.dart';
-import 'package:app/models/niveau.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/models/niveau.dart';
 
 class NiveauController {
   static List<Niveau> getGamesNiveau(List<Game> games) {

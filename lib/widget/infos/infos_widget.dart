@@ -1,10 +1,10 @@
-import 'package:app/controllers/competition/date.dart';
-import 'package:app/core/extension/list_extension.dart';
-import 'package:app/models/competition.dart';
-import 'package:app/models/infos/infos.dart';
-import 'package:app/pages/actualite/infos_details.dart';
-import 'package:app/providers/competition_provider.dart';
-import 'package:app/widget/infos/infos_error_widget.dart';
+import 'package:fscore/controllers/competition/date.dart';
+import 'package:fscore/core/extension/list_extension.dart';
+import 'package:fscore/models/competition.dart';
+import 'package:fscore/models/infos/infos.dart';
+import 'package:fscore/pages/actualite/infos_details.dart';
+import 'package:fscore/providers/competition_provider.dart';
+import 'package:fscore/widget/infos/infos_error_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

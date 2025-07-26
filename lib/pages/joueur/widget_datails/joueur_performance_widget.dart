@@ -1,11 +1,11 @@
-import 'package:app/controllers/joueur/joueur_controller.dart';
-import 'package:app/core/enums/performance_type.dart';
-import 'package:app/core/extension/string_extension.dart';
-import 'package:app/models/joueur.dart';
-import 'package:app/models/performance.dart';
-import 'package:app/providers/game_event_list_provider.dart';
-import 'package:app/providers/game_provider.dart';
-import 'package:app/widget/game/game_widget.dart';
+import 'package:fscore/controllers/joueur/joueur_controller.dart';
+import 'package:fscore/core/enums/performance_type.dart';
+import 'package:fscore/core/extension/string_extension.dart';
+import 'package:fscore/models/joueur.dart';
+import 'package:fscore/models/performance.dart';
+import 'package:fscore/providers/game_event_list_provider.dart';
+import 'package:fscore/providers/game_provider.dart';
+import 'package:fscore/widget/game/game_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

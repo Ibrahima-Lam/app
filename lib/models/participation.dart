@@ -1,5 +1,5 @@
-import 'package:app/models/groupe.dart';
-import 'package:app/models/participant.dart';
+import 'package:fscore/models/groupe.dart';
+import 'package:fscore/models/participant.dart';
 
 class Participation {
   String idParticipation;

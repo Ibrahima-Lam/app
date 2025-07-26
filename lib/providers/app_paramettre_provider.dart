@@ -1,5 +1,5 @@
-import 'package:app/models/app_paramettre.dart';
-import 'package:app/service/app_paramettre_service.dart';
+import 'package:fscore/models/app_paramettre.dart';
+import 'package:fscore/service/app_paramettre_service.dart';
 import 'package:flutter/material.dart';
 
 class AppParamettreProvider extends ChangeNotifier {

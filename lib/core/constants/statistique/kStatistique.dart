@@ -1,4 +1,4 @@
-import 'package:app/models/statistique.dart';
+import 'package:fscore/models/statistique.dart';
 
 final kYellowStatistique = Statistique(
     idStatistique: 'GCJ',

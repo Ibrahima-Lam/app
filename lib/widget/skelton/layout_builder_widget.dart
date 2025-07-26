@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:app/core/constants/navigation/kdestination.dart';
-import 'package:app/pages/actualite/infos_page.dart';
-import 'package:app/pages/exploration/exploration_page.dart';
-import 'package:app/pages/game/game_page.dart';
-import 'package:app/pages/notification/notification_page.dart';
-import 'package:app/widget/skelton/drawer_widget.dart';
+import 'package:fscore/core/constants/navigation/kdestination.dart';
+import 'package:fscore/pages/actualite/infos_page.dart';
+import 'package:fscore/pages/exploration/exploration_page.dart';
+import 'package:fscore/pages/game/game_page.dart';
+import 'package:fscore/pages/notification/notification_page.dart';
+import 'package:fscore/widget/skelton/drawer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 

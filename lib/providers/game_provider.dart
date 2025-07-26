@@ -1,15 +1,15 @@
-import 'package:app/controllers/game/game_controller.dart';
-import 'package:app/core/enums/game_etat_enum.dart';
-import 'package:app/core/extension/list_extension.dart';
-import 'package:app/models/game.dart';
-import 'package:app/models/gameEvent.dart';
-import 'package:app/models/scores/score.dart';
-import 'package:app/providers/game_event_list_provider.dart';
-import 'package:app/providers/groupe_provider.dart';
-import 'package:app/providers/participant_provider.dart';
-import 'package:app/providers/score_provider.dart';
+import 'package:fscore/controllers/game/game_controller.dart';
+import 'package:fscore/core/enums/game_etat_enum.dart';
+import 'package:fscore/core/extension/list_extension.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/models/gameEvent.dart';
+import 'package:fscore/models/scores/score.dart';
+import 'package:fscore/providers/game_event_list_provider.dart';
+import 'package:fscore/providers/groupe_provider.dart';
+import 'package:fscore/providers/participant_provider.dart';
+import 'package:fscore/providers/score_provider.dart';
 
-import 'package:app/service/game_service.dart';
+import 'package:fscore/service/game_service.dart';
 import 'package:flutter/material.dart';
 
 typedef GameList = List<Game>;

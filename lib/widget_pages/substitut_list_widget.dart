@@ -1,21 +1,21 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 
-import 'package:app/collection/composition_collection.dart';
-import 'package:app/controllers/competition/date.dart';
-import 'package:app/core/constants/event/kEvent.dart';
-import 'package:app/core/constants/strategie/rempl.dart';
-import 'package:app/core/enums/enums.dart';
-import 'package:app/models/composition.dart';
-import 'package:app/models/event.dart';
-import 'package:app/pages/joueur/joueur_details.dart';
-import 'package:app/providers/composition_provider.dart';
-import 'package:app/providers/game_event_list_provider.dart';
-import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/modals/composition_bottom_sheet_widget.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
-import 'package:app/widget/app/section_title_widget.dart';
-import 'package:app/widget/logos/substitut_logo_widget.dart';
-import 'package:app/widget_pages/composition_form.dart';
+import 'package:fscore/collection/composition_collection.dart';
+import 'package:fscore/controllers/competition/date.dart';
+import 'package:fscore/core/constants/event/kEvent.dart';
+import 'package:fscore/core/constants/strategie/rempl.dart';
+import 'package:fscore/core/enums/enums.dart';
+import 'package:fscore/models/composition.dart';
+import 'package:fscore/models/event.dart';
+import 'package:fscore/pages/joueur/joueur_details.dart';
+import 'package:fscore/providers/composition_provider.dart';
+import 'package:fscore/providers/game_event_list_provider.dart';
+import 'package:fscore/providers/joueur_provider.dart';
+import 'package:fscore/widget/modals/composition_bottom_sheet_widget.dart';
+import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
+import 'package:fscore/widget/app/section_title_widget.dart';
+import 'package:fscore/widget/logos/substitut_logo_widget.dart';
+import 'package:fscore/widget_pages/composition_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';

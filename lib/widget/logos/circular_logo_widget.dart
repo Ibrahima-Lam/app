@@ -1,14 +1,14 @@
-import 'package:app/core/enums/categorie_enum.dart';
-import 'package:app/pages/arbitre/arbitre_details.dart';
-import 'package:app/pages/coach/coach_details.dart';
-import 'package:app/pages/competition/competition_details.dart';
-import 'package:app/pages/equipe/equipe_details.dart';
-import 'package:app/pages/joueur/joueur_details.dart';
-import 'package:app/widget/logos/arbitre_logo_widget.dart';
-import 'package:app/widget/logos/coach_logo_widget.dart';
-import 'package:app/widget/logos/competition_logo_image.dart';
-import 'package:app/widget/logos/equipe_logo_widget.dart';
-import 'package:app/widget/logos/joueur_logo_widget.dart';
+import 'package:fscore/core/enums/categorie_enum.dart';
+import 'package:fscore/pages/arbitre/arbitre_details.dart';
+import 'package:fscore/pages/coach/coach_details.dart';
+import 'package:fscore/pages/competition/competition_details.dart';
+import 'package:fscore/pages/equipe/equipe_details.dart';
+import 'package:fscore/pages/joueur/joueur_details.dart';
+import 'package:fscore/widget/logos/arbitre_logo_widget.dart';
+import 'package:fscore/widget/logos/coach_logo_widget.dart';
+import 'package:fscore/widget/logos/competition_logo_image.dart';
+import 'package:fscore/widget/logos/equipe_logo_widget.dart';
+import 'package:fscore/widget/logos/joueur_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 class CircularLogoWidget extends StatelessWidget {

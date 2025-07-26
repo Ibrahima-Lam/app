@@ -1,7 +1,7 @@
-import 'package:app/models/joueur.dart';
-import 'package:app/models/participant.dart';
-import 'package:app/core/service/local_service.dart';
-import 'package:app/core/service/remote_service.dart';
+import 'package:fscore/models/joueur.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/core/service/local_service.dart';
+import 'package:fscore/core/service/remote_service.dart';
 
 class JoueurService {
   static LocalService get service => LocalService('joueur.json');

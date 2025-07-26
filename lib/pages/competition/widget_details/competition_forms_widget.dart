@@ -1,6 +1,6 @@
-import 'package:app/pages/forms/groupe_form.dart';
-import 'package:app/pages/forms/participant_form.dart';
-import 'package:app/pages/forms/participation_form.dart';
+import 'package:fscore/pages/forms/groupe_form.dart';
+import 'package:fscore/pages/forms/participant_form.dart';
+import 'package:fscore/pages/forms/participation_form.dart';
 import 'package:flutter/material.dart';
 
 class CompetitionFormsWidget extends StatelessWidget {

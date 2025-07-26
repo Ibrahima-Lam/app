@@ -1,11 +1,11 @@
-import 'package:app/collection/collection.dart';
-import 'package:app/core/constants/arbitre/kArbitre.dart';
-import 'package:app/core/constants/coatch/kCoatch.dart';
-import 'package:app/core/constants/strategie/rempl.dart';
-import 'package:app/core/constants/strategie/strategie_433.dart';
-import 'package:app/core/constants/strategie/strategie_442.dart';
-import 'package:app/models/composition.dart';
-import 'package:app/models/game.dart';
+import 'package:fscore/collection/collection.dart';
+import 'package:fscore/core/constants/arbitre/kArbitre.dart';
+import 'package:fscore/core/constants/coatch/kCoatch.dart';
+import 'package:fscore/core/constants/strategie/rempl.dart';
+import 'package:fscore/core/constants/strategie/strategie_433.dart';
+import 'package:fscore/core/constants/strategie/strategie_442.dart';
+import 'package:fscore/models/composition.dart';
+import 'package:fscore/models/game.dart';
 
 class CompositionCollection implements Collection {
   List<Composition> _compositions;

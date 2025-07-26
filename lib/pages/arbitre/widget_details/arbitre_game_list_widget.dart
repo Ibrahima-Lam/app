@@ -1,8 +1,8 @@
-import 'package:app/models/composition.dart';
-import 'package:app/models/game.dart';
-import 'package:app/providers/composition_provider.dart';
-import 'package:app/providers/game_provider.dart';
-import 'package:app/widget/app/person_game_list_widget.dart';
+import 'package:fscore/models/composition.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/providers/composition_provider.dart';
+import 'package:fscore/providers/game_provider.dart';
+import 'package:fscore/widget/app/person_game_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -1,4 +1,4 @@
-import 'package:app/models/composition.dart';
+import 'package:fscore/models/composition.dart';
 
 List<JoueurComposition> kStrategie433 = [
   JoueurComposition(

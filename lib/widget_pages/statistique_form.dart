@@ -1,10 +1,10 @@
 // ignore_for_file: invalid_use_of_protected_member
 
-import 'package:app/core/extension/string_extension.dart';
-import 'package:app/models/statistique.dart';
-import 'package:app/widget/form/elevated_button_widget.dart';
-import 'package:app/widget/form/text_field_widget.dart';
-import 'package:app/widget/skelton/layout_builder_widget.dart';
+import 'package:fscore/core/extension/string_extension.dart';
+import 'package:fscore/models/statistique.dart';
+import 'package:fscore/widget/form/elevated_button_widget.dart';
+import 'package:fscore/widget/form/text_field_widget.dart';
+import 'package:fscore/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 
 class StatistiqueForm extends StatefulWidget {

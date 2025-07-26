@@ -1,10 +1,10 @@
-import 'package:app/models/competition.dart';
-import 'package:app/models/participant.dart';
-import 'package:app/providers/competition_provider.dart';
-import 'package:app/providers/participant_provider.dart';
-import 'package:app/widget/equipe/equipe_widget.dart';
-import 'package:app/widget/form/text_search_field_widget.dart';
-import 'package:app/widget/skelton/layout_builder_widget.dart';
+import 'package:fscore/models/competition.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/providers/competition_provider.dart';
+import 'package:fscore/providers/participant_provider.dart';
+import 'package:fscore/widget/equipe/equipe_widget.dart';
+import 'package:fscore/widget/form/text_search_field_widget.dart';
+import 'package:fscore/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

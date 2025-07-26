@@ -1,16 +1,16 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, must_be_immutable
 
-import 'package:app/collection/game_event_list_collection.dart';
-import 'package:app/controllers/competition/date.dart';
-import 'package:app/core/constants/event/kEvent.dart';
-import 'package:app/core/enums/event_type_enum.dart';
-import 'package:app/models/event.dart';
-import 'package:app/models/game.dart';
-import 'package:app/providers/game_event_list_provider.dart';
-import 'package:app/widget/events/event_widget.dart';
-import 'package:app/widget/app/section_title_widget.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
-import 'package:app/widget_pages/event_list_form.dart';
+import 'package:fscore/collection/game_event_list_collection.dart';
+import 'package:fscore/controllers/competition/date.dart';
+import 'package:fscore/core/constants/event/kEvent.dart';
+import 'package:fscore/core/enums/event_type_enum.dart';
+import 'package:fscore/models/event.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/providers/game_event_list_provider.dart';
+import 'package:fscore/widget/events/event_widget.dart';
+import 'package:fscore/widget/app/section_title_widget.dart';
+import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
+import 'package:fscore/widget_pages/event_list_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';

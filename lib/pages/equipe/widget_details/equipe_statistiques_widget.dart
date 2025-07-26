@@ -1,11 +1,11 @@
-import 'package:app/controllers/equipe/equipe_controller.dart';
-import 'package:app/core/enums/event_type_enum.dart';
-import 'package:app/models/event.dart';
-import 'package:app/pages/joueur/joueur_details.dart';
-import 'package:app/providers/game_event_list_provider.dart';
-import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/logos/joueur_logo_widget.dart';
-import 'package:app/widget/app/section_title_widget.dart';
+import 'package:fscore/controllers/equipe/equipe_controller.dart';
+import 'package:fscore/core/enums/event_type_enum.dart';
+import 'package:fscore/models/event.dart';
+import 'package:fscore/pages/joueur/joueur_details.dart';
+import 'package:fscore/providers/game_event_list_provider.dart';
+import 'package:fscore/providers/joueur_provider.dart';
+import 'package:fscore/widget/logos/joueur_logo_widget.dart';
+import 'package:fscore/widget/app/section_title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

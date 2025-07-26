@@ -1,14 +1,14 @@
-import 'package:app/core/enums/competition_phase_enum.dart';
-import 'package:app/core/enums/competition_type.dart';
-import 'package:app/models/competition.dart';
-import 'package:app/models/groupe.dart';
-import 'package:app/models/participant.dart';
-import 'package:app/models/participation.dart';
-import 'package:app/providers/groupe_provider.dart';
-import 'package:app/providers/participant_provider.dart';
-import 'package:app/providers/participation_provider.dart';
-import 'package:app/widget/equipe/equipe_widget.dart';
-import 'package:app/widget/app/section_title_widget.dart';
+import 'package:fscore/core/enums/competition_phase_enum.dart';
+import 'package:fscore/core/enums/competition_type.dart';
+import 'package:fscore/models/competition.dart';
+import 'package:fscore/models/groupe.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/models/participation.dart';
+import 'package:fscore/providers/groupe_provider.dart';
+import 'package:fscore/providers/participant_provider.dart';
+import 'package:fscore/providers/participation_provider.dart';
+import 'package:fscore/widget/equipe/equipe_widget.dart';
+import 'package:fscore/widget/app/section_title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

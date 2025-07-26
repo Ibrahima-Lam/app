@@ -1,5 +1,5 @@
-import 'package:app/pages/skelton/contact_page.dart';
-import 'package:app/widget/skelton/layout_builder_widget.dart';
+import 'package:fscore/pages/skelton/contact_page.dart';
+import 'package:fscore/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 
 class SignalerPage extends StatelessWidget {

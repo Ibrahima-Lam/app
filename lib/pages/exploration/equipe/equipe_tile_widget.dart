@@ -1,7 +1,7 @@
-import 'package:app/models/participant.dart';
-import 'package:app/pages/equipe/equipe_details.dart';
-import 'package:app/pages/exploration/rating_widget.dart';
-import 'package:app/widget/logos/equipe_logo_widget.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/pages/equipe/equipe_details.dart';
+import 'package:fscore/pages/exploration/rating_widget.dart';
+import 'package:fscore/widget/logos/equipe_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 abstract class EquipeSupTileWidget extends StatelessWidget {

@@ -1,6 +1,6 @@
-import 'package:app/models/sponsor.dart';
-import 'package:app/core/service/local_service.dart';
-import 'package:app/core/service/remote_service.dart';
+import 'package:fscore/models/sponsor.dart';
+import 'package:fscore/core/service/local_service.dart';
+import 'package:fscore/core/service/remote_service.dart';
 
 class SponsorService {
   static LocalService get service => LocalService('sponsor.json');

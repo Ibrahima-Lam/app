@@ -1,6 +1,6 @@
-import 'package:app/models/statistique.dart';
-import 'package:app/providers/statistique_future_provider.dart';
-import 'package:app/widget_pages/statistique_form.dart';
+import 'package:fscore/models/statistique.dart';
+import 'package:fscore/providers/statistique_future_provider.dart';
+import 'package:fscore/widget_pages/statistique_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';

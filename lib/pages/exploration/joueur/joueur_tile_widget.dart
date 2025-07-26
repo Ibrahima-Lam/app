@@ -1,7 +1,7 @@
-import 'package:app/models/joueur.dart';
-import 'package:app/pages/exploration/rating_widget.dart';
-import 'package:app/pages/joueur/joueur_details.dart';
-import 'package:app/widget/logos/joueur_logo_widget.dart';
+import 'package:fscore/models/joueur.dart';
+import 'package:fscore/pages/exploration/rating_widget.dart';
+import 'package:fscore/pages/joueur/joueur_details.dart';
+import 'package:fscore/widget/logos/joueur_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 abstract class JoueurSupTileWidget extends StatelessWidget {

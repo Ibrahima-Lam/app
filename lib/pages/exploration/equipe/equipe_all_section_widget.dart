@@ -1,8 +1,8 @@
-import 'package:app/models/competition.dart';
-import 'package:app/models/participant.dart';
-import 'package:app/pages/exploration/equipe/equipe_tile_widget.dart';
-import 'package:app/providers/participant_provider.dart';
-import 'package:app/widget/app/favori_title_widget.dart';
+import 'package:fscore/models/competition.dart';
+import 'package:fscore/models/participant.dart';
+import 'package:fscore/pages/exploration/equipe/equipe_tile_widget.dart';
+import 'package:fscore/providers/participant_provider.dart';
+import 'package:fscore/widget/app/favori_title_widget.dart';
 import 'package:flutter/material.dart';
 
 class EquipeAllSectionWidget extends StatelessWidget {

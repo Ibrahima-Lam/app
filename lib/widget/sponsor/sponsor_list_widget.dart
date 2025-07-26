@@ -1,7 +1,7 @@
-import 'package:app/core/params/categorie/categorie_params.dart';
-import 'package:app/models/sponsor.dart';
-import 'package:app/providers/sponsor_provider.dart';
-import 'package:app/widget/sponsor/sponsor_widget.dart';
+import 'package:fscore/core/params/categorie/categorie_params.dart';
+import 'package:fscore/models/sponsor.dart';
+import 'package:fscore/providers/sponsor_provider.dart';
+import 'package:fscore/widget/sponsor/sponsor_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

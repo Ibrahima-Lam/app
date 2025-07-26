@@ -1,8 +1,8 @@
-import 'package:app/models/joueur.dart';
-import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/joueur/joueur_widget.dart';
-import 'package:app/widget/form/text_search_field_widget.dart';
-import 'package:app/widget/skelton/layout_builder_widget.dart';
+import 'package:fscore/models/joueur.dart';
+import 'package:fscore/providers/joueur_provider.dart';
+import 'package:fscore/widget/joueur/joueur_widget.dart';
+import 'package:fscore/widget/form/text_search_field_widget.dart';
+import 'package:fscore/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

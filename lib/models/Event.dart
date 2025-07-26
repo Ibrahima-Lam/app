@@ -1,5 +1,5 @@
-import 'package:app/core/enums/event_type_enum.dart';
-import 'package:app/models/game.dart';
+import 'package:fscore/core/enums/event_type_enum.dart';
+import 'package:fscore/models/game.dart';
 
 abstract class Event {
   String type;

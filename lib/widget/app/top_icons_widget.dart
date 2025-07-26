@@ -1,12 +1,12 @@
-import 'package:app/core/enums/categorie_enum.dart';
-import 'package:app/models/competition.dart';
-import 'package:app/models/event.dart';
-import 'package:app/models/game.dart';
-import 'package:app/models/joueur.dart';
-import 'package:app/providers/game_event_list_provider.dart';
-import 'package:app/providers/game_provider.dart';
-import 'package:app/providers/joueur_provider.dart';
-import 'package:app/widget/logos/circular_logo_widget.dart';
+import 'package:fscore/core/enums/categorie_enum.dart';
+import 'package:fscore/models/competition.dart';
+import 'package:fscore/models/event.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/models/joueur.dart';
+import 'package:fscore/providers/game_event_list_provider.dart';
+import 'package:fscore/providers/game_provider.dart';
+import 'package:fscore/providers/joueur_provider.dart';
+import 'package:fscore/widget/logos/circular_logo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

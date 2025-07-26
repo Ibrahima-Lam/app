@@ -1,4 +1,4 @@
-import 'package:app/core/enums/enums.dart';
+import 'package:fscore/core/enums/enums.dart';
 
 class Stat {
   int num;

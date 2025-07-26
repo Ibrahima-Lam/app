@@ -1,7 +1,7 @@
-import 'package:app/models/participation.dart';
-import 'package:app/pages/forms/participation_form.dart';
-import 'package:app/providers/participation_provider.dart';
-import 'package:app/widget/modals/confirm_dialog_widget.dart';
+import 'package:fscore/models/participation.dart';
+import 'package:fscore/pages/forms/participation_form.dart';
+import 'package:fscore/providers/participation_provider.dart';
+import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';

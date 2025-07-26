@@ -1,12 +1,12 @@
-import 'package:app/core/enums/competition_type.dart';
-import 'package:app/models/competition.dart';
-import 'package:app/providers/competition_provider.dart';
-import 'package:app/widget/form/dropdown_menu_app_form_widget.dart';
-import 'package:app/widget/form/elevated_button_form_widget.dart';
-import 'package:app/widget/form/file_form_field_widget.dart';
-import 'package:app/widget/form/slider_rating_form_widget.dart';
-import 'package:app/widget/form/text_form_field_widget.dart';
-import 'package:app/widget/skelton/layout_builder_widget.dart';
+import 'package:fscore/core/enums/competition_type.dart';
+import 'package:fscore/models/competition.dart';
+import 'package:fscore/providers/competition_provider.dart';
+import 'package:fscore/widget/form/dropdown_menu_app_form_widget.dart';
+import 'package:fscore/widget/form/elevated_button_form_widget.dart';
+import 'package:fscore/widget/form/file_form_field_widget.dart';
+import 'package:fscore/widget/form/slider_rating_form_widget.dart';
+import 'package:fscore/widget/form/text_form_field_widget.dart';
+import 'package:fscore/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

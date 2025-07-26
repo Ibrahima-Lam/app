@@ -1,9 +1,9 @@
-import 'package:app/core/enums/competition_phase_enum.dart';
-import 'package:app/core/extension/list_extension.dart';
-import 'package:app/models/participation.dart';
-import 'package:app/providers/groupe_provider.dart';
-import 'package:app/providers/participant_provider.dart';
-import 'package:app/service/participation_service.dart';
+import 'package:fscore/core/enums/competition_phase_enum.dart';
+import 'package:fscore/core/extension/list_extension.dart';
+import 'package:fscore/models/participation.dart';
+import 'package:fscore/providers/groupe_provider.dart';
+import 'package:fscore/providers/participant_provider.dart';
+import 'package:fscore/service/participation_service.dart';
 import 'package:flutter/material.dart';
 
 class ParticipationProvider extends ChangeNotifier {

@@ -1,5 +1,5 @@
-import 'package:app/core/enums/game_etat_enum.dart';
-import 'package:app/models/gameEvent.dart';
+import 'package:fscore/core/enums/game_etat_enum.dart';
+import 'package:fscore/models/gameEvent.dart';
 
 class Score {
   String idGame;

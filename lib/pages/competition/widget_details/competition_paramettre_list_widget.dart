@@ -1,5 +1,5 @@
-import 'package:app/models/paramettre.dart';
-import 'package:app/providers/paramettre_provider.dart';
+import 'package:fscore/models/paramettre.dart';
+import 'package:fscore/providers/paramettre_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';

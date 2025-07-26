@@ -1,5 +1,5 @@
-import 'package:app/collection/collection.dart';
-import 'package:app/models/competition.dart';
+import 'package:fscore/collection/collection.dart';
+import 'package:fscore/models/competition.dart';
 
 class CompetitionCollection implements Collection<Competition> {
   List<Competition> _competitions;

@@ -1,6 +1,6 @@
-import 'package:app/core/params/categorie/categorie_params.dart';
-import 'package:app/models/infos/infos.dart';
-import 'package:app/service/infos_service.dart';
+import 'package:fscore/core/params/categorie/categorie_params.dart';
+import 'package:fscore/models/infos/infos.dart';
+import 'package:fscore/service/infos_service.dart';
 import 'package:flutter/material.dart';
 
 class InfosProvider extends ChangeNotifier {

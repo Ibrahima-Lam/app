@@ -1,5 +1,5 @@
-import 'package:app/models/composition.dart';
-import 'package:app/widget/events/composition_events_widget.dart';
+import 'package:fscore/models/composition.dart';
+import 'package:fscore/widget/events/composition_events_widget.dart';
 import 'package:flutter/material.dart';
 
 class CoachAndTeamWidget extends StatelessWidget {

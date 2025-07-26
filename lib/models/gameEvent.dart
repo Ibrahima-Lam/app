@@ -1,4 +1,4 @@
-import 'package:app/models/game.dart';
+import 'package:fscore/models/game.dart';
 
 class GameEvent {
   final Game game;

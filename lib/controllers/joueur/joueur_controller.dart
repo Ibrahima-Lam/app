@@ -1,10 +1,10 @@
-import 'package:app/core/enums/event_type_enum.dart';
-import 'package:app/core/enums/performance_type.dart';
-import 'package:app/models/composition.dart';
-import 'package:app/models/event.dart';
-import 'package:app/models/game.dart';
-import 'package:app/models/joueur.dart';
-import 'package:app/models/performance.dart';
+import 'package:fscore/core/enums/event_type_enum.dart';
+import 'package:fscore/core/enums/performance_type.dart';
+import 'package:fscore/models/composition.dart';
+import 'package:fscore/models/event.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/models/joueur.dart';
+import 'package:fscore/models/performance.dart';
 
 class JoueurController {
   static List<Game> getJoueurConvocation(

@@ -1,8 +1,8 @@
-import 'package:app/core/enums/categorie_enum.dart';
-import 'package:app/models/competition.dart';
-import 'package:app/pages/competition/competition_details.dart';
-import 'package:app/widget/app/favori_icon_widget.dart';
-import 'package:app/widget/logos/competition_logo_image.dart';
+import 'package:fscore/core/enums/categorie_enum.dart';
+import 'package:fscore/models/competition.dart';
+import 'package:fscore/pages/competition/competition_details.dart';
+import 'package:fscore/widget/app/favori_icon_widget.dart';
+import 'package:fscore/widget/logos/competition_logo_image.dart';
 import 'package:flutter/material.dart';
 
 class CompetitionTitleWidget extends StatelessWidget {

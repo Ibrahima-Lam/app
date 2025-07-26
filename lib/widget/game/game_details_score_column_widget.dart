@@ -1,8 +1,8 @@
-import 'package:app/controllers/competition/date.dart';
-import 'package:app/core/enums/game_etat_enum.dart';
-import 'package:app/models/game.dart';
-import 'package:app/models/gameEvent.dart';
-import 'package:app/widget/game/game_score_animation_widget.dart';
+import 'package:fscore/controllers/competition/date.dart';
+import 'package:fscore/core/enums/game_etat_enum.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/models/gameEvent.dart';
+import 'package:fscore/widget/game/game_score_animation_widget.dart';
 import 'package:flutter/material.dart';
 
 class GameDetailsScoreColumnWidget extends StatelessWidget {

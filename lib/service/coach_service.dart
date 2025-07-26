@@ -1,6 +1,6 @@
-import 'package:app/models/coachs/coach.dart';
-import 'package:app/core/service/local_service.dart';
-import 'package:app/core/service/remote_service.dart';
+import 'package:fscore/models/coachs/coach.dart';
+import 'package:fscore/core/service/local_service.dart';
+import 'package:fscore/core/service/remote_service.dart';
 
 class CoachService {
   static LocalService get service => LocalService('coach.json');

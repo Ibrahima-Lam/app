@@ -1,7 +1,7 @@
-import 'package:app/core/extension/list_extension.dart';
-import 'package:app/models/paramettre.dart';
-import 'package:app/providers/user_provider.dart';
-import 'package:app/service/paramettre_service.dart';
+import 'package:fscore/core/extension/list_extension.dart';
+import 'package:fscore/models/paramettre.dart';
+import 'package:fscore/providers/user_provider.dart';
+import 'package:fscore/service/paramettre_service.dart';
 import 'package:flutter/material.dart';
 
 class ParamettreProvider extends ChangeNotifier {

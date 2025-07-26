@@ -1,6 +1,6 @@
-import 'package:app/core/params/categorie/classement/classement_params.dart';
-import 'package:app/models/game.dart';
-import 'package:app/models/participation.dart';
+import 'package:fscore/core/params/categorie/classement/classement_params.dart';
+import 'package:fscore/models/game.dart';
+import 'package:fscore/models/participation.dart';
 
 abstract class ClasseurControllerRipository {
   final List<Game> games;

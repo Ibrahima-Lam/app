@@ -1,5 +1,5 @@
-import 'package:app/pages/equipe/equipe_details.dart';
-import 'package:app/widget/logos/equipe_logo_widget.dart';
+import 'package:fscore/pages/equipe/equipe_details.dart';
+import 'package:fscore/widget/logos/equipe_logo_widget.dart';
 import 'package:flutter/material.dart';
 
 class EquipeListTileWidget extends StatelessWidget {

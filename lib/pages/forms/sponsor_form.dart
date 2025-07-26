@@ -1,11 +1,11 @@
-import 'package:app/controllers/competition/date.dart';
-import 'package:app/core/params/categorie/categorie_params.dart';
-import 'package:app/models/sponsor.dart';
-import 'package:app/providers/sponsor_provider.dart';
-import 'package:app/widget/form/elevated_button_form_widget.dart';
-import 'package:app/widget/form/file_form_field_widget.dart';
-import 'package:app/widget/form/text_form_field_widget.dart';
-import 'package:app/widget/skelton/layout_builder_widget.dart';
+import 'package:fscore/controllers/competition/date.dart';
+import 'package:fscore/core/params/categorie/categorie_params.dart';
+import 'package:fscore/models/sponsor.dart';
+import 'package:fscore/providers/sponsor_provider.dart';
+import 'package:fscore/widget/form/elevated_button_form_widget.dart';
+import 'package:fscore/widget/form/file_form_field_widget.dart';
+import 'package:fscore/widget/form/text_form_field_widget.dart';
+import 'package:fscore/widget/skelton/layout_builder_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
