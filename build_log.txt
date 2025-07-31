@@ -15916,7 +15916,7 @@
 [        ] Merging result: SUCCESS
 [        ] 1<?xml version="1.0" encoding="utf-8"?>
 [        ] 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-[        ] 3    package="com.example.app"
+[        ] 3    package="com.fscore.app"
 [        ] 4    android:versionCode="1"
 [        ] 5    android:versionName="1.0.0" >
 [        ] 6
@@ -15968,12 +15968,12 @@
 [        ] 32
 [        ] 33    <permission
 [        ] 33-->[androidx.core:core:1.13.1] C:\Users\MULTI MEDIA\.gradle\caches\8.12\transforms\73aa083afefb941d18007d1b70cec6be\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
-[        ] 34        android:name="com.example.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+[        ] 34        android:name="com.fscore.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
 [        ] 34-->[androidx.core:core:1.13.1] C:\Users\MULTI MEDIA\.gradle\caches\8.12\transforms\73aa083afefb941d18007d1b70cec6be\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
 [        ] 35        android:protectionLevel="signature" />
 [        ] 35-->[androidx.core:core:1.13.1] C:\Users\MULTI MEDIA\.gradle\caches\8.12\transforms\73aa083afefb941d18007d1b70cec6be\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
 [        ] 36
-[        ] 37    <uses-permission android:name="com.example.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+[        ] 37    <uses-permission android:name="com.fscore.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
 [        ] 37-->[androidx.core:core:1.13.1] C:\Users\MULTI MEDIA\.gradle\caches\8.12\transforms\73aa083afefb941d18007d1b70cec6be\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
 [        ] 37-->[androidx.core:core:1.13.1] C:\Users\MULTI MEDIA\.gradle\caches\8.12\transforms\73aa083afefb941d18007d1b70cec6be\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
 [        ] 38
@@ -15989,7 +15989,7 @@
 [        ] 44-->C:\projects\app\android\app\src\main\AndroidManifest.xml:3:9-31
 [        ] 45        <activity
 [        ] 45-->C:\projects\app\android\app\src\main\AndroidManifest.xml:6:9-27:20
-[        ] 46            android:name="com.example.app.MainActivity"
+[        ] 46            android:name="com.fscore.app.MainActivity"
 [        ] 46-->C:\projects\app\android\app\src\main\AndroidManifest.xml:7:13-41
 [        ] 47            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
 [        ] 47-->C:\projects\app\android\app\src\main\AndroidManifest.xml:12:13-163
@@ -16045,7 +16045,7 @@
 [        ] 79-->[:image_picker_android] C:\projects\app\build\image_picker_android\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:9:9-17:20
 [   +1 ms] 80            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
 [        ] 80-->[:image_picker_android] C:\projects\app\build\image_picker_android\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:10:13-82
-[        ] 81            android:authorities="com.example.app.flutter.image_provider"
+[        ] 81            android:authorities="com.fscore.app.flutter.image_provider"
 [        ] 81-->[:image_picker_android] C:\projects\app\build\image_picker_android\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:11:13-74
 [   +2 ms] 82            android:exported="false"
 [        ] 82-->[:image_picker_android] C:\projects\app\build\image_picker_android\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:12:13-37
@@ -16255,7 +16255,7 @@
 [        ] 189-->[:firebase_messaging] C:\projects\app\build\firebase_messaging\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:41:9-45:38
 [        ] 190            android:name="io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingInitProvider"
 [        ] 190-->[:firebase_messaging] C:\projects\app\build\firebase_messaging\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:42:13-102
-[        ] 191            android:authorities="com.example.app.flutterfirebasemessaginginitprovider"
+[        ] 191            android:authorities="com.fscore.app.flutterfirebasemessaginginitprovider"
 [        ] 191-->[:firebase_messaging] C:\projects\app\build\firebase_messaging\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:43:13-88
 [        ] 192            android:exported="false"
 [        ] 192-->[:firebase_messaging] C:\projects\app\build\firebase_messaging\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:44:13-37
@@ -16373,7 +16373,7 @@
 [        ] 257-->[com.google.firebase:firebase-common:21.0.0] C:\Users\MULTI MEDIA\.gradle\caches\8.12\transforms\6a7e3ef9232cbadb032af0fd5c6cc0ae\transformed\jetified-firebase-common-21.0.0\AndroidManifest.xml:23:9-28:39
 [        ] 258            android:name="com.google.firebase.provider.FirebaseInitProvider"
 [        ] 258-->[com.google.firebase:firebase-common:21.0.0] C:\Users\MULTI MEDIA\.gradle\caches\8.12\transforms\6a7e3ef9232cbadb032af0fd5c6cc0ae\transformed\jetified-firebase-common-21.0.0\AndroidManifest.xml:24:13-77
-[        ] 259            android:authorities="com.example.app.firebaseinitprovider"
+[        ] 259            android:authorities="com.fscore.app.firebaseinitprovider"
 [        ] 259-->[com.google.firebase:firebase-common:21.0.0] C:\Users\MULTI MEDIA\.gradle\caches\8.12\transforms\6a7e3ef9232cbadb032af0fd5c6cc0ae\transformed\jetified-firebase-common-21.0.0\AndroidManifest.xml:25:13-72
 [        ] 260            android:directBootAware="true"
 [        ] 260-->[com.google.firebase:firebase-common:21.0.0] C:\Users\MULTI MEDIA\.gradle\caches\8.12\transforms\6a7e3ef9232cbadb032af0fd5c6cc0ae\transformed\jetified-firebase-common-21.0.0\AndroidManifest.xml:26:13-43
@@ -16451,7 +16451,7 @@
 [        ] 301-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\MULTI MEDIA\.gradle\caches\8.12\transforms\c26e9bd9e94c83e6b65abe3b819ef578\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:24:9-32:20
 [        ] 302            android:name="androidx.startup.InitializationProvider"
 [        ] 302-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\MULTI MEDIA\.gradle\caches\8.12\transforms\c26e9bd9e94c83e6b65abe3b819ef578\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:25:13-67
-[        ] 303            android:authorities="com.example.app.androidx-startup"
+[        ] 303            android:authorities="com.fscore.app.androidx-startup"
 [        ] 303-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\MULTI MEDIA\.gradle\caches\8.12\transforms\c26e9bd9e94c83e6b65abe3b819ef578\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:26:13-68
 [        ] 304            android:exported="false" >
 [        ] 304-->[androidx.lifecycle:lifecycle-process:2.7.0] C:\Users\MULTI MEDIA\.gradle\caches\8.12\transforms\c26e9bd9e94c83e6b65abe3b819ef578\transformed\jetified-lifecycle-process-2.7.0\AndroidManifest.xml:27:13-37

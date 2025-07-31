@@ -1,40 +1,44 @@
 import 'package:fscore/core/constants/app/styles.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 
 List<Map<String, dynamic>> kDestinations = [
   {
     'label': 'Match',
-    'icon': Icon(
-      Icons.home_outlined,
-      size: kSize,
+    'icon': FaIcon(
+      FontAwesomeIcons.house,
+      size: kIconNavSize,
+      color: kColor,
     ),
-    'selectedIcon': Icon(
-      Icons.home,
-      size: kSize,
+    'selectedIcon': FaIcon(
+      FontAwesomeIcons.houseUser,
+      size: kIconNavSize,
       color: kColor,
     ),
   },
   {
     'label': 'Infos',
-    'icon': Icon(
-      Icons.info_outline,
-      size: kSize,
+    'icon': FaIcon(
+      FontAwesomeIcons.info,
+      size: kIconNavSize,
+      color: kColor,
     ),
-    'selectedIcon': Icon(
-      Icons.info,
-      size: kSize,
+    'selectedIcon': FaIcon(
+      FontAwesomeIcons.circleInfo,
+      size: kIconNavSize,
       color: kColor,
     ),
   },
   {
     'label': 'Explorer',
-    'icon': Icon(
-      Icons.open_in_browser,
-      size: kSize,
+    'icon': FaIcon(
+      FontAwesomeIcons.arrowUp,
+      size: kIconNavSize,
+      color: kColor,
     ),
-    'selectedIcon': Icon(
-      Icons.open_in_browser,
-      size: kSize,
+    'selectedIcon': FaIcon(
+      FontAwesomeIcons.circleArrowUp,
+      size: kIconNavSize,
       color: kColor,
     ),
   },
@@ -43,16 +47,17 @@ List<Map<String, dynamic>> kDestinations = [
     'icon': Badge(
         isLabelVisible: false,
         label: null,
-        child: Icon(
-          Icons.notifications_none,
-          size: kSize,
+        child: FaIcon(
+          FontAwesomeIcons.bell,
+          size: kIconNavSize,
+          color: kColor,
         )),
     'selectedIcon': Badge(
         isLabelVisible: false,
         label: null,
-        child: Icon(
-          Icons.notifications,
-          size: kSize,
+        child: FaIcon(
+          FontAwesomeIcons.solidBell,
+          size: kIconNavSize,
           color: kColor,
         )),
   },

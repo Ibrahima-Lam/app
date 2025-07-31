@@ -4,6 +4,7 @@ import 'package:fscore/providers/game_provider.dart';
 import 'package:fscore/service/notif_sqlite_service.dart';
 import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:provider/provider.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -98,6 +99,10 @@ class NotificationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseMessaging.instance.getToken().then((value) {
+      print(value);
+    });
+
     return Card(
       margin: EdgeInsets.symmetric(vertical: 1, horizontal: 4),
       child: ListTile(

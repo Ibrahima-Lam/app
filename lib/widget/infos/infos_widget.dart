@@ -1,4 +1,5 @@
 import 'package:fscore/controllers/competition/date.dart';
+import 'package:fscore/core/constants/app/platforme.dart';
 import 'package:fscore/core/extension/list_extension.dart';
 import 'package:fscore/models/competition.dart';
 import 'package:fscore/models/infos/infos.dart';
@@ -143,7 +144,9 @@ class _InfosFullWidgetState extends State<InfosFullWidget> {
                 Hero(
                   tag: widget.infos.idInfos,
                   child: Container(
-                    height: 260,
+                    height: MediaQuery.of(context).size.width <= kMaxWidth
+                        ? kSmallHeight
+                        : MediaQuery.of(context).size.width * kPourcentHeight,
                     width: MediaQuery.of(context).size.width,
                     child: (widget.infos.imageUrl ?? '').isEmpty
                         ? InfosErrorWidget()

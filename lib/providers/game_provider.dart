@@ -192,4 +192,8 @@ class GameProvider extends ChangeNotifier {
 
     return gamesData;
   }
+
+  void notify() {
+    notifyListeners();
+  }
 }

@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class TabBarWidget {
-  static PreferredSizeWidget build({
+  final BuildContext context;
+  TabBarWidget._(this.context);
+
+  static TabBarWidget of(BuildContext context) {
+    return TabBarWidget._(context);
+  }
+
+  PreferredSizeWidget build({
     TabController? controller,
     required List<Widget> tabs,
     TabAlignment? tabAlignment,
@@ -23,7 +30,10 @@ class TabBarWidget {
         fontWeight: FontWeight.bold,
         color: Colors.white,
       ),
-      tabAlignment: tabAlignment ?? TabAlignment.start,
+      tabAlignment: tabAlignment ??
+          (MediaQuery.of(context).size.width < 600
+              ? TabAlignment.start
+              : TabAlignment.center),
       tabs: tabs,
     );
   }

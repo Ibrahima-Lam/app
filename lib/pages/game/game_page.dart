@@ -1,15 +1,19 @@
 import 'package:fscore/collection/competition_collection.dart';
 import 'package:fscore/controllers/competition/date.dart';
 import 'package:fscore/core/constants/game/tab_bar.dart';
+import 'package:fscore/models/api/fixture.dart';
 import 'package:fscore/models/competition.dart';
 import 'package:fscore/models/game.dart';
 import 'package:fscore/providers/competition_provider.dart';
 import 'package:fscore/providers/favori_provider.dart';
+import 'package:fscore/providers/fixture_provider.dart';
 import 'package:fscore/providers/game_event_list_provider.dart';
 import 'package:fscore/providers/game_provider.dart';
 import 'package:fscore/widget/app/favori_title_widget.dart';
 import 'package:fscore/widget/app/top_icons_widget.dart';
 import 'package:fscore/widget/competition/competition_title_widget.dart';
+import 'package:fscore/widget/competition/league_tile_widget.dart';
+import 'package:fscore/widget/game/fixture_widget.dart';
 import 'package:fscore/widget/modals/custom_delegate_search.dart';
 import 'package:fscore/widget/game/game_widget.dart';
 import 'package:fscore/widget/skelton/scaffold_widget.dart';
@@ -129,7 +133,7 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
         onPressedSearch: _showSearch,
         onPressedCalendar: _showCalendar,
         onPressedStream: _setPlaying,
-        bottom: TabBarWidget.build(
+        bottom: TabBarWidget.of(context).build(
             controller: playing ? null : _tabController,
             tabAlignment: playing ? TabAlignment.center : null,
             tabs: playing
@@ -193,11 +197,13 @@ class CompetitionGamesWidget extends StatelessWidget {
   final String date;
   final bool playing;
   final List<Competition> competitions;
-  const CompetitionGamesWidget(
+  CompetitionGamesWidget(
       {super.key,
       required this.date,
       required this.competitions,
       required this.playing});
+
+  final ScrollController scrollController = ScrollController();
 
   String get _message =>
       playing ? 'Pas de match en direct!' : 'Pas de Match Pour cette date!';
@@ -245,41 +251,54 @@ class CompetitionGamesWidget extends StatelessWidget {
           }
           return Consumer2<GameProvider, FavoriProvider>(
               builder: (context, gameProvider, favoriProvider, child) {
-            return gameProvider
+            var fixtureProvider = context.read<FixtureProvider>();
+            if (gameProvider
                     .getGamesBy(dateGame: date, playing: playing)
-                    .isEmpty
-                ? Center(
-                    child: Text(_message),
-                  )
-                : SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Column(
-                          children: [
-                            TopIconsWidget(
-                              playing: playing,
-                              gameProvider: gameProvider,
-                              dateGame: date,
-                              competitions: competitions,
-                            ),
-                            FavorisSectionWidget(
-                                gameProvider: gameProvider,
-                                favoriProvider: favoriProvider,
-                                date: date,
-                                competitions: competitions,
-                                playing: playing),
-                            NonFavorisSectionWidget(
-                                gameProvider: gameProvider,
-                                favoriProvider: favoriProvider,
-                                date: date,
-                                competitions: competitions,
-                                playing: playing),
-                            SponsorListWidget(categorieParams: null),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
+                    .isEmpty &&
+                fixtureProvider.fixtures.isEmpty) {
+              fixtureProvider.LoadFixtures(date: date).then((res) {
+                if (res) gameProvider.notify();
+              });
+
+              return Center(
+                child: Text(_message),
+              );
+            }
+            return SingleChildScrollView(
+              controller: scrollController,
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      TopIconsWidget(
+                        playing: playing,
+                        gameProvider: gameProvider,
+                        dateGame: date,
+                        competitions: competitions,
+                      ),
+                      FavorisSectionWidget(
+                          gameProvider: gameProvider,
+                          favoriProvider: favoriProvider,
+                          date: date,
+                          competitions: competitions,
+                          playing: playing),
+                      NonFavorisSectionWidget(
+                          gameProvider: gameProvider,
+                          favoriProvider: favoriProvider,
+                          date: date,
+                          competitions: competitions,
+                          playing: playing),
+                      FixturesSectionWidget(
+                          controller: scrollController,
+                          fixtureProvider: fixtureProvider,
+                          date: date,
+                          live: playing),
+                      SponsorListWidget(categorieParams: null),
+                    ],
+                  ),
+                ],
+              ),
+            );
           });
         });
   }
@@ -289,7 +308,7 @@ class FavorisSectionWidget extends CompetitionGamesWidget {
   final GameProvider gameProvider;
   final FavoriProvider favoriProvider;
 
-  const FavorisSectionWidget(
+  FavorisSectionWidget(
       {super.key,
       required this.gameProvider,
       required this.favoriProvider,
@@ -322,7 +341,7 @@ class NonFavorisSectionWidget extends CompetitionGamesWidget {
   final GameProvider gameProvider;
   final FavoriProvider favoriProvider;
 
-  const NonFavorisSectionWidget(
+  NonFavorisSectionWidget(
       {super.key,
       required this.gameProvider,
       required this.favoriProvider,
@@ -380,6 +399,136 @@ class CompetitionSectionWidget extends StatelessWidget {
         const SizedBox(
           height: 5.0,
         )
+      ],
+    );
+  }
+}
+
+class FixturesSectionWidget extends StatefulWidget {
+  final String date;
+  final FixtureProvider fixtureProvider;
+  final ScrollController controller;
+  final bool live;
+
+  const FixturesSectionWidget({
+    super.key,
+    required this.fixtureProvider,
+    required this.date,
+    required this.controller,
+    required this.live,
+  });
+
+  @override
+  State<FixturesSectionWidget> createState() => _FixturesSectionWidgetState();
+}
+
+class _FixturesSectionWidgetState extends State<FixturesSectionWidget> {
+  List<League> displayedLeagues = [];
+  List<League> leagues = [];
+  int displayedCount = 3;
+  bool isLoading = false;
+  late Future<bool> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = getData();
+
+    widget.controller.addListener(() {
+      if (widget.controller.position.pixels >
+              widget.controller.position.maxScrollExtent - 100 &&
+          !isLoading) {
+        _loadMoreLeagues();
+      }
+    });
+  }
+
+  void setIsLoading(bool val) {
+    if (mounted) {
+      setState(() {
+        isLoading = val;
+      });
+    }
+  }
+
+  void _loadMoreLeagues() {
+    if (displayedCount >= leagues.length || isLoading) return;
+    setIsLoading(true);
+
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      setState(() {
+        displayedLeagues.addAll(leagues.skip(displayedCount).take(2));
+        displayedCount += 2;
+        isLoading = false;
+      });
+    });
+  }
+
+  Future<bool> getData() async {
+    await widget.fixtureProvider.getFixtures(
+      date: widget.date,
+      live: widget.live,
+    );
+
+    leagues.clear();
+    leagues.addAll(widget.fixtureProvider.leagues);
+
+    displayedLeagues.clear();
+    displayedCount = 3;
+    displayedLeagues.addAll(leagues.take(displayedCount));
+
+    return true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<bool>(
+      future: _future,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Center(child: Text('Erreur de chargement'));
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return Consumer<FixtureProvider>(
+          builder: (context, fixtureProvider, child) {
+            return Column(
+              children: [
+                ...displayedLeagues.map(
+                  (league) => LeagueSectionWidget(
+                    league: league,
+                    fixtures: fixtureProvider.getFixturesByLeague(league.id!),
+                  ),
+                ),
+                if (isLoading) const CircularProgressIndicator(),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class LeagueSectionWidget extends StatelessWidget {
+  final League league;
+  final List<Fixture> fixtures;
+
+  const LeagueSectionWidget({
+    super.key,
+    required this.league,
+    required this.fixtures,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        LeagueTileWidget(league: league),
+        for (final fixture in fixtures) FixtureWidget(fixture: fixture),
       ],
     );
   }

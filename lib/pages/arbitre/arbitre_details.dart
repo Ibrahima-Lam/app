@@ -121,7 +121,7 @@ class ArbitreDetails extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            bottom: TabBarWidget.build(
+                            bottom: TabBarWidget.of(context).build(
                                 tabs: tabs.map((e) => Tab(text: e)).toList()),
                           )
                         ];

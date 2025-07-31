@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '196237042075',
     projectId: 'fscore-8d32b',
     storageBucket: 'fscore-8d32b.appspot.com',
-    iosBundleId: 'com.example.app',
+    iosBundleId: 'com.fscore.app',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -72,7 +72,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '196237042075',
     projectId: 'fscore-8d32b',
     storageBucket: 'fscore-8d32b.appspot.com',
-    iosBundleId: 'com.example.app',
+    iosBundleId: 'com.fscore.app',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(

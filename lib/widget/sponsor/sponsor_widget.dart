@@ -1,3 +1,4 @@
+import 'package:fscore/core/constants/app/platforme.dart';
 import 'package:fscore/models/sponsor.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,9 @@ class SponsorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Container(
-        width: MediaQuery.of(context).size.width,
+        width: MediaQuery.of(context).size.width <= 600
+            ? MediaQuery.of(context).size.width
+            : MediaQuery.of(context).size.width * .71,
         constraints: const BoxConstraints(
           minHeight: 200,
         ),
@@ -18,7 +21,9 @@ class SponsorWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              height: 250,
+              height: MediaQuery.of(context).size.width <= kMaxWidth
+                  ? kSmallHeight
+                  : MediaQuery.of(context).size.width * kPourcentHeight,
               child: sponsor.imageUrl.isEmpty
                   ? SponsorErrorWidget()
                   : CachedNetworkImage(

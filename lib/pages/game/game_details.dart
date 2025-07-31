@@ -297,7 +297,7 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
                             ),
                           ),
                         ),
-                        bottom: TabBarWidget.build(
+                        bottom: TabBarWidget.of(context).build(
                           tabs: [
                             for (final tab in tabs)
                               Tab(

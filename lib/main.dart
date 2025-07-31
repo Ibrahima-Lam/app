@@ -1,32 +1,15 @@
 import 'dart:io';
 
-import 'package:fscore/collection/composition_collection.dart';
 import 'package:fscore/core/constants/app/styles.dart';
 import 'package:fscore/core/constants/navigation/kdestination.dart';
-import 'package:fscore/models/app_paramettre.dart';
+import 'package:fscore/core/route/app_route.dart';
+import 'package:fscore/core/widget/multi_provider_widget.dart';
 import 'package:fscore/pages/actualite/infos_page.dart';
 import 'package:fscore/pages/exploration/exploration_page.dart';
 import 'package:fscore/pages/game/game_page.dart';
 import 'package:fscore/pages/notification/notification_page.dart';
-import 'package:fscore/providers/app_paramettre_provider.dart';
-import 'package:fscore/providers/arbitre_provider.dart';
-import 'package:fscore/providers/coach_provider.dart';
 import 'package:fscore/providers/competition_provider.dart';
-import 'package:fscore/providers/composition_provider.dart';
-import 'package:fscore/providers/favori_provider.dart';
-import 'package:fscore/providers/infos_provider.dart';
-import 'package:fscore/providers/paramettre_provider.dart';
-import 'package:fscore/providers/score_provider.dart';
-import 'package:fscore/providers/sponsor_provider.dart';
-import 'package:fscore/providers/user_provider.dart';
-import 'package:fscore/providers/game_event_list_provider.dart';
 import 'package:fscore/providers/game_provider.dart';
-import 'package:fscore/providers/groupe_provider.dart';
-import 'package:fscore/providers/joueur_provider.dart';
-import 'package:fscore/providers/participant_provider.dart';
-import 'package:fscore/providers/participation_provider.dart';
-import 'package:fscore/providers/statistique_future_provider.dart';
-import 'package:fscore/providers/statistique_provider.dart';
 import 'package:fscore/core/service/local_notification_service.dart';
 import 'package:fscore/service/token_service.dart';
 import 'package:fscore/widget/skelton/drawer_widget.dart';
@@ -64,107 +47,11 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => CompetitionProvider()),
-        ChangeNotifierProvider(
-          create: (context) => FavoriProvider()
-            ..getCompetitions()
-            ..getEquipes()
-            ..getJoueurs(),
-          lazy: false,
-        ),
-        ChangeNotifierProvider(
-            lazy: false,
-            create: (context) =>
-                AppParamettreProvider(appParamettre: AppParamettre())
-                  ..getData()),
-        ChangeNotifierProvider(
-            lazy: false,
-            create: (context) => ParticipantProvider()..initParticipants()),
-        ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProvider(
-          lazy: false,
-          create: (context) => ScoreProvider([]),
-        ),
-        ChangeNotifierProvider(
-          lazy: false,
-          create: (context) => SponsorProvider([]),
-        ),
-        ChangeNotifierProvider(
-            lazy: false, create: (context) => InfosProvider()),
-        ChangeNotifierProvider(create: (context) => CoachProvider()),
-        ChangeNotifierProvider(create: (context) => ArbitreProvider()),
-        ChangeNotifierProvider(
-            lazy: false, create: (context) => GroupeProvider()),
-        ChangeNotifierProvider<GameEventListProvider>(
-          lazy: false,
-          create: (context) => GameEventListProvider([])..getEvents(),
-        ),
-        ChangeNotifierProxyProvider4<ParticipantProvider, GameEventListProvider,
-                GroupeProvider, ScoreProvider, GameProvider>(
-            lazy: false,
-            create: (context) => GameProvider([],
-                scoreProvider: context.read<ScoreProvider>(),
-                participantProvider: ParticipantProvider(),
-                gameEventListProvider: GameEventListProvider([]),
-                groupeProvider: GroupeProvider([])),
-            update: (context, parts, events, groupes, scores, previous) =>
-                GameProvider(
-                  previous?.games ?? [],
-                  scoreProvider: scores,
-                  participantProvider: parts,
-                  gameEventListProvider: events,
-                  groupeProvider: groupes,
-                )),
-        ChangeNotifierProxyProvider2<ParticipantProvider, GroupeProvider,
-                ParticipationProvider>(
-            create: (context) => ParticipationProvider([],
-                participantProvider: context.read<ParticipantProvider>(),
-                groupeProvider: context.read<GroupeProvider>()),
-            update: (context, parts, groupes, previous) =>
-                ParticipationProvider(
-                  previous?.participations ?? [],
-                  participantProvider: parts,
-                  groupeProvider: groupes,
-                )),
-        ChangeNotifierProvider<StatistiqueFutureProvider>(
-          lazy: false,
-          create: (context) => StatistiqueFutureProvider([]),
-        ),
-        ChangeNotifierProxyProvider2<StatistiqueFutureProvider,
-            GameEventListProvider, StatistiqueProvider>(
-          create: (context) => StatistiqueProvider(
-              context.read<StatistiqueFutureProvider>(),
-              context.read<GameEventListProvider>()),
-          update: (context, stats, events, previous) =>
-              StatistiqueProvider(stats, events),
-        ),
-        ChangeNotifierProxyProvider<UserProvider, ParamettreProvider>(
-            lazy: false,
-            create: (context) =>
-                ParamettreProvider(userProvider: context.read<UserProvider>()),
-            update: (context, value, previous) =>
-                ParamettreProvider(userProvider: value)),
-        ChangeNotifierProxyProvider<ParticipantProvider, JoueurProvider>(
-            lazy: false,
-            create: (context) => JoueurProvider([],
-                participantProvider: context.read<ParticipantProvider>()),
-            update: (context, value, previous) => JoueurProvider(
-                previous?.joueurs ?? [],
-                participantProvider: value)),
-        ChangeNotifierProxyProvider<GameEventListProvider, CompositionProvider>(
-            lazy: false,
-            create: (context) => CompositionProvider(
-                compositionCollection: CompositionCollection([]),
-                gameEventListProvider: context.read<GameEventListProvider>()),
-            update: (context, value, previous) => CompositionProvider(
-                compositionCollection: previous?.compositionCollection ??
-                    CompositionCollection([]),
-                gameEventListProvider: value)),
-      ],
+    return MultiProviderWidget(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        routes: appRoutes,
+        title: 'Football Score',
         theme: ThemeData(
             fontFamily: 'RobotoCondensed',
             progressIndicatorTheme: ProgressIndicatorThemeData(

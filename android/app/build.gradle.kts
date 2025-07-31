@@ -12,7 +12,7 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 android {
-    namespace = "com.example.app"
+    namespace = "com.fscore.app"
     compileSdk = 35
     ndkVersion = "27.0.12077973"
 
