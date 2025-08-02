@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:fscore/models/app_paramettre.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
@@ -8,11 +9,17 @@ class AppParamettreService {
   final String file_name = 'paramettre.json';
 
   Future<AppParamettre> getData() async {
+    if (kIsWeb) {
+      return AppParamettre(); // Web does not support local file system access
+    }
     final json = jsonDecode(await _readData() ?? '{}');
     return AppParamettre.fromJson(json);
   }
 
   Future<void> setData(AppParamettre paramettre) async {
+    if (kIsWeb) {
+      return; // Web does not support local file system access
+    }
     _writeText(jsonEncode(paramettre.toJson()));
   }
 

@@ -112,6 +112,10 @@ class GameProvider extends ChangeNotifier {
   }
 
   void changeDate({required String id, required String? date}) async {
+    Game game = games.singleWhere((element) => element.idGame == id);
+    game.dateGame = date;
+    final bool res = await GameService().editGame(id, game);
+    if (!res) return;
     games = games.map((e) {
       if (e.idGame == id) {
         e.dateGame = date;
@@ -121,6 +125,11 @@ class GameProvider extends ChangeNotifier {
   }
 
   void changeHeure({required String id, required String? heure}) async {
+    Game game = games.singleWhere((element) => element.idGame == id);
+    game.heureGame = heure;
+    final bool res = await GameService().editGame(id, game);
+    if (!res) return;
+    // Update the game in the local list
     games = games.map((e) {
       if (e.idGame == id) {
         e.heureGame = heure;

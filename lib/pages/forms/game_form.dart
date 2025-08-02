@@ -255,9 +255,12 @@ class _DateOuHeureFormWidgetState extends State<DateOuHeureFormWidget> {
                   }
                   return;
                 } else {
-                  int? h = int.tryParse(widget.controller.text.split(':')[0]);
-                  int? m = int.tryParse(widget.controller.text.split(':')[1]);
-
+                  int? h = widget.controller.text.isEmpty
+                      ? null
+                      : int.tryParse(widget.controller.text.split(':')[0]);
+                  int? m = widget.controller.text.isEmpty
+                      ? null
+                      : int.tryParse(widget.controller.text.split(':')[1]);
                   TimeOfDay? heure = await showTimePicker(
                       context: context,
                       initialTime: h != null && m != null

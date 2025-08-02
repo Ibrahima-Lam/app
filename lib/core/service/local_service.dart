@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
@@ -8,6 +9,9 @@ class LocalService {
   const LocalService(this._file);
 
   Future getData() async {
+    if (kIsWeb) {
+      return null; // Web does not support local file system access
+    }
     final String? data = await _readData();
     if (data == null) return null;
     final json = jsonDecode(data);
@@ -15,6 +19,9 @@ class LocalService {
   }
 
   Future<void> setData(data) async {
+    if (kIsWeb) {
+      return; // Web does not support local file system access
+    }
     _writeText(jsonEncode(data));
   }
 
@@ -49,9 +56,9 @@ class LocalService {
     }
   }
 
-  Future<File> create() async {
+  /* Future<File> create() async {
     return (await _getLocaleFile()).create();
-  }
+  } */
 
   Future<bool> hasData() async {
     try {

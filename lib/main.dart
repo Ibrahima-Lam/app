@@ -28,18 +28,20 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: true,
-    sound: true,
-  );
+  if (!kIsWeb) {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: true,
+      sound: true,
+    );
 
-  FirebaseMessaging.onBackgroundMessage(LocalNotificationService().onMessage);
+    FirebaseMessaging.onBackgroundMessage(LocalNotificationService().onMessage);
+  }
   runApp(const MyApp());
 }
 
@@ -127,13 +129,15 @@ class _GlobalPageState extends State<GlobalPage> {
   late Connectivity _connectivity;
   initState() {
     super.initState();
-    FirebaseMessaging.instance.getToken().then((token) async {
-      if (token != null) {
-        await TokenService.setToken(token);
-      }
-    });
+    if (!kIsWeb) {
+      FirebaseMessaging.instance.getToken().then((token) async {
+        if (token != null) {
+          await TokenService.setToken(token);
+        }
+      });
 
-    FirebaseMessaging.onMessage.listen(listenMessage);
+      FirebaseMessaging.onMessage.listen(listenMessage);
+    }
     _connectivity = Connectivity();
     _connectivity.checkConnectivity().then((value) {
       if (value.contains(ConnectivityResult.none)) {

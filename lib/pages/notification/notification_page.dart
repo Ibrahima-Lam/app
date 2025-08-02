@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:fscore/models/notification.dart';
 import 'package:fscore/pages/game/game_details.dart';
 import 'package:fscore/providers/game_provider.dart';
@@ -99,9 +100,11 @@ class NotificationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseMessaging.instance.getToken().then((value) {
-      print(value);
-    });
+    if (!kIsWeb) {
+      FirebaseMessaging.instance.getToken().then((value) {
+        print(value);
+      });
+    }
 
     return Card(
       margin: EdgeInsets.symmetric(vertical: 1, horizontal: 4),
