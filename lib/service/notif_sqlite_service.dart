@@ -5,7 +5,7 @@ class NotifSqliteService extends SqliteService {
   NotifSqliteService();
 
   Future insertNotif(Notif notif) async {
-    await (await db).insert('notifs', notif.toJson());
+    await (await db).insert('notifs', notif.toJson()..remove('idNotif'));
   }
 
   Future<List<Notif>> getNotifs() async {

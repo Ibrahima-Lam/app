@@ -80,7 +80,7 @@ class LocalService {
           DateTimeRange(start: time, end: DateTime.now()).duration.inHours;
 
       if (duration <= max) true;
-      return true;
+      return false;
     } catch (e) {
       return false;
     }

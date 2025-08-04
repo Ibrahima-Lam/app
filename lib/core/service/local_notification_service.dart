@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fscore/models/notification.dart';
+import 'package:fscore/providers/notification_provider.dart';
+import 'package:fscore/service/notif_sqlite_service.dart';
 
 class LocalNotificationService {
   static final flutterLocalNotificationsPlugin =
@@ -74,12 +77,24 @@ class LocalNotificationService {
         ? getNotificationDetailsAndroid(title, description)
         : getNotificationDetailsIos(title, description);
     await flutterLocalNotificationsPlugin.show(
-      notificationId,
+      notificationId++,
       title,
       description,
       notificationDetails,
       payload: 'Not present',
     );
+
+    unreadCountNotifier.value++;
+
+    // Save notification to sqlite
+    final Notif notif = Notif(
+      idNotif: notificationId.toString(),
+      title: title,
+      content: description,
+      date: DateTime.now().toString(),
+      idGame: data['idGame'] ?? '',
+    );
+    await NotifSqliteService().insertNotif(notif);
   }
 
   Future onMessage(RemoteMessage message) async {

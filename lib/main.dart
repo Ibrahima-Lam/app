@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:fscore/core/constants/app/styles.dart';
 import 'package:fscore/core/constants/navigation/kdestination.dart';
 import 'package:fscore/core/route/app_route.dart';
@@ -11,15 +12,16 @@ import 'package:fscore/pages/notification/notification_page.dart';
 import 'package:fscore/providers/competition_provider.dart';
 import 'package:fscore/providers/game_provider.dart';
 import 'package:fscore/core/service/local_notification_service.dart';
-import 'package:fscore/service/token_service.dart';
 import 'package:fscore/widget/skelton/drawer_widget.dart';
 import 'package:fscore/widget/skelton/layout_builder_widget.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -41,6 +43,15 @@ void main() async {
     );
 
     FirebaseMessaging.onBackgroundMessage(LocalNotificationService().onMessage);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        LocalNotificationService().showNotification(
+          title: message.notification!.title ?? '',
+          description: message.notification!.body ?? '',
+          data: message.data,
+        );
+      }
+    });
   }
   runApp(const MyApp());
 }
@@ -118,25 +129,89 @@ class GlobalPage extends StatefulWidget {
 }
 
 class _GlobalPageState extends State<GlobalPage> {
-  void listenMessage(RemoteMessage message) async {
-    await LocalNotificationService().showNotification(
-      title: message.notification?.title ?? 'Notification',
-      description: message.notification?.body ?? 'Corps de la notification',
-      data: message.data,
-    );
+  bool versionChecked = true;
+
+  Future<void> _checkVersion() async {
+    final remoteConfig = FirebaseRemoteConfig.instance;
+    await remoteConfig.setConfigSettings(RemoteConfigSettings(
+      fetchTimeout: const Duration(seconds: 10),
+      minimumFetchInterval: const Duration(minutes: 10),
+    ));
+    await remoteConfig.fetchAndActivate();
+
+    final minVersion = remoteConfig.getString('version');
+    final currentVersion = (await PackageInfo.fromPlatform()).version;
+    print(
+        'Current version: $currentVersion, Minimum required version: $minVersion');
+
+    if (_isVersionLower(currentVersion, minVersion)) {
+      _showUpdateDialog();
+    }
+  }
+
+  bool _isVersionLower(String current, String min) {
+    List<int> c = current.split('.').map(int.parse).toList();
+    List<int> m = min.split('.').map(int.parse).toList();
+    for (int i = 0; i < m.length; i++) {
+      if (c[i] < m[i]) return true;
+      if (c[i] > m[i]) return false;
+    }
+    return false;
+  }
+
+  void _showUpdateDialog() {
+    setState(() {
+      versionChecked = false;
+    });
+    if (!kIsWeb) {
+      if (Platform.isAndroid || Platform.isIOS)
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => AlertDialog(
+            title: Text("Mise à jour requise"),
+            content:
+                Text("Veuillez mettre à jour l'application pour continuer."),
+            actions: [
+              if (Platform.isAndroid)
+                TextButton(
+                  onPressed: () {
+                    launchUrl(Uri.parse(
+                        'https://play.google.com/store/apps/details?id=com.fscore.app'));
+                  },
+                  child: Text("Google Play Store"),
+                ),
+              if (Platform.isAndroid)
+                TextButton(
+                  onPressed: () {
+                    launchUrl(
+                        Uri.parse('https://apkpure.com/p/com.fscore.app'));
+                  },
+                  child: Text("APKPure"),
+                ),
+              if (Platform.isIOS)
+                TextButton(
+                  onPressed: () {
+                    launchUrl(
+                        Uri.parse('https://apps.apple.com/app/id6444228700'));
+                  },
+                  child: Text("App Store"),
+                ),
+            ],
+          ),
+        );
+    }
+    ;
   }
 
   late Connectivity _connectivity;
   initState() {
     super.initState();
     if (!kIsWeb) {
-      FirebaseMessaging.instance.getToken().then((token) async {
-        if (token != null) {
-          await TokenService.setToken(token);
-        }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _checkVersion();
       });
-
-      FirebaseMessaging.onMessage.listen(listenMessage);
+      FirebaseMessaging.instance.subscribeToTopic('messages');
     }
     _connectivity = Connectivity();
     _connectivity.checkConnectivity().then((value) {
@@ -185,7 +260,8 @@ class _GlobalPageState extends State<GlobalPage> {
     });
   }
 
-  dispose() {
+  @override
+  void dispose() {
     super.dispose();
   }
 
@@ -202,30 +278,32 @@ class _GlobalPageState extends State<GlobalPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Builder(
-        builder: (context) {
-          List<Widget> pages = [
-            GamePage(
-              checkPlatform: checkPlatform,
-              openDrawer: () => Scaffold.of(context).openDrawer(),
-            ),
-            InfosPage(
-              checkPlatform: checkPlatform,
-              openDrawer: () => Scaffold.of(context).openDrawer(),
-            ),
-            ExplorationPage(
-              checkPlatform: checkPlatform,
-              openDrawer: () => Scaffold.of(context).openDrawer(),
-            ),
-            NotificationPage(
-              checkPlatform: checkPlatform,
-              openDrawer: () => Scaffold.of(context).openDrawer(),
-            )
-          ];
+      body: !versionChecked
+          ? Center(child: SizedBox())
+          : Builder(
+              builder: (context) {
+                List<Widget> pages = [
+                  GamePage(
+                    checkPlatform: checkPlatform,
+                    openDrawer: () => Scaffold.of(context).openDrawer(),
+                  ),
+                  InfosPage(
+                    checkPlatform: checkPlatform,
+                    openDrawer: () => Scaffold.of(context).openDrawer(),
+                  ),
+                  ExplorationPage(
+                    checkPlatform: checkPlatform,
+                    openDrawer: () => Scaffold.of(context).openDrawer(),
+                  ),
+                  NotificationPage(
+                    checkPlatform: checkPlatform,
+                    openDrawer: () => Scaffold.of(context).openDrawer(),
+                  )
+                ];
 
-          return pages[currentIndex];
-        },
-      ),
+                return pages[currentIndex];
+              },
+            ),
       bottomNavigationBar: checkPlatform
           ? null
           : NavigationBar(

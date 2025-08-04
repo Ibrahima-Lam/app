@@ -288,12 +288,15 @@ class CompetitionGamesWidget extends StatelessWidget {
                           date: date,
                           competitions: competitions,
                           playing: playing),
+                      SponsorListWidget(categorieParams: null),
                       FixturesSectionWidget(
                           controller: scrollController,
                           fixtureProvider: fixtureProvider,
                           date: date,
                           live: playing),
-                      SponsorListWidget(categorieParams: null),
+                      const SizedBox(
+                        height: 20,
+                      ),
                     ],
                   ),
                 ],

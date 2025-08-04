@@ -11,10 +11,10 @@ import 'package:fscore/models/paramettre.dart';
 import 'package:fscore/pages/competition/competition_details.dart';
 import 'package:fscore/pages/game/widget_details/composition_widget.dart';
 import 'package:fscore/pages/game/widget_details/evenement_widget.dart';
+import 'package:fscore/pages/game/widget_details/game_fiche_list_widget.dart';
 import 'package:fscore/pages/game/widget_details/statistique_list_widget.dart';
 import 'package:fscore/providers/paramettre_provider.dart';
 import 'package:fscore/providers/score_provider.dart';
-import 'package:fscore/service/token_service.dart';
 import 'package:fscore/widget/classement/classement_widget.dart';
 import 'package:fscore/pages/game/widget_details/journee_list_widget.dart';
 import 'package:fscore/providers/competition_provider.dart';
@@ -72,6 +72,7 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
       bool statistique = false,
       bool evenement = false}) {
     return {
+      'fiche',
       'journee',
       'infos',
       if (classement) 'classement',
@@ -82,6 +83,7 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
   }
 
   Map<String, String> get tabBarLabel => {
+        'fiche': 'Fiche',
         'journee': 'Journée',
         'infos': 'Infos',
         'classement': 'Classement',
@@ -91,6 +93,7 @@ class _GameDetailsState extends State<GameDetails> with Abbreviable {
       };
 
   Map<String, Widget> get tabBarViewChildren => {
+        'fiche': GameFicheListWidget(idGame: game.idGame),
         'journee': JourneeWidget(game: game),
         'infos': InfosListWiget(
           categorieParams: CategorieParams(
@@ -392,7 +395,8 @@ class _NotificationSenderWidgetState extends State<NotificationSenderWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<String>>(
-        future: TokenService.getTokens(),
+        // Todo: Use TokenServiceS instead of TokenService
+        future: null,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Icon(Icons.error);

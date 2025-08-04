@@ -1,4 +1,5 @@
 import 'package:fscore/controllers/competition/date.dart';
+import 'package:fscore/core/constants/app/styles.dart';
 import 'package:fscore/core/extension/list_extension.dart';
 import 'package:fscore/core/params/categorie/categorie_params.dart';
 import 'package:fscore/models/competition.dart';
@@ -54,6 +55,8 @@ class _InfosDetailsState extends State<InfosDetails> {
                     foregroundColor: _scrollController.offset > 200
                         ? Colors.white
                         : Colors.black,
+                    backgroundColor:
+                        _scrollController.offset > 200 ? kColor : Colors.white,
                     elevation: 2,
                     expandedHeight: 300,
                     pinned: true,

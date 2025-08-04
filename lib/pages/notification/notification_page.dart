@@ -1,11 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:fscore/models/notification.dart';
 import 'package:fscore/pages/game/game_details.dart';
 import 'package:fscore/providers/game_provider.dart';
+import 'package:fscore/providers/notification_provider.dart';
 import 'package:fscore/service/notif_sqlite_service.dart';
 import 'package:fscore/widget/modals/confirm_dialog_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:provider/provider.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -30,6 +29,9 @@ class _NotificationPageState extends State<NotificationPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      unreadCountNotifier.value = 0;
+    });
   }
 
   _onDelete(String id) async {
@@ -100,12 +102,6 @@ class NotificationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!kIsWeb) {
-      FirebaseMessaging.instance.getToken().then((value) {
-        print(value);
-      });
-    }
-
     return Card(
       margin: EdgeInsets.symmetric(vertical: 1, horizontal: 4),
       child: ListTile(
