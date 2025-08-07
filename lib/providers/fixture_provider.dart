@@ -60,7 +60,7 @@ class FixtureProvider extends ChangeNotifier {
   }
 
   int _sortFixture(Fixture a, Fixture b) {
-    if (a.league?.id == b.league?.id) {
+    if (a.league?.id != b.league?.id) {
       return a.league?.id?.compareTo(b.league?.id ?? 0) ?? 0;
     }
     return a.fixture.date?.compareTo(b.fixture.date ?? '') ?? 0;

@@ -1,18 +1,32 @@
 import 'package:flutter/foundation.dart';
+import 'package:fscore/service/notification_service.dart';
 
 // Todo: No used
 class NotificationProvider extends ChangeNotifier {
-  int _unreadCount = 0;
-  int get unreadCount => _unreadCount;
+  final NotificationService _notificationService;
+  NotificationProvider(this._notificationService);
 
-  void incrementUnreadCount() {
-    _unreadCount++;
+  List<String> _abonnements = [];
+
+  List<String> get abonnements => _abonnements;
+  set abonnements(List<String> value) {
+    _abonnements = value;
     notifyListeners();
   }
 
-  void decrementUnreadCount() {
-    _unreadCount--;
+  Future<void> loadAbonnements() async {
+    _abonnements = await _notificationService.getAbonnements();
     notifyListeners();
+  }
+
+  Future<void> addAbonnement(String abonnement) async {
+    await _notificationService.addAbonnement(abonnement);
+    await loadAbonnements();
+  }
+
+  Future<void> removeAbonnement(String abonnement) async {
+    await _notificationService.removeAbonnement(abonnement);
+    await loadAbonnements();
   }
 }
 

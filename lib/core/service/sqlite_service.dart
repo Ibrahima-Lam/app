@@ -1,4 +1,5 @@
 import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
 class SqliteService {
   String _dbPath;
@@ -13,19 +14,26 @@ class SqliteService {
   }
 
   Future<Database> openDb() async {
-    return await openDatabase(_dbPath, version: 1,
-        onCreate: (db, version) async {
-      await db.execute('''CREATE TABLE notifs (
-        idNotif INTEGER PRIMARY KEY AUTOINCREMENT, 
-        idGame TEXT, 
-        title TEXT,
-        content TEXT,
-        date TEXT,
-        type TEXT,
-        created_at TEXT, 
-        updated_at TEXT
-      )
+    final databasesPath = await getDatabasesPath();
+    final path = join(databasesPath, _dbPath);
+
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (db, version) async {
+        await db.execute('''
+          CREATE TABLE notifs (
+            idNotif INTEGER PRIMARY KEY AUTOINCREMENT, 
+            idGame TEXT, 
+            title TEXT,
+            content TEXT,
+            date TEXT,
+            type TEXT,
+            created_at TEXT, 
+            updated_at TEXT
+          )
         ''');
-    });
+      },
+    );
   }
 }

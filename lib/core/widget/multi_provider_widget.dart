@@ -13,6 +13,7 @@ import 'package:fscore/providers/game_provider.dart';
 import 'package:fscore/providers/groupe_provider.dart';
 import 'package:fscore/providers/infos_provider.dart';
 import 'package:fscore/providers/joueur_provider.dart';
+import 'package:fscore/providers/notification_provider.dart';
 import 'package:fscore/providers/paramettre_provider.dart';
 import 'package:fscore/providers/participant_provider.dart';
 import 'package:fscore/providers/participation_provider.dart';
@@ -22,6 +23,7 @@ import 'package:fscore/providers/statistique_future_provider.dart';
 import 'package:fscore/providers/statistique_provider.dart';
 import 'package:fscore/providers/user_provider.dart';
 import 'package:fscore/service/fixture_service.dart';
+import 'package:fscore/service/notification_service.dart';
 import 'package:provider/provider.dart';
 
 class MultiProviderWidget extends StatelessWidget {
@@ -33,6 +35,8 @@ class MultiProviderWidget extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => CompetitionProvider()),
+        ChangeNotifierProvider(
+            create: (context) => NotificationProvider(NotificationService())),
         ChangeNotifierProvider(
           create: (context) => FavoriProvider()
             ..getCompetitions()

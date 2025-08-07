@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:fscore/models/api/fixture.dart';
+import 'package:fscore/pages/competition/competition_details.dart';
 import 'package:fscore/pages/competition/league_details.dart';
 import 'package:fscore/pages/equipe/team_details.dart';
 import 'package:fscore/pages/game/fixture_details.dart';
+import 'package:fscore/pages/game/game_details.dart';
 
 final Map<String, WidgetBuilder> appRoutes = {
+  '/competition_details': (context) {
+    final Map<String, dynamic>? args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    return CompetitionDetails(
+      id: args?['id'],
+    );
+  },
+  '/game_details': (context) {
+    final Map<String, dynamic>? args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    return GameDetails(
+      id: args?['id'],
+    );
+  },
   '/league_details': (context) {
     final League? league =
         ModalRoute.of(context)?.settings.arguments as League?;
