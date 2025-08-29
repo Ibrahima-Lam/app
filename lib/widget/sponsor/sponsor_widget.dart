@@ -11,6 +11,7 @@ class SponsorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Container(
+        padding: const EdgeInsets.all(5.0),
         width: MediaQuery.of(context).size.width <= 600
             ? MediaQuery.of(context).size.width
             : MediaQuery.of(context).size.width * .71,
@@ -21,13 +22,16 @@ class SponsorWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
+              width: MediaQuery.of(context).size.width <= 600
+                  ? MediaQuery.of(context).size.width
+                  : MediaQuery.of(context).size.width * .71,
               height: MediaQuery.of(context).size.width <= kMaxWidth
                   ? kSmallHeight
                   : MediaQuery.of(context).size.width * kPourcentHeight,
               child: sponsor.imageUrl.isEmpty
                   ? SponsorErrorWidget()
                   : CachedNetworkImage(
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                       imageUrl: sponsor.imageUrl,
                       errorWidget: (context, url, error) =>
                           SponsorErrorWidget(),

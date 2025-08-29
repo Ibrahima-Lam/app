@@ -90,7 +90,7 @@ class InformationGameWidget extends StatelessWidget with Abbreviable {
                           Container(
                             child: Text(
                               abbr(game?.home.nomEquipe ?? '') +
-                                  ' - ' +
+                                  (' vs ') +
                                   abbr(game?.away.nomEquipe ?? ''),
                               textAlign: TextAlign.center,
                               style: TextStyle(

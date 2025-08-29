@@ -1,11 +1,11 @@
 {
-    "name": "app",
-    "short_name": "app",
+    "name": "FScore",
+    "short_name": "FScore",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Une application de suivi des scores de football",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

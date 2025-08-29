@@ -71,7 +71,7 @@ class PlusInfosPage extends StatelessWidget {
                 title: Text('Google Play Store'),
                 onTap: () async {
                   String url =
-                      'https://play.google.com/store/apps/details?id=com.fscore.sport';
+                      'https://play.google.com/store/apps/details?id=com.fscore.app';
                   await launchUrl(Uri.parse(url));
                 },
               ),
@@ -87,8 +87,12 @@ class PlusInfosPage extends StatelessWidget {
                 },
               ),
             ),
-            Expanded(child: Container()),
-
+            SizedBox(height: 20),
+            Text('Développé par: ',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text('Ibrahima Lam "Amadou Dialadé Lam"'),
+            Text('Mauritanie, Boghé, Thialgou'),
+            SizedBox(height: 20),
             FutureBuilder(
                 future: PackageInfo.fromPlatform(),
                 builder: (context, asyncSnapshot) {
