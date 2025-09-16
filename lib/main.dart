@@ -26,10 +26,10 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  LocalNotificationService.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  LocalNotificationService.init();
   if (!kIsWeb) {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     await messaging.requestPermission(
@@ -212,17 +212,18 @@ class _GlobalPageState extends State<GlobalPage> {
         _checkVersion();
       });
       FirebaseMessaging.instance.subscribeToTopic('messages');
+      FirebaseMessaging.instance.subscribeToTopic('test');
     }
     _connectivity = Connectivity();
     _connectivity.checkConnectivity().then((value) {
       if (value.contains(ConnectivityResult.none)) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.grey,
             content: ListTile(
-                leading: Icon(Icons.wifi_off),
+                leading: Icon(Icons.wifi_off, color: Colors.red),
                 title: Text('Vous etes hors ligne !')),
-            duration: const Duration(milliseconds: 5000),
+            duration: const Duration(milliseconds: 10000),
           ),
         );
         _connectivity.onConnectivityChanged.listen((event) {
@@ -230,22 +231,22 @@ class _GlobalPageState extends State<GlobalPage> {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.grey,
                 content: ListTile(
-                    leading: Icon(Icons.wifi_off),
+                    leading: Icon(Icons.wifi_off, color: Colors.red),
                     title: Text('Vous etes hors ligne !')),
-                duration: const Duration(milliseconds: 5000),
+                duration: const Duration(milliseconds: 10000),
               ),
             );
           } else {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.grey,
                 content: ListTile(
                     leading: Icon(Icons.wifi, color: Colors.green),
                     title: Text('Connexion retablie !')),
-                duration: const Duration(milliseconds: 3000),
+                duration: const Duration(milliseconds: 10000),
               ),
             );
             context

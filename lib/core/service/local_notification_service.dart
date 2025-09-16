@@ -7,86 +7,117 @@ import 'package:fscore/providers/notification_provider.dart';
 import 'package:fscore/service/notif_sqlite_service.dart';
 
 class LocalNotificationService {
-  static final flutterLocalNotificationsPlugin =
+  static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   int notificationId = 1;
 
-  static Future<void> init() async {
-    // Initialize native android notification
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_notif');
+  // Définition du channel Android
+  static const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'high_importance_channel2', // id unique
+    'High Importance Notifications', // nom visible dans paramètres
+    description: 'This channel is used for important notifications.',
+    importance: Importance.max,
+    playSound: true,
+  );
 
-    // Initialize native Ios Notifications
+  /// Initialisation du service de notifications
+  static Future<void> init() async {
+    // Paramètres Android
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    // Paramètres iOS
     const DarwinInitializationSettings initializationSettingsIOS =
         DarwinInitializationSettings();
 
+    // Configuration générale
     const InitializationSettings initializationSettings =
         InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
 
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-    );
+    // Initialiser plugin
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+    // Créer le channel Android (obligatoire pour Android 8+)
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
+    // Demander permissions iOS
+    if (Platform.isIOS) {
+      await FirebaseMessaging.instance.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+    }
+
+    // Listener : notification reçue quand app est en foreground
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      LocalNotificationService().onMessage(message);
+    });
   }
 
+  /// Détails Android
   NotificationDetails getNotificationDetailsAndroid(
       String title, String value) {
     const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('channel_id', 'Channel Name',
-            channelDescription: 'Channel Description',
-            importance: Importance.max,
-            priority: Priority.high,
-            ticker: 'ticker');
+        AndroidNotificationDetails(
+      'high_importance_channel2', // doit correspondre au channel créé
+      'High Importance Notifications',
+      channelDescription: 'This channel is used for important notifications.',
+      importance: Importance.max,
+      priority: Priority.high,
+      playSound: true,
+      enableVibration: true,
+      fullScreenIntent: true,
+      category: AndroidNotificationCategory.alarm,
+      ticker: 'ticker',
+    );
 
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
-
-    return notificationDetails;
+    return const NotificationDetails(android: androidNotificationDetails);
   }
 
+  /// Détails iOS
   NotificationDetails getNotificationDetailsIos(String title, String value) {
     final DarwinNotificationDetails iOSPlatformChannelSpecifics =
         DarwinNotificationDetails(
-      presentAlert:
-          true, // Present an alert when the notification is displayed and the application is in the foreground (only from iOS 10 onwards)
-      presentBadge:
-          true, // Present the badge number when the notification is displayed and the application is in the foreground (only from iOS 10 onwards)
-      presentSound:
-          true, // Play a sound when the notification is displayed and the application is in the foreground (only from iOS 10 onwards)
-      // sound: String?,  // Specifics the file path to play (only from iOS 10 onwards)
-      // badgeNumber: int?, // The application's icon badge number
-      // attachments: List<IOSNotificationAttachment>?, // (only from iOS 10 onwards)
-      subtitle: value, //Secondary description  (only from iOS 10 onwards)
-      threadIdentifier: title, // (only from iOS 10 onwards)
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+      subtitle: value,
+      threadIdentifier: title,
     );
 
-    final NotificationDetails notificationDetails =
-        NotificationDetails(iOS: iOSPlatformChannelSpecifics);
-
-    return notificationDetails;
+    return NotificationDetails(iOS: iOSPlatformChannelSpecifics);
   }
 
-  Future<void> showNotification(
-      {required String title,
-      required String description,
-      required Map data}) async {
+  /// Afficher une notification locale
+  Future<void> showNotification({
+    required String title,
+    required String description,
+    required Map data,
+  }) async {
     final notificationDetails = Platform.isAndroid
         ? getNotificationDetailsAndroid(title, description)
         : getNotificationDetailsIos(title, description);
+
     await flutterLocalNotificationsPlugin.show(
       notificationId++,
       title,
       description,
       notificationDetails,
-      payload: 'Not present',
+      payload: data['idGame'],
     );
 
+    // Incrémenter compteur non lus
     unreadCountNotifier.value++;
 
-    // Save notification to sqlite
+    // Sauvegarde SQLite
     final Notif notif = Notif(
       idNotif: notificationId.toString(),
       title: title,
@@ -97,7 +128,8 @@ class LocalNotificationService {
     await NotifSqliteService().insertNotif(notif);
   }
 
-  Future onMessage(RemoteMessage message) async {
+  /// Quand message FCM reçu en foreground
+  Future<void> onMessage(RemoteMessage message) async {
     await showNotification(
       title: message.notification?.title ?? 'Notification',
       description: message.notification?.body ?? 'Corps de la notification',

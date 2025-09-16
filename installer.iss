@@ -2,7 +2,7 @@
 
 [Setup]
 AppName=FScore
-AppVersion=1.0.4
+AppVersion=1.0.6
 DefaultDirName={autopf}\FScore
 DefaultGroupName=FScore
 UninstallDisplayIcon={app}\Runner.exe

@@ -1,21 +1,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fscore.app"> <!-- Mets ici ton vrai package -->
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.fscore.app">
 
-    <!-- ✅ Permission INTERNET -->
+    <!-- Permissions essentielles -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
+    <!-- Requis pour Android 12+ si tu utilises foreground service -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <!-- ✅ Permission pour détecter WhatsApp et autres apps avec URL -->
+    <!-- Queries (détection d'autres apps et intents) -->
     <queries>
-        <!-- Pour WhatsApp -->
+        <!-- WhatsApp -->
         <package android:name="com.whatsapp" />
-        <!-- Pour liens génériques -->
+        
+        <!-- Liens génériques -->
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="https" />
         </intent>
-        <!-- Pour les plugins Flutter qui traitent du texte -->
+
+        <!-- Plugins Flutter (ex: share, traitement de texte) -->
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
@@ -25,7 +32,10 @@
     <application
         android:label="FScore"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
+
+        <!-- Activity principale Flutter -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -35,18 +45,33 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
+
             <meta-data
                 android:name="io.flutter.embedding.android.NormalTheme"
                 android:resource="@style/NormalTheme" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <!-- Flutter -->
+        <!-- Flutter Embedding -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <!-- ⚠️ Ne redéclare PAS FirebaseMessagingService ni FirebaseInstanceIdReceiver -->
+        <!-- Si tu veux ton propre service de messagerie, déclare ta classe custom ici : -->
+        <!--
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        -->
     </application>
 </manifest>

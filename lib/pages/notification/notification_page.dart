@@ -108,6 +108,15 @@ class _NotificationPageState extends State<NotificationPage> {
             AbonnementWidget(),
           ],
         ),
+        /*  floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            LocalNotificationService().showNotification(
+                title: 'Titre de la notification',
+                description: 'Description de la notification',
+                data: {});
+          },
+          child: Icon(Icons.add),
+        ), */
       ),
     );
   }
