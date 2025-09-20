@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "196237042075",
+    "project_id": "fscore-8d32b",
+    "storage_bucket": "fscore-8d32b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196237042075:android:f725f0a65fceccf085813e",
+        "android_client_info": {
+          "package_name": "com.fscore.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCV6t53xblII2lkI6jD1Qqgb3TctavsPtU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
