@@ -212,7 +212,7 @@ class _GlobalPageState extends State<GlobalPage> {
         _checkVersion();
       });
       FirebaseMessaging.instance.subscribeToTopic('messages');
-      FirebaseMessaging.instance.subscribeToTopic('test');
+      // FirebaseMessaging.instance.subscribeToTopic('test');
     }
     _connectivity = Connectivity();
     _connectivity.checkConnectivity().then((value) {

@@ -42,16 +42,17 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyDZRkKUNohKSP3XoPM2HQbBUYiGlRe_dA8',
-    appId: '1:196237042075:web:e2f9773ab4d900f885813e',
+    appId: '1:196237042075:web:208a8d22f1174b3885813e',
     messagingSenderId: '196237042075',
     projectId: 'fscore-8d32b',
     authDomain: 'fscore-8d32b.firebaseapp.com',
     storageBucket: 'fscore-8d32b.appspot.com',
+    measurementId: 'G-RYNP05YZ2E',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCV6t53xblII2lkI6jD1Qqgb3TctavsPtU',
-    appId: '1:196237042075:android:f725f0a65fceccf085813e',
+    appId: '1:196237042075:android:8aae1cfa9241d9bc85813e',
     messagingSenderId: '196237042075',
     projectId: 'fscore-8d32b',
     storageBucket: 'fscore-8d32b.appspot.com',
@@ -59,7 +60,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDjGzfJtHtX85g_CCcGz78XEvOmcKVmEz0',
-    appId: '1:196237042075:ios:eaa570f31c422a1785813e',
+    appId: '1:196237042075:ios:1281d5a378262f4b85813e',
     messagingSenderId: '196237042075',
     projectId: 'fscore-8d32b',
     storageBucket: 'fscore-8d32b.appspot.com',
@@ -68,7 +69,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyDjGzfJtHtX85g_CCcGz78XEvOmcKVmEz0',
-    appId: '1:196237042075:ios:eaa570f31c422a1785813e',
+    appId: '1:196237042075:ios:1281d5a378262f4b85813e',
     messagingSenderId: '196237042075',
     projectId: 'fscore-8d32b',
     storageBucket: 'fscore-8d32b.appspot.com',
@@ -76,11 +77,12 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyDZRkKUNohKSP3XoPM2HQbBUYiGlRe_dA8',
-    appId: '1:196237042075:web:208a8d22f1174b3885813e',
+    apiKey: 'AIzaSyC4KfPPNky5uJ4xuOqXPbexutOKT3mM62A',
+    appId: '1:196237042075:web:8dd56cd8d04c869285813e',
     messagingSenderId: '196237042075',
     projectId: 'fscore-8d32b',
     authDomain: 'fscore-8d32b.firebaseapp.com',
     storageBucket: 'fscore-8d32b.appspot.com',
+    measurementId: 'G-E3FYWSNZP9',
   );
 }
